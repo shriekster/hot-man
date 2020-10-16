@@ -10,22 +10,22 @@ class Login extends React.Component {
 
   render() {
     return (
-      <form>
-        <label for="user">
-          Utilizator:
-        <label>
+      <form className='Login-form'>
+        <div className='Login-element'>
+          <label for="user">
+            Utilizator
+          </label>
           <input type="text" name="user" />
-        </label>
-        
-          Parola:
+        </div>
+        <div>
+          <label for="pass">
+            Parola
+          </label>
           <input type="password" name="pass" />
-        </label>
-        <label>
-          Nu aveti cont?
-        <button>
-          Creare cont
-        </button>
-        </label>
+        </div>
+        <div>
+            Nu aveti cont? <span className="Create-account-text">Creati un cont.</span>
+        </div>
       </form>
     );
   }
