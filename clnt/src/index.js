@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Login />
+    <App logIn={true}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

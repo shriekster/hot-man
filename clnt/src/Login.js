@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
+import CreateAccount from './CreateAccount';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-
 
   render() {
     return (
@@ -15,7 +15,9 @@ class Login extends React.Component {
           <label for="user">
             Utilizator
           </label>
-          <input type="text" name="user" />
+          <div className='Login-password'>
+            <input type="text" name="user" />
+          </div>
         </div>
         <div>
           <label for="pass">
@@ -24,7 +26,7 @@ class Login extends React.Component {
           <input type="password" name="pass" />
         </div>
         <div>
-            Nu aveti cont? <span className="Create-account-text">Creati un cont.</span>
+            Nu aveti cont? <span onClick={this.props.onClick} className="Create-account-text">Creati un cont.</span>
         </div>
       </form>
     );
