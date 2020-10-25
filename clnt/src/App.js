@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import Login from './Login';
-import CreateAccount from './CreateAccount';
+import Signup from './Signup';
+import Main from './Main';
 import './App.css';
 
 
@@ -14,35 +15,46 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.createAccount = this.createAccount.bind(this);
-    this.login = this.login.bind(this);
+    // components: an array of possible ('defined') components
+    // toRender: the component to be rendered, without
+    // the props (!)
+    this.state = {
 
-    this.state = {logIn: true};
+      components: {
+        Login: Login, 
+        Signup: Signup, 
+        Main: Main
+      },
+      
+      toRender: Login
+    };
+
+    this.onChange = this.onChange.bind(this);
   }
 
-  login() {
-    this.setState({login: true});
-  }
-
-  createAccount() {
-    this.setState({login: false});
+  onChange(toRender) {
+    let Component = toRender;
+    if (Object.keys(this.state.components).includes(toRender)) {
+      
+      this.setState({
+        toRender: this.state.components[toRender]
+      });
+    } else {
+      
+      this.setState({
+        toRender: Login
+      });
+    }
   }
 
   render() {
-    const logIn = this.state.logIn;
-    if (logIn){
-      return (
-        <div id="App">
-          <Login />
-        </div>
-      );
-    }
+    let Component = this.state.toRender;
+    
     return (
-      <div id="App">
-        <CreateAccount />
+      <div id='App'>
+        <Component onChange={this.onChange}/>
       </div>
     );
-
   }
 }
 

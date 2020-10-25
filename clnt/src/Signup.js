@@ -1,8 +1,7 @@
 import React from 'react';
-import './App.css';
-import CreateAccount from './CreateAccount';
 
-class Login extends React.Component {
+
+class Signup extends React.Component {
   constructor(props) {
     super(props);
 
@@ -17,7 +16,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className='Login'>
+      <div className='Signup'>
         <form className='Login-form'>
           <div className='Login-element'>
             <label htmlFor="user">
@@ -35,12 +34,11 @@ class Login extends React.Component {
           </div>
         </form>
         <div>
-              Nu aveti cont? <span onClick={() => this.onChange('Signup')} className="Create-account-text">Creati un cont.</span>
+              Aveti deja un cont? <span onClick={() => this.onChange('Login')} className="Create-account-text">Autentificati-va.</span>
         </div>
       </div>
     );
   }
 }
 
-export default Login;
-//asdasd
+export default Signup;
