@@ -1,15 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import Login from './Login';
 import Signup from './Signup';
 import Main from './Main';
-import './App.css';
+import './css/App.css';
+import './css/all.min.css';
 
 
 /**
- * NOT GOOD!
- * TODO: Lift state from the Login and CreateAccount
- * components up to the App component
+ * Controls the app components
  */
 class App extends React.Component {
   constructor(props) {
@@ -50,8 +48,9 @@ class App extends React.Component {
   render() {
     let Component = this.state.toRender;
     
+    // The props are defined here (onChange)
     return (
-      <div id='App'>
+      <div className='App'>
         <Component onChange={this.onChange}/>
       </div>
     );

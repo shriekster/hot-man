@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
 import App from './App';
-import Login from './Login';
+
+import './css/index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App logIn={false}/>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

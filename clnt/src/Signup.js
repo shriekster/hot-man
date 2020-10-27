@@ -16,25 +16,62 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <div className='Signup'>
-        <form className='Login-form'>
-          <div className='Login-element'>
+      <div className='Form'>
+        <form>
+          <div className='Form-field'>
             <label htmlFor="user">
-              Utilizator
+              Cod numeric personal
             </label>
-            <div className='Login-password'>
+            <div className='Form-name'>
               <input type="text" name="user" />
             </div>
           </div>
-          <div>
+          <div className='Form-field'>
+            <label htmlFor="user">
+              Grad
+            </label>
+            <div className='Form-name'>
+              <input type="text" name="user" />
+            </div>
+          </div>
+          <div className='Form-field'>
+            <label htmlFor="user">
+              Nume
+            </label>
+            <div className='Form-name'>
+              <input type="text" name="user" />
+            </div>
+          </div>
+          <div className='Form-field'>
+            <label htmlFor="user">
+              Prenume
+            </label>
+            <div className='Form-name'>
+              <input type="text" name="user" />
+            </div>
+          </div>
+          <div className='Form-field'>
+            <label htmlFor="user">
+              Utilizator
+            </label>
+            <div className='Form-name'>
+              <input type="text" name="user" />
+            </div>
+          </div>
+          <div className='Form-field'>
             <label htmlFor="pass">
               Parola
             </label>
-            <input type="password" name="pass" />
+            <div className='Form-password'>
+              <input type="password" name="pass" />
+            </div>
+          </div>
+          <div className='Form-field'>
+            <button>Creeaza cont</button>
           </div>
         </form>
-        <div>
-              Aveti deja un cont? <span onClick={() => this.onChange('Login')} className="Create-account-text">Autentificati-va.</span>
+        <div className='Form-field'>
+              Aveti deja un cont? <span onClick={() => this.onChange('Login')} className="Form-hint">Autentificati-va.</span>
         </div>
       </div>
     );
