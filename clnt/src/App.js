@@ -1,8 +1,6 @@
 import React, { Suspense } from 'react';
-//import Signup from './Signup';
-//import Main from './Main';
-import './css/App.css';
 
+import './css/App.css';
 /*!
  * Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
@@ -12,8 +10,6 @@ import './css/all.min.css';
 const Login = React.lazy(() => import('./Login'));
 const Signup = React.lazy(() => import('./Signup'));
 const Main = React.lazy(() => import('./Main'));
-
-
 
 
 /**
@@ -47,11 +43,13 @@ class App extends React.Component {
       this.setState({
         toRender: this.state.components[toRender]
       });
+
     } else {
       
       this.setState({
         toRender: Login
       });
+      
     }
   }
 
