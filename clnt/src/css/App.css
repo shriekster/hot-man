@@ -73,6 +73,10 @@ form {
   z-index: 1;
 }
 
+.crimson {
+  color: crimson;
+}
+
 .Auth-button {
   display: flex;
 }

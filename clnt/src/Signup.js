@@ -1,4 +1,5 @@
 import React from 'react';
+import PasswordBox from './PasswordBox';
 
 
 class Signup extends React.Component {
@@ -58,20 +59,13 @@ class Signup extends React.Component {
               <input type="text" name="user" />
             </div>
           </div>
+          <PasswordBox visibility='visible'/>
           <div className='Form-field'>
-            <label htmlFor="pass">
-              Parola
-            </label>
-            <div className='Form-password'>
-              <input type="password" name="pass" />
-            </div>
-          </div>
-          <div className='Form-field'>
-            <button>Creeaza cont</button>
+            <button>Creează cont</button>
           </div>
         </form>
         <div className='Form-field'>
-              Aveti deja un cont? <span onClick={() => this.onChange('Login')} className="Form-hint">Autentificati-va.</span>
+              Aveți deja un cont? <span onClick={() => this.onChange('Login')} className="Form-hint">Autentificați-vă.</span>
         </div>
       </div>
     );

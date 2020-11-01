@@ -1,9 +1,18 @@
-import React from 'react';
-import Login from './Login';
+import React, { Suspense } from 'react';
 import Signup from './Signup';
 import Main from './Main';
 import './css/App.css';
+
+/*!
+ * Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ */
 import './css/all.min.css';
+
+const Login = React.lazy(() => import('./Login'));
+
+
+
 
 
 /**
@@ -51,7 +60,9 @@ class App extends React.Component {
     // The props are defined here (onChange)
     return (
       <div className='App'>
-        <Component onChange={this.onChange}/>
+        <Suspense fallback={<div className='Form'>Se încarcă...</div>}>
+          <Component onChange={this.onChange}/>
+        </Suspense>
       </div>
     );
   }
