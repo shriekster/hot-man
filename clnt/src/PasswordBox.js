@@ -63,7 +63,11 @@ class PasswordBox extends React.Component {
           Parola
         </label>
         <div className='Form-password'>
-          <input type={display.inputType} name="pass" />
+          <input 
+           type={display.inputType} 
+           name="pass"
+           className='password' 
+           required />
           <Tippy content={display.tippyContent}
           theme='material'
           hideOnClick={false}

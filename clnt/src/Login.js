@@ -26,16 +26,28 @@ class Login extends React.Component {
               Utilizator
             </label>
             <div className='Form-name'>
-              <input type="text" name="user" />
+              <input 
+               type="text" 
+               name="user"
+               required />
             </div>
           </div>
           <PasswordBox />
+          <div className='Form-field Form-remember'>
+            <input 
+             type="checkbox" 
+             name="remember"
+             className='remember' />
+            <label htmlFor="remember">
+              Ține-mă minte
+            </label>
+          </div>
           <div className='Form-field'>
             <button>Conectează-te</button>
           </div>
         </form>
-        <div className='Form-field'>
-              Nu aveți cont? <span onClick={() => this.onChange('Signup')} className="Form-hint">Creați un cont.</span>
+        <div className='Form-field Form-text'>
+          Nu aveți cont? <span onClick={() => this.onChange('Signup')} className="Form-hint">Creați un cont.</span>
         </div>
       </div>
     );

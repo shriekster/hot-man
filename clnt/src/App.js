@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-import Signup from './Signup';
-import Main from './Main';
+//import Signup from './Signup';
+//import Main from './Main';
 import './css/App.css';
 
 /*!
@@ -10,7 +10,8 @@ import './css/App.css';
 import './css/all.min.css';
 
 const Login = React.lazy(() => import('./Login'));
-
+const Signup = React.lazy(() => import('./Signup'));
+const Main = React.lazy(() => import('./Main'));
 
 
 
