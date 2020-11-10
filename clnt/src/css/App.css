@@ -3,6 +3,7 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   margin: 0;
   padding: 0;
+  font-size: max(16px, 1vw);
 }
 
 input {
@@ -11,7 +12,9 @@ input {
 
 input[type='text'], 
 input[type='password'] {
-  width: 200px;
+  width: 95%;
+  color: #3377AA;
+  background-color: whitesmoke;
 }
 
 button {
@@ -22,6 +25,7 @@ button {
   padding: 4px;
   background-color: #3377AA;
   color: white;
+  margin: 0 auto;
 }
 
 button:hover {
@@ -33,7 +37,8 @@ form {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  width: max-content;
+  /*width: max-content;*/
+  width: inherit;
   border: 1px solid #3377AA;
 }
 
@@ -41,33 +46,55 @@ form {
 .App {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   width: 100%;
   height: 100vh;
 }
 
+.Intro {
+  background-image: url('../images/hotel.svg');
+  background-origin: border-box;
+  -webkit-background-origin: border-box;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  background-color: #08044d;
+}
+
+.Main {
+  background-image: url('../images/hotel.svg');
+  background-origin: border-box;
+  -webkit-background-origin: border-box;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  background-color: #08044d;
+}
+
 .Form {
+  color:  whitesmoke;/* #cfc547;*/
+  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
   height: 50vh;
+  width: 30vw;
+  margin: 5px 2vw;
 }
 
 .Form-field {
   padding: 2px;
   margin: 5px;
+  width: 95%;
 }
 
 .Form-password {
   position: relative;
 }
 
-.Form-remember {
-  align-self: flex-start;
-}
 
-.remember {
+.Form-remember {
   margin: 0 5px;
   position: relative;
   top: 9px;
@@ -81,33 +108,56 @@ form {
 
 .Form-hint {
   font-weight: 900;
-  color:#3377AA;
+  color:#D72C25;
   cursor: pointer;
 }
 
 .icon-eye {
   position: absolute;
-  top: 3px;
-  right: 5px;
+  top: 2px;
+  right: 1.5vw;
   font-size: 24px;
   z-index: 1;
   margin: 2px;
+  text-shadow: none;
+  color: #3377AA;
 }
 
-.crimson {
-  color: crimson;
+.red {
+  color: #D72C25;
 }
 
-.password {
+.centered-text {
+  text-align: center;
+}
+
+.right-padded {
   padding-right: 40px;
 }
 
-.Auth-button {
-  display: flex;
+.pulse {
+  box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
+	animation: pulse-blue 1.3s infinite;
 }
 
-.Signup-button {
-  display: flex;
-  background-color: lightcoral;
+.loading {
+  width: 40px;
+  height: 126px;
 }
 
+@keyframes pulse-blue {
+	0% {
+		transform: scale(0.9);
+		box-shadow: 0 0 0 0 rgba(51, 119, 170, 0.7);
+  }
+	
+	70% {
+		transform: scale(1.1);
+		box-shadow: 0 0 0 15px rgba(51, 119, 170, 0);
+	}
+	
+	100% {
+		transform: scale(0.9);
+		box-shadow: 0 0 0 0 rgba(51, 119, 170, 0);
+	}
+}

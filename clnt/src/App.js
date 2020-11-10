@@ -55,10 +55,11 @@ class App extends React.Component {
 
   render() {
     let Component = this.state.toRender;
+    let className = (Component === Login) || (Component == Signup) ? 'App Intro' : 'App';
     
     // The props are defined here (onChange)
     return (
-      <div className='App'>
+      <div className={className}>
         <Suspense fallback={<div className='Form'>Se încarcă...</div>}>
           <Component onChange={this.onChange}/>
         </Suspense>

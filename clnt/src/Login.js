@@ -1,5 +1,5 @@
 import React from 'react';
-
+import loading from './images/hotel-loading.svg'
 import PasswordBox from './PasswordBox'
 
 class Login extends React.Component {
@@ -33,11 +33,11 @@ class Login extends React.Component {
             </div>
           </div>
           <PasswordBox />
-          <div className='Form-field Form-remember'>
+          <div className='Form-field'>
             <input 
+             className='Form-remember'
              type="checkbox" 
-             name="remember"
-             className='remember' />
+             name="remember" />
             <label htmlFor="remember">
               Ține-mă minte
             </label>
@@ -45,8 +45,11 @@ class Login extends React.Component {
           <div className='Form-field'>
             <button>Conectează-te</button>
           </div>
+          <div className='Form-field'>
+            <img className='pulse loading' src={loading} />
+          </div>
         </form>
-        <div className='Form-field Form-text'>
+        <div className='Form-field Form-text centered-text'>
           Nu aveți cont? <span onClick={() => this.onChange('Signup')} className="Form-hint">Creați un cont.</span>
         </div>
       </div>

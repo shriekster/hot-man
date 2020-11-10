@@ -64,7 +64,7 @@ class Signup extends React.Component {
             <button>Creează cont</button>
           </div>
         </form>
-        <div className='Form-field Form-text'>
+        <div className='Form-field Form-text centered-text'>
               Aveți deja un cont? <span onClick={() => this.onChange('Login')} className="Form-hint">Autentificați-vă.</span>
         </div>
       </div>

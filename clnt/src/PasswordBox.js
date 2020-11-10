@@ -12,13 +12,6 @@ class PasswordBox extends React.Component {
     this.togglePasswordVisibility = this.togglePasswordVisibility.bind(this);
 
     this.state = {
-      /*
-      displays: {
-        0: 'hidden',
-        1: 'visible'
-      },
-      */
-      //display: 0,
       passwordVisibilityStates: {
         hidden: {
           iconClass: 'fas fa-eye icon-eye',
@@ -27,7 +20,7 @@ class PasswordBox extends React.Component {
         },
 
         visible: {
-          iconClass: 'fas fa-eye-slash icon-eye crimson',
+          iconClass: 'fas fa-eye-slash icon-eye red',
           tippyContent: 'Ascunde parola',
           inputType: 'text'
         }
@@ -63,10 +56,10 @@ class PasswordBox extends React.Component {
           Parola
         </label>
         <div className='Form-password'>
-          <input 
+          <input
+           className='right-padded'  
            type={display.inputType} 
            name="pass"
-           className='password' 
            required />
           <Tippy content={display.tippyContent}
           theme='material'
