@@ -8,6 +8,8 @@ class Signup extends React.Component {
 
     this.onChange = this.onChange.bind(this);
 
+    this.handleSubmit = this.handleSubmit.bind(this);
+
     this.state = {};
   }
 
@@ -15,40 +17,56 @@ class Signup extends React.Component {
     this.props.onChange(toRender);
   }
 
-  render() {
+  handleSubmit(event) {
+    event.preventDefault();
+  }
+
+  render() {  
     return (
       <div className='Form'>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <div className='Form-field'>
-            <label htmlFor="user">
+            <label htmlFor="cnp">
               Cod numeric personal
             </label>
             <div className='Form-name'>
-              <input type="text" name="user" />
+              <input 
+               type="text" 
+               name="cnp"
+               required={true} />
             </div>
           </div>
           <div className='Form-field'>
-            <label htmlFor="user">
+            <label htmlFor="grad">
               Grad
             </label>
             <div className='Form-name'>
-              <input type="text" name="user" />
+              <input 
+               type="text" 
+               name="grad"
+               required={true} />
             </div>
           </div>
           <div className='Form-field'>
-            <label htmlFor="user">
+            <label htmlFor="nume">
               Nume
             </label>
             <div className='Form-name'>
-              <input type="text" name="user" />
+              <input 
+               type="text" 
+               name="nume"
+               required={true} />
             </div>
           </div>
           <div className='Form-field'>
-            <label htmlFor="user">
+            <label htmlFor="prenume">
               Prenume
             </label>
             <div className='Form-name'>
-              <input type="text" name="user" />
+              <input 
+               type="text" 
+               name="prenume"
+               required={true} />
             </div>
           </div>
           <div className='Form-field'>
@@ -56,7 +74,10 @@ class Signup extends React.Component {
               Utilizator
             </label>
             <div className='Form-name'>
-              <input type="text" name="user" />
+              <input 
+               type="text" 
+               name="user"
+               required={true} />
             </div>
           </div>
           <PasswordBox visibility='visible'/>

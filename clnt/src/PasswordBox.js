@@ -1,8 +1,10 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
+import Input from './Input'
 
 import 'tippy.js/dist/tippy.css';
-import 'tippy.js/themes/material.css'
+import 'tippy.js/themes/red-material.css'
+import 'tippy.js/themes/blue-material.css'
 
 
 class PasswordBox extends React.Component {
@@ -15,25 +17,27 @@ class PasswordBox extends React.Component {
       passwordVisibilityStates: {
         hidden: {
           iconClass: 'fas fa-eye icon-eye',
+          inputClass: 'right-padded blue',
           tippyContent: 'Arată parola',
-          inputType: 'password'
+          inputType: 'password',
+          theme: 'blue-material',
         },
 
         visible: {
           iconClass: 'fas fa-eye-slash icon-eye red',
+          inputClass: 'right-padded red bold glow',
           tippyContent: 'Ascunde parola',
-          inputType: 'text'
+          inputType: 'text',
+          theme: 'red-material',
         }
       },
 
-      passwordVisibility: this.props.visibility || 'hidden'
+      passwordVisibility: this.props.visibility || 'hidden',
     }
   }
 
   togglePasswordVisibility() {
 
-    //let displayKey = this.state.display ^ 1;
-    //let displayValue = this.state.displays[displayKey];
     let visibility = this.state.passwordVisibility;
 
     if ('hidden' === visibility) {
@@ -56,13 +60,16 @@ class PasswordBox extends React.Component {
           Parola
         </label>
         <div className='Form-password'>
-          <input
-           className='right-padded'  
-           type={display.inputType} 
-           name="pass"
-           required />
+        <Input
+          className={display.inputClass}
+          type={display.inputType} 
+          name='pass'
+          placeholder='Introduceți parola'
+          required={true} 
+          onInvalid={this.onInvalid}  
+        />
           <Tippy content={display.tippyContent}
-          theme='material'
+          theme={display.theme}
           hideOnClick={false}
           placement='right'
           offset={[0,20]}>
@@ -70,6 +77,9 @@ class PasswordBox extends React.Component {
             onClick={this.togglePasswordVisibility}>
             </i>
           </Tippy>
+        </div>
+        <div>
+          <span>{this.state.errorMessage}</span>
         </div>
       </div>
     );

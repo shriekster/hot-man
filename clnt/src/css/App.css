@@ -1,6 +1,20 @@
-* {
+@font-face {
+  font-family: 'Source Sans Pro Regular';
+  src: url('../webfonts/SourceSansPro-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro Bold';
+  src: url('../webfonts/SourceSansPro-Bold.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+*, html, body, form, input {
   box-sizing: border-box;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
   margin: 0;
   padding: 0;
   font-size: max(16px, 1vw);
@@ -15,6 +29,7 @@ input[type='password'] {
   width: 95%;
   color: #3377AA;
   background-color: whitesmoke;
+  font-size: .9rem;
 }
 
 button {
@@ -24,7 +39,7 @@ button {
   border-radius: 5px;
   padding: 4px;
   background-color: #3377AA;
-  color: white;
+  color: whitesmoke;
   margin: 0 auto;
 }
 
@@ -41,7 +56,6 @@ form {
   width: inherit;
   border: 1px solid #3377AA;
 }
-
 
 .App {
   display: flex;
@@ -124,7 +138,15 @@ form {
 }
 
 .red {
-  color: #D72C25;
+  color: #D72C25 !important;
+}
+
+.blue {
+  color: #3377AA !important;
+}
+
+.bold {
+  font-family: 'Source Sans Pro Bold' !important;
 }
 
 .centered-text {
@@ -136,8 +158,8 @@ form {
 }
 
 .pulse {
-  box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
-	animation: pulse-blue 1.3s infinite;
+  box-shadow: 0 0 0 0 rgba(215, 44, 37, 1);
+	animation: pulse 1.3s infinite;
 }
 
 .loading {
@@ -145,19 +167,45 @@ form {
   height: 126px;
 }
 
-@keyframes pulse-blue {
+.rotateOut {
+  animation-name: rotateOut;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  transform-origin: center;
+}
+
+.glow {
+  animation: glow .8s infinite alternate;
+}
+
+@keyframes rotateOut {
+  0% {
+    opacity: 1;
+  } to {
+    transform: rotate(720deg) scale(.1);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
 	0% {
 		transform: scale(0.9);
-		box-shadow: 0 0 0 0 rgba(51, 119, 170, 0.7);
+		box-shadow: 0 0 0 0 rgba(215, 44, 37, 0.7);
   }
 	
 	70% {
 		transform: scale(1.1);
-		box-shadow: 0 0 0 15px rgba(51, 119, 170, 0);
+		box-shadow: 0 0 0 10px rgba(215, 44, 37, 0);
 	}
 	
 	100% {
 		transform: scale(0.9);
-		box-shadow: 0 0 0 0 rgba(51, 119, 170, 0);
+		box-shadow: 0 0 0 0 rgba(215, 44, 37, 0);
 	}
+}
+
+@keyframes glow {
+  to {
+		text-shadow: 0 0 10px rgba(215, 44, 37, .8);
+  }	
 }

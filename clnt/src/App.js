@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-
+import Loading from './Loading';
 import './css/App.css';
 /*!
  * Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com
@@ -10,7 +10,6 @@ import './css/all.min.css';
 const Login = React.lazy(() => import('./Login'));
 const Signup = React.lazy(() => import('./Signup'));
 const Main = React.lazy(() => import('./Main'));
-
 
 /**
  * Controls the app components
@@ -39,7 +38,7 @@ class App extends React.Component {
   onChange(toRender) {
     let Component = toRender;
     if (Object.keys(this.state.components).includes(toRender)) {
-      
+
       this.setState({
         toRender: this.state.components[toRender]
       });
@@ -55,12 +54,12 @@ class App extends React.Component {
 
   render() {
     let Component = this.state.toRender;
-    let className = (Component === Login) || (Component == Signup) ? 'App Intro' : 'App';
+    let className = (Component === Login) || (Component === Signup) ? 'App Intro' : 'App';
     
     // The props are defined here (onChange)
     return (
       <div className={className}>
-        <Suspense fallback={<div className='Form'>Se încarcă...</div>}>
+        <Suspense fallback={<Loading status='loading'/>}>
           <Component onChange={this.onChange}/>
         </Suspense>
       </div>

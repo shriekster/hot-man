@@ -1,5 +1,5 @@
 import React from 'react';
-import loading from './images/hotel-loading.svg'
+import Loading from './Loading'
 import PasswordBox from './PasswordBox'
 
 class Login extends React.Component {
@@ -7,6 +7,8 @@ class Login extends React.Component {
     super(props);
 
     this.onChange = this.onChange.bind(this);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
 
@@ -17,10 +19,14 @@ class Login extends React.Component {
     this.props.onChange(toRender);
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+  }
+
   render() {
     return (
       <div className='Form'>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <div className='Form-field'>
             <label htmlFor="user">
               Utilizator
@@ -29,6 +35,7 @@ class Login extends React.Component {
               <input 
                type="text" 
                name="user"
+               placeholder='Introduceți numele de utilizator'
                required />
             </div>
           </div>
@@ -44,9 +51,6 @@ class Login extends React.Component {
           </div>
           <div className='Form-field'>
             <button>Conectează-te</button>
-          </div>
-          <div className='Form-field'>
-            <img className='pulse loading' src={loading} />
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>
