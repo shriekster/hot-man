@@ -4,7 +4,7 @@ import RequiredTippy from './RequiredTippy';
 import Tippy from '@tippyjs/react';
 
 
-class PasswordBox extends React.Component {
+class PasswordInput extends React.Component {
   constructor(props) {
     super(props);
     
@@ -53,7 +53,7 @@ class PasswordBox extends React.Component {
     let asterisk = this.props.asterisk;
     return (
       <div className='Form-field'>
-        <label htmlFor="pass">
+        <label htmlFor='pass'>
           Parola
           {
             asterisk &&
@@ -65,7 +65,8 @@ class PasswordBox extends React.Component {
           className={display.inputClass}
           type={display.inputType} 
           name='pass'
-          placeholder='Introdu parola' 
+          placeholder='Introdu parola'
+          onInput={this.props.onInput}
         />
           <Tippy content={display.tippyContent}
             theme={display.theme}
@@ -85,4 +86,4 @@ class PasswordBox extends React.Component {
   }
 }
 
-export default PasswordBox;
+export default PasswordInput;

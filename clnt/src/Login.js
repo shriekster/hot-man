@@ -1,6 +1,11 @@
 import React from 'react';
-import Loading from './Loading'
-import PasswordBox from './PasswordBox'
+import Tippy from '@tippyjs/react';
+import Input from './Input'
+import PasswordInput from './PasswordInput'
+
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/red-material.css'
+import 'tippy.js/themes/blue-material.css'
 
 class Login extends React.Component {
   constructor(props) {
@@ -8,19 +13,57 @@ class Login extends React.Component {
 
     this.onChange = this.onChange.bind(this);
 
+    this.onInput = this.onInput.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-
+      user: '',
+      pass: '',
+      remember: 'no'
     };
+  }
+
+  onInput(e) {
+    switch(e.target.id) {
+      case 'user': {
+        this.setState({
+          user: e.target.value
+        })
+      }
+
+      case 'pass': {
+        this.setState({
+          pass: e.target.value
+        })
+      }
+
+      case 'remember': {
+        this.setState({
+          remember: e.target.checked ? 'yes' : 'no'
+        })
+      }
+    }
   }
 
   onChange(toRender) {
     this.props.onChange(toRender);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit(e) {
+    e.preventDefault();
+    
+    // Simple POST request with a JSON body using fetch
+    const requestOptions = {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state)
+    };
+
+    fetch('http://localhost:3001/login', requestOptions)
+        .then(response => {console.log(response);response.json()})
+        .then(data => console.log(data));
   }
 
   render() {
@@ -28,24 +71,30 @@ class Login extends React.Component {
       <div className='Form'>
         <form onSubmit={this.handleSubmit}>
           <div className='Form-field'>
-            <label htmlFor="user">
+            <label htmlFor='user'>
               Utilizator
             </label>
             <div className='Form-name'>
-              <input 
-               type="text" 
-               name="user"
-               placeholder='Introduceți numele de utilizator'
-               required />
+              <Input 
+               type='text' 
+               name='user'
+               id='user'
+               placeholder='Introdu numele de utilizator'
+               onInput={this.onInput}
+              />
             </div>
           </div>
-          <PasswordBox />
+          <PasswordInput />
           <div className='Form-field'>
-            <input 
-             className='Form-remember'
-             type="checkbox" 
-             name="remember" />
-            <label htmlFor="remember">
+            <Input 
+              className='Form-remember'
+              type='checkbox' 
+              name='remember'
+              id='remember'
+              value='yes'
+              onInput={this.onInput}
+             />
+            <label htmlFor='remember'>
               Ține-mă minte
             </label>
           </div>
@@ -54,7 +103,7 @@ class Login extends React.Component {
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>
-          Nu aveți cont? <span onClick={() => this.onChange('Signup')} className="Form-hint">Creați un cont.</span>
+          Nu ai cont? <span onClick={() => this.onChange('Signup')} className='Form-hint'>Creează un cont</span>.
         </div>
       </div>
     );

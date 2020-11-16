@@ -54,7 +54,15 @@ form {
   justify-content: space-evenly;
   /*width: max-content;*/
   width: inherit;
-  border: 1px solid #3377AA;
+  /*border: 1px solid #3377AA;*/
+}
+
+input:placeholder-shown {
+  animation: none;
+}
+
+::placeholder {
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
 }
 
 .App {
@@ -129,7 +137,7 @@ form {
 .icon-eye {
   position: absolute;
   top: 2px;
-  right: 1.5vw;
+  right: 1.6vw;
   font-size: 24px;
   z-index: 1;
   margin: 2px;
@@ -147,6 +155,10 @@ form {
 
 .bold {
   font-family: 'Source Sans Pro Bold' !important;
+}
+
+.big {
+  font-size: 1.5rem;
 }
 
 .centered-text {
@@ -176,6 +188,10 @@ form {
 
 .glow {
   animation: glow .8s infinite alternate;
+}
+
+.my-tippy {
+  font-size: 10px !important;
 }
 
 @keyframes rotateOut {

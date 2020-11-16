@@ -1,5 +1,14 @@
 import React from 'react';
-import PasswordBox from './PasswordBox';
+import Tippy from '@tippyjs/react';
+import Input from './Input';
+import PasswordInput from './PasswordInput';
+import RequiredTippy from './RequiredTippy';
+
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/red-material.css'
+import 'tippy.js/themes/red-material-light.css'
+import 'tippy.js/themes/blue-material.css'
+
 
 
 class Signup extends React.Component {
@@ -10,7 +19,16 @@ class Signup extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.state = {};
+    this.state = {
+      elements: {
+        cnp: '',
+        grad: '',
+        nume: '',
+        prenume: '',
+        user: '',
+        pass: ''
+      }
+    };
   }
 
   onChange(toRender) {
@@ -24,69 +42,81 @@ class Signup extends React.Component {
   render() {  
     return (
       <div className='Form'>
-        <form onSubmit={this.handleSubmit}>
+        <form 
+          onSubmit={this.handleSubmit}
+          autoComplete='off'>
           <div className='Form-field'>
-            <label htmlFor="cnp">
+            <label htmlFor='cnp'>
               Cod numeric personal
+              <RequiredTippy />
             </label>
             <div className='Form-name'>
-              <input 
-               type="text" 
-               name="cnp"
-               required={true} />
+              <Input 
+               type='text' 
+               name='cnp'
+               placeholder='Introdu CNP-ul'
+              />
             </div>
           </div>
           <div className='Form-field'>
-            <label htmlFor="grad">
+            <label htmlFor='grad'>
               Grad
+              <RequiredTippy />
             </label>
             <div className='Form-name'>
-              <input 
-               type="text" 
-               name="grad"
-               required={true} />
+              <Input 
+               type='text' 
+               name='grad'
+               placeholder='Introdu gradul'
+               />
             </div>
           </div>
           <div className='Form-field'>
-            <label htmlFor="nume">
+            <label htmlFor='nume'>
               Nume
+              <RequiredTippy />
             </label>
             <div className='Form-name'>
-              <input 
-               type="text" 
-               name="nume"
-               required={true} />
+              <Input 
+               type='text' 
+               name='nume'
+               placeholder='Introdu numele'
+               />
             </div>
           </div>
           <div className='Form-field'>
-            <label htmlFor="prenume">
+            <label htmlFor='prenume'>
               Prenume
+              <RequiredTippy /> 
             </label>
             <div className='Form-name'>
-              <input 
-               type="text" 
-               name="prenume"
-               required={true} />
+              <Input 
+               type='text' 
+               name='prenume'
+               placeholder='Introdu prenumele'
+               />
             </div>
           </div>
           <div className='Form-field'>
-            <label htmlFor="user">
+            <label htmlFor='user'>
               Utilizator
+              <RequiredTippy /> 
             </label>
             <div className='Form-name'>
-              <input 
-               type="text" 
-               name="user"
-               required={true} />
+              <Input 
+               type='text' 
+               name='user'
+               placeholder='Alege un nume de utilizator'
+               />
             </div>
           </div>
-          <PasswordBox visibility='visible'/>
+          <PasswordInput visibility='visible' asterisk={true}/>
           <div className='Form-field'>
             <button>Creează cont</button>
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>
-              Aveți deja un cont? <span onClick={() => this.onChange('Login')} className="Form-hint">Autentificați-vă.</span>
+              Ai deja un cont? <span onClick={() => this.onChange('Login')} className='Form-hint'>Conectează-te</span>.
         </div>
       </div>
     );

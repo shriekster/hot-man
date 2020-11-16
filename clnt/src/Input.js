@@ -5,43 +5,34 @@ class Input extends React.Component {
   constructor(props) {
     super(props);
     
-    this.onChange = this.onChange.bind(this);
-    this.onInvalid = this.onInvalid.bind(this);
+    //this.onInput = this.onInput.bind(this);
+    //this.onInvalid = this.onInvalid.bind(this);
 
-    this.state = {
-      backgroundColor: 'whitesmoke'
-    }
+    //this.state = {}
+  }
+/*
+  onInput(e) {
+    e.target.setCustomValidity('TEST');
+
   }
 
-  onChange() {
-    this.setState({
-      backgroundColor: 'whitesmoke'
-    })
+  onInvalid(e) {
+    e.target.setCustomValidity('TEST');
   }
-
-  onInvalid() {
-    this.setState({
-      backgroundColor: '#D72C25'
-    })
-  }
-
-  onVisibilityChange() {
-    this.props.onVisibilityChange();
-  }
+*/
 
   render() {
-    console.log(this.props.className)
     return (
       <input
-      className={this.props.className}
-      style={{backgroundColor: this.state.backgroundColor}}
-      type={this.props.type} 
-      name={this.props.name}
-      placeholder={this.props.placeholder}
-      required={this.props.required || true} 
-      onChange={this.onChange}
-      onInvalid={this.onInvalid}
-    />
+        className={this.props.className}
+        type={this.props.type} 
+        name={this.props.name}
+        id={this.props.id}
+        placeholder={this.props.placeholder}
+        value={this.props.value}
+        onInput={this.props.onInput}
+        //onInvalid={this.onInvalid}
+      />
     );
   }
 }

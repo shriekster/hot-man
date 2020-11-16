@@ -1,10 +1,22 @@
 var express = require('express');
 var router = express.Router();
 
+router.options('/', function(req, res, next) {
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  });
+  res.send('')
+});
+
 /* POST */
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
   //res.render('index', { title: 'Express' });
-  res.redirect('http://localhost:3000');
+  console.log (req.query)
+  res.json({
+    status: 'YES'
+  })
 });
 
 module.exports = router;
