@@ -27,9 +27,11 @@ function createWindow () {
     }
   })
 
+  // set the user agent of the window (browser)
+  mainWindow.webContents.userAgent = 'Hotelitary/1.0.0-beta';
   // and load the index.html of the app.
   //mainWindow.loadFile('index.html')
-  mainWindow.loadURL('http://localhost:3000')
+  mainWindow.loadURL('http://localhost:3001')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

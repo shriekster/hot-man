@@ -56,13 +56,13 @@ class Login extends React.Component {
     // Simple POST request with a JSON body using fetch
     const requestOptions = {
       method: 'POST',
-      mode: 'no-cors',
+      mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state)
     };
 
     fetch('http://localhost:3001/login', requestOptions)
-        .then(response => {console.log(response);response.json()})
+        .then(response => {console.log(response)})
         .then(data => console.log(data));
   }
 

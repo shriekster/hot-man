@@ -7,16 +7,19 @@ router.options('/', function(req, res, next) {
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
     'Access-Control-Allow-Headers': 'Content-Type'
   });
-  res.send('')
+  res.send('test')
 });
 
 /* POST */
 router.post('/', function(req, res, next) {
   //res.render('index', { title: 'Express' });
-  console.log (req.query)
   res.json({
     status: 'YES'
   })
 });
+
+//router.all('/', function(req, res, next) {
+//  res.redirect('http://localhost:3001')
+//});
 
 module.exports = router;

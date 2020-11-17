@@ -31,13 +31,18 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  let options = {
+    root: path.join(__dirname, 'public'),
+  }
   // set locals, only providing error in development
   res.locals.message = err.message;
+  //console.log(err.message)
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+  res.sendFile('404.html', options);
 });
 
 module.exports = app;
