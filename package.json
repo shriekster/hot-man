@@ -23,6 +23,7 @@
   "dependencies": {
     "better-sqlite3": "^7.1.1",
     "cookie-parser": "~1.4.4",
+    "custom-electron-titlebar": "^3.2.5",
     "debug": "~2.6.9",
     "express": "^4.17.1",
     "http-errors": "~1.6.3",

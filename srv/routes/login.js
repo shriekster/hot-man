@@ -3,19 +3,33 @@ var router = express.Router();
 
 router.options('/', function(req, res, next) {
   res.set({
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  });
-  res.send('test')
+    'Allow': 'OPTIONS',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'http://localhost:3000',
+    'Access-Control-Allow-Methods': 'OPTIONS, POST',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Accept-Encoding, Origin'
+  })
+  .status(200)
+  .send();
 });
 
 /* POST */
 router.post('/', function(req, res, next) {
-  //res.render('index', { title: 'Express' });
+  res.set({
+    'Allow': 'POST',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'http://localhost:3000',
+  });
+
+  let status = 'denied';
+  if (req.body.user === 'test' && req.body.pass === 'test') {
+    status = 'allowed';
+  }
+  
   res.json({
-    status: 'YES'
-  })
+    status: status
+  });
 });
 
 //router.all('/', function(req, res, next) {

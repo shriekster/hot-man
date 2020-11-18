@@ -6,6 +6,8 @@ class RequiredTippy extends React.Component {
     super(props);
 
     this.state = {
+      tippyContent: 'Obligatoriu',
+      spanContent: ' *'
     }
   }
 
@@ -13,11 +15,11 @@ class RequiredTippy extends React.Component {
     return (
       <Tippy
         className='my-tippy' 
-        content='Obligatoriu'
+        content={this.state.tippyContent}
         theme='red-material-light'
         hideOnClick={false}
         placement='right'>
-        <span className='red bold'> *</span>
+        <span className='red bold'>{this.state.spanContent}</span>
       </Tippy> 
     );
   }

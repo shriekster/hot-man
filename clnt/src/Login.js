@@ -62,8 +62,14 @@ class Login extends React.Component {
     };
 
     fetch('http://localhost:3001/login', requestOptions)
-        .then(response => {console.log(response)})
-        .then(data => console.log(data));
+        .then(response => response.json())
+        .then(login => {
+          if (login.status === 'allowed') {
+            this.onChange('Main')
+          } else {
+            console.log('WRONG');
+          }
+        });
   }
 
   render() {

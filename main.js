@@ -5,6 +5,7 @@ const path = require('path')
 const webapp = require('./srv/webapp');
 const debug = require('debug')('srv:*');
 const http = require('http');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -18,23 +19,30 @@ webapp.set('port', port);
 var server = http.createServer(webapp);
 
 function createWindow () {
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    frame: false,
+    titleBarStyle: 'hidden',
+    icon: path.join(__dirname, 'srv/public/hotel-icon.png'),
+    //icon: path.join(__dirname, 'srv/public/icon.png'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, 'preload.js'),
+      enableRemoteModule: true,
+      nodeIntegration: true,
+    },
   })
 
   // set the user agent of the window (browser)
-  mainWindow.webContents.userAgent = 'Hotelitary/1.0.0-beta';
+  mainWindow.webContents.userAgent = 'Hotelitary/v1.0.0-alpha.1';
   // and load the index.html of the app.
   //mainWindow.loadFile('index.html')
   mainWindow.loadURL('http://localhost:3001')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
   // Close the menu bar
   mainWindow.removeMenu();
 }

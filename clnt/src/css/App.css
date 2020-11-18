@@ -12,13 +12,18 @@
   font-style: normal;
 }
 
-*, html, body, form, input {
+html, body, form, input, button {
   box-sizing: border-box;
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
   margin: 0;
   padding: 0;
   font-size: max(16px, 1vw);
 }
+
+body {
+  overflow-y: hidden;
+}
+
 
 input {
   min-height: 30px;
@@ -103,6 +108,9 @@ input:placeholder-shown {
   height: 50vh;
   width: 30vw;
   margin: 5px 2vw;
+
+  font-size: max(16px, 1vw);
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
 }
 
 .Form-field {

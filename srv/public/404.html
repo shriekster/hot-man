@@ -9,15 +9,52 @@
 		  display: block;
 		  background: white
 		}
+		.label-danger {
+    	background-color: #d9534f;
+		}
+		.label {
+	    display: inline;
+	    padding: .2em .6em .3em;
+	    font-size: 75%;
+	    font-weight: 700;
+	    line-height: 1;
+	    color: #fff;
+	    text-align: center;
+	    white-space: nowrap;
+	    vertical-align: baseline;
+	    border-radius: .25em;
+		}
+		.btn-default {
+	    color: #333;
+	    background-color: #fff;
+	    border-color: #ccc;
+		}
+		.btn {
+	    display: inline-block;
+	    padding: 4px;
+	    margin: 6px;
+	    font-size: 14px;
+	    font-weight: 400;
+	    line-height: 1;
+	    text-align: center;
+	    white-space: nowrap;
+	    vertical-align: middle;
+	    touch-action: manipulation;
+	    cursor: pointer;
+	    user-select: none;
+	    background-image: none;
+	    border: 1px solid black;
+	    border-radius: 4px;
+		}
 	</style>
 	<title>&quest;</title>
 </head>
 
 <body>
-	<p class="center">Pagina pe care o cauți nu există.
-  <br/><span class="label label-danger">Spațiu</span> - trage 
-  <br/><span class="label label-danger">←</span>&#160;<span class="label label-danger">→</span> mișcă-te&#160;&#160;&#160;
-  <br/><button class="btn btn-default btn-xs" id="restart">Restart</button></p>
+	<p class="center">
+  <br/><span class="label label-danger">Spațiu</span>,  
+  <span class="label label-danger">←</span>,&#160;<span class="label label-danger">→</span>&#160;&#160;&#160;
+  <br/><button class="btn btn-default" id="restart">Restart</button></p>
   <br/>
 
 	<canvas id="space-invaders"/>

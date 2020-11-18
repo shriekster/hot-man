@@ -9,11 +9,11 @@ router.get('/', function(req, res, next) {
     root: path.join(__dirname, 'public'),
   }
 
-  if (req.headers['user-agent'] !== 'Hotelitary/1.0.0-beta'){
+  if (req.headers['user-agent'] !== 'Hotelitary/v1.0.0-alpha.1'){
     console.log('WARNING: ACCESS');
-    res.status(404).sendFile('404.html', options)
+    res.status(404).sendFile('404.html', options);
   }
-  
+  else
   res.redirect('http://localhost:3000');
 });
 

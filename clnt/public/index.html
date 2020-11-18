@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
   <head>
     <meta charset="utf-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self' localhost:* 'unsafe-inline'; 
+                   script-src 'self' localhost:* 'unsafe-inline'; 
+                   style-src 'self' localhost:* 'unsafe-inline';
+                   img-src localhost:* data:">
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="CRA at first, then work, work"
-    />
+    <!--meta name="theme-color" content="#000000" /-->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -39,5 +41,7 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script src="./renderer.js"></script>
+    <script src="./preload.js"></script>
   </body>
 </html>
