@@ -20,28 +20,33 @@ class Login extends React.Component {
     this.state = {
       user: '',
       pass: '',
-      remember: 'no'
+      remember: 'no',
+      errorMessage: ''
     };
   }
 
   onInput(e) {
     switch(e.target.id) {
+
       case 'user': {
         this.setState({
           user: e.target.value
-        })
+        });
+        break;
       }
 
       case 'pass': {
         this.setState({
           pass: e.target.value
-        })
+        });
+        break;
       }
 
       case 'remember': {
         this.setState({
           remember: e.target.checked ? 'yes' : 'no'
-        })
+        });
+        break;
       }
     }
   }
@@ -64,10 +69,13 @@ class Login extends React.Component {
     fetch('http://localhost:3001/login', requestOptions)
         .then(response => response.json())
         .then(login => {
+          console.log(login.status)
           if (login.status === 'allowed') {
             this.onChange('Main')
           } else {
-            console.log('WRONG');
+            this.setState({
+              errorMessage: 'Utilizatorul / parola greșit(ă)!'
+            })
           }
         });
   }
@@ -90,7 +98,8 @@ class Login extends React.Component {
               />
             </div>
           </div>
-          <PasswordInput />
+          <PasswordInput
+            onInput={this.onInput} />
           <div className='Form-field'>
             <Input 
               className='Form-remember'
@@ -106,6 +115,9 @@ class Login extends React.Component {
           </div>
           <div className='Form-field'>
             <button>Conectează-te</button>
+          </div>
+          <div className='Form-field'>
+            {this.state.errorMessage}
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>

@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const crypto = require('crypto');
+var db = require('../db');
 
 router.options('/', function(req, res, next) {
   res.set({
@@ -23,17 +25,40 @@ router.post('/', function(req, res, next) {
   });
 
   let status = 'denied';
-  if (req.body.user === 'test' && req.body.pass === 'test') {
-    status = 'allowed';
-  }
+
+  let user = req.body.user;
+  let pass = req.body.pass;
+  let remember = req.body.remember;
+
+  // Prepare the SQL statement
+  const statement = db.prepare(`SELECT Utilizator as _user, Parola as _pass, Extra as _salt from Utilizatori where Utilizator = ?`);
+  // Check if the username is correct and get the hashed password and the salt
+  const row = statement.get(user);
   
-  res.json({
-    status: status
-  });
+  if (row && undefined != row){
+    crypto.pbkdf2(pass, row._salt, 10000, 32, 'sha512', (err, derivedKey) => {
+      if (err) throw err;
+
+      let hash = derivedKey.toString('base64');
+
+      if(hash === row._pass) {
+        status = 'allowed';
+        console.log('Login successful.')
+      } else {
+        console.log('Login failed!')
+      }
+
+      res.json({
+        status: status
+      });
+    });
+  }
+
 });
 
-//router.all('/', function(req, res, next) {
-//  res.redirect('http://localhost:3001')
-//});
+router.all('/', function(req, res, next) {
+  console.log('WARNING: HTTP METHOD')
+  res.redirect('http://localhost:3001')
+});
 
 module.exports = router;

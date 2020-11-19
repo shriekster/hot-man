@@ -65,6 +65,7 @@ class PasswordInput extends React.Component {
           className={display.inputClass}
           type={display.inputType} 
           name='pass'
+          id='pass'
           placeholder='Introdu parola'
           onInput={this.props.onInput}
         />
