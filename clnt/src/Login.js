@@ -8,8 +8,6 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onChange = this.onChange.bind(this);
-
     this.onInput = this.onInput.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,12 +28,12 @@ class Login extends React.Component {
       showUserWarning: false,
       showPassWarning: false
     });
-    
+
     switch(e.target.id) {
 
       case 'user': {
         this.setState({
-          user: e.target.value
+          user: e.target.value.trim()
         });
         break;
       }
@@ -56,23 +54,28 @@ class Login extends React.Component {
     }
   }
 
-  onChange(toRender) {
-    this.props.onChange(toRender);
-  }
-
   handleSubmit(e) {
     e.preventDefault();
 
     let user = this.state.user;
     let pass = this.state.pass;
+    let remember = this.state.remember;
 
-    if (user !== '' && pass !== '') {
+    let credentials = {
+      user: user,
+      pass: pass,
+      remember: remember,
+    };
+
+    let valid = (user !== '' && pass !== '');
+
+    if (valid) {
       // Simple POST request with a JSON body using fetch
       const requestOptions = {
         method: 'POST',
         mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.state)
+        body: JSON.stringify(credentials)
       };
 
       fetch('http://localhost:3001/login', requestOptions)
@@ -81,7 +84,7 @@ class Login extends React.Component {
         console.log(login.status)
 
         if (login.status === 'allowed') {
-          this.onChange('Main')
+          this.props.onChange('Main')
         } else {
           this.setState({
             showError: true
@@ -106,21 +109,23 @@ class Login extends React.Component {
   render() {
     return (
       <div className='Form'>
-        <form onSubmit={this.handleSubmit}>
+        <form 
+          onSubmit={this.handleSubmit}
+          autoComplete='off'
+          autoCorrect='off'>
           <div className='Form-field'>
             <label htmlFor='user'>
               Utilizator
             </label>
             <div className='Form-name'>
               <Tippy
-                hideOnClick={false}
                 content={
                   <>
                     <i className='fas fa-exclamation-circle'></i> Introdu utilizatorul
                   </>
                 }
                 allowHTML={true}
-                placement='bottom-start'
+                placement='right'
                 arrow={false}
                 theme='red-material-warning'
                 visible={this.state.showUserWarning}>
@@ -156,7 +161,6 @@ class Login extends React.Component {
           </div>
           <div className='Form-field'>
           <Tippy
-            hideOnClick={false}
             allowHTML={true}
             content={
               <>
@@ -172,7 +176,7 @@ class Login extends React.Component {
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>
-          Nu ai cont? <span onClick={() => this.onChange('Signup')} className='Form-hint bold'>Creează un cont</span>.
+          Nu ai cont? <span onClick={() => this.props.onChange('Signup')} className='Form-hint bold glow'>Creează un cont</span>.
         </div>
       </div>
     );

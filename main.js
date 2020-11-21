@@ -22,8 +22,8 @@ function createWindow () {
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1388,
+    height: 768,
     frame: false,
     titleBarStyle: 'hidden',
     icon: path.join(__dirname, 'srv/public/hotel-icon.png'),
@@ -34,6 +34,8 @@ function createWindow () {
     },
   })
 
+  // maximize the window
+  mainWindow.maximize();
   // set the user agent of the window (browser)
   mainWindow.webContents.userAgent = 'Hotelitary/v1.0.0-alpha.1';
   // and load the index.html of the app.

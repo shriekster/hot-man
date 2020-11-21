@@ -29,7 +29,7 @@ router.post('/', function(req, res, next) {
   let user = req.body.user;
   let pass = req.body.pass;
   let remember = req.body.remember;
-
+  console.log(req.body)
   // Prepare the SQL statement
   const statement = db.prepare(`SELECT Utilizator as _user, Parola as _pass, 
                                 Extra as _salt from Utilizatori 
@@ -54,11 +54,12 @@ router.post('/', function(req, res, next) {
         status: status
       });
     });
+  } else {
+    // Send response if the user is not in the database
+    res.json({
+      status: status
+    });
   }
-  // Send response if the user is not in the database
-  res.json({
-    status: status
-  });
 
 });
 

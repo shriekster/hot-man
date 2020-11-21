@@ -38,6 +38,7 @@ class App extends React.Component {
 
   onChange(toRender) {
     let Component = toRender;
+    
     if (Object.keys(this.state.components).includes(toRender)) {
 
       this.setState({

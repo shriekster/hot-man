@@ -57,19 +57,19 @@ class PasswordInput extends React.Component {
           Parola
           {
             asterisk &&
-            <RequiredTippy />
+            <RequiredTippy 
+              content='Câmp obligatoriu - minim 8 caractere'/>
           }
         </label>
         <div className='Form-password'>
           <Tippy
-            hideOnClick={false}
             content={
               <>
                 <i className='fas fa-exclamation-circle'></i> Introdu parola
               </>
             }
             allowHTML={true}
-            placement='bottom-start'
+            placement='right'
             arrow={false}
             theme='red-material-warning'
             visible={this.props.displayWarning}>
