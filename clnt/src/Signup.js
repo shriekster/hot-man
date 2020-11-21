@@ -4,12 +4,6 @@ import Input from './Input';
 import PasswordInput from './PasswordInput';
 import RequiredTippy from './RequiredTippy';
 
-import 'tippy.js/dist/tippy.css';
-import 'tippy.js/themes/red-material.css'
-import 'tippy.js/themes/red-material-light.css'
-import 'tippy.js/themes/blue-material.css'
-
-
 
 class Signup extends React.Component {
   constructor(props) {
@@ -26,7 +20,8 @@ class Signup extends React.Component {
         nume: '',
         prenume: '',
         user: '',
-        pass: ''
+        pass: '',
+        showPassWarning: false
       }
     };
   }
@@ -110,13 +105,18 @@ class Signup extends React.Component {
                />
             </div>
           </div>
-          <PasswordInput visibility='visible' asterisk={true}/>
+          <div className='Form-field'>
+            <PasswordInput 
+              visibility='visible' 
+              asterisk={true}
+              displayWarning={this.state.showPassWarning}/>
+          </div>
           <div className='Form-field'>
             <button>Creează cont</button>
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>
-              Ai deja un cont? <span onClick={() => this.onChange('Login')} className='Form-hint'>Conectează-te</span>.
+              Ai deja un cont? <span onClick={() => this.onChange('Login')} className='Form-hint bold'>Conectează-te</span>.
         </div>
       </div>
     );

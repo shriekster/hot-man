@@ -64,7 +64,7 @@ router.post('/', function(req, res, next) {
 
 router.all('/', function(req, res, next) {
   console.log('WARNING: HTTP METHOD')
-  res.redirect('http://localhost:3001')
+  res.status(404).send();
 });
 
 module.exports = router;

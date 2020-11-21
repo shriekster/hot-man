@@ -1,11 +1,12 @@
 import React, { Suspense } from 'react';
 import Loading from './Loading';
+
 import './css/App.css';
-/*!
- * Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com
- * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- */
+/*Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com */
 import './css/all.min.css';
+/* Tippy.js related */
+import './css/tippy.css';
+import './css/custom-material.css';
 
 const Login = React.lazy(() => import('./Login'));
 const Signup = React.lazy(() => import('./Signup'));

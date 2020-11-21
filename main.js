@@ -27,7 +27,6 @@ function createWindow () {
     frame: false,
     titleBarStyle: 'hidden',
     icon: path.join(__dirname, 'srv/public/hotel-icon.png'),
-    //icon: path.join(__dirname, 'srv/public/icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       enableRemoteModule: true,
@@ -44,7 +43,7 @@ function createWindow () {
   // Open the DevTools.
   //mainWindow.webContents.openDevTools()
   // Close the menu bar
-  mainWindow.removeMenu();
+  //mainWindow.removeMenu();
 }
 
 // This method will be called when Electron has finished
@@ -52,7 +51,6 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
 
-  // Launch Express webserver
   /**
    * Listen on provided port, on all network interfaces.
    */

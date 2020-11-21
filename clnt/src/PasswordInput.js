@@ -52,7 +52,7 @@ class PasswordInput extends React.Component {
     let display = this.state.passwordVisibilityStates[this.state.passwordVisibility];
     let asterisk = this.props.asterisk;
     return (
-      <div className='Form-field'>
+      <div>
         <label htmlFor='pass'>
           Parola
           {
@@ -61,14 +61,29 @@ class PasswordInput extends React.Component {
           }
         </label>
         <div className='Form-password'>
-        <Input
-          className={display.inputClass}
-          type={display.inputType} 
-          name='pass'
-          id='pass'
-          placeholder='Introdu parola'
-          onInput={this.props.onInput}
-        />
+          <Tippy
+            hideOnClick={false}
+            content={
+              <>
+                <i className='fas fa-exclamation-circle'></i> Introdu parola
+              </>
+            }
+            allowHTML={true}
+            placement='bottom-start'
+            arrow={false}
+            theme='red-material-warning'
+            visible={this.props.displayWarning}>
+            <span className='legacy' tabIndex='0'>
+              <Input
+                className={display.inputClass}
+                type={display.inputType} 
+                name='pass'
+                id='pass'
+                placeholder='Introdu parola'
+                onInput={this.props.onInput}
+              />
+            </span>
+          </Tippy>
           <Tippy content={display.tippyContent}
             theme={display.theme}
             hideOnClick={false}
