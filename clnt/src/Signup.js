@@ -136,21 +136,21 @@ class Signup extends React.Component {
         method: 'POST',
         mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.state)
+        body: JSON.stringify({
+          cnp: cnp,
+          grad: grad,
+          nume: nume,
+          prenume: prenume,
+          user: user,
+          pass: pass,
+          rol: rol
+        })
       };
 
       fetch('http://localhost:3001/signup', requestOptions)
       .then(response => response.json())
       .then(signup => {
-        console.log(signup.status)
-
-        if (signup.status === 'created') {
-          this.onChange('Main')
-        } else {
-          this.setState({
-            showError: true
-          })
-        }
+        console.log(signup)
       });
     } else {
       if (cnp === '') {

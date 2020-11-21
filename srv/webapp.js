@@ -37,6 +37,7 @@ app.use(function(err, req, res, next) {
   let options = {
     root: path.join(__dirname, 'public'),
   }
+  console.log(err)
   // set locals, only providing error in development
   res.locals.message = err.message;
   //console.log(err.message)
