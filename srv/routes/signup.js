@@ -30,7 +30,7 @@ function checkCNP( p_cnp ) {
   return ( cnp[12] === hashResult );
 }
 
-function checkAttribute(name) {
+function checkPerson(grad, nume, prenume) {
   // does not contain whitespace characters
   // certain attributes must contain at least 3 characters
 }
@@ -51,7 +51,10 @@ function checkUsername(user) {
 }
 
 function checkPassword() {
-
+  /* at least 8 characters, with at least one character from each of the 
+  * 4 character classes (alphabetic lower and upper case; numeric, symbols)
+  */
+  let regex = /(?=.{8,})(?=.*?[^\w\s])(?=.*?[0-9])(?=.*?[A-Z]).*?[a-z].*/;
 }
 
 router.options('/', function(req, res, next) {
@@ -98,10 +101,7 @@ router.post('/', function(req, res, next) {
   // TODO: implement check functions
   // TODO: finish the route handler
 
-  /* at least 8 characters, with at least one character from each of the 
-  * 4 character classes (alphabetic lower and upper case; numeric, symbols)
-  */
-  let regex = /(?=.{8,})(?=.*?[^\w\s])(?=.*?[0-9])(?=.*?[A-Z]).*?[a-z].*/;
+
 
 
 });

@@ -251,12 +251,17 @@ class Signup extends React.Component {
               theme='red-material-warning'
               visible={this.state.showGradWarning}>
               <span className='legacy' tabIndex='0'>
-                <Input 
-                type='text' 
-                name='grad'
-                id='grad'
-                placeholder='Introdu gradul'
-                onInput={this.onInput}/>
+                <Input
+                  list='ranks'
+                  type='text' 
+                  name='grad'
+                  id='grad'
+                  placeholder='Introdu gradul'
+                  onInput={this.onInput}/>
+                <datalist id='ranks'>
+                  <option value='P.c.c.'/>
+                  <option value='F.p.'/>
+                </datalist>
               </span>
             </Tippy>
             </div>
