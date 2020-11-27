@@ -118,7 +118,7 @@ class Signup extends React.Component {
     }
 
     if (e.target.value.length > 12) {
-      if(charCode !== 8 && charCode !== 46 ) {
+      if(charCode !== 8 && charCode !== 46 && charCode !== 9 ) {
         e.preventDefault();
         return false;
       }
@@ -503,42 +503,23 @@ class Signup extends React.Component {
             content=
             {
               <>
-                <div><i className="fas fa-info-circle"></i> Minim 8 caractere:
-                  <ul>
-                    <li>&#x02713; minim 1 literă mică</li>
-                    <li>&#x02713; minim o literă mare</li>
-                    <li>&#x02713; minim o cifră</li>
-                    <li>&#x02713; minim un caracter special (ex. '@', ']')</li>
-                  </ul>
-                </div>
+                <i className='fas fa-minus-circle'></i> Parolă invalidă
               </>
             }
             allowHTML={true}
             placement='right'
             arrow={false}
-            theme='blue-material'
-            disabled={!this.state.showPassInfo}>
-            <Tippy
-              content=
-              {
-                <>
-                  <i className='fas fa-minus-circle'></i> Parolă invalidă
-                </>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              visible={this.state.showPassError}>
-              <span className='legacy' tabIndex='0'>
-                <PasswordInput
-                  onInput={this.onInput}
-                  visibility='visible' 
-                  asterisk={true}
-                  displayWarning={this.state.showPassWarning}/>
-              </span>
+            theme='red-material-warning'
+            visible={this.state.showPassError}>
+            <span className='legacy' tabIndex='0'>
+              <PasswordInput
+                onInput={this.onInput}
+                visibility='visible' 
+                asterisk={true}
+                displayWarning={this.state.showPassWarning}
+                displayInfo={this.state.showPassInfo}/>
+            </span>
             </Tippy>
-          </Tippy>
           </div>
           <div className='Form-field'>
             <label htmlFor='rol'>
@@ -602,7 +583,7 @@ class Signup extends React.Component {
         <div className='Form-field Form-text centered-text'>
               Ai deja un cont? <span onClick={() => this.props.onChange('Login')} className='Form-hint bold glow'>Conectează-te</span>.
         </div>
-        {this.state.fetching && <Loading status='loading'/>}
+        {/*this.state.fetching && <Loading status='loading' width='20' height='63'/>*/}
       </div>
     );
   }

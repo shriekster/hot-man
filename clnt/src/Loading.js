@@ -29,7 +29,11 @@ class Loading extends React.Component {
 
     return (
       <div className='Form'>
-        <img className={currentClass} src={loading} />
+        <img 
+          className={currentClass} 
+          src={loading}
+          width={this.props.width}
+          height={this.props.height} />
       </div>
     );
   }
