@@ -30,10 +30,6 @@ function checkCNP( p_cnp ) {
   return ( cnp[12] === hashResult );
 }
 
-function checkPerson(grad, nume, prenume) {
-  // does not contain whitespace characters
-  // certain attributes must contain at least 3 characters
-}
 
 function checkUsername(user) {
   // does not contain whitespace characters

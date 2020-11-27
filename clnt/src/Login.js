@@ -130,7 +130,8 @@ class Login extends React.Component {
                 theme='red-material-warning'
                 visible={this.state.showUserWarning}>
                 <span className='legacy' tabIndex='0'>
-                  <Input 
+                  <Input
+                  className='fixed-height'
                   type='text' 
                   name='user'
                   id='user'

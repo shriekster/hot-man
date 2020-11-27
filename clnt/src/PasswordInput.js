@@ -14,7 +14,7 @@ class PasswordInput extends React.Component {
       passwordVisibilityStates: {
         hidden: {
           iconClass: 'fas fa-eye icon-eye',
-          inputClass: 'right-padded blue',
+          inputClass: 'right-padded blue fixed-height',
           tippyContent: 'Arată parola',
           inputType: 'password',
           theme: 'blue-material',
@@ -22,7 +22,7 @@ class PasswordInput extends React.Component {
 
         visible: {
           iconClass: 'fas fa-eye-slash icon-eye red',
-          inputClass: 'right-padded red bold glow',
+          inputClass: 'right-padded red bold glow fixed-height',
           tippyContent: 'Ascunde parola',
           inputType: 'text',
           theme: 'red-material',

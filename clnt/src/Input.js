@@ -24,6 +24,7 @@ class Input extends React.Component {
   render() {
     return (
       <input
+        onKeyDown={this.props.onKeyDown}
         list={this.props.list}
         className={this.props.className}
         type={this.props.type} 

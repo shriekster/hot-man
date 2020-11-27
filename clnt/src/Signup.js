@@ -1,6 +1,8 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
+import Select from 'react-select';
 import Input from './Input';
+import Loading from './Loading';
 import PasswordInput from './PasswordInput';
 import RequiredTippy from './RequiredTippy';
 
@@ -12,6 +14,8 @@ class Signup extends React.Component {
     this.onInput = this.onInput.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.onKeyDown = this.onKeyDown.bind(this);
 
     this.state = {
       cnp: '',
@@ -31,17 +35,104 @@ class Signup extends React.Component {
       showUserWarning: false,
       showPassWarning: false,
       showRolWarning: false,
+      showPassInfo: true,
+      roluri: [
+        {value: 'operator', label: 'Operator'},
+        {value: 'manager', label: 'Manager'},
+      ],
       rolInfo: {
-        '0': 'Selectează rolul pentru a vedea informațiile despre acesta',
-        operator: 'Operator',
-        manager: 'Manager'
+        '0': {
+          innerHTML: <div>Selectează rolul pentru a vedea informațiile despre acesta</div>
+        },
+        operator: {
+          innerHTML: 
+          <div>
+            <div>Operatorul este persoana cu drepturi de administrare a hotelului.</div>
+            <div>Acesta poate să:
+              <ul>
+                <li>&#x02713; adauge hoteluri (în aplicație)</li>
+                <li>&#x02713; adauge și să șteargă spații de cazare</li>
+                <li>&#x02713; adauge și să șteargă categorii de confort, de paturi, de spații de cazare și altele</li>
+                <li>&#x02713; adauge turiști și să rezerve camere</li>
+                <li>&#x02713; efectueze operațiunile de plată (în numerar)</li>
+                <li>&#x02713; își administreze propriul cont (datele personale)</li>
+              </ul>
+            </div>
+          </div>
+        },
+        manager: {
+          innerHTML: 
+          <div>
+            <div>Managerul este persoana cu drepturi de administrare a hotelului și a personalului acestuia.</div>
+            <div>Acesta poate, în plus față de un operator, să:
+              <ul>
+                <li>&#x02713; administreze conturile operatorilor (dezactivarea contului sau promovarea în rolul de manager)</li>
+              </ul>
+            </div>
+          </div>
+        }
       },
       rolIndex: '0',
-      rolOffsetX: 10
+      rolOffsetX: 10,
+      grade: [
+        {value: 'P.c.c.', label: 'Personal civil contractual'},
+        {value: 'F.p.', label: 'Funcționar public'},
+        {value: 'Sold.', label: 'Soldat'},
+        {value: 'Frt.', label: 'Fruntaș'},
+        {value: 'Cap.III', label: 'Caporal clasa a III-a'},
+        {value: 'Cap.II', label: 'Caporal clasa a II-a'},
+        {value: 'Cap.I', label: 'Caporal clasa I'},
+        {value: 'Sg.', label: 'Sergent'},
+        {value: 'Sg.maj.', label: 'Sergent major'},
+        {value: 'Plt.', label: 'Plutonier'},
+        {value: 'Plt.maj.', label: 'Plutonier major'},
+        {value: 'Plt.adj.', label: 'Plutonier adjutant'},
+        {value: 'Plt.adj.pr', label: 'Plutonier adjutant principal'},
+        {value: 'M.m.V', label: 'Maistru militar clasa a V-a'},
+        {value: 'M.m.IV', label: 'Maistru militar clasa a IV-a'},
+        {value: 'M.m.III', label: 'Maistru militar clasa a III-a'},
+        {value: 'M.m.II', label: 'Maistru militar clasa a II-a'},
+        {value: 'M.m.I', label: 'Maistru militar clasa I'},
+        {value: 'M.m.p.', label: 'Maistru militar principal'},
+        {value: 'Slt.', label: 'Sublocotenent'},
+        {value: 'Asp.', label: 'Aspirant'},
+        {value: 'Lt.', label: 'Locotenent'},
+        {value: 'Cpt.', label: 'Căpitan'},
+        {value: 'Mr.', label: 'Maior'},
+        {value: 'Lt.cdor.', label: 'Locotenent-comandor'},
+        {value: 'Lt.col.', label: 'Locotenent-comandor'},
+        {value: 'Cpt.cdor.', label: 'Căpitan-comandor'},
+        {value: 'Col.', label: 'Colonel'},
+        {value: 'Cdor.', label: 'Comandor'},
+      ],
+      fetching: false,
     };
   }
 
-  onInput(e) {
+  onKeyDown(e) {
+    let charCode = (e.which) ? e.which : e.keyCode;
+    
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      e.preventDefault();
+      return false;
+    }
+
+    if (e.target.value.length > 12) {
+      if(charCode !== 8 && charCode !== 46 ) {
+        e.preventDefault();
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * 
+   * @param e event object 
+   * @param optional an object which stores the virtual ID and the value of the 'event' generator
+   */
+  onInput(e, optional) {
 
     this.setState({
       showCnpError: false,
@@ -55,65 +146,88 @@ class Signup extends React.Component {
       showPassWarning: false,
       showRolWarning: false,
       showRolInfo: false,
+      showPassInfo: true,
       rolOffsetX: 10
     });
 
-    switch(e.target.id) {
-      case 'cnp': {
+    if (optional && optional != undefined) {
+      if (optional.id === 'grad' && optional.action === 'select-option') {
         this.setState({
-          cnp: e.target.value.trim()
+          grad: optional.value.trim()
         });
-        break;
       }
-
-      case 'grad': {
+      else
+      if (optional.id === 'rol' && optional.action === 'select-option') {
         this.setState({
-          grad: e.target.value.trim()
+          rol: optional.value.trim(),
+          rolIndex: optional.value.trim(),
         });
-        break;
       }
+    }
 
-      case 'nume': {
-        this.setState({
-          nume: e.target.value.trim()
-        });
-        break;
-      }
+    if (e != null){
+      switch(e.target.id) {
+        case 'cnp': {
+          if (e.target.value.length > 13) {
+            e.preventDefault();
+          }
+          else {
+            this.setState({
+              cnp: e.target.value.trim()
+            });
+          }
+          break;
+        }
 
-      case 'prenume': {
-        this.setState({
-          prenume: e.target.value.trim()
-        });
-        break;
-      }
+        case 'grad': {
+          //this.setState({
+          //  grad: e.target.value.trim()
+          //});
+          break;
+        }
 
-      case 'user': {
-        this.setState({
-          user: e.target.value.trim()
-        });
-        break;
-      }
+        case 'nume': {
+          this.setState({
+            nume: e.target.value.trim()
+          });
+          break;
+        }
 
-      case 'pass': {
-        this.setState({
-          pass: e.target.value.trim()
-        });
-        break;
-      }
+        case 'prenume': {
+          this.setState({
+            prenume: e.target.value.trim()
+          });
+          break;
+        }
 
-      case 'rol': {
-        this.setState({
-          rol: e.target.value,
-          rolIndex: e.target.value,
-        });
-        break;
+        case 'user': {
+          this.setState({
+            user: e.target.value.trim()
+          });
+          break;
+        }
+
+        case 'pass': {
+          this.setState({
+            pass: e.target.value.trim()
+          });
+          break;
+        }
+
+        case 'rol': {
+          //this.setState({
+          //  rol: e.target.value,
+          //  rolIndex: e.target.value,
+          //});
+          break;
+        }
       }
     }
   }
 
   handleSubmit(e) {
     e.preventDefault();
-
+ 
     let cnp = this.state.cnp;
     let grad = this.state.grad;
     let nume = this.state.nume;
@@ -147,11 +261,14 @@ class Signup extends React.Component {
         })
       };
 
-      fetch('http://localhost:3001/signup', requestOptions)
-      .then(response => response.json())
-      .then(signup => {
-        console.log(signup)
+      this.setState({fetching: true}, () => {
+        fetch('http://localhost:3001/signup', requestOptions)
+        .then(response => response.json())
+        .then(signup => {
+          console.log(signup)
+        });
       });
+
     } else {
       if (cnp === '') {
         this.setState({
@@ -185,7 +302,8 @@ class Signup extends React.Component {
 
       if (pass === '') {
         this.setState({
-          showPassWarning: true
+          showPassWarning: true,
+          showPassInfo: false
         });
       }
 
@@ -198,7 +316,7 @@ class Signup extends React.Component {
     }
   }
 
-  render() {  
+  render() {
     return (
       <div className='Form'>
         <form 
@@ -208,28 +326,43 @@ class Signup extends React.Component {
           <div className='Form-field'>
             <label htmlFor='cnp'>
               Cod numeric personal
-              <RequiredTippy />
+              <RequiredTippy
+                content='Câmp obligatoriu - 13 cifre' />
             </label>
             <div className='Form-name'>
             <Tippy
               content={
                 <>
-                  <i className='fas fa-exclamation-circle'></i> Introdu CNP
+                  <i className='fas fa-minus-circle'></i> CNP invalid
                 </>
               }
               allowHTML={true}
               placement='right'
               arrow={false}
               theme='red-material-warning'
-              visible={this.state.showCnpWarning}>
-              <span className='legacy' tabIndex='0'>
-                <Input
-                type='text' 
-                name='cnp'
-                id='cnp'
-                placeholder='Introdu CNP'
-                onInput={this.onInput}/>
-              </span>
+              visible={this.state.showCnpError}>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-exclamation-circle'></i> Introdu CNP
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                visible={this.state.showCnpWarning}>
+                <span className='legacy' tabIndex='0'>
+                  <Input
+                  onKeyDown={this.onKeyDown}
+                  className='fixed-height'
+                  type='text' 
+                  name='cnp'
+                  id='cnp'
+                  placeholder='Introdu CNP'
+                  onInput={this.onInput}/>
+                </span>
+              </Tippy>
             </Tippy>
             </div>
           </div>
@@ -242,26 +375,25 @@ class Signup extends React.Component {
             <Tippy
               content={
                 <>
-                  <i className='fas fa-exclamation-circle'></i> Introdu gradul
+                  <i className='fas fa-exclamation-circle'></i> Selectează gradul
                 </>
               }
+              offset={[0, -5]}
               allowHTML={true}
               placement='right'
               arrow={false}
               theme='red-material-warning'
               visible={this.state.showGradWarning}>
               <span className='legacy' tabIndex='0'>
-                <Input
-                  list='ranks'
-                  type='text' 
-                  name='grad'
-                  id='grad'
-                  placeholder='Introdu gradul'
-                  onInput={this.onInput}/>
-                <datalist id='ranks'>
-                  <option value='P.c.c.'/>
-                  <option value='F.p.'/>
-                </datalist>
+                <Select
+                  onInputChange={(inputValue, action) => this.onInput(null, {id: 'grad', value: inputValue, action: action.action})}
+                  onChange={(inputValue,action) => this.onInput(null, {id: 'grad', value: inputValue.value, action: action.action})}
+                  maxMenuHeight={100}
+                  placeholder='Selectează...'
+                  noOptionsMessage={(msg) => 'Nu există'}
+                  className='select-container'
+                  classNamePrefix='select' 
+                  options={this.state.grade} />
               </span>
             </Tippy>
             </div>
@@ -285,6 +417,7 @@ class Signup extends React.Component {
               visible={this.state.showNumeWarning}>
               <span className='legacy' tabIndex='0'>
                 <Input 
+                className='fixed-height'
                 type='text' 
                 name='nume'
                 id='nume'
@@ -313,6 +446,7 @@ class Signup extends React.Component {
               visible={this.state.showPrenumeWarning}>
               <span className='legacy' tabIndex='0'>
                 <Input 
+                className='fixed-height'
                 type='text' 
                 name='prenume'
                 id='prenume'
@@ -332,31 +466,79 @@ class Signup extends React.Component {
             <Tippy
               content={
                 <>
-                  <i className='fas fa-exclamation-circle'></i> Introdu utilizatorul
+                  <i className='fas fa-minus-circle'></i> Nume de utilizator indisponibil
                 </>
               }
               allowHTML={true}
               placement='right'
               arrow={false}
               theme='red-material-warning'
-              visible={this.state.showUserWarning}>
-              <span className='legacy' tabIndex='0'>
-                <Input 
-                type='text' 
-                name='user'
-                id='user'
-                placeholder='Alege un nume de utilizator'
-                onInput={this.onInput}/>
-              </span>
+              visible={this.state.showUserError}>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-exclamation-circle'></i> Introdu utilizatorul
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                visible={this.state.showUserWarning}>
+                <span className='legacy' tabIndex='0'>
+                  <Input 
+                  className='fixed-height'
+                  type='text' 
+                  name='user'
+                  id='user'
+                  placeholder='Alege un nume de utilizator'
+                  onInput={this.onInput}/>
+                </span>
+              </Tippy>
             </Tippy>
             </div>
           </div>
           <div className='Form-field'>
-            <PasswordInput
-              onInput={this.onInput}
-              visibility='visible' 
-              asterisk={true}
-              displayWarning={this.state.showPassWarning}/>
+          <Tippy
+            content=
+            {
+              <>
+                <div><i className="fas fa-info-circle"></i> Minim 8 caractere:
+                  <ul>
+                    <li>&#x02713; minim 1 literă mică</li>
+                    <li>&#x02713; minim o literă mare</li>
+                    <li>&#x02713; minim o cifră</li>
+                    <li>&#x02713; minim un caracter special (ex. '@', ']')</li>
+                  </ul>
+                </div>
+              </>
+            }
+            allowHTML={true}
+            placement='right'
+            arrow={false}
+            theme='blue-material'
+            disabled={!this.state.showPassInfo}>
+            <Tippy
+              content=
+              {
+                <>
+                  <i className='fas fa-minus-circle'></i> Parolă invalidă
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              visible={this.state.showPassError}>
+              <span className='legacy' tabIndex='0'>
+                <PasswordInput
+                  onInput={this.onInput}
+                  visibility='visible' 
+                  asterisk={true}
+                  displayWarning={this.state.showPassWarning}/>
+              </span>
+            </Tippy>
+          </Tippy>
           </div>
           <div className='Form-field'>
             <label htmlFor='rol'>
@@ -370,6 +552,7 @@ class Signup extends React.Component {
                   <i className='fas fa-exclamation-circle'></i> Selectează rolul
                 </>
               }
+              offset={[0, -5]}
               allowHTML={true}
               placement='right'
               arrow={false}
@@ -380,8 +563,8 @@ class Signup extends React.Component {
                 //visible={true}
                 allowHTML={true}
                 interactive={true}
-                maxWidth={200}
-                offset={[0, this.state.rolOffsetX]}
+                maxWidth={300}
+                offset={[0, this.state.rolOffsetX - 5]}
                 content={
                   <>
                   <div
@@ -391,20 +574,23 @@ class Signup extends React.Component {
                       maxHeight: '15vh',
                       overflowY: 'auto'
                       }}>
-                    {this.state.rolInfo[this.state.rolIndex]}
+                    {this.state.rolInfo[this.state.rolIndex].innerHTML}
                   </div>
                   </>
                 }
                 placement='right'
                 theme='blue-material'>
-                <select
-                  name='rol' 
-                  id='rol'
-                  onChange={this.onInput}>
-                  <option value='0'>(Selectează...)</option>
-                  <option value='operator'>Operator</option>
-                  <option value='manager'>Manager</option>
-                </select>
+                  <span className='legacy' tabIndex='0'>
+                  <Select
+                    onInputChange={(inputValue, action) => this.onInput(null, {id: 'rol', value: inputValue, action: action.action})}
+                    onChange={(inputValue,action) => this.onInput(null, {id: 'rol', value: inputValue.value, action: action.action})}
+                    maxMenuHeight={100}
+                    placeholder='Selectează...'
+                    noOptionsMessage={(msg) => 'Nu există'}
+                    className='select-container'
+                    classNamePrefix='select' 
+                    options={this.state.roluri} />
+                  </span>
               </Tippy>
             </Tippy>
             </div>
@@ -416,6 +602,7 @@ class Signup extends React.Component {
         <div className='Form-field Form-text centered-text'>
               Ai deja un cont? <span onClick={() => this.props.onChange('Login')} className='Form-hint bold glow'>Conectează-te</span>.
         </div>
+        {this.state.fetching && <Loading status='loading'/>}
       </div>
     );
   }
