@@ -52,7 +52,7 @@ class PasswordInput extends React.Component {
     let display = this.state.passwordVisibilityStates[this.state.passwordVisibility];
     let asterisk = this.props.asterisk;
     return (
-      <div>
+      <div className='Form-name'>
         <label htmlFor='pass'>
           Parola
           {
@@ -68,10 +68,10 @@ class PasswordInput extends React.Component {
             <>
               <div><i className='fas fa-info-circle'></i> Minim 8 caractere:
                 <ul>
-                  <li>&#x02713; minim 1 literă mică</li>
+                  <li>&#x02713; minim o literă mică</li>
                   <li>&#x02713; minim o literă mare</li>
                   <li>&#x02713; minim o cifră</li>
-                  <li>&#x02713; minim un caracter special (ex. '@', ']')</li>
+                  <li>&#x02713; minim un simbol (ex. @ ] #)</li>
                 </ul>
               </div>
             </>
@@ -79,42 +79,69 @@ class PasswordInput extends React.Component {
           allowHTML={true}
           placement='right'
           arrow={true}
-          theme='blue-material'
-          offset={[0, 150]}
+          theme='blue-material-light'
+          offset={[0, 20 + 130 * this.props.displayWarning]}
           disabled={!(this.props.displayInfo)}>
-          <span className='legacy' tabIndex='0'>
+          <Tippy
+            content=
+            {
+              <>
+                <i className='fas fa-minus-circle'></i> Parolă invalidă
+              </>
+            }
+            allowHTML={true}
+            placement='right'
+            arrow={false}
+            theme='red-material-warning'
+            visible={this.props.displayError}>
             <Tippy
-              content=
-              {
+              content={
                 <>
-                  <i className='fas fa-exclamation-circle'></i> Introdu parola
+                  <i className='fas fa-exclamation-circle'></i> Selectează rolul
                 </>
               }
+              
               allowHTML={true}
               placement='right'
               arrow={false}
               theme='red-material-warning'
-              visible={this.props.displayWarning}>
-              <span className='legacy' tabIndex='0'>
-                <Input
-                  className={display.inputClass}
-                  type={display.inputType} 
-                  name='pass'
-                  id='pass'
-                  placeholder='Introdu parola'
-                  onInput={this.props.onInput} />
-              </span>
+              visible={this.props.displayRolWarning}
+              offset={[75, 10]}>
+              <Tippy
+                content=
+                {
+                  <>
+                    <i className='fas fa-exclamation-circle'></i> Introdu parola
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                visible={this.props.displayWarning}>
+                <span className='legacy' tabIndex='0'>
+                  <Input
+                    onKeyDown={this.props.onKeyDown}
+                    className={display.inputClass}
+                    type={display.inputType} 
+                    name='pass'
+                    id='pass'
+                    placeholder='Introdu parola'
+                    onInput={this.props.onInput} />
+                </span>
+              </Tippy>
             </Tippy>
-            <Tippy content={display.tippyContent}
-              theme={display.theme}
-              hideOnClick={false}
-              placement='right'
-              offset={[0,20]}>
-              <i className={display.iconClass}
-                onClick={this.togglePasswordVisibility}>
-              </i>
-            </Tippy>
-          </span>
+          </Tippy>
+        </Tippy>
+        <Tippy content={display.tippyContent}
+          theme={display.theme}
+          hideOnClick={false}
+          placement={this.props.eyePlacement}
+          offset={this.props.eyeOffset}
+          arrow={this.props.eyeArrow}>
+          <i className={display.iconClass}
+            onClick={this.togglePasswordVisibility}>
+          </i>
         </Tippy>
         </div>
         <div>

@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				click: () => dialog.showMessageBox(null, options)
 			},
 			{
-				label: 'Dezvoltator',
+				label: 'Instrumente pentru dezvoltatori',
 				role: 'toggleDevTools'
 			}
 		]

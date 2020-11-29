@@ -15,7 +15,10 @@ class Signup extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
+    // numeric input
     this.onKeyDown = this.onKeyDown.bind(this);
+
+    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
 
     this.state = {
       cnp: '',
@@ -73,7 +76,7 @@ class Signup extends React.Component {
         }
       },
       rolIndex: '0',
-      rolOffsetX: 10,
+      rolOffsetX: 0,
       grade: [
         {value: 'P.c.c.', label: 'Personal civil contractual'},
         {value: 'F.p.', label: 'Funcționar public'},
@@ -118,7 +121,24 @@ class Signup extends React.Component {
     }
 
     if (e.target.value.length > 12) {
-      if(charCode !== 8 && charCode !== 46 && charCode !== 9 ) {
+      if(charCode !== 8 && charCode !== 9 && 
+        charCode !== 17 && charCode !== 46 && 
+        !(charCode >= 37 && charCode <= 40))  {
+        e.preventDefault();
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  onGenericKeyDown(e) {
+    let charCode = (e.which) ? e.which : e.keyCode;
+
+    if (e.target.value.length > 64) {
+      if(charCode !== 8 && charCode !== 9 && 
+         charCode !== 17 && charCode !== 46 && 
+         !(charCode >= 37 && charCode <= 40)) {
         e.preventDefault();
         return false;
       }
@@ -147,7 +167,7 @@ class Signup extends React.Component {
       showRolWarning: false,
       showRolInfo: false,
       showPassInfo: true,
-      rolOffsetX: 10
+      rolOffsetX: 0
     });
 
     if (optional && optional != undefined) {
@@ -303,13 +323,13 @@ class Signup extends React.Component {
       if (pass === '') {
         this.setState({
           showPassWarning: true,
-          showPassInfo: false
+          //showPassInfo: false
         });
       }
 
       if (rol === '0') {
         this.setState({
-          rolOffsetX: 150,
+          rolOffsetX: 130,
           showRolWarning: true
         });
       }
@@ -344,24 +364,37 @@ class Signup extends React.Component {
               <Tippy
                 content={
                   <>
-                    <i className='fas fa-exclamation-circle'></i> Introdu CNP
+                    <i className='fas fa-exclamation-circle'></i> Selectează gradul
                   </>
                 }
+                offset={[75, 10]}
                 allowHTML={true}
                 placement='right'
                 arrow={false}
                 theme='red-material-warning'
-                visible={this.state.showCnpWarning}>
-                <span className='legacy' tabIndex='0'>
-                  <Input
-                  onKeyDown={this.onKeyDown}
-                  className='fixed-height'
-                  type='text' 
-                  name='cnp'
-                  id='cnp'
-                  placeholder='Introdu CNP'
-                  onInput={this.onInput}/>
-                </span>
+                visible={this.state.showGradWarning}>
+                <Tippy
+                  content={
+                    <>
+                      <i className='fas fa-exclamation-circle'></i> Introdu CNP
+                    </>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={false}
+                  theme='red-material-warning'
+                  visible={this.state.showCnpWarning}>
+                  <span className='legacy' tabIndex='0'>
+                    <Input
+                    onKeyDown={this.onKeyDown}
+                    className='fixed-height'
+                    type='text' 
+                    name='cnp'
+                    id='cnp'
+                    placeholder='Introdu CNP'
+                    onInput={this.onInput}/>
+                  </span>
+                </Tippy>
               </Tippy>
             </Tippy>
             </div>
@@ -372,30 +405,15 @@ class Signup extends React.Component {
               <RequiredTippy />
             </label>
             <div className='Form-name'>
-            <Tippy
-              content={
-                <>
-                  <i className='fas fa-exclamation-circle'></i> Selectează gradul
-                </>
-              }
-              offset={[0, -5]}
-              allowHTML={true}
-              placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              visible={this.state.showGradWarning}>
-              <span className='legacy' tabIndex='0'>
-                <Select
-                  onInputChange={(inputValue, action) => this.onInput(null, {id: 'grad', value: inputValue, action: action.action})}
-                  onChange={(inputValue,action) => this.onInput(null, {id: 'grad', value: inputValue.value, action: action.action})}
-                  maxMenuHeight={100}
-                  placeholder='Selectează...'
-                  noOptionsMessage={(msg) => 'Nu există'}
-                  className='select-container'
-                  classNamePrefix='select' 
-                  options={this.state.grade} />
-              </span>
-            </Tippy>
+              <Select
+                onInputChange={(inputValue, action) => this.onInput(null, {id: 'grad', value: inputValue, action: action.action})}
+                onChange={(inputValue,action) => this.onInput(null, {id: 'grad', value: inputValue.value, action: action.action})}
+                maxMenuHeight={100}
+                placeholder='Selectează...'
+                noOptionsMessage={(msg) => 'Nu există'}
+                className='select-container'
+                classNamePrefix='select' 
+                options={this.state.grade} />
             </div>
           </div>
           <div className='Form-field'>
@@ -417,6 +435,7 @@ class Signup extends React.Component {
               visible={this.state.showNumeWarning}>
               <span className='legacy' tabIndex='0'>
                 <Input 
+                onKeyDown={this.onGenericKeyDown}
                 className='fixed-height'
                 type='text' 
                 name='nume'
@@ -446,6 +465,7 @@ class Signup extends React.Component {
               visible={this.state.showPrenumeWarning}>
               <span className='legacy' tabIndex='0'>
                 <Input 
+                onKeyDown={this.onGenericKeyDown}
                 className='fixed-height'
                 type='text' 
                 name='prenume'
@@ -486,7 +506,8 @@ class Signup extends React.Component {
                 theme='red-material-warning'
                 visible={this.state.showUserWarning}>
                 <span className='legacy' tabIndex='0'>
-                  <Input 
+                  <Input
+                  onKeyDown={this.onGenericKeyDown}
                   className='fixed-height'
                   type='text' 
                   name='user'
@@ -499,27 +520,18 @@ class Signup extends React.Component {
             </div>
           </div>
           <div className='Form-field'>
-          <Tippy
-            content=
-            {
-              <>
-                <i className='fas fa-minus-circle'></i> Parolă invalidă
-              </>
-            }
-            allowHTML={true}
-            placement='right'
-            arrow={false}
-            theme='red-material-warning'
-            visible={this.state.showPassError}>
-            <span className='legacy' tabIndex='0'>
-              <PasswordInput
-                onInput={this.onInput}
-                visibility='visible' 
-                asterisk={true}
-                displayWarning={this.state.showPassWarning}
-                displayInfo={this.state.showPassInfo}/>
-            </span>
-            </Tippy>
+            <PasswordInput
+              onInput={this.onInput}
+              onKeyDown={this.onGenericKeyDown}
+              visibility='visible' 
+              asterisk={true}
+              displayWarning={this.state.showPassWarning}
+              displayInfo={this.state.showPassInfo}
+              displayError={this.state.showPassError}
+              displayRolWarning={this.state.showRolWarning}
+              eyeOffset={[0 + 25 * this.state.showPassWarning, 20]}
+              eyePlacement={this.state.showPassWarning ? 'right-start' : 'right'}
+              eyeArrow={true}/>
           </div>
           <div className='Form-field'>
             <label htmlFor='rol'>
@@ -528,51 +540,38 @@ class Signup extends React.Component {
             </label>
             <div className='Form-name'>
             <Tippy
-              content={
+              hideOnClick={false}
+              allowHTML={true}
+              interactive={true}
+              maxWidth={300}
+              offset={[10, this.state.rolOffsetX]}
+              content=
+              {
                 <>
-                  <i className='fas fa-exclamation-circle'></i> Selectează rolul
+                <div
+                  id='style-1'
+                  style={{
+                    height: 'auto',
+                    maxHeight: '15vh',
+                    overflowY: 'auto'
+                    }}>
+                  {this.state.rolInfo[this.state.rolIndex].innerHTML}
+                </div>
                 </>
               }
-              offset={[0, -5]}
-              allowHTML={true}
               placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              visible={this.state.showRolWarning}>
-              <Tippy
-                hideOnClick={false}
-                //visible={true}
-                allowHTML={true}
-                interactive={true}
-                maxWidth={300}
-                offset={[0, this.state.rolOffsetX - 5]}
-                content={
-                  <>
-                  <div
-                    id='style-1'
-                    style={{
-                      height: 'auto',
-                      maxHeight: '15vh',
-                      overflowY: 'auto'
-                      }}>
-                    {this.state.rolInfo[this.state.rolIndex].innerHTML}
-                  </div>
-                  </>
-                }
-                placement='right'
-                theme='blue-material'>
-                  <span className='legacy' tabIndex='0'>
-                  <Select
-                    onInputChange={(inputValue, action) => this.onInput(null, {id: 'rol', value: inputValue, action: action.action})}
-                    onChange={(inputValue,action) => this.onInput(null, {id: 'rol', value: inputValue.value, action: action.action})}
-                    maxMenuHeight={100}
-                    placeholder='Selectează...'
-                    noOptionsMessage={(msg) => 'Nu există'}
-                    className='select-container'
-                    classNamePrefix='select' 
-                    options={this.state.roluri} />
-                  </span>
-              </Tippy>
+              theme='blue-material-light'>
+                <span className='legacy' tabIndex='0'>
+                <Select
+                  onInputChange={(inputValue, action) => this.onInput(null, {id: 'rol', value: inputValue, action: action.action})}
+                  onChange={(inputValue,action) => this.onInput(null, {id: 'rol', value: inputValue.value, action: action.action})}
+                  maxMenuHeight={100}
+                  placeholder='Selectează...'
+                  noOptionsMessage={(msg) => 'Nu există'}
+                  className='select-container'
+                  classNamePrefix='select' 
+                  options={this.state.roluri} />
+                </span>
             </Tippy>
             </div>
           </div>

@@ -10,6 +10,8 @@ class Login extends React.Component {
 
     this.onInput = this.onInput.bind(this);
 
+    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
@@ -52,6 +54,21 @@ class Login extends React.Component {
         break;
       }
     }
+  }
+
+  onGenericKeyDown(e) {
+    let charCode = (e.which) ? e.which : e.keyCode;
+
+    if (e.target.value.length > 64) {
+      if(charCode !== 8 && charCode !== 9 && 
+         charCode !== 17 && charCode !== 46 && 
+         !(charCode >= 37 && charCode <= 40)) {
+        e.preventDefault();
+        return false;
+      }
+    }
+
+    return true;
   }
 
   handleSubmit(e) {
@@ -131,6 +148,7 @@ class Login extends React.Component {
                 visible={this.state.showUserWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input
+                  onKeyDown={this.onGenericKeyDown}
                   className='fixed-height'
                   type='text' 
                   name='user'
@@ -144,8 +162,14 @@ class Login extends React.Component {
           </div>
           <div className='Form-field'>
             <PasswordInput
+              onKeyDown={this.onGenericKeyDown}
               onInput={this.onInput} 
-              displayWarning={this.state.showPassWarning}/>
+              displayWarning={this.state.showPassWarning}
+              displayError={false}
+              eyeOffset={[0 + 25 * this.state.showPassWarning, 20]}
+              eyePlacement={this.state.showPassWarning ? 'right-start' : 'right'}
+              eyeArrow={true}
+              displayRolWarning={false}/>
           </div>
           <div className='Form-field'>
             <Input 
