@@ -66,7 +66,7 @@ router.post('/', function(req, res, next) {
         status = 'allowed';
 
         if (rolId && undefined !== rolId) {
-          const rolDen = selectRol(rolId._rolId);
+          const rolDen = selectRol.get(rolId._rolId);
 
           if (rolDen && undefined !== rolDen) {
             let secret = crypto.randomBytes(32).toString('base64');
