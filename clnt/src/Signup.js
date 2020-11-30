@@ -2,7 +2,7 @@ import React from 'react';
 import Tippy from '@tippyjs/react';
 import Select from 'react-select';
 import Input from './Input';
-import Loading from './Loading';
+import Spinner from './Spinner';
 import PasswordInput from './PasswordInput';
 import RequiredTippy from './RequiredTippy';
 
@@ -15,7 +15,6 @@ class Signup extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    // numeric input
     this.onKeyDown = this.onKeyDown.bind(this);
 
     this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
@@ -29,6 +28,8 @@ class Signup extends React.Component {
       pass: '',
       rol: '0',
       showCnpError: false,
+      showNumeError: false,
+      showPrenumeError: false,
       showUserError: false,
       showPassError: false,
       showCnpWarning: false,
@@ -45,12 +46,12 @@ class Signup extends React.Component {
       ],
       rolInfo: {
         '0': {
-          innerHTML: <div>Selectează rolul pentru a vedea informațiile despre acesta</div>
+          innerHTML: <div><i className='fas fa-info-circle'></i> Selectează rolul</div>
         },
         operator: {
           innerHTML: 
           <div>
-            <div>Operatorul este persoana cu drepturi de administrare a hotelului.</div>
+            <div><i className='fas fa-user'></i> Operatorul este persoana cu drepturi de administrare a hotelului.</div>
             <div>Acesta poate să:
               <ul>
                 <li>&#x02713; adauge hoteluri (în aplicație)</li>
@@ -66,7 +67,7 @@ class Signup extends React.Component {
         manager: {
           innerHTML: 
           <div>
-            <div>Managerul este persoana cu drepturi de administrare a hotelului și a personalului acestuia.</div>
+            <div><i className='fas fa-user-cog'></i> Managerul este persoana cu drepturi de administrare a hotelului și a personalului acestuia.</div>
             <div>Acesta poate, în plus față de un operator, să:
               <ul>
                 <li>&#x02713; administreze conturile operatorilor (dezactivarea contului sau promovarea în rolul de manager)</li>
@@ -109,15 +110,22 @@ class Signup extends React.Component {
         {value: 'Cdor.', label: 'Comandor'},
       ],
       fetching: false,
+      showError: false,
+      toLogin: false,
     };
   }
 
+  // numeric input only
   onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
     
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      e.preventDefault();
-      return false;
+      if(charCode !== 8 && charCode !== 9 && 
+        charCode !== 17 && charCode !== 46 && 
+        !(charCode >= 37 && charCode <= 40)) {
+        e.preventDefault();
+        return false;
+      }
     }
 
     if (e.target.value.length > 12) {
@@ -132,6 +140,7 @@ class Signup extends React.Component {
     return true;
   }
 
+  // input max length: 64
   onGenericKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
@@ -156,6 +165,8 @@ class Signup extends React.Component {
 
     this.setState({
       showCnpError: false,
+      showNumeError: false,
+      showPrenumeError: false,
       showUserError: false,
       showPassError: false,
       showCnpWarning: false,
@@ -167,7 +178,8 @@ class Signup extends React.Component {
       showRolWarning: false,
       showRolInfo: false,
       showPassInfo: true,
-      rolOffsetX: 0
+      rolOffsetX: 0,
+      showError: false,
     });
 
     if (optional && optional != undefined) {
@@ -285,7 +297,78 @@ class Signup extends React.Component {
         fetch('http://localhost:3001/signup', requestOptions)
         .then(response => response.json())
         .then(signup => {
-          console.log(signup)
+          let signedUp = false;
+
+          this.setState({
+            fetching: false
+          });
+          
+          if (signup && undefined !== signup) {
+            signedUp = true;
+
+            if (false === signup.grad || 
+                false === signup.rol) {
+              signedUp = false;
+              this.setState({
+                showError: true, /* improbable, but not impossible */ 
+              });
+            } else { /*  */
+
+              if (false === signup.cnp) {
+                signedUp = false;
+                this.setState({
+                  showCnpError: true,
+                });
+              }
+
+              if (false === signup.nume) {
+                signedUp = false;
+                this.setState({
+                  showNumeError: true,
+                });
+              }
+
+              if (false === signup.prenume) {
+                signedUp = false;
+                this.setState({
+                  showPrenumeError: true,
+                });
+              }
+
+              if (false === signup.user) {
+                signedUp = false;
+                this.setState({
+                  showUserError: true,
+                });
+              }
+
+              if (false === signup.pass) {
+                signedUp = false;
+                this.setState({
+                  showPassError: true,
+                });
+              }
+            }
+          } else {
+            signedUp = false;
+            this.setState({
+              showError: true,
+            });
+          }
+
+          if(signedUp) { /* Successfully registered */
+            this.setState({
+              toLogin: true
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error); // dev mode only!
+
+          this.setState({
+            fetching: false,
+            showError: true,
+          });
         });
       });
 
@@ -337,7 +420,11 @@ class Signup extends React.Component {
   }
 
   render() {
+    
     return (
+      <>
+      {
+      !this.state.toLogin &&
       <div className='Form'>
         <form 
           onSubmit={this.handleSubmit}
@@ -425,24 +512,36 @@ class Signup extends React.Component {
             <Tippy
               content={
                 <>
-                  <i className='fas fa-exclamation-circle'></i> Introdu numele
+                  <i className='fas fa-minus-circle'></i> Nume invalid
                 </>
               }
               allowHTML={true}
               placement='right'
               arrow={false}
               theme='red-material-warning'
-              visible={this.state.showNumeWarning}>
-              <span className='legacy' tabIndex='0'>
-                <Input 
-                onKeyDown={this.onGenericKeyDown}
-                className='fixed-height'
-                type='text' 
-                name='nume'
-                id='nume'
-                placeholder='Introdu numele'
-                onInput={this.onInput}/>
-              </span>
+              visible={this.state.showNumeError}>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-exclamation-circle'></i> Introdu numele
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                visible={this.state.showNumeWarning}>
+                <span className='legacy' tabIndex='0'>
+                  <Input 
+                  onKeyDown={this.onGenericKeyDown}
+                  className='fixed-height'
+                  type='text' 
+                  name='nume'
+                  id='nume'
+                  placeholder='Introdu numele'
+                  onInput={this.onInput}/>
+                </span>
+              </Tippy>
             </Tippy>
             </div>
           </div>
@@ -455,24 +554,36 @@ class Signup extends React.Component {
             <Tippy
               content={
                 <>
-                  <i className='fas fa-exclamation-circle'></i> Introdu prenumele
+                  <i className='fas fa-minus-circle'></i> Prenume invalid
                 </>
               }
               allowHTML={true}
               placement='right'
               arrow={false}
               theme='red-material-warning'
-              visible={this.state.showPrenumeWarning}>
-              <span className='legacy' tabIndex='0'>
-                <Input 
-                onKeyDown={this.onGenericKeyDown}
-                className='fixed-height'
-                type='text' 
-                name='prenume'
-                id='prenume'
-                placeholder='Introdu prenumele'
-                onInput={this.onInput}/>
-              </span>
+              visible={this.state.showPrenumeError}>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-exclamation-circle'></i> Introdu prenumele
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                visible={this.state.showPrenumeWarning}>
+                <span className='legacy' tabIndex='0'>
+                  <Input 
+                  onKeyDown={this.onGenericKeyDown}
+                  className='fixed-height'
+                  type='text' 
+                  name='prenume'
+                  id='prenume'
+                  placeholder='Introdu prenumele'
+                  onInput={this.onInput}/>
+                </span>
+              </Tippy>
             </Tippy>
             </div>
           </div>
@@ -486,7 +597,7 @@ class Signup extends React.Component {
             <Tippy
               content={
                 <>
-                  <i className='fas fa-minus-circle'></i> Nume de utilizator indisponibil
+                  <i className='fas fa-minus-circle'></i> Utilizator invalid sau indisponibil
                 </>
               }
               allowHTML={true}
@@ -576,14 +687,42 @@ class Signup extends React.Component {
             </div>
           </div>
           <div className='Form-field'>
+          <Tippy
+            allowHTML={true}
+            content={
+              <>
+                <i className='fas fa-times-circle'></i> Eroare! Încearcă din nou.
+              </>
+            }
+            placement='bottom'
+            arrow={false}
+            theme='red-material-warning'
+            visible={this.state.showError}>
             <button>Creează cont</button>
+          </Tippy>
           </div>
+          <Spinner 
+            status='altLoading'
+            visibility={this.state.fetching}/>
         </form>
         <div className='Form-field Form-text centered-text'>
               Ai deja un cont? <span onClick={() => this.props.onChange('Login')} className='Form-hint bold glow'>Conectează-te</span>.
         </div>
-        {/*this.state.fetching && <Loading status='loading' width='20' height='63'/>*/}
       </div>
+      }
+      {
+        this.state.toLogin &&
+        <div className='Form'>
+          <div className='Form-field Form-text centered-text bold staticPulse'>
+              Contul tău a fost creat, 
+              <span className='blue'> {this.state.user}</span>!
+              <div onClick={() => this.props.onChange('Login')} className='Form-hint bold'>
+                Conectează-te
+              </div>
+          </div>
+        </div>
+      }
+      </>
     );
   }
 }

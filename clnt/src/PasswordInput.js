@@ -80,7 +80,7 @@ class PasswordInput extends React.Component {
           placement='right'
           arrow={true}
           theme='blue-material-light'
-          offset={[0, 20 + 130 * this.props.displayWarning]}
+          offset={[0, 20 + 130 * (this.props.displayWarning || this.props.displayError)]}
           disabled={!(this.props.displayInfo)}>
           <Tippy
             content=

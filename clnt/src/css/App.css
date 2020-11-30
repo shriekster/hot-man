@@ -203,9 +203,20 @@ span.legacy {
 	animation: pulse 1.3s infinite;
 }
 
+.staticPulse {
+  box-shadow: 0 0 0 0 rgba(215, 44, 37, 1);
+	animation: staticPulse 1.3s infinite;
+}
+
 .loading {
   width: 40px;
   height: 126px;
+}
+
+.altLoading {
+  display: flex;
+  width: 24px;
+  height: 24px;
 }
 
 .rotateOut {
@@ -213,6 +224,15 @@ span.legacy {
   animation-duration: 1s;
   animation-fill-mode: both;
   transform-origin: center;
+}
+
+.rotate {
+  animation-name: rotate;
+  animation-duration: 1.2s;
+  animation-fill-mode: both;
+  transform-origin: center;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
 .glow {
@@ -232,6 +252,20 @@ span.legacy {
   }
 }
 
+@keyframes rotate { 
+  0% {
+    opacity: 1;
+  } 
+  50% {
+    opacity: .5;
+    transform:rotate(180deg); 
+  } 
+  100% {
+    opacity: 1;
+    transform:rotate(360deg); 
+  }
+}
+
 @keyframes pulse {
 	0% {
 		transform: scale(0.9);
@@ -245,6 +279,20 @@ span.legacy {
 	
 	100% {
 		transform: scale(0.9);
+		box-shadow: 0 0 0 0 rgba(215, 44, 37, 0);
+	}
+}
+
+@keyframes staticPulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(215, 44, 37, 0.7);
+  }
+	
+	70% {
+		box-shadow: 0 0 0 8px rgba(215, 44, 37, 0);
+	}
+	
+	100% {
 		box-shadow: 0 0 0 0 rgba(215, 44, 37, 0);
 	}
 }

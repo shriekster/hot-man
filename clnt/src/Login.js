@@ -98,9 +98,11 @@ class Login extends React.Component {
       fetch('http://localhost:3001/login', requestOptions)
       .then(response => response.json())
       .then(login => {
-        console.log(login.status)
+        console.log(login)
+        
 
         if (login.status === 'allowed') {
+          //localStorage.setItem('token', login.token);
           this.props.onChange('Main')
         } else {
           this.setState({
@@ -196,7 +198,7 @@ class Login extends React.Component {
             arrow={false}
             theme='red-material-warning'
             visible={this.state.showError}>
-            <button>Conectează-te</button>
+              <button>Conectează-te</button>
             </Tippy>
           </div>
         </form>
