@@ -172,7 +172,8 @@ router.post('/', function(req, res, next) {
   if (valid.cnp && valid.grad && valid.nume && valid.prenume && valid.user && valid.pass && valid.rol) {
     let uId;
     let urId;
-    let rolId = 'operator' === rol ? 1 : 2;
+    let rolId = 'operator' === rol ? 1 : 2; //! hardcoded
+
     const selectUserCount = db.prepare(`SELECT COUNT(*) AS count 
                                         FROM Utilizatori`);
     const selectUserRoleCount = db.prepare(`SELECT COUNT(*) AS count
@@ -211,10 +212,10 @@ router.post('/', function(req, res, next) {
       let hash = derivedKey.toString('base64');
 
       const userInfo = insertUser.run(uId, cnp, grad, nume, prenume, user, hash, salt);
-      console.log(userInfo);
+      //console.log(userInfo);
 
       const userRoleInfo = insertUserRole.run(urId, uId, rolId);
-      console.log(userRoleInfo);
+      //console.log(userRoleInfo);
     });
   }
 

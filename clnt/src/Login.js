@@ -17,7 +17,6 @@ class Login extends React.Component {
     this.state = {
       user: '',
       pass: '',
-      remember: 'no',
       showError: false,
       showUserWarning: false,
       showPassWarning: false
@@ -46,13 +45,6 @@ class Login extends React.Component {
         });
         break;
       }
-
-      case 'remember': {
-        this.setState({
-          remember: e.target.checked ? 'yes' : 'no'
-        });
-        break;
-      }
     }
   }
 
@@ -76,12 +68,10 @@ class Login extends React.Component {
 
     let user = this.state.user;
     let pass = this.state.pass;
-    let remember = this.state.remember;
 
     let credentials = {
       user: user,
       pass: pass,
-      remember: remember,
     };
 
     let valid = (user !== '' && pass !== '');
@@ -172,19 +162,6 @@ class Login extends React.Component {
               eyePlacement={this.state.showPassWarning ? 'right-start' : 'right'}
               eyeArrow={true}
               displayRolWarning={false}/>
-          </div>
-          <div className='Form-field'>
-            <Input 
-              className='Form-remember'
-              type='checkbox' 
-              name='remember'
-              id='remember'
-              value='yes'
-              onInput={this.onInput}
-            />
-            <label htmlFor='remember'>
-              Ține-mă minte
-            </label>
           </div>
           <div className='Form-field'>
           <Tippy

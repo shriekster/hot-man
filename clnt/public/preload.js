@@ -1,14 +1,15 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 const customTitlebar = require('custom-electron-titlebar');
-const path = require('path');
+//const path = require('path');
 //const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = require('electron').remote
 
+let titlebar;
 
 window.addEventListener('DOMContentLoaded', () => {
 
-  let titlebar = new customTitlebar.Titlebar({
+  titlebar = new customTitlebar.Titlebar({
     backgroundColor: customTitlebar.Color.fromHex('#25aaa9'),
     icon: './hotel-icon.png',
 	});

@@ -56,7 +56,7 @@ class App extends React.Component {
 
   render() {
     let Component = this.state.toRender;
-    let className = (Component === Login) || (Component === Signup) ? 'App Intro' : 'App';
+    let className = (Component === Login) || (Component === Signup) ? 'App --with-background-image' : 'App';
     
     // The props are defined here (onChange)
     return (

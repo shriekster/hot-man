@@ -41,8 +41,8 @@ class Signup extends React.Component {
       showRolWarning: false,
       showPassInfo: true,
       roluri: [
-        {value: 'operator', label: 'Operator'},
-        {value: 'manager', label: 'Manager'},
+        {value: 'operator', label: <span><i className='fas fa-user-cog'></i> Operator</span>},
+        {value: 'manager', label: <span><i className='fas fa-user-plus'></i> Manager</span>},
       ],
       rolInfo: {
         '0': {
@@ -51,7 +51,7 @@ class Signup extends React.Component {
         operator: {
           innerHTML: 
           <div>
-            <div><i className='fas fa-user'></i> Operatorul este persoana cu drepturi de administrare a hotelului.</div>
+            <div>Operatorul este persoana cu drepturi de administrare a hotelului.</div>
             <div>Acesta poate să:
               <ul>
                 <li>&#x02713; adauge hoteluri (în aplicație)</li>
@@ -67,7 +67,7 @@ class Signup extends React.Component {
         manager: {
           innerHTML: 
           <div>
-            <div><i className='fas fa-user-cog'></i> Managerul este persoana cu drepturi de administrare a hotelului și a personalului acestuia.</div>
+            <div>Managerul este persoana cu drepturi de administrare a hotelului și a personalului acestuia.</div>
             <div>Acesta poate, în plus față de un operator, să:
               <ul>
                 <li>&#x02713; administreze conturile operatorilor (dezactivarea contului sau promovarea în rolul de manager)</li>
@@ -104,7 +104,7 @@ class Signup extends React.Component {
         {value: 'Cpt.', label: 'Căpitan'},
         {value: 'Mr.', label: 'Maior'},
         {value: 'Lt.cdor.', label: 'Locotenent-comandor'},
-        {value: 'Lt.col.', label: 'Locotenent-comandor'},
+        {value: 'Lt.col.', label: 'Locotenent-colonel'},
         {value: 'Cpt.cdor.', label: 'Căpitan-comandor'},
         {value: 'Col.', label: 'Colonel'},
         {value: 'Cdor.', label: 'Comandor'},
@@ -373,6 +373,7 @@ class Signup extends React.Component {
       });
 
     } else {
+      console.log(window.titlebar)
       if (cnp === '') {
         this.setState({
           showCnpWarning: true
