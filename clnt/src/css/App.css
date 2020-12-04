@@ -41,6 +41,7 @@ select {
   border-style: solid;
   border-color: hsl(0,0%,80%);
   padding: 2px 8px;
+  outline: none;
 }
 
 select {
@@ -388,12 +389,13 @@ div[class^='select-'] {
 /* Fixed sidenav, full height */
 .sidenav {
   height: 100%;
-  min-width: max-content;
-  width: 10vw;
+  min-width: 180px;
+  width: 14vw;
   z-index: 1;
   background-color: rgba(79, 183, 183, .9);
   overflow-x: hidden;
   padding-top: 20px;
+  position: relative;
 }
 
 /* Style the sidenav links and the dropdown button */
@@ -413,7 +415,7 @@ div[class^='select-'] {
 
 /* On mouse-over */
 .sidenav a:hover, .dropdown-btn:hover {
-  color: #D72C25;
+  color: #009500;;
 }
 
 /* content */
@@ -452,6 +454,15 @@ div[class^='select-'] {
 .user-icon--big--container {
   display: flex;
   justify-content: center;
+}
+
+.menu-icon {
+  font-size: 20px;
+}
+
+.menu-label {
+  position: absolute;
+  left: 45px;
 }
 
 hr.user-settings--separator {

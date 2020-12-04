@@ -31,11 +31,30 @@ class Main extends React.Component {
     return (
       <div className='Main'>
         <div className='sidenav'>
-          <a href='#about'>Administrare</a>
-          <a href='#services'>Services</a>
-          <a href='#clients'>Clients</a>
-          <a href='#contact'>Contact</a>
-          <a href='#contact'>Search</a>
+          <a href='#'>
+            <i className='fas fa-building menu-icon'></i> 
+            <span className='menu-label'>Administrare</span>
+          </a>
+          <a href='#'>
+            <i className='fas fa-chart-bar menu-icon'></i> 
+            <span className='menu-label'>Rapoarte</span>
+          </a>
+          <a href='#'>
+            <i className='fas fa-receipt menu-icon'></i> 
+            <span className='menu-label'>Plăți</span>
+          </a>
+          <a href='#'>
+            <i className='fas fa-coins menu-icon'></i> 
+            <span className='menu-label'>Tarife</span>
+          </a>
+          <a href='#'>
+            <i className='fas fa-calendar-plus menu-icon'></i> 
+            <span className='menu-label'>Rezervări</span>
+          </a>
+          <a href='#'>
+            <i className='fas fa-clock menu-icon'></i> 
+            <span className='menu-label'>Solicitări</span>
+          </a>
         </div>
 
         <div className='content'>
@@ -85,10 +104,10 @@ class Main extends React.Component {
               }
             </Tippy>
           </div>
-          <h2>Sidebar Dropdown</h2>
-          <p>Click on the dropdown button to open the dropdown menu inside the side navigation.</p>
-          <p>This sidebar is of full height (100%) and always shown.</p>
-          <p>Some random text..</p>
+          <h2>Hotelitary</h2>
+          <p>Aici se vor caza persoanele...</p>
+          <p>Aici sperăm să oferim satisfacția atât turiștilor...</p>
+          <p>... cât și operatorilor și managerilor!</p>
         </div>
       </div>
     );
