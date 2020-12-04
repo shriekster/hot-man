@@ -5,12 +5,14 @@ const path = require('path')
 const webapp = require('./srv/webapp');
 const debug = require('debug')('srv:*');
 const http = require('http');
+const db = require('./srv/db');
+
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3001');
+var port = normalizePort('3001');
 webapp.set('port', port);
 /**
  * Create HTTP server.
@@ -69,6 +71,14 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
+
+app.on('before-quit', function() {
+
+});
+
+app.on('render-process-gone', function() {
+
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -139,4 +149,21 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+
+/**
+ * An attempt to gracefully close the database
+ */
+[`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, `uncaughtException`, `SIGTERM`].forEach((eventType) => {
+  process.on(eventType, closeDatabase.bind(null, eventType));
+})
+
+function closeDatabase(thisArg, e) {
+  console.log(e);
+
+  if (db.open) {
+    console.log('Database will close.')
+    db.close();
+  }
 }

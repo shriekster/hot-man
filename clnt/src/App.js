@@ -30,25 +30,33 @@ class App extends React.Component {
         Main: Main
       },
       
-      toRender: Login
+      toRender: Login,
+
+      token: '0',
+
+      user: '##'
     };
 
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange(toRender) {
+  onChange(toRender, token='0', user='##') {
     let Component = toRender;
     
     if (Object.keys(this.state.components).includes(toRender)) {
 
       this.setState({
-        toRender: this.state.components[toRender]
+        toRender: this.state.components[toRender],
+        token: token,
+        user: user
       });
 
     } else {
       
       this.setState({
-        toRender: Login
+        toRender: Login,
+        token: '0',
+        user: '##'
       });
       
     }
@@ -61,8 +69,12 @@ class App extends React.Component {
     // The props are defined here (onChange)
     return (
       <div className={className}>
-        <Suspense fallback={<Loading status='loading'/>}>
-          <Component onChange={this.onChange}/>
+        <Suspense 
+          fallback={<Loading status='loading'/>}>
+          <Component 
+            onChange={this.onChange}
+            token={this.state.token}
+            user={this.state.user} />
         </Suspense>
       </div>
     );

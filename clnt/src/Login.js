@@ -88,12 +88,9 @@ class Login extends React.Component {
       fetch('http://localhost:3001/login', requestOptions)
       .then(response => response.json())
       .then(login => {
-        console.log(login)
-        
 
         if (login.status === 'allowed') {
-          //localStorage.setItem('token', login.token);
-          this.props.onChange('Main')
+          this.props.onChange('Main', login.token, login.user);
         } else {
           this.setState({
             showError: true

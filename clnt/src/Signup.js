@@ -182,7 +182,7 @@ class Signup extends React.Component {
       showError: false,
     });
 
-    if (optional && optional != undefined) {
+    if (optional && optional !== undefined) {
       if (optional.id === 'grad' && optional.action === 'select-option') {
         this.setState({
           grad: optional.value.trim()

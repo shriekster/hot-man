@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 const secret = require('../secret');
+const { readlink } = require('fs');
 
 router.options('/', function(req, res, next) {
   res.set({
@@ -27,16 +28,22 @@ router.post('/', function(req, res, next) {
   });
 
   let status = 'denied';
-  let token = '';
+  let token = '0';
+  let realUser = '##';
 
   let user = req.body.user;
   let pass = req.body.pass;
 
+
+
   // Prepare the SQL statements
   const selectUser = db.prepare(`SELECT ID AS _id, 
-                                        Utilizator AS _user, 
-                                        Parola AS _hashedPass, 
-                                        Extra AS _salt 
+                                Grad AS _grad,
+                                Nume AS _nume,
+                                Prenume AS _prenume,
+                                Utilizator AS _user, 
+                                Parola AS _hashedPass, 
+                                Extra AS _salt 
                                 FROM Utilizatori 
                                 WHERE Utilizator = ?`);
 
@@ -58,7 +65,9 @@ router.post('/', function(req, res, next) {
       if (err) {
         console.log(err);
         res.json({
-          status: 'error'
+          status: 'error',
+          token: token,
+          user: realUser
         });
       }
       
@@ -71,11 +80,19 @@ router.post('/', function(req, res, next) {
           const denumireRol = selectRol.get(rolId._val);
 
           if (denumireRol && undefined !== denumireRol) {
+            realUser = {
+              grad: userRow._grad,
+              nume: userRow._nume,
+              prenume: userRow._prenume,
+              utilizator: userRow._user,
+              rol: denumireRol._val,
+            };
+
             token = jwt.sign(
               {
                 usr: user,
                 rle: denumireRol._val,
-                exp: Math.floor(Date.now() / 1000) + (24 * 60 * 30) /* expires in 30 days */
+                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */
               }, 
               secret
             );
@@ -88,14 +105,16 @@ router.post('/', function(req, res, next) {
 
       res.json({
         status: status,
-        token: token
+        token: token,
+        user: realUser
       });
     });
   } else {
     // Send response if the user is not in the database
     res.json({
       status: status,
-      token: token
+      token: token,
+      user: realUser
     });
   }
 });

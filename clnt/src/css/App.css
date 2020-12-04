@@ -57,6 +57,7 @@ button {
   background-color: #3377AA;
   color: whitesmoke;
   margin: 0 auto;
+  outline: none;
 }
 
 button:hover {
@@ -107,17 +108,7 @@ span.legacy {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: top;
-  background-color: #08044d;
-}
-
-.Main {
-  background-image: url('../images/hotel.svg');
-  background-origin: border-box;
-  -webkit-background-origin: border-box;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
-  background-color: #08044d;
+  background-color: rgb(37, 170, 169);
 }
 
 .Form {
@@ -294,15 +285,43 @@ span.legacy {
   }	
 }
 
+@keyframes glowBlue {
+  to {
+    /*text-shadow: 0 0 14px rgba(51, 119, 170, .7);*/
+    text-shadow: 0 0 14px rgba(79, 183, 183, .9);
+  }	
+}
+
 /* Titlebar customization */
+.titlebar {
+  background-color: #25aaa9 !important;
+}
+
 .titlebar > .window-appicon {
   background-size: 24px !important;
 }
 
-/* Container (after titlebar) customization */
+.titlebar, .titlebar > * {
+  font-family: 'Source Sans Pro Regular';
+}
+
+.window-title {
+  font-family: 'Source Sans Pro Bold' !important;
+  font-size: 14px !important;
+}
+
+.menubar .menubar-menu-button {
+  font-size: 14px;
+}
+
+.menubar-menu-container .action-label {
+  font-size: 14px;
+}
+
+/* Container (after titlebar) customization - the body, kinda */
 .container-after-titlebar {
   overflow: hidden !important;
-  background-color: rgb(37, 170, 169) !important;
+  background-color: rgba(37, 170, 169, .44) !important;
 }
 
 /*React Select customization via CSS classes */
@@ -353,4 +372,114 @@ div[class^='select-'] {
 
 .fixed-height {
   height: 44px;
+}
+
+
+/* Main view */
+.Main {
+  align-self: stretch;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-content: flex-start;
+  justify-content: flex-start;
+}
+
+/* Fixed sidenav, full height */
+.sidenav {
+  height: 100%;
+  min-width: max-content;
+  width: 10vw;
+  z-index: 1;
+  background-color: rgba(79, 183, 183, .9);
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Style the sidenav links and the dropdown button */
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: darkslategray;
+  display: block;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+/* On mouse-over */
+.sidenav a:hover, .dropdown-btn:hover {
+  color: #D72C25;
+}
+
+/* content */
+.content {
+  width: 100%;
+  margin: 4px; /* Same as the width of the sidenav */
+  font-size: 20px; /* Increased text to enable scrolling */
+  padding: 4px;
+  color: darkslategray;
+}
+
+.user-settings {
+  display: flex;
+  justify-content: flex-end;
+  /*color: #3377AA;*/
+  color:#25AAA9;
+}
+
+.user-settings--menu {
+  text-align: center;
+  color: darkslategray;
+}
+
+.user-icon {
+  font-size: 1.6rem;
+}
+
+.user-icon:hover {
+  animation: glowBlue .8s infinite alternate;
+}
+
+.user-icon--big {
+  font-size: 3rem;
+}
+
+.user-icon--big--container {
+  display: flex;
+  justify-content: center;
+}
+
+hr.user-settings--separator {
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: rgba(37, 170, 169, 1);
+}
+
+button.manage-user {
+  border-radius: 16px;
+  color: darkslategray;
+  background-color: rgba(79, 183, 183, .9);
+  border: 1px solid rgba(37, 170, 169, 1);
+  outline: none;
+}
+
+button.manage-user:hover {
+  color: #009500;
+}
+
+button.sign-out {
+  border-radius: 16px;
+  color: darkslategray;
+  background-color: rgba(79, 183, 183, .9);
+  border: 1px solid rgba(37, 170, 169, 1);
+  outline: none;
+}
+
+button.sign-out:hover {
+  color: #D72C25;
 }
