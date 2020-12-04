@@ -25,6 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
+
+// TODO: auth middleware?
+// app.use(authorization)
+
 app.use('/main', mainRouter);
 
 // catch 404 and forward to error handler

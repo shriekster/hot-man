@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const db = require('../db');
 
 router.options('/', function(req, res, next) {
   res.set({
@@ -23,10 +24,47 @@ router.post('/', function(req, res, next) {
     'Access-Control-Allow-Origin': 'http://localhost:3000',
   });
 
-  console.log(req.body.token);
+  let hotel='null';
+
+  const hCount = db.prepare(`SELECT COUNT(*) AS value
+                                FROM Hoteluri`);
+  const who = db.prepare(`SELECT *
+                          FROM Hoteluri`);
+
+  const hotelCount = hCount.get();
+
+  if (hotelCount && undefined !== hotelCount) {
+    switch(hotelCount.value) {
+      case 0: {}
+
+      case 1: {
+        let single = who.get();
+        
+        if (single && undefined !== single) {
+          hotel = {
+            nume: single.Nume,
+            judet: single.Judet,
+            sector: single.Sector,
+            strada: single.Strada,
+            numar: single.Numar,
+            codPostal: single.CodPostal,
+            telefon: single.Telefon,
+            fax: single.Fax,
+            email: single.Email,
+          }
+        }
+
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
+  }
 
   res.json({
-    hotel: 'Haiducii'
+    hotel: hotel
   })
 });
 

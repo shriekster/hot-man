@@ -25,7 +25,7 @@ class Administrare extends React.Component {
     fetch('http://localhost:3001/main/hotel', requestOptions)
     .then(response => response.json())
     .then(who => {
-      console.log(who)
+      console.log(who);
       this.setState({
         hotel: who.hotel,
       });
@@ -37,7 +37,7 @@ class Administrare extends React.Component {
       <div>
         <div>Administrare</div>
         <hr className='view--separator'/>
-      <div>{this.state.hotel}</div>
+      <div></div>
       </div>
     );
   }
