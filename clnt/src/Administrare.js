@@ -13,7 +13,8 @@ class Administrare extends React.Component {
   render() {
     return (
       <div>
-        Administrare
+        <div>Administrare</div>
+        <hr className='view--separator'/>
       </div>
     );
   }

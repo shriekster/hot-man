@@ -13,7 +13,8 @@ class Rezervari extends React.Component {
   render() {
     return (
       <div>
-        Rezervari
+        <div>Rezervări</div>
+        <hr className='view--separator'/>
       </div>
     );
   }

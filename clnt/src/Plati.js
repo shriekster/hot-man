@@ -13,7 +13,8 @@ class Plati extends React.Component {
   render() {
     return (
       <div>
-        Plati
+        <div>Plăți</div>
+        <hr className='view--separator'/>
       </div>
     );
   }

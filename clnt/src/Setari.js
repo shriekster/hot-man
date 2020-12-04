@@ -27,7 +27,7 @@ class Setari extends React.Component {
     return (
       <div>
         <div>Setările utilizatorului</div>
-        <hr/>
+        <hr className='view--separator'/>
         <div className='view-user-settings'>
           <div className='--settings-item'>
             <span>

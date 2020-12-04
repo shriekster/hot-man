@@ -13,7 +13,8 @@ class Rapoarte extends React.Component {
   render() {
     return (
       <div>
-        Rapoarte
+        <div>Rapoarte</div>
+        <hr className='view--separator'/>
       </div>
     );
   }

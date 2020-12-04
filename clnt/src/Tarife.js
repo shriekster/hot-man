@@ -13,7 +13,8 @@ class Tarife extends React.Component {
   render() {
     return (
       <div>
-        Tarife
+        <div>Tarife</div>
+        <hr className='view--separator'/>
       </div>
     );
   }

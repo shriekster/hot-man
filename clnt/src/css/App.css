@@ -532,3 +532,9 @@ button.sign-out:hover {
   left: 250px;
   font-size: 20px;
 }
+
+hr.view--separator {
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: rgba(37, 170, 169, 1);
+}

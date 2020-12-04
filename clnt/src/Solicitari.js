@@ -13,7 +13,8 @@ class Solicitari extends React.Component {
   render() {
     return (
       <div>
-        Solicitari
+        <div>Solicitări</div>
+        <hr className='view--separator'/>
       </div>
     );
   }
