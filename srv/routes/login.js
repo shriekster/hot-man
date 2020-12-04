@@ -37,7 +37,8 @@ router.post('/', function(req, res, next) {
 
 
   // Prepare the SQL statements
-  const selectUser = db.prepare(`SELECT ID AS _id, 
+  const selectUser = db.prepare(`SELECT ID AS _id,
+                                CNP AS _cnp,
                                 Grad AS _grad,
                                 Nume AS _nume,
                                 Prenume AS _prenume,
@@ -81,6 +82,7 @@ router.post('/', function(req, res, next) {
 
           if (denumireRol && undefined !== denumireRol) {
             realUser = {
+              cnp: userRow._cnp,
               grad: userRow._grad,
               nume: userRow._nume,
               prenume: userRow._prenume,

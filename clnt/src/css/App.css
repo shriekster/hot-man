@@ -308,15 +308,17 @@ span.legacy {
 
 .window-title {
   font-family: 'Source Sans Pro Bold' !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
+  /*color: #EE3924 !important;*/
+  color: darkgreen !important;
 }
 
 .menubar .menubar-menu-button {
-  font-size: 14px;
+  font-size: 16px !important;
 }
 
 .menubar-menu-container .action-label {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 /* Container (after titlebar) customization - the body, kinda */
@@ -376,7 +378,7 @@ div[class^='select-'] {
 }
 
 
-/* Main view */
+/* MAIN VIEW */
 .Main {
   align-self: stretch;
   height: 100vh;
@@ -493,4 +495,40 @@ button.sign-out {
 
 button.sign-out:hover {
   color: #D72C25;
+}
+
+/* Component views */
+.view {
+  height: 90vh;
+}
+
+.view-user-settings {
+  font-size: 18px;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.-inline {
+  display: inline;
+}
+
+.--settings-item {
+  border: 1px solid rgba(37, 170, 169, 1);
+  margin-bottom: 2vh;
+  width: 240px;
+  position: relative;
+}
+
+.--settings-value {
+  position: absolute;
+  left: 85px;
+}
+
+.--settings-edit {
+  position: absolute;
+  left: 250px;
+  font-size: 20px;
 }

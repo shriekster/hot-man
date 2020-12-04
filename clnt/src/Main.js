@@ -1,5 +1,15 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Tippy from '@tippyjs/react';
+
+import Spinner from './Spinner';
+
+import Administrare from './Administrare';
+import Setari from './Setari';
+import Rapoarte from './Rapoarte';
+import Plati from './Plati';
+import Tarife from './Tarife';
+import Rezervari from './Rezervari';
+import Solicitari from './Solicitari';
 
 class Main extends React.Component {
   constructor(props) {
@@ -7,12 +17,26 @@ class Main extends React.Component {
 
     this.toggleUserSettings = this.toggleUserSettings.bind(this);
 
+    this.closeUserSettings = this.closeUserSettings.bind(this);
+
     this.signOut = this.signOut.bind(this);
 
-
+    this.changeView = this.changeView.bind(this);
 
     this.state = {
       showUserSettings: false,
+
+      components: {
+        Administrare: Administrare,
+        Setari: Setari,
+        Rapoarte: Rapoarte,
+        Plati: Plati,
+        Tarife: Tarife,
+        Rezervari: Rezervari,
+        Solicitari: Solicitari,
+      },
+
+      view: Rezervari,
     };
   }
 
@@ -22,36 +46,70 @@ class Main extends React.Component {
     });
   }
 
+  closeUserSettings() {
+    this.setState({
+      showUserSettings: false
+    });
+  }
+
   signOut() {
     this.props.onChange('Login');
   }
 
+  changeView(component='Rezervari') {
+    let nextView = component;
+    let nextUserSettings = this.state.showUserSettings;
+
+    if(Object.keys(this.state.components).includes(nextView)) {
+      nextView = this.state.components[component];
+
+      if (Setari === nextView) {
+        nextUserSettings = false;
+      }
+
+    } else {
+      nextView = Rezervari;
+    }
+
+    this.setState({
+      view: nextView,
+      showUserSettings: nextUserSettings
+    })
+  }
+
   render() {
-    console.log(this.props.user)
+    let Component = this.state.view;
+    
     return (
       <div className='Main'>
         <div className='sidenav'>
-          <a href='#'>
+          <a href='#'
+            onClick={() => this.changeView('Administrare')}>
             <i className='fas fa-building menu-icon'></i> 
             <span className='menu-label'>Administrare</span>
           </a>
-          <a href='#'>
+          <a href='#'
+            onClick={() => this.changeView('Rapoarte')}>
             <i className='fas fa-chart-bar menu-icon'></i> 
             <span className='menu-label'>Rapoarte</span>
           </a>
-          <a href='#'>
+          <a href='#'
+            onClick={() => this.changeView('Plati')}>
             <i className='fas fa-receipt menu-icon'></i> 
             <span className='menu-label'>Plăți</span>
           </a>
-          <a href='#'>
+          <a href='#'
+            onClick={() => this.changeView('Tarife')}>
             <i className='fas fa-coins menu-icon'></i> 
             <span className='menu-label'>Tarife</span>
           </a>
-          <a href='#'>
+          <a href='#'
+            onClick={() => this.changeView('Rezervari')}>
             <i className='fas fa-calendar-plus menu-icon'></i> 
             <span className='menu-label'>Rezervări</span>
           </a>
-          <a href='#'>
+          <a href='#'
+            onClick={() => this.changeView('Solicitari')}>
             <i className='fas fa-clock menu-icon'></i> 
             <span className='menu-label'>Solicitări</span>
           </a>
@@ -75,7 +133,8 @@ class Main extends React.Component {
                   <hr className='user-settings--separator'/>
                   <div className='user-settings--manage'>
                     <button
-                      className='manage-user'>
+                      className='manage-user'
+                      onClick={() => this.changeView('Setari')}>
                       Setări
                     </button>
                   </div>
@@ -98,16 +157,24 @@ class Main extends React.Component {
             visible={this.state.showUserSettings}>
               {'operator' === this.props.user.rol ? 
                 <i className='fas fa-user-cog user-icon' 
-                  onClick={this.toggleUserSettings}></i> :
+                  onClick={this.toggleUserSettings}></i>:
                 <i className='fas fa-user-plus user-icon' 
                   onClick={this.toggleUserSettings}></i>
               }
             </Tippy>
           </div>
-          <h2>Hotelitary</h2>
-          <p>Aici se vor caza persoanele...</p>
-          <p>Aici sperăm să oferim satisfacția atât turiștilor...</p>
-          <p>... cât și operatorilor și managerilor!</p>
+          <div className='view'>
+            <Suspense 
+              fallback=
+              {
+                <Spinner 
+                status='altLoading'
+                visibility={true}/>
+              }>
+              <Component 
+                user={this.props.user}/>
+            </Suspense>
+          </div>
         </div>
       </div>
     );
