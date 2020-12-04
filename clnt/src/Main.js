@@ -172,7 +172,8 @@ class Main extends React.Component {
                 visibility={true}/>
               }>
               <Component 
-                user={this.props.user}/>
+                user={this.props.user}
+                token={this.props.token}/>
             </Suspense>
           </div>
         </div>
