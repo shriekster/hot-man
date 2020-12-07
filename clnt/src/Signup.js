@@ -91,7 +91,7 @@ class Signup extends React.Component {
         {value: 'Plt.', label: 'Plutonier'},
         {value: 'Plt.maj.', label: 'Plutonier major'},
         {value: 'Plt.adj.', label: 'Plutonier adjutant'},
-        {value: 'Plt.adj.pr', label: 'Plutonier adjutant principal'},
+        {value: 'Plt.adj.pr.', label: 'Plutonier adjutant principal'},
         {value: 'M.m.V', label: 'Maistru militar clasa a V-a'},
         {value: 'M.m.IV', label: 'Maistru militar clasa a IV-a'},
         {value: 'M.m.III', label: 'Maistru militar clasa a III-a'},

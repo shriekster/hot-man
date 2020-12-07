@@ -18,16 +18,10 @@
 
 html, body, form, input, button {
   box-sizing: border-box;
-  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
   margin: 0;
   padding: 0;
   font-size: max(16px, 1vw);
-}
-
-:root {
-  --arrow-right: 20px;
-  --arrow-opacity: 0;
-  --arrow-color: #25AAA9;
 }
 
 body {
@@ -48,10 +42,11 @@ select {
   border-color: hsl(0,0%,80%);
   padding: 2px 8px;
   outline: none;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
 }
 
 select {
-  font-family: 'Source Sans Pro Regular';
+  font-family: 'Source Sans Pro Bold';
   /*margin: 10px 2px;*/
 }
 
@@ -93,7 +88,7 @@ ul {
 }
 
 ::placeholder {
-  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
 }
 
 span.legacy {
@@ -119,7 +114,7 @@ span.legacy {
 }
 
 .Form {
-  color:  whitesmoke; /*#cfc547;*/
+  color:  darkslategray; /*whitesmoke;*/
   
   display: flex;
   flex-direction: column;
@@ -130,13 +125,14 @@ span.legacy {
   margin: 5px 2vw;
 
   font-size: max(16px, 1vw);
-  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
 }
 
 .Form-field {
   /*padding: 10px 2px;*/
   margin: 5px;
   width: 95%;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
 }
 
 .Form-password {
@@ -299,6 +295,14 @@ span.legacy {
   }	
 }
 
+@keyframes editing {
+ 0% {
+   color: darkslategray;
+ } to {
+   color: #009500;
+ }
+}
+
 @keyframes fadeLeft {
   0% {
     opacity: 0;
@@ -353,9 +357,9 @@ span.legacy {
   background-color: rgba(37, 170, 169, .44) !important;
 }
 
-/*React Select customization via CSS classes */
+/* React Select customization via CSS classes */
 div[class^='select-'] {
-  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
   width: 95%;
   color: #3377AA;
   font-size: .9rem;
@@ -568,22 +572,68 @@ button.sign-out:hover {
 }
 
 .--settings-item {
+  display: flex;
+  align-items: center;
   border: 1px solid rgba(37, 170, 169, 1);
   margin-bottom: 2vh;
-  width: 240px;
+  width: 450px;
+  height: 44px;
   position: relative;
 }
 
 .--settings-value {
+  display: flex;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  align-items: center;
   position: absolute;
-  left: 85px;
+  left: 95px;
+  outline: none;
+  width: 352px;
+  height: 40px;
+}
+
+[contenteditable='true'] {
+  white-space: nowrap;
+  overflow: hidden;
+} 
+
+[contenteditable='true'] br {
+  display:none;
+}
+
+[contenteditable='true'] * {
+  display:inline;
+  white-space:nowrap;
+}
+
+[contenteditable='false'] {
+  white-space: nowrap;
+  overflow: hidden;
+} 
+
+[contenteditable='false'] br {
+  display:none;
+}
+
+[contenteditable='false'] * {
+  display:inline;
+  white-space:nowrap;
+}
+
+.--value-editing {
+  outline: dashed #009500 1px;
+  color: #009500;
 }
 
 .--settings-edit {
   position: absolute;
-  left: 250px;
-  font-size: 20px;
+  left: 460px;
+  font-size: 24px;
   transition: all .3s linear;
+}
+
+.--editing {
+  animation: editing .75s infinite alternate;
 }
 
 .--settings-edit:hover {
@@ -594,4 +644,96 @@ hr.view--separator {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: rgba(37, 170, 169, 1);
+}
+
+#suggestions {
+  scroll-behavior: smooth;
+  height: auto;
+  max-height: 15vh;
+  overflow-y: auto;
+  width: 350px;
+}
+
+#suggestions::selection {
+  background: lightslategray;
+}
+
+#suggestions::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 4px;
+  background-color: darkgreen;
+}
+
+#suggestions::-webkit-scrollbar {
+  width: 8px;
+  background-color: #3377AA;
+}
+
+#suggestions::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: lightslategray;
+}
+
+.--suggestion-item-selected {
+  background-color: lightgray;
+}
+
+.--suggestions-list {
+  cursor: pointer;
+}
+
+
+
+
+/* React Select customization via CSS classes */
+div[class^='sel-'] {
+  position: absolute;
+  left: 85px;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  width: 360px;
+  color: #009500;
+  font-size: 18px;
+  border: none;
+}
+
+div[class^='sel-'] > * {
+  /*background-color:  rgb(37, 170, 169);*/
+  background-color: #9fd9d9;
+  border: none;
+}
+
+.sel__control {
+  /*background-color: whitesmoke !important;*/
+}
+
+.sel__single-value {
+  color: #009500 !important;
+}
+
+.sel__single-value--is-disabled {
+  color: darkslategray !important;
+}
+
+.sel__menu * {
+  color: darkslategray !important;
+}
+
+.sel__placeholder {
+  color: #009500 !important;
+}
+
+.sel__indicator {
+  transition: all .3s linear;
+  color: darkslategray !important;
+}
+
+.sel__indicator-separator {
+  background-color: rgba(37, 170, 169, 1) !important;
+}
+
+.sel__indicator:hover {
+  color: #009500 !important;
 }
