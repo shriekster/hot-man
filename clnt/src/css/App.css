@@ -24,6 +24,12 @@ html, body, form, input, button {
   font-size: max(16px, 1vw);
 }
 
+:root {
+  --arrow-right: 20px;
+  --arrow-opacity: 0;
+  --arrow-color: #25AAA9;
+}
+
 body {
   overflow-y: hidden;
 }
@@ -283,14 +289,34 @@ span.legacy {
 @keyframes glow {
   to {
 		text-shadow: 0 0 10px rgba(215, 44, 37, .8);
-  }	
+  }
 }
 
 @keyframes glowBlue {
   to {
-    /*text-shadow: 0 0 14px rgba(51, 119, 170, .7);*/
-    text-shadow: 0 0 14px rgba(79, 183, 183, .9);
+    text-shadow: 0 0 3px rgba(51, 119, 170, .9);
+    /*text-shadow: 0 0 14px rgba(79, 183, 183, .9);*/
   }	
+}
+
+@keyframes fadeLeft {
+  0% {
+    opacity: 0;
+    right: 20px;
+  } to {
+    opacity: 1;
+    right: 40px;
+  }
+}
+
+@keyframes fadeRight {
+  0% {
+    opacity: 1;
+    right: 40px;
+  } to {
+    opacity: 0;
+    right: 20px;
+  }
 }
 
 /* Titlebar customization */
@@ -413,6 +439,7 @@ div[class^='select-'] {
   text-align: left;
   cursor: pointer;
   outline: none;
+  transition: all .3s linear;
 }
 
 /* On mouse-over */
@@ -443,10 +470,35 @@ div[class^='select-'] {
 
 .user-icon {
   font-size: 1.6rem;
+  animation: glowBlue .8s infinite alternate;
+  position: relative;
 }
 
 .user-icon:hover {
-  animation: glowBlue .8s infinite alternate;
+  animation: none;
+  --arrow-animation: fadeRight .5s;
+  --arrow-right: 40px;
+}
+
+.user-settings--arrow {
+  font-size: 32px;
+  position: absolute;
+  top: 5px;
+  z-index: -1;
+  right: var(--arrow-right);
+  opacity: var(--arrow-opacity);
+}
+
+.fade--right {
+  animation: fadeRight .25s;
+  --arrow-right: 20px;
+  --arrow-opacity: 0;
+}
+
+.fade--left {
+  animation: fadeLeft .25s;
+  --arrow-right: 40px;
+  --arrow-opacity: 1;
 }
 
 .user-icon--big {
@@ -531,6 +583,11 @@ button.sign-out:hover {
   position: absolute;
   left: 250px;
   font-size: 20px;
+  transition: all .3s linear;
+}
+
+.--settings-edit:hover {
+  color: #009500;
 }
 
 hr.view--separator {

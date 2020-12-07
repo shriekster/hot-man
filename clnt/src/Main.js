@@ -23,9 +23,13 @@ class Main extends React.Component {
 
     this.changeView = this.changeView.bind(this);
 
+    this.onSettingsEnter = this.onSettingsEnter.bind(this);
+
+    this.onSettingsLeave = this.onSettingsLeave.bind(this);
+
     this.state = {
       showUserSettings: false,
-
+      userSettingsClass: '',
       components: {
         Administrare: Administrare,
         Setari: Setari,
@@ -59,12 +63,14 @@ class Main extends React.Component {
   changeView(component='Rezervari') {
     let nextView = component;
     let nextUserSettings = this.state.showUserSettings;
+    let nextClass = this.state.userSettingsClass;
 
     if(Object.keys(this.state.components).includes(nextView)) {
       nextView = this.state.components[component];
 
       if (Setari === nextView) {
         nextUserSettings = false;
+        nextClass = 'fade--right';
       }
 
     } else {
@@ -73,8 +79,23 @@ class Main extends React.Component {
 
     this.setState({
       view: nextView,
-      showUserSettings: nextUserSettings
+      showUserSettings: nextUserSettings,
+      userSettingsClass: nextClass
     })
+  }
+
+  onSettingsEnter() {
+    this.setState({
+      userSettingsClass: 'fade--left'
+    });
+  }
+
+  onSettingsLeave() {
+    if (!this.state.showUserSettings) {
+      this.setState({
+        userSettingsClass: 'fade--right'
+      });
+    }
   }
 
   render() {
@@ -117,6 +138,10 @@ class Main extends React.Component {
 
         <div className='content'>
           <div className='user-settings'>
+            {true === this.state.showUserSettings ?
+            <i className={'fas fa-angle-right user-settings--arrow' + ' ' + this.state.userSettingsClass}></i> :
+            <i className={'fas fa-angle-left user-settings--arrow' + ' ' + this.state.userSettingsClass}></i>
+            }
             <Tippy
             content={
               <>
@@ -133,6 +158,7 @@ class Main extends React.Component {
                   <hr className='user-settings--separator'/>
                   <div className='user-settings--manage'>
                     <button
+                      id='settings-button'
                       className='manage-user'
                       onClick={() => this.changeView('Setari')}>
                       Setări
@@ -154,12 +180,17 @@ class Main extends React.Component {
             arrow={false}
             theme='blue-material-thin'
             interactive={true}
+            offset={[0, 18]}
             visible={this.state.showUserSettings}>
               {'operator' === this.props.user.rol ? 
                 <i className='fas fa-user-cog user-icon' 
-                  onClick={this.toggleUserSettings}></i>:
+                  onClick={this.toggleUserSettings}
+                  onMouseEnter={this.onSettingsEnter}
+                  onMouseLeave={this.onSettingsLeave}></i>:
                 <i className='fas fa-user-plus user-icon' 
-                  onClick={this.toggleUserSettings}></i>
+                  onClick={this.toggleUserSettings}
+                  onMouseEnter={this.onSettingsHover}
+                  onMouseLeave={this.onSettingsLeave}></i>
               }
             </Tippy>
           </div>
