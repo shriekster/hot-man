@@ -16,9 +16,14 @@
   box-sizing: border-box;
 }
 
+:root {
+  --arrow-right: 20px;
+  --arrow-opacity: 0;
+}
+
 html, body, form, input, button {
   box-sizing: border-box;
-  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif !important;
   margin: 0;
   padding: 0;
   font-size: max(16px, 1vw);
@@ -309,14 +314,14 @@ span.legacy {
     right: 20px;
   } to {
     opacity: 1;
-    right: 40px;
+    right: 58px;
   }
 }
 
 @keyframes fadeRight {
   0% {
     opacity: 1;
-    right: 40px;
+    right: 58px;
   } to {
     opacity: 0;
     right: 20px;
@@ -354,7 +359,7 @@ span.legacy {
 /* Container (after titlebar) customization - the body, kinda */
 .container-after-titlebar {
   overflow: hidden !important;
-  background-color: rgba(37, 170, 169, .44) !important;
+  background-color: #9fd9d9 /*rgba(37, 170, 169, .44)*/ !important;
 }
 
 /* React Select customization via CSS classes */
@@ -473,7 +478,7 @@ div[class^='select-'] {
 }
 
 .user-icon {
-  font-size: 1.6rem;
+  font-size: 2.5rem;
   animation: glowBlue .8s infinite alternate;
   position: relative;
 }
@@ -481,13 +486,13 @@ div[class^='select-'] {
 .user-icon:hover {
   animation: none;
   --arrow-animation: fadeRight .5s;
-  --arrow-right: 40px;
+  --arrow-right: 58px;
 }
 
 .user-settings--arrow {
-  font-size: 32px;
+  font-size: 36px;
   position: absolute;
-  top: 5px;
+  top: 10px;
   z-index: -1;
   right: var(--arrow-right);
   opacity: var(--arrow-opacity);
@@ -501,7 +506,7 @@ div[class^='select-'] {
 
 .fade--left {
   animation: fadeLeft .25s;
-  --arrow-right: 40px;
+  --arrow-right: 58px;
   --arrow-opacity: 1;
 }
 
@@ -579,6 +584,7 @@ button.sign-out:hover {
   width: 450px;
   height: 44px;
   position: relative;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
 }
 
 .--settings-value {
@@ -586,10 +592,11 @@ button.sign-out:hover {
   font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
   align-items: center;
   position: absolute;
-  left: 95px;
+  left: 92px;
   outline: none;
-  width: 352px;
+  width: 355px;
   height: 40px;
+  padding: 4px;
 }
 
 [contenteditable='true'] {
@@ -628,7 +635,7 @@ button.sign-out:hover {
 .--settings-edit {
   position: absolute;
   left: 460px;
-  font-size: 24px;
+  font-size: 36px;
   transition: all .3s linear;
 }
 
@@ -638,6 +645,10 @@ button.sign-out:hover {
 
 .--settings-edit:hover {
   color: #009500;
+}
+
+.--settings-parola {
+
 }
 
 hr.view--separator {

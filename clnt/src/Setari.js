@@ -1,6 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 import Select from 'react-select';
+import PasswordInput from './PasswordInput';
 
 class Setari extends React.Component {
   constructor(props) {
@@ -8,15 +9,13 @@ class Setari extends React.Component {
 
     this.editItem = this.editItem.bind(this);
 
-    this.onIconClick = this.onIconClick.bind(this);
-
     this.onValueInput = this.onValueInput.bind(this);
+
+    this.onIconClick = this.onIconClick.bind(this);
 
     this.onKeyDown = this.onKeyDown.bind(this);
 
     this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
-    this.onSuggestionClick = this.onSuggestionClick.bind(this);
 
     this.onSelect = this.onSelect.bind(this);
 
@@ -36,6 +35,13 @@ class Setari extends React.Component {
       nextUtilizator: '',
       nextParola: '',
 
+      showCnpError: false,
+      showGradError: false,
+      showNumeError: false,
+      showPrenumeError: false,
+      showUtilizatorError: false,
+      showParolaError: false,
+
       editCnpClass: 'fas fa-edit --settings-edit',
       editGradClass: 'fas fa-edit --settings-edit',
       editNumeClass: 'fas fa-edit --settings-edit',
@@ -52,7 +58,7 @@ class Setari extends React.Component {
 
       iconClassNames: {
         edit: 'fas fa-edit --settings-edit',
-        editing: 'fas fa-pen --settings-edit --editing',
+        editing: 'fas fa-save --settings-edit --editing',
       },
 
       valueClassNames: {
@@ -60,7 +66,7 @@ class Setari extends React.Component {
         editing: '--settings-value --value-editing -inline'
       },
 
-      _grade: [
+      grade: [
         {value: 'P.c.c.', label: 'Personal civil contractual'},
         {value: 'F.p.', label: 'Funcționar public'},
         {value: 'Sold.', label: 'Soldat'},
@@ -285,33 +291,6 @@ class Setari extends React.Component {
     }
   }
 
-  onValueInput(e) {
-    if (e && e.target && e.target.id) {
-      switch (e.target.id) {
-        case '--settings-grad': {
-          let suggestions = [];
-          this.state.grade.forEach(value => {
-            let val = value.toLowerCase();
-            let text = e.target.innerText.toLowerCase();
-
-            if (val.includes(text)) {
-              suggestions.push(<li className='--suggestion-item' key={value} id={value} onClick={this.onSuggestionClick}>{value}</li>)
-            }
-          });
-          
-          if (0 === suggestions.length) {
-            suggestions.push(<li className='--suggestion-item' key='none' id='none' onClick={this.onSuggestionClick}>(nu există)</li>)
-          }
-
-          this.setState({
-            gradeSuggestions: suggestions
-          })
-          break;
-        }
-      }
-    }
-  }
-
   // numeric input only
   onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
@@ -348,84 +327,8 @@ class Setari extends React.Component {
         e.preventDefault();
         return false;
       } 
-    } else
-
-    if ('--settings-grad' === e.target.id) {
-      let suggestions = [];
-      this.state.grade.forEach(value => {
-        let val = value.toLowerCase();
-        let text = e.target.innerText.toLowerCase();
-
-        if (val.includes(text)) {
-          suggestions.push(<li className='--suggestion-item' key={value} id={value} onClick={this.onSuggestionClick}>{value}</li>)
-        }
-      });
-      
-      if (0 === suggestions.length) {
-        suggestions.push(<li className='--suggestion-item' key='none' id='none' onClick={this.onSuggestionClick}>(nu există)</li>)
-      }
-
-      switch(charCode) {
-        case 38: {
-          let index = this.state.suggestionIndex;
-
-          if (index && index > 0) {
-            index --;
-            let s = suggestions[index];
-            let nextSuggestion = <li className='--suggestion-item-selected' key={s.key} id={s.id}>{s.props.children}</li>
-            suggestions[index] = nextSuggestion;
-          }
-
-          this.setState({
-            gradeSuggestions: suggestions,
-            suggestionIndex: index,
-          });
-          break;
-        }
-
-        case 40: {
-          let index = this.state.suggestionIndex;
-
-          if (index && index < suggestions.length) {
-            index ++;
-            let s = suggestions[index];
-            let nextSuggestion = <li className='--suggestion-item-selected' key={s.key} id={s.id}>{s.props.children}</li>
-            suggestions[index] = nextSuggestion;
-          }
-
-          this.setState({
-            gradeSuggestions: suggestions,
-            suggestionIndex: index,
-          });
-          break;
-        }
-
-        default: {
-          break;
-        }
-      }
-    }
-
+    } 
     return true;
-  }
-
-  onSuggestionClick(e) {
-    if (e && e.target && e.target.id) {
-
-      if ('none' !== e.target.id) {
-        this.setState({
-          editGrad: false,
-          editGradClass: this.state.iconClassNames.edit,
-          nextGrad: e.target.innerText,
-        })
-      } else {
-        this.setState({
-          editGrad: false,
-          editGradClass: this.state.iconClassNames.edit,
-          nextGrad: this.props.user.grad,
-        })
-      }
-    }
   }
 
   onSelect(e, optional) {
@@ -433,8 +336,59 @@ class Setari extends React.Component {
     if (optional && optional !== undefined) {
       if (optional.id === 'grad' && optional.action === 'select-option') {
         this.setState({
-          //grad: optional.value.trim()
+          nextGrad: optional.value.trim()
         });
+      }
+    }
+  }
+
+  onValueInput(e) {
+    if (e && e.target && e.target.id) {
+      switch (e.target.id) {
+        case '--settings-cnp': {
+          if (e.target.innerText) {
+            this.setState({
+              nextCnp: e.target.innerText
+            })
+          }
+          break;
+        }
+
+        case '--settings-nume': {
+          if (e.target.innerText) {
+            this.setState({
+              nextNume: e.target.innerText
+            })
+          }
+          break;
+        }
+
+        case '--settings-prenume': {
+          if (e.target.innerText) {
+            this.setState({
+              nextPrenume: e.target.innerText
+            })
+          }
+          break;
+        }
+
+        case '--settings-utilizator': {
+          if (e.target.innerText) {
+            this.setState({
+              nextUtilizator: e.target.innerText
+            })
+          }
+          break;
+        }
+
+        case '--settings-parola': {
+          if (e.target.innerText) {
+            this.setState({
+              nextParola: e.target.innerText
+            })
+          }
+          break;
+        }
       }
     }
   }
@@ -442,10 +396,14 @@ class Setari extends React.Component {
   componentDidMount() {
   }
 
+  componentDidUpdate () {
+    console.log(this.state.nextCnp, this.state.nextGrad, this.state.nextNume, this.state.nextPrenume, this.state.nextUtilizator, this.state.nextParola)
+  }
+
   render() {
     return (
       <div>
-        <div>Setările utilizatorului</div>
+        <div>Setările contului</div>
         <hr className='view--separator'/>
         <div className='view-user-settings'>
           <div className='--settings-item'>
@@ -469,6 +427,7 @@ class Setari extends React.Component {
             </span>
             <Select
               isDisabled={!this.state.editGrad}
+              defaultValue={this.state.grade.find(option => option.value === this.props.user.grad)}
               onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
               onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
               maxMenuHeight={100}
@@ -476,7 +435,7 @@ class Setari extends React.Component {
               noOptionsMessage={(msg) => 'Nu există'}
               className='sel-container'
               classNamePrefix='sel' 
-              options={this.state._grade} /> 
+              options={this.state.grade} /> 
             <i id='--settings-edit-grad'  
               className={this.state.editGradClass}
               onClick={this.onIconClick}></i>

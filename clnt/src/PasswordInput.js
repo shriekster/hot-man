@@ -54,7 +54,12 @@ class PasswordInput extends React.Component {
     return (
       <div className='Form-name'>
         <label htmlFor='pass'>
-          Parola
+          {
+            //!this.props.text &&
+            <>
+            Parola 
+            </>
+          }
           {
             asterisk &&
             <RequiredTippy />
