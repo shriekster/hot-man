@@ -28,11 +28,11 @@ class Setari extends React.Component {
       editUtilizator: false,
       editParola: false,
 
-      nextCnp: '',
-      nextGrad: '',
-      nextNume: '',
-      nextPrenume: '',
-      nextUtilizator: '',
+      nextCnp: this.props.user.cnp,
+      nextGrad: this.props.user.grad,
+      nextNume: this.props.user.nume,
+      nextPrenume: this.props.user.prenume,
+      nextUtilizator: this.props.user.utilizator,
       nextParola: '',
 
       showCnpError: false,
@@ -111,6 +111,12 @@ class Setari extends React.Component {
           let className = this.state.editCnpClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueCnpClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
+          if (!this.state.nextCnp){
+            this.setState({
+              //nextCnp: this.props.user.cnp
+            })
+          }
+
           this.setState({
             editCnp: !this.state.editCnp,
             editCnpClass: className,
@@ -415,7 +421,7 @@ class Setari extends React.Component {
               contentEditable={this.state.editCnp}
               onInput={this.onValueInput}
               onKeyDown={this.onKeyDown}>
-              {this.props.user.cnp}
+              {this.state.nextCnp}
             </div>
             <i id='--settings-edit-cnp' 
               className={this.state.editCnpClass}
@@ -427,7 +433,7 @@ class Setari extends React.Component {
             </span>
             <Select
               isDisabled={!this.state.editGrad}
-              defaultValue={this.state.grade.find(option => option.value === this.props.user.grad)}
+              defaultValue={this.state.grade.find(option => option.value === this.state.nextGrad)}
               onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
               onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
               maxMenuHeight={100}
@@ -449,7 +455,7 @@ class Setari extends React.Component {
               contentEditable={this.state.editNume}
               onInput={this.onValueInput}
               onKeyDown={this.onGenericKeyDown}>
-              {this.props.user.nume}
+              {this.state.nextNume}
             </div>
             <i id='--settings-edit-nume' 
               className={this.state.editNumeClass}
@@ -464,7 +470,7 @@ class Setari extends React.Component {
               contentEditable={this.state.editPrenume}
               onInput={this.onValueInput}
               onKeyDown={this.onGenericKeyDown}>
-              {this.props.user.prenume}
+              {this.state.nextPrenume}
             </div>
             <i id='--settings-edit-prenume'
               className={this.state.editPrenumeClass}
@@ -479,7 +485,7 @@ class Setari extends React.Component {
               contentEditable={this.state.editUtilizator}
               onInput={this.onValueInput}
               onKeyDown={this.onGenericKeyDown}>
-              {this.props.user.utilizator}
+              {this.state.nextUtilizator}
             </div>
             <i id='--settings-edit-utilizator' 
               className={this.state.editUtilizatorClass}
