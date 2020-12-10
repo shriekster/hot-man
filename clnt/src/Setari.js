@@ -2,6 +2,7 @@ import React from 'react';
 import Tippy from '@tippyjs/react';
 import Select from 'react-select';
 import PasswordInput from './PasswordInput';
+import { runAtThisOrScheduleAtNextAnimationFrame } from 'custom-electron-titlebar/lib/common/dom';
 
 class Setari extends React.Component {
   constructor(props) {
@@ -19,6 +20,12 @@ class Setari extends React.Component {
 
     this.onViewSettingsClick = this.onViewSettingsClick.bind(this);
 
+    this.togglePasswordVisibility = this.togglePasswordVisibility.bind(this);
+
+    this.onPasswordFocus = this.onPasswordFocus.bind(this);
+
+    this.onPasswordBlur = this.onPasswordBlur.bind(this);
+
     this.state = {
       fetching: false,
       editCnp: false,
@@ -27,6 +34,9 @@ class Setari extends React.Component {
       editPrenume: false,
       editUtilizator: false,
       editParola: false,
+
+      passwordVisible: false,
+      passwordFocused: false,
 
       cnp: this.props.user.cnp,
       grad: this.props.user.grad,
@@ -282,11 +292,19 @@ class Setari extends React.Component {
         case '--settings-edit-parola': {
           let className = this.state.editParolaClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueParolaClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-          
+          let passwordVisible = false;
+
+          if (className === this.state.iconClassNames.edit &&
+              valueClassName == this.state.valueClassNames.edit) {
+                passwordVisible = false;
+          }
+
           this.setState({
             editParola: !this.state.editParola,
             editParolaClass: className,
             valueParolaClass: valueClassName,
+
+            passwordVisible: passwordVisible,
 
             editCnp: false,
             editGrad: false,
@@ -482,6 +500,24 @@ class Setari extends React.Component {
     }
   }
 
+  togglePasswordVisibility () {
+    this.setState({
+      passwordVisible: !this.state.passwordVisible
+    });
+  }
+
+  onPasswordFocus () {
+    this.setState({
+      passwordFocused: true,
+    })
+  }
+
+  onPasswordBlur () {
+    this.setState({
+      passwordFocused: false,
+    })
+  }
+
   componentDidMount() {
   }
 
@@ -617,12 +653,22 @@ class Setari extends React.Component {
               <input id='--settings-parola'
                 autoComplete='off'
                 autoCorrect='off'
-                className={this.state.valueParolaClass}
+                className={this.state.valueParolaClass + ' --settings-parola'}
                 disabled={!this.state.editParola}
                 onInput={this.onValueInput}
                 onKeyDown={this.onGenericKeyDown}
-                value={this.state.nextParola}>
+                value={this.state.nextParola}
+                type={this.state.passwordVisible ? 'text' : 'password'}>
               </input>
+              <i id='--settings-parola-icon'
+                className={(this.state.passwordVisible ? 
+                            'fas fa-eye-slash --settings-parola-icon' : 
+                            'fas fa-eye --settings-parola-icon') 
+                            + 
+                          (this.state.editParola ? 
+                            ' --parola-is-visible' : 
+                              ' --parola-is-invisible')}
+                onClick={this.togglePasswordVisibility}></i>
               <i id='--settings-edit-parola' 
                 className={this.state.editParolaClass}
                 onClick={this.handleSettingsSubmit}></i>

@@ -590,6 +590,8 @@ button.sign-out:hover {
   font-size: 18px;
 }
 
+input[type='text'].--settings-value,
+input[type='password'].--settings-value,
 .--settings-value {
   outline: none !important;
   border: none;
@@ -604,6 +606,7 @@ button.sign-out:hover {
   height: 40px;
   padding: 4px;
   background-color: #9fd9d9;
+  color: darkslategray;
 }
 
 .--value-editing {
@@ -612,6 +615,8 @@ button.sign-out:hover {
   color: #009500;
 }
 
+input[type='text'].--value-editing:focus,
+input[type='password'].--value-editing:focus,
 .--value-editing:focus {
   border: 1px #009500 inset;
   border-radius: 4px;
@@ -633,7 +638,22 @@ button.sign-out:hover {
 }
 
 .--settings-parola {
+  padding-right: 40px !important;
+}
 
+.--settings-parola-icon {
+  position: absolute;
+  left: 415px;
+  z-index: 4;
+  font-size: 24px !important;
+}
+
+.--parola-is-visible {
+  visibility: visible;
+}
+
+.--parola-is-invisible {
+  visibility: hidden;
 }
 
 hr.view--separator {
