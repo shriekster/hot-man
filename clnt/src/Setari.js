@@ -158,7 +158,7 @@ class Setari extends React.Component {
           
           let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-          console.log(className, valueClassName)
+          
           this.setState({
             editGrad: !this.state.editGrad,
             editGradClass: className,
