@@ -70,11 +70,12 @@ class Main extends React.Component {
 
       if (Setari === nextView) {
         nextUserSettings = false;
-        nextClass = 'fade--right';
+        nextClass = '';
       }
 
     } else {
       nextView = Rezervari;
+      nextClass = '';
     }
 
     this.setState({
@@ -86,14 +87,14 @@ class Main extends React.Component {
 
   onSettingsEnter() {
     this.setState({
-      userSettingsClass: 'fade--left'
+      userSettingsClass: '--opened'
     });
   }
 
   onSettingsLeave() {
     if (!this.state.showUserSettings) {
       this.setState({
-        userSettingsClass: 'fade--right'
+        userSettingsClass: ''
       });
     }
   }
@@ -138,23 +139,31 @@ class Main extends React.Component {
 
         <div className='content'>
           <div className='user-settings'>
+            <span id='--settings-arrow'>
             {true === this.state.showUserSettings ?
-            <i className={'fas fa-angle-right user-settings--arrow' + ' ' + this.state.userSettingsClass}></i> :
-            <i className={'fas fa-angle-left user-settings--arrow' + ' ' + this.state.userSettingsClass}></i>
+            <i className={'fas fa-caret-right user-settings--arrow' + ' ' + this.state.userSettingsClass}></i> :
+            <i className={'fas fa-caret-left user-settings--arrow' + ' ' + this.state.userSettingsClass}></i>
             }
+            </span>
             <Tippy
             content={
               <>
                 <div className='user-settings--menu'>
                   <div className='user-icon--big--container'>
                     {'operator' === this.props.user.rol ? 
-                    <i className='fas fa-user-cog user-icon--big'></i> :
-                    <i className='fas fa-user-plus user-icon--big'></i>
+                    <i className='fas fa-user user-icon--big'></i> :
+                    <i className='fas fa-user-cog user-icon--big'></i>
                     }
                   </div>
                   <div className='bold'>{this.props.user.grad} {this.props.user.nume} {this.props.user.prenume}</div>
-                  <div>{this.props.user.utilizator}</div>
-                  <div>{this.props.user.rol}</div>
+                  <div>
+                    <div className='user-settings--attribute'>
+                      <i className='fas fa-id-card --attribute-icon'></i> <span className='bold --attribute-text'>{this.props.user.utilizator}</span>
+                    </div>
+                    <div className='user-settings--attribute'>
+                      <i className='fas fa-user-tag --attribute-icon'></i> <span className='bold --attribute-text'>{this.props.user.rol}</span>
+                    </div>
+                  </div>
                   <hr className='user-settings--separator'/>
                   <div className='user-settings--manage'>
                     <button
@@ -180,18 +189,14 @@ class Main extends React.Component {
             arrow={false}
             theme='blue-material-thin'
             interactive={true}
-            offset={[0, 18]}
+            offset={[0, 4]}
             visible={this.state.showUserSettings}>
-              {'operator' === this.props.user.rol ? 
-                <i className='fas fa-user-cog user-icon' 
+              <span id='user-icon' className='user-icon'>
+                <i className='fas fa-user-circle --uicon' 
                   onClick={this.toggleUserSettings}
                   onMouseEnter={this.onSettingsEnter}
-                  onMouseLeave={this.onSettingsLeave}></i>:
-                <i className='fas fa-user-plus user-icon' 
-                  onClick={this.toggleUserSettings}
-                  onMouseEnter={this.onSettingsHover}
                   onMouseLeave={this.onSettingsLeave}></i>
-              }
+              </span>
             </Tippy>
           </div>
           <div className='view'>

@@ -7,17 +7,17 @@ class Setari extends React.Component {
   constructor(props) {
     super(props);
 
-    this.editItem = this.editItem.bind(this);
-
     this.onValueInput = this.onValueInput.bind(this);
 
-    this.onIconClick = this.onIconClick.bind(this);
+    this.handleSettingsSubmit = this.handleSettingsSubmit.bind(this);
 
     this.onKeyDown = this.onKeyDown.bind(this);
 
     this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
 
     this.onSelect = this.onSelect.bind(this);
+
+    this.onViewSettingsClick = this.onViewSettingsClick.bind(this);
 
     this.state = {
       fetching: false,
@@ -27,6 +27,13 @@ class Setari extends React.Component {
       editPrenume: false,
       editUtilizator: false,
       editParola: false,
+
+      cnp: this.props.user.cnp,
+      grad: this.props.user.grad,
+      nume: this.props.user.nume,
+      prenume: this.props.user.prenume,
+      utilizator: this.props.user.utilizator,
+      parola: '',
 
       nextCnp: this.props.user.cnp,
       nextGrad: this.props.user.grad,
@@ -100,22 +107,24 @@ class Setari extends React.Component {
     };
   }
 
-  editItem(itemName) {
-    ;
-  }
+  handleSettingsSubmit(e) {
+    if (e && '--settings-form' === e.target.className) {
+      e.preventDefault();
+    }
 
-  onIconClick(e) {
     if (e && e.target && e.target.id) {
       switch (e.target.id) {
+
+        case '--settings-cnp-form':
         case '--settings-edit-cnp': {
           let className = this.state.editCnpClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueCnpClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
-          if (!this.state.nextCnp){
-            this.setState({
+          //if (!this.state.nextCnp){
+          //  this.setState({
               //nextCnp: this.props.user.cnp
-            })
-          }
+          //  })
+          //}
 
           this.setState({
             editCnp: !this.state.editCnp,
@@ -144,10 +153,12 @@ class Setari extends React.Component {
           break;
         }
 
+        case '--settings-grad-form':
         case '--settings-edit-grad': {
+          
           let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-          
+          console.log(className, valueClassName)
           this.setState({
             editGrad: !this.state.editGrad,
             editGradClass: className,
@@ -174,6 +185,7 @@ class Setari extends React.Component {
           break;
         }
 
+        case '--settings-nume-form':
         case '--settings-edit-nume': {
           let className = this.state.editNumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueNumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
@@ -204,6 +216,7 @@ class Setari extends React.Component {
           break;
         }
 
+        case '--settings-prenume-form':
         case '--settings-edit-prenume': {
           let className = this.state.editPrenumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valuePrenumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
@@ -234,6 +247,7 @@ class Setari extends React.Component {
           break;
         }
 
+        case '--settings-utilizator-form':
         case '--settings-edit-utilizator': {
           let className = this.state.editUtilizatorClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueUtilizatorClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
@@ -264,6 +278,7 @@ class Setari extends React.Component {
           break;
         }
 
+        case '--settings-parola-form':
         case '--settings-edit-parola': {
           let className = this.state.editParolaClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueParolaClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
@@ -300,6 +315,10 @@ class Setari extends React.Component {
   // numeric input only
   onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
+
+    if (27 === charCode) {
+      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
+    }
     
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       if(charCode !== 8 && charCode !== 9 && 
@@ -310,7 +329,7 @@ class Setari extends React.Component {
       }
     }
 
-    if (e && e.target.innerText.length > 12) {
+    if (e && e.target.value.length > 13) {
       if(charCode !== 8 && charCode !== 9 && 
         charCode !== 17 && charCode !== 46 && 
         !(charCode >= 37 && charCode <= 40))  {
@@ -326,7 +345,11 @@ class Setari extends React.Component {
   onGenericKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
-    if (e && e.target.innerText.length > 64) {
+    if (27 === charCode) {
+      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
+    } 
+
+    if (e && e.target.value.length > 64) {
       if(charCode !== 8 && charCode !== 9 && 
           charCode !== 17 && charCode !== 46 && 
           !(charCode >= 37 && charCode <= 40)) {
@@ -352,49 +375,109 @@ class Setari extends React.Component {
     if (e && e.target && e.target.id) {
       switch (e.target.id) {
         case '--settings-cnp': {
-          if (e.target.innerText) {
+          if (e.target.value.length > 13) {
+            e.preventDefault();
+          }
+          else {
             this.setState({
-              nextCnp: e.target.innerText
+              nextCnp: e.target.value.trim()
             })
           }
           break;
         }
 
         case '--settings-nume': {
-          if (e.target.innerText) {
-            this.setState({
-              nextNume: e.target.innerText
-            })
-          }
+          this.setState({
+            nextNume: e.target.value.trim()
+          })
           break;
         }
 
         case '--settings-prenume': {
-          if (e.target.innerText) {
-            this.setState({
-              nextPrenume: e.target.innerText
-            })
-          }
+          this.setState({
+            nextPrenume: e.target.value.trim()
+          })
           break;
         }
 
         case '--settings-utilizator': {
-          if (e.target.innerText) {
-            this.setState({
-              nextUtilizator: e.target.innerText
-            })
-          }
+          this.setState({
+            nextUtilizator: e.target.value.trim()
+          })
           break;
         }
 
         case '--settings-parola': {
-          if (e.target.innerText) {
-            this.setState({
-              nextParola: e.target.innerText
-            })
-          }
+          this.setState({
+            nextParola: e.target.value.trim()
+          })
           break;
         }
+      }
+    }
+  }
+
+  onViewSettingsClick(e) {
+    if (e && e.target) {
+      if ('view-user-settings' === e.target.id) {
+
+        if (this.state.editCnp) {
+          this.setState({
+            editCnp: false,
+            nextCnp: this.state.cnp,
+            editCnpClass: this.state.iconClassNames.edit,
+            valueCnpClass: this.state.valueClassNames.edit,
+          })
+        }
+
+        if (this.state.editGrad) {
+          this.setState({
+            editGrad: false,
+            nextGrad: this.state.grad,
+            editGradClass: this.state.iconClassNames.edit,
+            valueGradClass: this.state.valueClassNames.edit,
+          })
+        }
+
+        if (this.state.editNume) {
+          this.setState({
+            editNume: false,
+            nextNume: this.state.nume,
+            editNumeClass: this.state.iconClassNames.edit,
+            valueNumeClass: this.state.valueClassNames.edit,
+          })
+        }
+
+        if (this.state.editPrenume) {
+          this.setState({
+            editPrenume: false,
+            nextPrenume: this.state.prenume,
+            editPrenumeClass: this.state.iconClassNames.edit,
+            valuePrenumeClass: this.state.valueClassNames.edit,
+          })
+        }
+
+        if (this.state.editUtilizator) {
+          this.setState({
+            editUtilizator: false,
+            nextUtilizator: this.state.utilizator,
+            editUtilizatorClass: this.state.iconClassNames.edit,
+            valueUtilizatorClass: this.state.valueClassNames.edit,
+          })
+        }
+
+        if (this.state.editParola) {
+          this.setState({
+            editParola: false,
+            nextParola: this.state.parola,
+            editParolaClass: this.state.iconClassNames.edit,
+            valueParolaClass: this.state.valueClassNames.edit,
+          })
+        }
+
+        this.setState({
+          fetching: false,
+        });
       }
     }
   }
@@ -403,7 +486,6 @@ class Setari extends React.Component {
   }
 
   componentDidUpdate () {
-    console.log(this.state.nextCnp, this.state.nextGrad, this.state.nextNume, this.state.nextPrenume, this.state.nextUtilizator, this.state.nextParola)
   }
 
   render() {
@@ -411,99 +493,140 @@ class Setari extends React.Component {
       <div>
         <div>Setările contului</div>
         <hr className='view--separator'/>
-        <div className='view-user-settings'>
+        <div id='view-user-settings' 
+          className='view-user-settings'
+          onClick={this.onViewSettingsClick}>
           <div className='--settings-item'>
-            <span>
-              CNP
-            </span>
-            <div id='--settings-cnp'
-              className={this.state.valueCnpClass}
-              contentEditable={this.state.editCnp}
-              onInput={this.onValueInput}
-              onKeyDown={this.onKeyDown}>
-              {this.state.nextCnp}
-            </div>
-            <i id='--settings-edit-cnp' 
-              className={this.state.editCnpClass}
-              onClick={this.onIconClick}></i>
+            <form id='--settings-cnp-form'
+              className='--settings-form'
+              onSubmit={this.handleSettingsSubmit}>
+              <span>
+                CNP
+              </span>
+              <input id='--settings-cnp'
+                autoComplete='off'
+                autoCorrect='off'
+                className={this.state.valueCnpClass}
+                disabled={!this.state.editCnp}
+                onInput={this.onValueInput}
+                onKeyDown={this.onKeyDown}
+                value={this.state.nextCnp}>
+              </input>
+              <i id='--settings-edit-cnp' 
+                className={this.state.editCnpClass}
+                onClick={this.handleSettingsSubmit}></i>
+            </form>
           </div>
           <div className='--settings-item'>
-            <span>
-              Grad
-            </span>
-            <Select
-              isDisabled={!this.state.editGrad}
-              defaultValue={this.state.grade.find(option => option.value === this.state.nextGrad)}
-              onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
-              onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
-              maxMenuHeight={100}
-              placeholder='Selectează...'
-              noOptionsMessage={(msg) => 'Nu există'}
-              className='sel-container'
-              classNamePrefix='sel' 
-              options={this.state.grade} /> 
-            <i id='--settings-edit-grad'  
-              className={this.state.editGradClass}
-              onClick={this.onIconClick}></i>
+            <form id='--settings-grad-form'
+              className='--settings-form'
+              onSubmit={this.handleSettingsSubmit}>
+              <span>
+                Grad
+              </span>
+              <Select
+                id='--settings-grad'
+                isDisabled={!this.state.editGrad}
+                defaultValue={this.state.grade.find(option => option.value === this.state.nextGrad)}
+                value={this.state.grade.find(option => option.value === this.state.nextGrad)}
+                onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
+                onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
+                maxMenuHeight={100}
+                placeholder='Selectează...'
+                noOptionsMessage={(msg) => 'Nu există'}
+                className='sel-container'
+                classNamePrefix='sel' 
+                options={this.state.grade} 
+                onKeyDown={this.onGenericKeyDown}
+                /> 
+              <i id='--settings-edit-grad'  
+                className={this.state.editGradClass}
+                onClick={this.handleSettingsSubmit}></i>
+            </form>
           </div>
           <div className='--settings-item'>
-            <span>
-              Nume
-            </span>
-            <div id='--settings-nume'
-              className={this.state.valueNumeClass}
-              contentEditable={this.state.editNume}
-              onInput={this.onValueInput}
-              onKeyDown={this.onGenericKeyDown}>
-              {this.state.nextNume}
-            </div>
-            <i id='--settings-edit-nume' 
-              className={this.state.editNumeClass}
-              onClick={this.onIconClick}></i>
+            <form id='--settings-nume-form'
+              className='--settings-form'
+              onSubmit={this.handleSettingsSubmit}>
+              <span>
+                Nume
+              </span>
+              <input id='--settings-nume'
+                autoComplete='off'
+                autoCorrect='off'
+                className={this.state.valueNumeClass}
+                disabled={!this.state.editNume}
+                onInput={this.onValueInput}
+                onKeyDown={this.onGenericKeyDown}
+                value={this.state.nextNume}>
+              </input>
+              <i id='--settings-edit-nume' 
+                className={this.state.editNumeClass}
+                onClick={this.handleSettingsSubmit}></i>
+            </form>
           </div>
           <div className='--settings-item'>
-            <span>
-              Prenume
-            </span>
-            <div id='--settings-prenume'
-              className={this.state.valuePrenumeClass}
-              contentEditable={this.state.editPrenume}
-              onInput={this.onValueInput}
-              onKeyDown={this.onGenericKeyDown}>
-              {this.state.nextPrenume}
-            </div>
-            <i id='--settings-edit-prenume'
-              className={this.state.editPrenumeClass}
-              onClick={this.onIconClick}></i>
+            <form id='--settings-prenume-form'
+              className='--settings-form'
+              onSubmit={this.handleSettingsSubmit}>
+              <span>
+                Prenume
+              </span>
+              <input id='--settings-prenume'
+                autoComplete='off'
+                autoCorrect='off'
+                className={this.state.valuePrenumeClass}
+                disabled={!this.state.editPrenume}
+                onInput={this.onValueInput}
+                onKeyDown={this.onGenericKeyDown}
+                value={this.state.nextPrenume}>
+              </input>
+              <i id='--settings-edit-prenume'
+                className={this.state.editPrenumeClass}
+                onClick={this.handleSettingsSubmit}></i>
+            </form>
           </div>
           <div className='--settings-item'>
-            <span>
-              Utilizator
-            </span>
-            <div id='--settings-utilizator'
-              className={this.state.valueUtilizatorClass}
-              contentEditable={this.state.editUtilizator}
-              onInput={this.onValueInput}
-              onKeyDown={this.onGenericKeyDown}>
-              {this.state.nextUtilizator}
-            </div>
-            <i id='--settings-edit-utilizator' 
-              className={this.state.editUtilizatorClass}
-              onClick={this.onIconClick}></i>
+            <form id='--settings-utilizator-form'
+              className='--settings-form'
+              onSubmit={this.handleSettingsSubmit}>
+              <span>
+                Utilizator
+              </span>
+              <input id='--settings-utilizator'
+                autoComplete='off'
+                autoCorrect='off'
+                className={this.state.valueUtilizatorClass}
+                disabled={!this.state.editUtilizator}
+                onInput={this.onValueInput}
+                onKeyDown={this.onGenericKeyDown}
+                value={this.state.nextUtilizator}>
+              </input>
+              <i id='--settings-edit-utilizator' 
+                className={this.state.editUtilizatorClass}
+                onClick={this.handleSettingsSubmit}></i>
+            </form>
           </div>
           <div className='--settings-item'>
-            <span>
-              Parolă
-            </span>
-            <div id='--settings-parola'
-              className={this.state.valueParolaClass}
-              contentEditable={this.state.editParola}
-              onInput={this.onValueInput}
-              onKeyDown={this.onGenericKeyDown}>
-            </div>
-            <i id='--settings-edit-parola' 
-              className={this.state.editParolaClass}
-              onClick={this.onIconClick}></i>
+            <form id='--settings-parola-form'
+              className='--settings-form'
+              onSubmit={this.handleSettingsSubmit}>
+              <span>
+                Parolă
+              </span>
+              <input id='--settings-parola'
+                autoComplete='off'
+                autoCorrect='off'
+                className={this.state.valueParolaClass}
+                disabled={!this.state.editParola}
+                onInput={this.onValueInput}
+                onKeyDown={this.onGenericKeyDown}
+                value={this.state.nextParola}>
+              </input>
+              <i id='--settings-edit-parola' 
+                className={this.state.editParolaClass}
+                onClick={this.handleSettingsSubmit}></i>
+            </form>
           </div>
         </div>
       </div>

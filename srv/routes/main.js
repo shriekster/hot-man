@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 var hotelRouter = require('./hotel');
+var setariRouter = require('./setari');
 
 router.use('/hotel', hotelRouter);
+router.use('/setari', setariRouter);
 
 router.options('/', function(req, res, next) {
   res.set({

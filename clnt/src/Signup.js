@@ -41,8 +41,8 @@ class Signup extends React.Component {
       showRolWarning: false,
       showPassInfo: true,
       roluri: [
-        {value: 'operator', label: <span><i className='fas fa-user-cog'></i> Operator</span>},
-        {value: 'manager', label: <span><i className='fas fa-user-plus'></i> Manager</span>},
+        {value: 'operator', label: <span><i className='fas fa-user'></i> Operator</span>},
+        {value: 'manager', label: <span><i className='fas fa-user-cog'></i> Manager</span>},
       ],
       rolInfo: {
         '0': {
@@ -128,7 +128,7 @@ class Signup extends React.Component {
       }
     }
 
-    if (e.target.value.length > 12) {
+    if (e.target.value.length > 13) {
       if(charCode !== 8 && charCode !== 9 && 
         charCode !== 17 && charCode !== 46 && 
         !(charCode >= 37 && charCode <= 40))  {
