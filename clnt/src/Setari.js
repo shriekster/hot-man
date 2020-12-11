@@ -28,6 +28,7 @@ class Setari extends React.Component {
 
     this.state = {
       fetching: false,
+
       editCnp: false,
       editGrad: false,
       editNume: false,
@@ -115,6 +116,46 @@ class Setari extends React.Component {
         {value: 'Cdor.', label: 'Comandor'},
       ],
     };
+
+    // Focus inputs when they are enabled
+    
+    this.cnpInput = React.createRef(); 
+    this.gradInput = React.createRef(); 
+    this.numeInput = React.createRef();
+    this.prenumeInput = React.createRef();
+    this.utilizatorInput = React.createRef();
+    this.parolaInput = React.createRef();   
+    
+    this.focusInput = this.focusInput.bind(this);
+  }
+
+  focusInput() {
+    // Explicitly focus the text input using the raw DOM API
+    // Note: we're accessing "current" to get the DOM node
+    if (this.state.editCnp) {
+      this.cnpInput.current.focus();
+    } else
+
+    if (this.state.editGrad) {
+      //this.gradInput.focus();
+      this.gradInput.current.select.focus()
+    } else
+
+    if (this.state.editNume) {
+      this.numeInput.current.focus();
+    } else
+
+    if (this.state.editPrenume) {
+      this.prenumeInput.current.focus();
+    } else
+
+    if (this.state.editUtilizator) {
+      this.utilizatorInput.current.focus();
+    } else
+
+    if (this.state.editParola) {
+      this.parolaInput.current.focus();
+    }
   }
 
   handleSettingsSubmit(e) {
@@ -381,6 +422,15 @@ class Setari extends React.Component {
   onSelect(e, optional) {
 
     if (optional && optional !== undefined) {
+      this.setState({
+        showCnpError: false,
+        showGradError: false,
+        showNumeError: false,
+        showPrenumeError: false,
+        showUtilizatorError: false,
+        showParolaError: false,
+      });
+
       if (optional.id === 'grad' && optional.action === 'select-option') {
         this.setState({
           nextGrad: optional.value.trim()
@@ -391,6 +441,15 @@ class Setari extends React.Component {
 
   onValueInput(e) {
     if (e && e.target && e.target.id) {
+      this.setState({
+        showCnpError: false,
+        showGradError: false,
+        showNumeError: false,
+        showPrenumeError: false,
+        showUtilizatorError: false,
+        showParolaError: false,
+      });
+
       switch (e.target.id) {
         case '--settings-cnp': {
           if (e.target.value.length > 13) {
@@ -519,9 +578,12 @@ class Setari extends React.Component {
   }
 
   componentDidMount() {
+    
   }
 
   componentDidUpdate () {
+    // Focus input elements when they are enabled
+    this.focusInput();
   }
 
   render() {
@@ -533,146 +595,230 @@ class Setari extends React.Component {
           className='view-user-settings'
           onClick={this.onViewSettingsClick}>
           <div className='--settings-item'>
-            <form id='--settings-cnp-form'
-              className='--settings-form'
-              onSubmit={this.handleSettingsSubmit}>
-              <span>
-                CNP
-              </span>
-              <input id='--settings-cnp'
-                autoComplete='off'
-                autoCorrect='off'
-                className={this.state.valueCnpClass}
-                disabled={!this.state.editCnp}
-                onInput={this.onValueInput}
-                onKeyDown={this.onKeyDown}
-                value={this.state.nextCnp}>
-              </input>
-              <i id='--settings-edit-cnp' 
-                className={this.state.editCnpClass}
-                onClick={this.handleSettingsSubmit}></i>
-            </form>
+            <Tippy
+              content={
+                <>
+                  <i className='fas fa-minus-circle'></i> CNP invalid
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              offset={[0, 65]}
+              visible={this.state.showCnpError}>
+              <form id='--settings-cnp-form'
+                className='--settings-form'
+                onSubmit={this.handleSettingsSubmit}>
+                <span>
+                  CNP
+                </span>
+                <input id='--settings-cnp'
+                  autoComplete='off'
+                  autoCorrect='off'
+                  className={this.state.valueCnpClass}
+                  disabled={!this.state.editCnp}
+                  onInput={this.onValueInput}
+                  onKeyDown={this.onKeyDown}
+                  value={this.state.nextCnp}
+                  ref={this.cnpInput}>
+                </input>
+                <i id='--settings-edit-cnp' 
+                  className={this.state.editCnpClass}
+                  onClick={this.handleSettingsSubmit}></i>
+              </form>
+            </Tippy>
           </div>
           <div className='--settings-item'>
-            <form id='--settings-grad-form'
-              className='--settings-form'
-              onSubmit={this.handleSettingsSubmit}>
-              <span>
-                Grad
-              </span>
-              <Select
-                id='--settings-grad'
-                isDisabled={!this.state.editGrad}
-                defaultValue={this.state.grade.find(option => option.value === this.state.nextGrad)}
-                value={this.state.grade.find(option => option.value === this.state.nextGrad)}
-                onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
-                onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
-                maxMenuHeight={100}
-                placeholder='Selectează...'
-                noOptionsMessage={(msg) => 'Nu există'}
-                className='sel-container'
-                classNamePrefix='sel' 
-                options={this.state.grade} 
-                onKeyDown={this.onGenericKeyDown}
-                /> 
-              <i id='--settings-edit-grad'  
-                className={this.state.editGradClass}
-                onClick={this.handleSettingsSubmit}></i>
-            </form>
+          <Tippy
+            content={
+              <>
+                <i className='fas fa-minus-circle'></i> Grad invalid
+              </>
+            }
+            allowHTML={true}
+            placement='right'
+            arrow={false}
+            theme='red-material-warning'
+            offset={[0, 65]}
+            visible={this.state.showGradError}>
+              <form id='--settings-grad-form'
+                className='--settings-form'
+                onSubmit={this.handleSettingsSubmit}>
+                <span>
+                  Grad
+                </span>
+                <Select
+                  id='--settings-grad'
+                  isDisabled={!this.state.editGrad}
+                  defaultValue={this.state.grade.find(option => option.value === this.state.nextGrad)}
+                  value={this.state.grade.find(option => option.value === this.state.nextGrad)}
+                  onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
+                  onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
+                  maxMenuHeight={100}
+                  placeholder='Selectează...'
+                  noOptionsMessage={(msg) => 'Nu există'}
+                  className='sel-container'
+                  classNamePrefix='sel' 
+                  options={this.state.grade} 
+                  onKeyDown={this.onGenericKeyDown}
+                  ref={this.gradInput}
+                  openMenuOnFocus={true}/> 
+                <i id='--settings-edit-grad'  
+                  className={this.state.editGradClass}
+                  onClick={this.handleSettingsSubmit}></i>
+              </form>
+            </Tippy>
           </div>
           <div className='--settings-item'>
-            <form id='--settings-nume-form'
-              className='--settings-form'
-              onSubmit={this.handleSettingsSubmit}>
-              <span>
-                Nume
-              </span>
-              <input id='--settings-nume'
-                autoComplete='off'
-                autoCorrect='off'
-                className={this.state.valueNumeClass}
-                disabled={!this.state.editNume}
-                onInput={this.onValueInput}
-                onKeyDown={this.onGenericKeyDown}
-                value={this.state.nextNume}>
-              </input>
-              <i id='--settings-edit-nume' 
-                className={this.state.editNumeClass}
-                onClick={this.handleSettingsSubmit}></i>
-            </form>
+            <Tippy
+              content={
+                <>
+                  <i className='fas fa-minus-circle'></i> Nume invalid
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              offset={[0, 65]}
+              visible={this.state.showNumeError}>
+              <form id='--settings-nume-form'
+                className='--settings-form'
+                onSubmit={this.handleSettingsSubmit}>
+                <span>
+                  Nume
+                </span>
+                <input id='--settings-nume'
+                  autoComplete='off'
+                  autoCorrect='off'
+                  className={this.state.valueNumeClass}
+                  disabled={!this.state.editNume}
+                  onInput={this.onValueInput}
+                  onKeyDown={this.onGenericKeyDown}
+                  value={this.state.nextNume}
+                  ref={this.numeInput}>
+                </input>
+                <i id='--settings-edit-nume' 
+                  className={this.state.editNumeClass}
+                  onClick={this.handleSettingsSubmit}></i>
+              </form>
+            </Tippy>
           </div>
           <div className='--settings-item'>
-            <form id='--settings-prenume-form'
-              className='--settings-form'
-              onSubmit={this.handleSettingsSubmit}>
-              <span>
-                Prenume
-              </span>
-              <input id='--settings-prenume'
-                autoComplete='off'
-                autoCorrect='off'
-                className={this.state.valuePrenumeClass}
-                disabled={!this.state.editPrenume}
-                onInput={this.onValueInput}
-                onKeyDown={this.onGenericKeyDown}
-                value={this.state.nextPrenume}>
-              </input>
-              <i id='--settings-edit-prenume'
-                className={this.state.editPrenumeClass}
-                onClick={this.handleSettingsSubmit}></i>
-            </form>
+            <Tippy
+              content={
+                <>
+                  <i className='fas fa-minus-circle'></i> Prenume invalid
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              offset={[0, 65]}
+              visible={this.state.showPrenumeError}>
+              <form id='--settings-prenume-form'
+                className='--settings-form'
+                onSubmit={this.handleSettingsSubmit}>
+                <span>
+                  Prenume
+                </span>
+                <input id='--settings-prenume'
+                  autoComplete='off'
+                  autoCorrect='off'
+                  className={this.state.valuePrenumeClass}
+                  disabled={!this.state.editPrenume}
+                  onInput={this.onValueInput}
+                  onKeyDown={this.onGenericKeyDown}
+                  value={this.state.nextPrenume}
+                  ref={this.prenumeInput}>
+                </input>
+                <i id='--settings-edit-prenume'
+                  className={this.state.editPrenumeClass}
+                  onClick={this.handleSettingsSubmit}></i>
+              </form>
+            </Tippy>
           </div>
           <div className='--settings-item'>
-            <form id='--settings-utilizator-form'
-              className='--settings-form'
-              onSubmit={this.handleSettingsSubmit}>
-              <span>
-                Utilizator
-              </span>
-              <input id='--settings-utilizator'
-                autoComplete='off'
-                autoCorrect='off'
-                className={this.state.valueUtilizatorClass}
-                disabled={!this.state.editUtilizator}
-                onInput={this.onValueInput}
-                onKeyDown={this.onGenericKeyDown}
-                value={this.state.nextUtilizator}>
-              </input>
-              <i id='--settings-edit-utilizator' 
-                className={this.state.editUtilizatorClass}
-                onClick={this.handleSettingsSubmit}></i>
-            </form>
+            <Tippy
+                content={
+                  <>
+                    <i className='fas fa-minus-circle'></i> Utilizator invalid sau indisponibil
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 65]}
+                visible={this.state.showUtilizatorError}>
+              <form id='--settings-utilizator-form'
+                className='--settings-form'
+                onSubmit={this.handleSettingsSubmit}>
+                <span>
+                  Utilizator
+                </span>
+                <input id='--settings-utilizator'
+                  autoComplete='off'
+                  autoCorrect='off'
+                  className={this.state.valueUtilizatorClass}
+                  disabled={!this.state.editUtilizator}
+                  onInput={this.onValueInput}
+                  onKeyDown={this.onGenericKeyDown}
+                  value={this.state.nextUtilizator}
+                  ref={this.utilizatorInput}>
+                </input>
+                <i id='--settings-edit-utilizator' 
+                  className={this.state.editUtilizatorClass}
+                  onClick={this.handleSettingsSubmit}></i>
+              </form>
+            </Tippy>
           </div>
           <div className='--settings-item'>
-            <form id='--settings-parola-form'
-              className='--settings-form'
-              onSubmit={this.handleSettingsSubmit}>
-              <span>
-                Parolă
-              </span>
-              <input id='--settings-parola'
-                autoComplete='off'
-                autoCorrect='off'
-                className={this.state.valueParolaClass + ' --settings-parola'}
-                disabled={!this.state.editParola}
-                onInput={this.onValueInput}
-                onKeyDown={this.onGenericKeyDown}
-                value={this.state.nextParola}
-                type={this.state.passwordVisible ? 'text' : 'password'}>
-              </input>
-              <i id='--settings-parola-icon'
-                className={(this.state.passwordVisible ? 
-                            'fas fa-eye-slash --settings-parola-icon' : 
-                            'fas fa-eye --settings-parola-icon') 
-                            + 
-                          (this.state.editParola ? 
-                            ' --parola-is-visible' : 
-                              ' --parola-is-invisible')}
-                onClick={this.togglePasswordVisibility}></i>
-              <i id='--settings-edit-parola' 
-                className={this.state.editParolaClass}
-                onClick={this.handleSettingsSubmit}></i>
-            </form>
+            <Tippy
+              content={
+                <>
+                  <i className='fas fa-minus-circle'></i> Parolă invalidă
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              offset={[0, 65]}
+              visible={this.state.showParolaError}>
+              <form id='--settings-parola-form'
+                className='--settings-form'
+                onSubmit={this.handleSettingsSubmit}>
+                <span>
+                  Parolă
+                </span>
+                <input id='--settings-parola'
+                  autoComplete='off'
+                  autoCorrect='off'
+                  className={this.state.valueParolaClass + ' --settings-parola'}
+                  disabled={!this.state.editParola}
+                  onInput={this.onValueInput}
+                  onKeyDown={this.onGenericKeyDown}
+                  value={this.state.nextParola}
+                  type={this.state.passwordVisible ? 'text' : 'password'}
+                  ref={this.parolaInput}>
+                </input>
+                <i id='--settings-parola-icon'
+                  className={(this.state.passwordVisible ? 
+                              'fas fa-eye-slash --settings-parola-icon' : 
+                              'fas fa-eye --settings-parola-icon') 
+                              + 
+                            (this.state.editParola ? 
+                              ' --parola-is-visible' : 
+                                ' --parola-is-invisible')}
+                  onClick={this.togglePasswordVisibility}></i>
+                <i id='--settings-edit-parola' 
+                  className={this.state.editParolaClass}
+                  onClick={this.handleSettingsSubmit}></i>
+              </form>
+            </Tippy>
           </div>
         </div>
       </div>

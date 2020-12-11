@@ -30,6 +30,12 @@ class Main extends React.Component {
     this.state = {
       showUserSettings: false,
       userSettingsClass: '',
+      menuAdmClass: 'sidenav-a',
+      menuRapClass: 'sidenav-a',
+      menuPayClass: 'sidenav-a',
+      menuTarClass: 'sidenav-a',
+      menuRezClass: 'sidenav-a',
+      menuSolClass: 'sidenav-a',
       components: {
         Administrare: Administrare,
         Setari: Setari,
@@ -78,10 +84,55 @@ class Main extends React.Component {
       nextClass = '';
     }
 
+    let nextMenuAdmClass = 'sidenav-a';
+    let nextMenuRapClass = 'sidenav-a';
+    let nextMenuPayClass = 'sidenav-a';
+    let nextMenuTarClass = 'sidenav-a';
+    let nextMenuRezClass = 'sidenav-a';
+    let nextMenuSolClass = 'sidenav-a';
+
+    switch(component) {
+      case 'Administrare': {
+        nextMenuAdmClass += ' --active-menu'
+        break;
+      }
+
+      case 'Rapoarte': {
+        nextMenuRapClass += ' --active-menu'
+        break;
+      }
+
+      case 'Plati': {
+        nextMenuPayClass += ' --active-menu'
+        break;
+      }
+
+      case 'Tarife': {
+        nextMenuTarClass += ' --active-menu'
+        break;
+      }
+
+      case 'Rezervari': {
+        nextMenuRezClass += ' --active-menu'
+        break;
+      }
+
+      case 'Solicitari': {
+        nextMenuSolClass += ' --active-menu'
+        break;
+      }
+    }
+
     this.setState({
       view: nextView,
       showUserSettings: nextUserSettings,
-      userSettingsClass: nextClass
+      userSettingsClass: nextClass,
+      menuAdmClass: nextMenuAdmClass,
+      menuRapClass: nextMenuRapClass,
+      menuPayClass: nextMenuPayClass,
+      menuTarClass: nextMenuTarClass,
+      menuRezClass: nextMenuRezClass,
+      menuSolClass: nextMenuSolClass,
     })
   }
 
@@ -105,36 +156,44 @@ class Main extends React.Component {
     return (
       <div className='Main'>
         <div className='sidenav'>
-          <a href='#'
-            onClick={() => this.changeView('Administrare')}>
-            <i className='fas fa-building menu-icon'></i> 
-            <span className='menu-label'>Administrare</span>
-          </a>
-          <a href='#'
-            onClick={() => this.changeView('Rapoarte')}>
-            <i className='fas fa-chart-bar menu-icon'></i> 
-            <span className='menu-label'>Rapoarte</span>
-          </a>
-          <a href='#'
-            onClick={() => this.changeView('Plati')}>
-            <i className='fas fa-receipt menu-icon'></i> 
-            <span className='menu-label'>Plăți</span>
-          </a>
-          <a href='#'
-            onClick={() => this.changeView('Tarife')}>
-            <i className='fas fa-coins menu-icon'></i> 
-            <span className='menu-label'>Tarife</span>
-          </a>
-          <a href='#'
-            onClick={() => this.changeView('Rezervari')}>
-            <i className='fas fa-calendar-plus menu-icon'></i> 
-            <span className='menu-label'>Rezervări</span>
-          </a>
-          <a href='#'
-            onClick={() => this.changeView('Solicitari')}>
-            <i className='fas fa-clock menu-icon'></i> 
-            <span className='menu-label'>Solicitări</span>
-          </a>
+          <div className='sidenav-container'>
+            <a href='#'
+              className={this.state.menuAdmClass}
+              onClick={() => this.changeView('Administrare')}>
+              <i className='fas fa-building menu-icon'></i> 
+              <span className='menu-label'>Administrare</span>
+            </a>
+            <a href='#'
+              className={this.state.menuRapClass}
+              onClick={() => this.changeView('Rapoarte')}>
+              <i className='fas fa-chart-bar menu-icon'></i> 
+              <span className='menu-label'>Rapoarte</span>
+            </a>
+            <a href='#'
+              className={this.state.menuPayClass}
+              onClick={() => this.changeView('Plati')}>
+              <i className='fas fa-receipt menu-icon'></i> 
+              <span className='menu-label'>Plăți</span>
+            </a>
+            <a href='#'
+              className={this.state.menuTarClass}
+              onClick={() => this.changeView('Tarife')}>
+              <i className='fas fa-coins menu-icon'></i> 
+              <span className='menu-label'>Tarife</span>
+            </a>
+            <a href='#'
+              className={this.state.menuRezClass}
+              onClick={() => this.changeView('Rezervari')}>
+              <i className='fas fa-calendar-plus menu-icon'></i> 
+              <span className='menu-label'>Rezervări</span>
+            </a>
+            <a href='#'
+              className={this.state.menuSolClass}
+              onClick={() => this.changeView('Solicitari')}>
+              <i className='fas fa-clock menu-icon'></i> 
+              <span className='menu-label'>Solicitări</span>
+            </a>
+          </div>
         </div>
 
         <div className='content'>

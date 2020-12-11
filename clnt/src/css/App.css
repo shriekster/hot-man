@@ -410,8 +410,16 @@ div[class^='select-'] {
   position: relative;
 }
 
+.sidenav-container {
+  margin-top: 40px;
+}
+
+.--active-menu {
+  color: #009500 !important;
+}
+
 /* Style the sidenav links and the dropdown button */
-.sidenav a {
+.sidenav-a {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
   font-size: 20px;
@@ -445,6 +453,7 @@ div[class^='select-'] {
   justify-content: flex-end;
   /*color: #3377AA;*/
   color:#25AAA9;
+  height: 56px;
 }
 
 .user-settings--menu {
@@ -612,7 +621,7 @@ input[type='password'].--settings-value,
 .--value-editing {
   outline: none;
   text-decoration: none;
-  color: #009500;
+  color: #009500 !important;
 }
 
 input[type='text'].--value-editing:focus,
@@ -646,6 +655,7 @@ input[type='password'].--value-editing:focus,
   left: 415px;
   z-index: 4;
   font-size: 24px !important;
+  color: #009500;
 }
 
 .--parola-is-visible {
