@@ -27,7 +27,17 @@ router.post('/', authorization, function(req, res, next) {
     'Access-Control-Allow-Origin': 'http://localhost:3000',
   });
 
-  let hotel='null';
+  let hotel= {
+    nume: '',
+    judet: '',
+    sector: '',
+    strada: '',
+    numar: '',
+    codPostal: '',
+    telefon: '',
+    fax: '',
+    email: '',
+  }
 
   const hCount = db.prepare(`SELECT COUNT(*) AS value
                                 FROM Hoteluri`);
@@ -39,6 +49,7 @@ router.post('/', authorization, function(req, res, next) {
   if (hotelCount && undefined !== hotelCount) {
     switch(hotelCount.value) {
       case 0: {}
+
 
       case 1: {
         let single = who.get();

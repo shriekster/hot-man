@@ -6,7 +6,8 @@ class Administrare extends React.Component {
     super(props);
 
     this.state = {
-      hotel: '(empty)',
+      title: 'Administrarea hotelului',
+      hotel: ''
     };
   }
 
@@ -25,7 +26,6 @@ class Administrare extends React.Component {
     fetch('http://localhost:3001/main/administrare', requestOptions)
     .then(response => response.json())
     .then(who => {
-      console.log(who);
       this.setState({
         hotel: who.hotel,
       });
@@ -35,9 +35,31 @@ class Administrare extends React.Component {
   render() {
     return (
       <div>
-        <div>Administrare</div>
+        <div id='administrare-title'
+          className='administrare-title'>
+          {this.state.hotel.nume || this.state.title}
+        </div>
         <hr className='view--separator'/>
-      <div></div>
+        <div id='view-administrare'
+          className='view-administrare'>
+          {
+            this.state.hotel  ?
+            <div id='view-manage-hotel'
+              className='view-manage-hotel'>
+              DA
+            </div>     :
+            <div id='view-add-hotel'
+              className='view-add-hotel'>
+              <div className='view-add-hotel-info regular'>
+                Completează informațiile referitoare la hotelul pe care îl administrezi:
+              </div>
+              <form id='view-add-hotel-form'
+                className='view-add-hotel-form'>
+                  
+              </form>
+            </div>
+          }
+        </div>
       </div>
     );
   }

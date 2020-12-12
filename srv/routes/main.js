@@ -3,11 +3,15 @@ var router = express.Router();
 
 const authorization = require('../auth');
 
-var administrareRouter = require('./administrare');
 var setariRouter = require('./setari');
+var administrareRouter = require('./administrare');
 
-router.use('/hotel', administrareRouter);
+/** Setarile utilizatorului */
 router.use('/setari', setariRouter);
+
+/** Celelalte elemente din meniul principal */
+router.use('/administrare', administrareRouter);
+
 
 router.options('/', function(req, res, next) {
   res.set({

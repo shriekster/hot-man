@@ -256,7 +256,6 @@ class Setari extends React.Component {
         fetch('http://localhost:3001/main/setari', requestOptions)
         .then(response => response.json())
         .then(updated => {
-          console.log(updated);
 
           if ('denied' === updated.status) {
             this.props.onChange('Login'); /* render login component when something is wrong with authorization (!) */
@@ -956,13 +955,12 @@ class Setari extends React.Component {
   componentDidUpdate (prevProps, prevState) {
     // Focus input elements when they are enabled
     this.focusInput(prevState);
-    console.log(this.state.token)
   }
 
   render() {
     return (
       <div>
-        <div>Setările contului</div>
+        <div>Setările contului de utilizator</div>
         <hr className='view--separator'/>
         <div id='view-user-settings' 
           className='view-user-settings'

@@ -171,6 +171,10 @@ span.legacy {
   font-family: 'Source Sans Pro Bold' !important;
 }
 
+.regular {
+  font-family: 'Source Sans Pro Regular' !important;
+}
+
 .big {
   font-size: 1.5rem;
 }
@@ -747,3 +751,26 @@ div[class^='sel-'] > * {
 .sel__indicator:hover {
   color: #009500 !important;
 }
+
+/* Administrare */
+
+.administrare-title {
+
+}
+
+.view-administrare {
+
+}
+
+.view-manage-hotel {
+
+}
+
+.view-add-hotel {
+  font-size: 18px;
+}
+
+.view-add-hotel-form {
+  
+}
+
