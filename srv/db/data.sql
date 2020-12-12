@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS "UtilizatoriRoluri" (
 	"ID"	INTEGER,
 	"UtilizatorID"	INTEGER,
 	"RolID"	INTEGER,
-	PRIMARY KEY("ID"),
 	FOREIGN KEY("RolID") REFERENCES "Roluri"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	FOREIGN KEY("UtilizatorID") REFERENCES "Utilizatori"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
+	FOREIGN KEY("UtilizatorID") REFERENCES "Utilizatori"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "Tarife" (
 	"ID"	INTEGER,
@@ -83,11 +83,11 @@ CREATE TABLE IF NOT EXISTS "Tarife" (
 	"Valoare"	REAL,
 	"ModTarifID"	INTEGER,
 	"_Tip"	TEXT,
-	PRIMARY KEY("ID"),
 	FOREIGN KEY("ModTarifID") REFERENCES "ModuriTarife"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	FOREIGN KEY("CategorieConfortID") REFERENCES "CategoriiConfort"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
 	FOREIGN KEY("ActualizareID") REFERENCES "ActualizariTarife"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	FOREIGN KEY("CategorieSpatiuID") REFERENCES "CategoriiSpatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
+	FOREIGN KEY("CategorieConfortID") REFERENCES "CategoriiConfort"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	FOREIGN KEY("CategorieSpatiuID") REFERENCES "CategoriiSpatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "Spatii" (
 	"ID"	INTEGER,
@@ -96,10 +96,10 @@ CREATE TABLE IF NOT EXISTS "Spatii" (
 	"Etaj"	INTEGER,
 	"StatusSpatiuID"	INTEGER,
 	"TarifID"	INTEGER,
-	FOREIGN KEY("StatusSpatiuID") REFERENCES "StatusSpatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
 	PRIMARY KEY("ID"),
 	FOREIGN KEY("CategorieSpatiuID") REFERENCES "CategoriiSpatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	FOREIGN KEY("TarifID") REFERENCES "Tarife"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
+	FOREIGN KEY("TarifID") REFERENCES "Tarife"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	FOREIGN KEY("StatusSpatiuID") REFERENCES "StatusSpatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
 );
 CREATE TABLE IF NOT EXISTS "Turisti" (
 	"ID"	INTEGER,
@@ -119,9 +119,9 @@ CREATE TABLE IF NOT EXISTS "SolicitariCazare" (
 	"UtilizatorID"	INTEGER,
 	"DataInceput"	TEXT,
 	"DataSfarsit"	TEXT,
-	FOREIGN KEY("HotelID") REFERENCES "Hoteluri"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	PRIMARY KEY("ID"),
 	FOREIGN KEY("UtilizatorID") REFERENCES "Utilizatori"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	PRIMARY KEY("ID")
+	FOREIGN KEY("HotelID") REFERENCES "Hoteluri"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
 );
 CREATE TABLE IF NOT EXISTS "DocumenteSolicitari" (
 	"ID"	INTEGER,
@@ -140,24 +140,24 @@ CREATE TABLE IF NOT EXISTS "TuristiSolicitari" (
 	"Grad"	TEXT,
 	"Nume"	TEXT,
 	"Prenume"	TEXT,
-	FOREIGN KEY("SolicitareCazareID") REFERENCES "SolicitariCazare"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	PRIMARY KEY("ID")
+	PRIMARY KEY("ID"),
+	FOREIGN KEY("SolicitareCazareID") REFERENCES "SolicitariCazare"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
 );
 CREATE TABLE IF NOT EXISTS "Cazari" (
 	"ID"	INTEGER,
 	"HotelID"	INTEGER,
 	"UtilizatorID"	INTEGER,
-	PRIMARY KEY("ID"),
+	FOREIGN KEY("HotelID") REFERENCES "Hoteluri"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
 	FOREIGN KEY("UtilizatorID") REFERENCES "Utilizatori"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	FOREIGN KEY("HotelID") REFERENCES "Hoteluri"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
+	PRIMARY KEY("ID")
 );
 CREATE TABLE IF NOT EXISTS "SpatiiCazari" (
 	"ID"	INTEGER,
 	"CazareID"	INTEGER,
 	"SpatiuID"	INTEGER,
-	FOREIGN KEY("CazareID") REFERENCES "Cazari"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	PRIMARY KEY("ID"),
 	FOREIGN KEY("SpatiuID") REFERENCES "Spatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	PRIMARY KEY("ID")
+	FOREIGN KEY("CazareID") REFERENCES "Cazari"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
 );
 CREATE TABLE IF NOT EXISTS "PaturiSpatii" (
 	"ID"	INTEGER,
@@ -167,9 +167,9 @@ CREATE TABLE IF NOT EXISTS "PaturiSpatii" (
 	"NumarPaturiOcupate"	INTEGER,
 	"NumarPaturiSuplimentare"	INTEGER,
 	"NumarPaturiSuplimentareOcupate"	INTEGER,
-	FOREIGN KEY("SpatiuID") REFERENCES "Spatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	PRIMARY KEY("ID"),
 	FOREIGN KEY("CategoriePatID") REFERENCES "CategoriiPaturi"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	PRIMARY KEY("ID")
+	FOREIGN KEY("SpatiuID") REFERENCES "Spatii"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
 );
 CREATE TABLE IF NOT EXISTS "TuristiCazari" (
 	"SpatiuCazareID"	INTEGER,
@@ -179,10 +179,10 @@ CREATE TABLE IF NOT EXISTS "TuristiCazari" (
 	"DataSfarsit"	TEXT,
 	"CoeficientTarifID"	INTEGER,
 	"Detalii"	TEXT,
-	FOREIGN KEY("CoeficientTarifID") REFERENCES "CoeficientiTarife"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	FOREIGN KEY("TuristID") REFERENCES "Turisti"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
 	FOREIGN KEY("ScopSosireID") REFERENCES "ScopuriSosire"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
 	FOREIGN KEY("SpatiuCazareID") REFERENCES "SpatiiCazari"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
-	FOREIGN KEY("TuristID") REFERENCES "Turisti"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
+	FOREIGN KEY("CoeficientTarifID") REFERENCES "CoeficientiTarife"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
 );
 CREATE TABLE IF NOT EXISTS "DocumenteCazari" (
 	"ID"	INTEGER,
@@ -210,24 +210,23 @@ CREATE TABLE IF NOT EXISTS "Plati" (
 	"NumarChitanta"	TEXT,
 	"Data"	TEXT,
 	"Detalii"	TEXT,
-	FOREIGN KEY("TuristID") REFERENCES "Turisti"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
 	FOREIGN KEY("CazareID") REFERENCES "Cazari"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
 	PRIMARY KEY("ID"),
-	FOREIGN KEY("UtilizatorID") REFERENCES "Utilizatori"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
+	FOREIGN KEY("UtilizatorID") REFERENCES "Utilizatori"("ID") ON UPDATE CASCADE ON DELETE NO ACTION,
+	FOREIGN KEY("TuristID") REFERENCES "Turisti"("ID") ON UPDATE CASCADE ON DELETE NO ACTION
 );
 CREATE TABLE IF NOT EXISTS "Utilizatori" (
 	"ID"	INTEGER,
-	"CNP"	TEXT,
+	"CNP"	TEXT UNIQUE,
 	"Grad"	TEXT,
 	"Nume"	TEXT,
 	"Prenume"	TEXT,
-	"Utilizator"	TEXT,
+	"Utilizator"	TEXT UNIQUE,
 	"Parola"	TEXT,
 	"Extra"	TEXT,
 	"Session"	TEXT,
 	PRIMARY KEY("ID")
 );
---INSERT INTO "Hoteluri" ("ID","Nume","Judet","Sector","Strada","Numar","CodPostal","Telefon","Fax","Email") VALUES (1,'Complex Hotelier Haiducului','','6','Haiducului',NULL,'061344','0213195982',NULL,NULL);
 INSERT INTO "CategoriiConfort" ("ID","Denumire") VALUES (1,'1'),
  (2,'2'),
  (3,'3');
@@ -258,8 +257,8 @@ INSERT INTO "ScopuriSosire" ("ID","Denumire","Detalii") VALUES (1,'Interes perso
 INSERT INTO "Roluri" ("ID","Denumire","Descriere") VALUES (0,'admin','Admin'),
  (1,'operator','Operator'),
  (2,'manager','Manager');
-INSERT INTO "Utilizatori" ("ID","CNP","Grad","Nume","Prenume","Utilizator","Parola","Extra","Session") VALUES (0,'#','#','#','#','admin','IFckTyjzH/qwhFiAHJ6M0DvmSgkeCA5FqCMRysTwYyw=','*Ddq!c}?==?J',NULL),
- (1,'1920923152504','Lt.','Moldoveanu','Dan','daniel','dj+NvdHICLGeOrtzSd/FoxOX4ImH2ca5+kjPMHR8nmc=','AVTJqrZ5Byadzy61',NULL);
 INSERT INTO "UtilizatoriRoluri" ("ID","UtilizatorID","RolID") VALUES (0,0,0),
  (1,1,1);
+INSERT INTO "Utilizatori" ("ID","CNP","Grad","Nume","Prenume","Utilizator","Parola","Extra","Session") VALUES (0,'#','#','#','#','admin','IFckTyjzH/qwhFiAHJ6M0DvmSgkeCA5FqCMRysTwYyw=','*Ddq!c}?==?J',NULL),
+ (1,'1931017152493','Slt.','Moldoveanu','Dan','daniel','dj+NvdHICLGeOrtzSd/FoxOX4ImH2ca5+kjPMHR8nmc=','AVTJqrZ5Byadzy61',NULL);
 COMMIT;

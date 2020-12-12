@@ -362,12 +362,31 @@ class Setari extends React.Component {
               let tok = updated.token;
 
               this.setState({
+                token: tok,
+
                 fetchingCnp: false,
                 fetchingGrad: false,
                 fetchingNume: false,
                 fetchingPrenume: false,
                 fetchingUtilizator: false,
                 fetchingParola: false,
+
+                cnp: usr.cnp,
+                grad: usr.grad,
+                nume: usr.nume,
+                prenume: usr.prenume,
+                utilizator: usr.utilizator,
+                rol: usr.rol,
+                parola: '',
+                nextParola: '',
+
+                //??
+                showCnpError: false,
+                showGradError: false,
+                showNumeError: false,
+                showPrenumeError: false,
+                showUtilizatorError: false,
+                showParolaError: false,
               }, 
               () => {this.props.onUserUpdate(tok, usr)});
 
@@ -937,8 +956,7 @@ class Setari extends React.Component {
   componentDidUpdate (prevProps, prevState) {
     // Focus input elements when they are enabled
     this.focusInput(prevState);
-
-    console.log(this.state.cnp)
+    console.log(this.state.token)
   }
 
   render() {

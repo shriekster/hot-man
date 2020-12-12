@@ -91,7 +91,7 @@ function isValidOtherName(name) {
 
   // If the string matched by the regex matches the input string => the input string conforms to the requirements
   if (test && undefined !== test) {
-    valid = (test[0] === test.input);
+    valid = ((test[0] === test.input) && (name.length >= 3));
   }
 
   return valid;

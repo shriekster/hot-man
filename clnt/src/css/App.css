@@ -213,7 +213,7 @@ span.legacy {
 
 .rotate {
   animation-name: rotate;
-  animation-duration: 1.2s;
+  animation-duration: 1s;
   animation-fill-mode: both;
   transform-origin: center;
   animation-iteration-count: infinite;
@@ -673,8 +673,8 @@ input[type='password'].--value-editing:focus,
 }
 
 .--settings-loading > img {
-  width: 40px !important;
-  height: 40px !important;
+  width: 36px !important;
+  height: 36px !important;
 }
 
 .--settings-loading > img::selection {

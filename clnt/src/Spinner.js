@@ -14,7 +14,7 @@ class Spinner extends React.Component {
         done: 'rotateOut loading'
       },
 
-      currentClass: 'pulse loading'
+      currentClass: 'pulse loading' //misleading
     };
   }
 

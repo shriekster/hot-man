@@ -30,13 +30,14 @@ module.exports = function (req, res, next) {
   try {
     if (token) {
       decoded = jwt.verify(token, secret);
-
+      console.log(decoded, 'user: ', req.body.username)
       if (decoded) {
         let user = selectUser.get(decoded.usr);
 
         if (user) {
           if (roles.includes(decoded.rle)) {
             if (now < decoded.exp) {
+              console.log('Authorized')
               return next();
 
             } else {

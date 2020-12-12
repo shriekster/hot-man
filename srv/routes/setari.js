@@ -89,7 +89,7 @@ function isValidOtherName(name) {
 
   // If the string matched by the regex matches the input string => the input string conforms to the requirements
   if (test && undefined !== test) {
-    valid = (test[0] === test.input);
+    valid = ((test[0] === test.input) && (name.length >= 3));
   }
 
   return valid;
@@ -109,6 +109,7 @@ function updateCnp(value, username) {
   const update = db.prepare(`UPDATE Utilizatori
                             SET CNP = ?
                             WHERE Utilizator = ?`);
+
   if (isValidCNP(value)) {
     let error;
 
@@ -131,22 +132,174 @@ function updateCnp(value, username) {
 }
 
 function updateGrad(value, username) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET Grad = ?
+                            WHERE Utilizator = ?`);
 
+  if (value.length > 0) {
+    let error;
+
+    try {
+      const info = update.run(value, username);
+      console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'unknown';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
 }
 
 function updateNume(value, username) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET Nume = ?
+                            WHERE Utilizator = ?`);
 
+  if (isValidOtherName(value)) {
+    let error;
+
+    try {
+      const info = update.run(value, username);
+      console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'unknown';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
 }
 
 function updatePrenume(value, username) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET Prenume = ?
+                            WHERE Utilizator = ?`);
 
+  if (isValidOtherName(value)) {
+    let error;
+
+    try {
+      const info = update.run(value, username);
+      console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'unknown';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
 }
 
 function updateUtilizator(value, username) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET Utilizator = ?
+                            WHERE Utilizator = ?`);
 
+  if (isValidUsername(value)) {
+    let error;
+
+    try {
+      const info = update.run(value, username);
+      console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'unknown';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
 }
 
 function updateParola(value, username) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET Parola = ?,
+                                Extra = ?
+                            WHERE Utilizator = ?`);
+
+  if (isValidPassword(value)) {
+    let error = null;
+
+    let salt = crypto.randomBytes(12).toString('base64');
+
+    let derived;
+
+    try {
+      derived = crypto.pbkdf2Sync(value, salt, 10000, 32, 'sha512');
+    } catch (e) {
+      if (e) console.log(e)
+    } finally {
+      if (derived) {
+        let hash = derived.toString('base64');
+
+        try {
+          const info = update.run(hash, salt, username);
+          console.log('PAROLA: ', info);
+        } catch(err) {
+          error = err;
+          console.log(err);
+        } finally {
+
+          if (error) {
+            return 'unknown';
+          }
+
+          return 'valid';
+        }
+      }
+    }
+
+    /*
+    crypto.pbkdf2(value, salt, 10000, 32, 'sha512', (err, derivedKey) => {
+      if (err) {
+        console.log(err);
+      } else {
+        let hash = derivedKey.toString('base64');
+
+        try {
+          const info = update.run(hash, salt, username);
+          console.log('PAROLA: ', info);
+        } catch(err) {
+          error = err;
+          console.log(err);
+        } finally {
+
+          if (error) {
+            return 'unknown';
+          }
+
+          return 'valid';
+        }
+      }
+    });
+    */
+  }
+  
+  return 'invalid';
 
 }
 
@@ -173,12 +326,14 @@ router.post('/', authorization, function(req, res, next) {
   });
 
   let status = 'unknown';
-  let token = 0;
+  let token;
 
   if (req.body) {
     let key = req.body.attributeName;
     let value = req.body.attributeValue;
     let username = req.body.username;
+
+    token = req.body.token;
 
     const selectUser = db.prepare(`SELECT ID AS _id,
                                   CNP AS _cnp,
@@ -220,6 +375,9 @@ router.post('/', authorization, function(req, res, next) {
 
       case 'utilizator': {
         status = updateUtilizator(value, username);
+        if ('valid' === status) {
+          username = value;
+        }
         break;
       }
 
@@ -239,18 +397,9 @@ router.post('/', authorization, function(req, res, next) {
           const denumireRol = selectRol.get(rolId._val);
   
           if (denumireRol && undefined !== denumireRol) {
-            let realUser = {
-              cnp: userRow._cnp,
-              grad: userRow._grad,
-              nume: userRow._nume,
-              prenume: userRow._prenume,
-              utilizator: userRow._user,
-              rol: denumireRol._val,
-            };
-  
             token = jwt.sign(
               {
-                usr: realUser,
+                usr: username,
                 rle: denumireRol._val,
                 exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */,
                 iat: Math.floor(Date.now() / 1000),
