@@ -115,7 +115,7 @@ function updateCnp(value, username) {
 
     try {
       const info = update.run(value, username);
-      console.log(info);
+      //console.log(info);
     } catch(err) {
       error = err;
       console.log(err);
@@ -141,7 +141,7 @@ function updateGrad(value, username) {
 
     try {
       const info = update.run(value, username);
-      console.log(info);
+      //console.log(info);
     } catch(err) {
       error = err;
       console.log(err);
@@ -167,7 +167,7 @@ function updateNume(value, username) {
 
     try {
       const info = update.run(value, username);
-      console.log(info);
+      //console.log(info);
     } catch(err) {
       error = err;
       console.log(err);
@@ -193,7 +193,7 @@ function updatePrenume(value, username) {
 
     try {
       const info = update.run(value, username);
-      console.log(info);
+      //console.log(info);
     } catch(err) {
       error = err;
       console.log(err);
@@ -219,7 +219,7 @@ function updateUtilizator(value, username) {
 
     try {
       const info = update.run(value, username);
-      console.log(info);
+      //console.log(info);
     } catch(err) {
       error = err;
       console.log(err);
@@ -258,7 +258,7 @@ function updateParola(value, username) {
 
         try {
           const info = update.run(hash, salt, username);
-          console.log('PAROLA: ', info);
+          //console.log('PAROLA: ', info);
         } catch(err) {
           error = err;
           console.log(err);
