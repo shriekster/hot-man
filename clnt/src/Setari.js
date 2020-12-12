@@ -844,6 +844,8 @@ class Setari extends React.Component {
             fetchingPrenume: false,
             fetchingUtilizator: false,
             fetchingParola: false,
+
+            showCnpError: false,
           })
         }
 
@@ -860,6 +862,8 @@ class Setari extends React.Component {
             fetchingPrenume: false,
             fetchingUtilizator: false,
             fetchingParola: false,
+
+            showGradError: false,
           })
         }
 
@@ -876,6 +880,8 @@ class Setari extends React.Component {
             fetchingPrenume: false,
             fetchingUtilizator: false,
             fetchingParola: false,
+
+            showNumeError: false,
           })
         }
 
@@ -892,6 +898,8 @@ class Setari extends React.Component {
             fetchingPrenume: false,
             fetchingUtilizator: false,
             fetchingParola: false,
+
+            showPrenumeError: false,
           })
         }
 
@@ -908,6 +916,8 @@ class Setari extends React.Component {
             fetchingPrenume: false,
             fetchingUtilizator: false,
             fetchingParola: false,
+
+            showUtilizatorError: false,
           })
         }
 
@@ -924,6 +934,8 @@ class Setari extends React.Component {
             fetchingPrenume: false,
             fetchingUtilizator: false,
             fetchingParola: false,
+
+            showParolaError: false,
           })
         }
       }
