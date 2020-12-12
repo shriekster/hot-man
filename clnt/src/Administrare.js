@@ -43,7 +43,7 @@ class Administrare extends React.Component {
         <div id='view-administrare'
           className='view-administrare'>
           {
-            this.state.hotel  ?
+            this.state.hotel.nume  ?
             <div id='view-manage-hotel'
               className='view-manage-hotel'>
               DA
