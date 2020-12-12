@@ -4,7 +4,6 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 const secret = require('../secret');
-const { readlink } = require('fs');
 
 router.options('/', function(req, res, next) {
   res.set({
@@ -94,7 +93,8 @@ router.post('/', function(req, res, next) {
               {
                 usr: user,
                 rle: denumireRol._val,
-                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */
+                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */,
+                iat: Math.floor(Date.now() / 1000),
               }, 
               secret
             );

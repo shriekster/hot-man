@@ -1,8 +1,8 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 import Select from 'react-select';
-import PasswordInput from './PasswordInput';
-import { runAtThisOrScheduleAtNextAnimationFrame } from 'custom-electron-titlebar/lib/common/dom';
+import Spinner from './Spinner'
+//import { runAtThisOrScheduleAtNextAnimationFrame } from 'custom-electron-titlebar/lib/common/dom';
 
 class Setari extends React.Component {
   constructor(props) {
@@ -26,8 +26,18 @@ class Setari extends React.Component {
 
     this.onPasswordBlur = this.onPasswordBlur.bind(this);
 
+    /** Update user attributes (fetch - POST) */
+    this.update = this.update.bind(this);
+
     this.state = {
-      fetching: false,
+      token: this.props.token,
+
+      fetchingCnp: false,
+      fetchingGrad: false,
+      fetchingNume: false,
+      fetchingPrenume: false,
+      fetchingUtilizator: false,
+      fetchingParola: false,
 
       editCnp: false,
       editGrad: false,
@@ -44,6 +54,7 @@ class Setari extends React.Component {
       nume: this.props.user.nume,
       prenume: this.props.user.prenume,
       utilizator: this.props.user.utilizator,
+      rol: this.props.user.rol,
       parola: '',
 
       nextCnp: this.props.user.cnp,
@@ -118,7 +129,6 @@ class Setari extends React.Component {
     };
 
     // Focus inputs when they are enabled
-    
     this.cnpInput = React.createRef(); 
     this.gradInput = React.createRef(); 
     this.numeInput = React.createRef();
@@ -129,7 +139,7 @@ class Setari extends React.Component {
     this.focusInput = this.focusInput.bind(this);
   }
 
-  focusInput() {
+  focusInput(prevState) {
     // Explicitly focus the text input using the raw DOM API
     // Note: we're accessing "current" to get the DOM node
     if (this.state.editCnp) {
@@ -137,8 +147,8 @@ class Setari extends React.Component {
     } else
 
     if (this.state.editGrad) {
-      //this.gradInput.focus();
-      this.gradInput.current.select.focus()
+      if(!prevState.editGrad) /** Important! Check the previous state, otherwise the select menu will stay open when it's not supposed to */
+        this.gradInput.current.select.focus()
     } else
 
     if (this.state.editNume) {
@@ -156,6 +166,238 @@ class Setari extends React.Component {
     if (this.state.editParola) {
       this.parolaInput.current.focus();
     }
+  }
+
+  update (attributeName, attributeValue) {
+  /* Simple POST request 
+  ** with a JSON body using fetch */
+  const requestOptions = {
+    method: 'POST',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      attributeName: attributeName,
+      attributeValue: attributeValue,
+      token: this.state.token,
+      username: this.state.utilizator,
+    })
+  };
+
+  let fCnp = false;
+  let fGrad = false;
+  let fNume = false;
+  let fPrenume = false;
+  let fUtilizator = false;
+  let fParola = false;
+
+  
+
+  switch(attributeName) {
+    case 'cnp': {
+      if (this.state.cnp !== this.state.nextCnp){
+        fCnp = true;
+      }
+      break;
+    }
+
+    case 'grad': {
+      if(this.state.grad !== this.state.nextGrad) {
+        fGrad = true;
+      }
+      break;
+    }
+
+    case 'nume': {
+      if (this.state.nume !== this.state.nextNume) {
+        fNume = true;
+      }
+      break;
+    }
+
+    case 'prenume': {
+      if (this.state.prenume !== this.state.nextPrenume) {
+        fPrenume = true;
+      }
+      break;
+    }
+
+    case 'utilizator': {
+      if (this.state.utilizator !== this.state.nextUtilizator) {
+        fUtilizator = true;
+      }
+      break;
+    }
+
+    case 'parola': {
+      if (this.state.parola !== this.state.nextParola) {
+        fParola = true;
+      }
+      break;
+    }
+  }
+
+  this.setState(
+    {
+      fetchingCnp: fCnp,
+      fetchingGrad: fGrad,
+      fetchingNume: fNume,
+      fetchingPrenume: fPrenume,
+      fetchingUtilizator: fUtilizator,
+      fetchingParola: fParola,
+    }, 
+
+    () => 
+    {
+      let fetchApproved = (
+        fCnp || fGrad || fNume || fPrenume || fUtilizator || fParola
+      );
+
+      if (fetchApproved) {
+        fetch('http://localhost:3001/main/setari', requestOptions)
+        .then(response => response.json())
+        .then(updated => {
+          console.log(updated);
+
+          if ('denied' === updated.status) {
+            this.props.onChange('Login'); /* render login component when something is wrong with authorization (!) */
+          } else {
+            if ('invalid' === updated.status) {
+              switch(attributeName) {
+                case 'cnp': {
+                  this.setState({
+                    fetchingCnp: false,
+                    fetchingGrad: false,
+                    fetchingNume: false,
+                    fetchingPrenume: false,
+                    fetchingUtilizator: false,
+                    fetchingParola: false,
+
+                    showCnpError: true,
+                  });
+                  break;
+                }
+            
+                case 'grad': {
+                  this.setState({
+                    fetchingCnp: false,
+                    fetchingGrad: false,
+                    fetchingNume: false,
+                    fetchingPrenume: false,
+                    fetchingUtilizator: false,
+                    fetchingParola: false,
+
+                    showGradError: true,
+                  });
+                  break;
+                }
+            
+                case 'nume': {
+                  this.setState({
+                    fetchingCnp: false,
+                    fetchingGrad: false,
+                    fetchingNume: false,
+                    fetchingPrenume: false,
+                    fetchingUtilizator: false,
+                    fetchingParola: false,
+
+                    showNumeError: true,
+                  });
+                  break;
+                }
+            
+                case 'prenume': {
+                  this.setState({
+                    fetchingCnp: false,
+                    fetchingGrad: false,
+                    fetchingNume: false,
+                    fetchingPrenume: false,
+                    fetchingUtilizator: false,
+                    fetchingParola: false,
+
+                    showPrenumeError: true,
+                  });
+                  break;
+                }
+            
+                case 'utilizator': {
+                  this.setState({
+                    fetchingCnp: false,
+                    fetchingGrad: false,
+                    fetchingNume: false,
+                    fetchingPrenume: false,
+                    fetchingUtilizator: false,
+                    fetchingParola: false,
+
+                    showUtilizatorError: true,
+                  });
+                  break;
+                }
+            
+                case 'parola': {
+                  this.setState({
+                    fetchingCnp: false,
+                    fetchingGrad: false,
+                    fetchingNume: false,
+                    fetchingPrenume: false,
+                    fetchingUtilizator: false,
+                    fetchingParola: false,
+
+                    showParolaError: true,
+                  });
+                  break;
+                }
+              }
+            } else
+
+            if ('valid' === updated.status) {
+              let usr = {
+                cnp: this.state.nextCnp,
+                grad: this.state.nextGrad,
+                nume: this.state.nextNume,
+                prenume: this.state.Prenume,
+                utilizator: this.state.nextUtilizator,
+                rol: this.props.user.rol,
+              };
+
+              let tok = updated.token;
+
+              this.setState({
+                fetchingCnp: false,
+                fetchingGrad: false,
+                fetchingNume: false,
+                fetchingPrenume: false,
+                fetchingUtilizator: false,
+                fetchingParola: false,
+              }, 
+              () => {this.props.onUserUpdate(tok, usr)});
+
+            } else { /** Any other case */
+              this.setState({
+                fetchingCnp: false,
+                fetchingGrad: false,
+                fetchingNume: false,
+                fetchingPrenume: false,
+                fetchingUtilizator: false,
+                fetchingParola: false,
+              });
+            }
+          }
+        })
+        .catch(error => {
+        console.log(error); // dev mode only!
+
+        this.setState({
+          fetchingCnp: false,
+          fetchingGrad: false,
+          fetchingNume: false,
+          fetchingPrenume: false,
+          fetchingUtilizator: false,
+          fetchingParola: false,
+          //showError: true,
+        });
+      });
+      }
+    });
   }
 
   handleSettingsSubmit(e) {
@@ -176,6 +418,10 @@ class Setari extends React.Component {
               //nextCnp: this.props.user.cnp
           //  })
           //}
+
+          if (this.state.editCnp) {
+            this.update( 'cnp', this.state.nextCnp);
+          }
 
           this.setState({
             editCnp: !this.state.editCnp,
@@ -210,6 +456,15 @@ class Setari extends React.Component {
           let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
+          // !!!
+          //if (this.state.editGrad) {
+          //  this.gradInput.current.select.blur();
+          //}
+
+          if (this.state.editGrad) {
+            this.update( 'grad', this.state.nextGrad);
+          }
+
           this.setState({
             editGrad: !this.state.editGrad,
             editGradClass: className,
@@ -241,6 +496,10 @@ class Setari extends React.Component {
           let className = this.state.editNumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueNumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
+          if (this.state.editNume) {
+            this.update( 'nume', this.state.nextNume);
+          }
+
           this.setState({
             editNume: !this.state.editNume,
             editNumeClass: className,
@@ -272,6 +531,10 @@ class Setari extends React.Component {
           let className = this.state.editPrenumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valuePrenumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
+          if (this.state.editPrenume) {
+            this.update( 'prenume', this.state.nextPrenume);
+          }
+
           this.setState({
             editPrenume: !this.state.editPrenume,
             editPrenumeClass: className,
@@ -303,6 +566,10 @@ class Setari extends React.Component {
           let className = this.state.editUtilizatorClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueUtilizatorClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
+          if (this.state.editUtilizator) {
+            this.update( 'utilizator', this.state.nextUtilizator);
+          }
+
           this.setState({
             editUtilizator: !this.state.editUtilizator,
             editUtilizatorClass: className,
@@ -338,6 +605,10 @@ class Setari extends React.Component {
           if (className === this.state.iconClassNames.edit &&
               valueClassName == this.state.valueClassNames.edit) {
                 passwordVisible = false;
+          }
+
+          if (this.state.editParola) {
+            this.update( 'parola', this.state.nextParola);
           }
 
           this.setState({
@@ -422,6 +693,7 @@ class Setari extends React.Component {
   onSelect(e, optional) {
 
     if (optional && optional !== undefined) {
+      /*
       this.setState({
         showCnpError: false,
         showGradError: false,
@@ -430,10 +702,17 @@ class Setari extends React.Component {
         showUtilizatorError: false,
         showParolaError: false,
       });
-
+      */
       if (optional.id === 'grad' && optional.action === 'select-option') {
         this.setState({
-          nextGrad: optional.value.trim()
+          nextGrad: optional.value.trim(),
+
+          showCnpError: false,
+          showGradError: false,
+          showNumeError: false,
+          showPrenumeError: false,
+          showUtilizatorError: false,
+          showParolaError: false,
         });
       }
     }
@@ -441,6 +720,7 @@ class Setari extends React.Component {
 
   onValueInput(e) {
     if (e && e.target && e.target.id) {
+      /*
       this.setState({
         showCnpError: false,
         showGradError: false,
@@ -449,7 +729,7 @@ class Setari extends React.Component {
         showUtilizatorError: false,
         showParolaError: false,
       });
-
+      */
       switch (e.target.id) {
         case '--settings-cnp': {
           if (e.target.value.length > 13) {
@@ -457,7 +737,14 @@ class Setari extends React.Component {
           }
           else {
             this.setState({
-              nextCnp: e.target.value.trim()
+              nextCnp: e.target.value.trim(),
+
+              showCnpError: false,
+              showGradError: false,
+              showNumeError: false,
+              showPrenumeError: false,
+              showUtilizatorError: false,
+              showParolaError: false,
             })
           }
           break;
@@ -465,28 +752,56 @@ class Setari extends React.Component {
 
         case '--settings-nume': {
           this.setState({
-            nextNume: e.target.value.trim()
+            nextNume: e.target.value.trim(),
+
+            showCnpError: false,
+            showGradError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
           })
           break;
         }
 
         case '--settings-prenume': {
           this.setState({
-            nextPrenume: e.target.value.trim()
+            nextPrenume: e.target.value.trim(),
+
+            showCnpError: false,
+            showGradError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
           })
           break;
         }
 
         case '--settings-utilizator': {
           this.setState({
-            nextUtilizator: e.target.value.trim()
+            nextUtilizator: e.target.value.trim(),
+
+            showCnpError: false,
+            showGradError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
           })
           break;
         }
 
         case '--settings-parola': {
           this.setState({
-            nextParola: e.target.value.trim()
+            nextParola: e.target.value.trim(),
+
+            showCnpError: false,
+            showGradError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
           })
           break;
         }
@@ -496,7 +811,7 @@ class Setari extends React.Component {
 
   onViewSettingsClick(e) {
     if (e && e.target) {
-      if ('view-user-settings' === e.target.id) {
+      if ('view-user-settings' === e.target.id || 'user-settings-container' === e.target.id) {
 
         if (this.state.editCnp) {
           this.setState({
@@ -504,6 +819,13 @@ class Setari extends React.Component {
             nextCnp: this.state.cnp,
             editCnpClass: this.state.iconClassNames.edit,
             valueCnpClass: this.state.valueClassNames.edit,
+
+            fetchingCnp: false,
+            fetchingGrad: false,
+            fetchingNume: false,
+            fetchingPrenume: false,
+            fetchingUtilizator: false,
+            fetchingParola: false,
           })
         }
 
@@ -513,6 +835,13 @@ class Setari extends React.Component {
             nextGrad: this.state.grad,
             editGradClass: this.state.iconClassNames.edit,
             valueGradClass: this.state.valueClassNames.edit,
+
+            fetchingCnp: false,
+            fetchingGrad: false,
+            fetchingNume: false,
+            fetchingPrenume: false,
+            fetchingUtilizator: false,
+            fetchingParola: false,
           })
         }
 
@@ -522,6 +851,13 @@ class Setari extends React.Component {
             nextNume: this.state.nume,
             editNumeClass: this.state.iconClassNames.edit,
             valueNumeClass: this.state.valueClassNames.edit,
+
+            fetchingCnp: false,
+            fetchingGrad: false,
+            fetchingNume: false,
+            fetchingPrenume: false,
+            fetchingUtilizator: false,
+            fetchingParola: false,
           })
         }
 
@@ -531,6 +867,13 @@ class Setari extends React.Component {
             nextPrenume: this.state.prenume,
             editPrenumeClass: this.state.iconClassNames.edit,
             valuePrenumeClass: this.state.valueClassNames.edit,
+
+            fetchingCnp: false,
+            fetchingGrad: false,
+            fetchingNume: false,
+            fetchingPrenume: false,
+            fetchingUtilizator: false,
+            fetchingParola: false,
           })
         }
 
@@ -540,6 +883,13 @@ class Setari extends React.Component {
             nextUtilizator: this.state.utilizator,
             editUtilizatorClass: this.state.iconClassNames.edit,
             valueUtilizatorClass: this.state.valueClassNames.edit,
+
+            fetchingCnp: false,
+            fetchingGrad: false,
+            fetchingNume: false,
+            fetchingPrenume: false,
+            fetchingUtilizator: false,
+            fetchingParola: false,
           })
         }
 
@@ -549,12 +899,15 @@ class Setari extends React.Component {
             nextParola: this.state.parola,
             editParolaClass: this.state.iconClassNames.edit,
             valueParolaClass: this.state.valueClassNames.edit,
+
+            fetchingCnp: false,
+            fetchingGrad: false,
+            fetchingNume: false,
+            fetchingPrenume: false,
+            fetchingUtilizator: false,
+            fetchingParola: false,
           })
         }
-
-        this.setState({
-          fetching: false,
-        });
       }
     }
   }
@@ -581,9 +934,11 @@ class Setari extends React.Component {
     
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps, prevState) {
     // Focus input elements when they are enabled
-    this.focusInput();
+    this.focusInput(prevState);
+
+    console.log(this.state.cnp)
   }
 
   render() {
@@ -594,157 +949,12 @@ class Setari extends React.Component {
         <div id='view-user-settings' 
           className='view-user-settings'
           onClick={this.onViewSettingsClick}>
-          <div className='--settings-item'>
-            <Tippy
-              content={
-                <>
-                  <i className='fas fa-minus-circle'></i> CNP invalid
-                </>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              offset={[0, 65]}
-              visible={this.state.showCnpError}>
-              <form id='--settings-cnp-form'
-                className='--settings-form'
-                onSubmit={this.handleSettingsSubmit}>
-                <span>
-                  CNP
-                </span>
-                <input id='--settings-cnp'
-                  autoComplete='off'
-                  autoCorrect='off'
-                  className={this.state.valueCnpClass}
-                  disabled={!this.state.editCnp}
-                  onInput={this.onValueInput}
-                  onKeyDown={this.onKeyDown}
-                  value={this.state.nextCnp}
-                  ref={this.cnpInput}>
-                </input>
-                <i id='--settings-edit-cnp' 
-                  className={this.state.editCnpClass}
-                  onClick={this.handleSettingsSubmit}></i>
-              </form>
-            </Tippy>
-          </div>
-          <div className='--settings-item'>
-          <Tippy
-            content={
-              <>
-                <i className='fas fa-minus-circle'></i> Grad invalid
-              </>
-            }
-            allowHTML={true}
-            placement='right'
-            arrow={false}
-            theme='red-material-warning'
-            offset={[0, 65]}
-            visible={this.state.showGradError}>
-              <form id='--settings-grad-form'
-                className='--settings-form'
-                onSubmit={this.handleSettingsSubmit}>
-                <span>
-                  Grad
-                </span>
-                <Select
-                  id='--settings-grad'
-                  isDisabled={!this.state.editGrad}
-                  defaultValue={this.state.grade.find(option => option.value === this.state.nextGrad)}
-                  value={this.state.grade.find(option => option.value === this.state.nextGrad)}
-                  onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
-                  onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
-                  maxMenuHeight={100}
-                  placeholder='Selectează...'
-                  noOptionsMessage={(msg) => 'Nu există'}
-                  className='sel-container'
-                  classNamePrefix='sel' 
-                  options={this.state.grade} 
-                  onKeyDown={this.onGenericKeyDown}
-                  ref={this.gradInput}
-                  openMenuOnFocus={true}/> 
-                <i id='--settings-edit-grad'  
-                  className={this.state.editGradClass}
-                  onClick={this.handleSettingsSubmit}></i>
-              </form>
-            </Tippy>
-          </div>
-          <div className='--settings-item'>
-            <Tippy
-              content={
-                <>
-                  <i className='fas fa-minus-circle'></i> Nume invalid
-                </>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              offset={[0, 65]}
-              visible={this.state.showNumeError}>
-              <form id='--settings-nume-form'
-                className='--settings-form'
-                onSubmit={this.handleSettingsSubmit}>
-                <span>
-                  Nume
-                </span>
-                <input id='--settings-nume'
-                  autoComplete='off'
-                  autoCorrect='off'
-                  className={this.state.valueNumeClass}
-                  disabled={!this.state.editNume}
-                  onInput={this.onValueInput}
-                  onKeyDown={this.onGenericKeyDown}
-                  value={this.state.nextNume}
-                  ref={this.numeInput}>
-                </input>
-                <i id='--settings-edit-nume' 
-                  className={this.state.editNumeClass}
-                  onClick={this.handleSettingsSubmit}></i>
-              </form>
-            </Tippy>
-          </div>
-          <div className='--settings-item'>
-            <Tippy
-              content={
-                <>
-                  <i className='fas fa-minus-circle'></i> Prenume invalid
-                </>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              offset={[0, 65]}
-              visible={this.state.showPrenumeError}>
-              <form id='--settings-prenume-form'
-                className='--settings-form'
-                onSubmit={this.handleSettingsSubmit}>
-                <span>
-                  Prenume
-                </span>
-                <input id='--settings-prenume'
-                  autoComplete='off'
-                  autoCorrect='off'
-                  className={this.state.valuePrenumeClass}
-                  disabled={!this.state.editPrenume}
-                  onInput={this.onValueInput}
-                  onKeyDown={this.onGenericKeyDown}
-                  value={this.state.nextPrenume}
-                  ref={this.prenumeInput}>
-                </input>
-                <i id='--settings-edit-prenume'
-                  className={this.state.editPrenumeClass}
-                  onClick={this.handleSettingsSubmit}></i>
-              </form>
-            </Tippy>
-          </div>
-          <div className='--settings-item'>
-            <Tippy
+          <div id='user-settings-container'>
+            <div className='--settings-item'>
+              <Tippy
                 content={
                   <>
-                    <i className='fas fa-minus-circle'></i> Utilizator invalid sau indisponibil
+                    <i className='fas fa-minus-circle'></i> CNP invalid
                   </>
                 }
                 allowHTML={true}
@@ -752,30 +962,208 @@ class Setari extends React.Component {
                 arrow={false}
                 theme='red-material-warning'
                 offset={[0, 65]}
-                visible={this.state.showUtilizatorError}>
-              <form id='--settings-utilizator-form'
-                className='--settings-form'
-                onSubmit={this.handleSettingsSubmit}>
-                <span>
-                  Utilizator
-                </span>
-                <input id='--settings-utilizator'
-                  autoComplete='off'
-                  autoCorrect='off'
-                  className={this.state.valueUtilizatorClass}
-                  disabled={!this.state.editUtilizator}
-                  onInput={this.onValueInput}
-                  onKeyDown={this.onGenericKeyDown}
-                  value={this.state.nextUtilizator}
-                  ref={this.utilizatorInput}>
-                </input>
-                <i id='--settings-edit-utilizator' 
-                  className={this.state.editUtilizatorClass}
-                  onClick={this.handleSettingsSubmit}></i>
-              </form>
-            </Tippy>
-          </div>
-          <div className='--settings-item'>
+                visible={this.state.showCnpError}>
+                <form id='--settings-cnp-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    CNP
+                  </span>
+                  <input id='--settings-cnp'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    className={this.state.valueCnpClass}
+                    disabled={!this.state.editCnp}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onKeyDown}
+                    value={this.state.nextCnp}
+                    ref={this.cnpInput}>
+                  </input>
+                  <i id='--settings-edit-cnp' 
+                    className={this.state.editCnpClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingCnp}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-minus-circle'></i> Grad invalid
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 65]}
+                visible={this.state.showGradError}>
+                <form id='--settings-grad-form'
+                    className='--settings-form'
+                    onSubmit={this.handleSettingsSubmit}>
+                    <span>
+                      Grad
+                    </span>
+                    <Select
+                      id='--settings-grad'
+                      isDisabled={!this.state.editGrad}
+                      defaultValue={this.state.grade.find(option => option.value === this.state.nextGrad)}
+                      value={this.state.grade.find(option => option.value === this.state.nextGrad)}
+                      onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
+                      onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
+                      maxMenuHeight={100}
+                      placeholder='Selectează...'
+                      noOptionsMessage={(msg) => 'Nu există'}
+                      className='sel-container'
+                      classNamePrefix='sel' 
+                      options={this.state.grade} 
+                      onKeyDown={this.onGenericKeyDown}
+                      ref={this.gradInput}
+                      openMenuOnFocus={true}
+                      closeMenuOnSelect={true}
+                      /> 
+                    <i id='--settings-edit-grad'  
+                      className={this.state.editGradClass}
+                      onClick={this.handleSettingsSubmit}></i>
+                  </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingGrad}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-minus-circle'></i> Nume invalid
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 65]}
+                visible={this.state.showNumeError}>
+                <form id='--settings-nume-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Nume
+                  </span>
+                  <input id='--settings-nume'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    className={this.state.valueNumeClass}
+                    disabled={!this.state.editNume}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextNume}
+                    ref={this.numeInput}>
+                  </input>
+                  <i id='--settings-edit-nume' 
+                    className={this.state.editNumeClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingNume}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-minus-circle'></i> Prenume invalid
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 65]}
+                visible={this.state.showPrenumeError}>
+                <form id='--settings-prenume-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Prenume
+                  </span>
+                  <input id='--settings-prenume'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    className={this.state.valuePrenumeClass}
+                    disabled={!this.state.editPrenume}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextPrenume}
+                    ref={this.prenumeInput}>
+                  </input>
+                  <i id='--settings-edit-prenume'
+                    className={this.state.editPrenumeClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingPrenume}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                  content={
+                    <>
+                      <i className='fas fa-minus-circle'></i> Utilizator invalid sau indisponibil
+                    </>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={false}
+                  theme='red-material-warning'
+                  offset={[0, 65]}
+                  visible={this.state.showUtilizatorError}>
+                <form id='--settings-utilizator-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Utilizator
+                  </span>
+                  <input id='--settings-utilizator'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    className={this.state.valueUtilizatorClass}
+                    disabled={!this.state.editUtilizator}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextUtilizator}
+                    ref={this.utilizatorInput}>
+                  </input>
+                  <i id='--settings-edit-utilizator' 
+                    className={this.state.editUtilizatorClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingUtilizator}/>
+            </div>
+            <div className='--settings-item'>
             <Tippy
               content={
                 <>
@@ -819,6 +1207,13 @@ class Setari extends React.Component {
                   onClick={this.handleSettingsSubmit}></i>
               </form>
             </Tippy>
+            <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingParola}/>
+          </div>
           </div>
         </div>
       </div>

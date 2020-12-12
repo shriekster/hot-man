@@ -10,6 +10,18 @@ var db = require('../db');
 * @return boolean
 */
 function isValidCNP( p_cnp ) {
+  /** Verific daca CNP-ul exista deja in baza de date ... */
+  // Prepare the SQL statement
+  const statement = db.prepare(`SELECT CNP AS _cnp from Utilizatori
+                                WHERE CNP = ?`);
+  const row = statement.get(p_cnp);
+
+  if (row && undefined !== row){
+  // CNP-ul exista, deci este indisponibil
+    return false;
+  }
+
+  /** ... apoi, daca nu exista, verific daca este valid */
   var i=0 , year=0 , hashResult=0 , cnp=[] , hashTable=[2,7,9,1,4,6,3,5,8,2,7,9];
   if( p_cnp.length !== 13 ) { return false; }
   for( i=0 ; i<13 ; i++ ) {
@@ -135,8 +147,6 @@ router.post('/', function(req, res, next) {
   let pass = req.body.pass;
   let rol = req.body.rol;
 
-  // TODO: implement check functions
-  // TODO: finish the route handler
   if (cnp && undefined != cnp) {
     valid.cnp = isValidCNP(cnp);
   }

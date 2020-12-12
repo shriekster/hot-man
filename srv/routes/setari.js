@@ -1,9 +1,26 @@
 var express = require('express');
 var router = express.Router();
+
+const authorization = require('../auth');
+
+const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../db');
+const secret = require('../secret');
 
 function isValidCNP( p_cnp ) {
+  /** Verific daca CNP-ul exista deja in baza de date ... */
+  // Prepare the SQL statement
+  const statement = db.prepare(`SELECT CNP AS _cnp from Utilizatori
+                                WHERE CNP = ?`);
+  const row = statement.get(p_cnp);
+
+  if (row && undefined !== row){
+  // CNP-ul exista, deci este indisponibil
+    return false;
+  }
+
+  /** ... apoi, daca nu exista, verific daca este valid */
   var i=0 , year=0 , hashResult=0 , cnp=[] , hashTable=[2,7,9,1,4,6,3,5,8,2,7,9];
   if( p_cnp.length !== 13 ) { return false; }
   for( i=0 ; i<13 ; i++ ) {
@@ -24,7 +41,6 @@ function isValidCNP( p_cnp ) {
   if( year < 1800 || year > 2099 ) { return false; }
   return ( cnp[12] === hashResult );
 }
-
 
 function isValidUsername(user) {
   // Prepare the SQL statement
@@ -89,6 +105,51 @@ function isValidPassword(pass) {
   return regex.test(pass);
 }
 
+function updateCnp(value, username) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET CNP = ?
+                            WHERE Utilizator = ?`);
+  if (isValidCNP(value)) {
+    let error;
+
+    try {
+      const info = update.run(value, username);
+      console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'unknown';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateGrad(value, username) {
+
+}
+
+function updateNume(value, username) {
+
+}
+
+function updatePrenume(value, username) {
+
+}
+
+function updateUtilizator(value, username) {
+
+}
+
+function updateParola(value, username) {
+
+}
+
 router.options('/', function(req, res, next) {
   res.set({
     'Allow': 'OPTIONS',
@@ -104,55 +165,108 @@ router.options('/', function(req, res, next) {
 
 
 /* POST */
-router.post('/', function(req, res, next) {
+router.post('/', authorization, function(req, res, next) {
   res.set({
     'Allow': 'POST',
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:3000',
+    'Access-Control-Allow-Origin': 'http://localhost:3000'
   });
 
-  let hotel='null';
+  let status = 'unknown';
+  let token = 0;
 
-  const hCount = db.prepare(`SELECT COUNT(*) AS value
-                                FROM Hoteluri`);
-  const who = db.prepare(`SELECT *
-                          FROM Hoteluri`);
+  if (req.body) {
+    let key = req.body.attributeName;
+    let value = req.body.attributeValue;
+    let username = req.body.username;
 
-  const hotelCount = hCount.get();
+    const selectUser = db.prepare(`SELECT ID AS _id,
+                                  CNP AS _cnp,
+                                  Grad AS _grad,
+                                  Nume AS _nume,
+                                  Prenume AS _prenume,
+                                  Utilizator AS _user
+                                  FROM Utilizatori 
+                                  WHERE Utilizator = ?`);
 
-  if (hotelCount && undefined !== hotelCount) {
-    switch(hotelCount.value) {
-      case 0: {}
+    const selectRolId = db.prepare(`SELECT RolID AS _val
+                                  FROM UtilizatoriRoluri
+                                  WHERE UtilizatorID = ?`);
+  
+    const selectRol = db.prepare(`SELECT Denumire as _val
+                                FROM Roluri
+                                WHERE ID = ?`);
 
-      case 1: {
-        let single = who.get();
-        
-        if (single && undefined !== single) {
-          hotel = {
-            nume: single.Nume,
-            judet: single.Judet,
-            sector: single.Sector,
-            strada: single.Strada,
-            numar: single.Numar,
-            codPostal: single.CodPostal,
-            telefon: single.Telefon,
-            fax: single.Fax,
-            email: single.Email,
-          }
-        }
-
+    switch (key) {
+      case 'cnp': {
+        status = updateCnp(value, username);
         break;
       }
 
-      default: {
+      case 'grad': {
+        status = updateGrad(value, username);
         break;
+      }
+
+      case 'nume': {
+        status = updateNume(value, username);
+        break;
+      }
+
+      case 'prenume': {
+        status = updatePrenume(value, username);
+        break;
+      }
+
+      case 'utilizator': {
+        status = updateUtilizator(value, username);
+        break;
+      }
+
+      case 'parola': {
+        status = updateParola(value, username);
+        break;
+      }
+    }
+
+    if ('valid' === status) {
+      const userRow = selectUser.get(username);
+      
+      if (userRow) {
+        const rolId = selectRolId.get(userRow._id);
+  
+        if (rolId && undefined !== rolId) {
+          const denumireRol = selectRol.get(rolId._val);
+  
+          if (denumireRol && undefined !== denumireRol) {
+            let realUser = {
+              cnp: userRow._cnp,
+              grad: userRow._grad,
+              nume: userRow._nume,
+              prenume: userRow._prenume,
+              utilizator: userRow._user,
+              rol: denumireRol._val,
+            };
+  
+            token = jwt.sign(
+              {
+                usr: realUser,
+                rle: denumireRol._val,
+                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */,
+                iat: Math.floor(Date.now() / 1000),
+              }, 
+              secret);
+          }
+        }
       }
     }
   }
 
   res.json({
-    hotel: hotel
+    status: status,
+    token: token,
   })
+
 });
 
 router.all('/', function(req, res, next) {

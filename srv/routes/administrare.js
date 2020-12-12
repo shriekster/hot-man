@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+
+const authorization = require('../auth');
+
 const db = require('../db');
 
 router.options('/', function(req, res, next) {
@@ -17,7 +20,7 @@ router.options('/', function(req, res, next) {
 
 
 /* POST */
-router.post('/', function(req, res, next) {
+router.post('/', authorization, function(req, res, next) {
   res.set({
     'Allow': 'POST',
     'Content-Type': 'application/json',

@@ -373,7 +373,7 @@ class Signup extends React.Component {
       });
 
     } else {
-      console.log(window.titlebar)
+      //console.log(window.titlebar)
       if (cnp === '') {
         this.setState({
           showCnpWarning: true
@@ -441,7 +441,7 @@ class Signup extends React.Component {
             <Tippy
               content={
                 <>
-                  <i className='fas fa-minus-circle'></i> CNP invalid
+                  <i className='fas fa-minus-circle'></i> CNP invalid sau indisponibil
                 </>
               }
               allowHTML={true}

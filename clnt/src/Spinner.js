@@ -29,10 +29,12 @@ class Spinner extends React.Component {
     let currentClass = this.state.classNames[status];
 
     return (
-      <div style={{
+      <div 
+        style={{
           visibility: this.props.visibility
                       ? 'visible' : 'hidden'
-      }}>
+        }}
+        className={'' || this.props.className}>
         <img 
           className={currentClass} 
           src={loadingAlt}

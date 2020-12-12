@@ -652,10 +652,10 @@ input[type='password'].--value-editing:focus,
 
 .--settings-parola-icon {
   position: absolute;
-  left: 415px;
+  left: 412px;
   z-index: 4;
   font-size: 24px !important;
-  color: #009500;
+  color: darkslategray !important;
 }
 
 .--parola-is-visible {
@@ -664,6 +664,21 @@ input[type='password'].--value-editing:focus,
 
 .--parola-is-invisible {
   visibility: hidden;
+}
+
+.--settings-loading {
+  position: absolute;
+  left: 520px;
+  /*transition: all .3s linear;*/
+}
+
+.--settings-loading > img {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.--settings-loading > img::selection {
+  background: transparent;
 }
 
 hr.view--separator {

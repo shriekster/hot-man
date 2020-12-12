@@ -22,7 +22,7 @@ class Administrare extends React.Component {
       })
     };
 
-    fetch('http://localhost:3001/main/hotel', requestOptions)
+    fetch('http://localhost:3001/main/administrare', requestOptions)
     .then(response => response.json())
     .then(who => {
       console.log(who);

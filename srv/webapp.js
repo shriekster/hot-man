@@ -26,9 +26,7 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 
-// TODO: auth middleware?
-// app.use(authorization)
-
+/** Protected routes */
 app.use('/main', mainRouter);
 
 // catch 404 and forward to error handler

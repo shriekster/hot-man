@@ -27,6 +27,8 @@ class Main extends React.Component {
 
     this.onSettingsLeave = this.onSettingsLeave.bind(this);
 
+    this.onUserUpdate = this.onUserUpdate.bind(this);
+
     this.state = {
       showUserSettings: false,
       userSettingsClass: '',
@@ -34,7 +36,7 @@ class Main extends React.Component {
       menuRapClass: 'sidenav-a',
       menuPayClass: 'sidenav-a',
       menuTarClass: 'sidenav-a',
-      menuRezClass: 'sidenav-a',
+      menuRezClass: 'sidenav-a --active-menu',
       menuSolClass: 'sidenav-a',
       components: {
         Administrare: Administrare,
@@ -47,6 +49,9 @@ class Main extends React.Component {
       },
 
       view: Rezervari,
+
+      token: this.props.token,
+      user: this.props.user,
     };
   }
 
@@ -146,6 +151,15 @@ class Main extends React.Component {
     if (!this.state.showUserSettings) {
       this.setState({
         userSettingsClass: ''
+      });
+    }
+  }
+
+  onUserUpdate(token, user) {
+    if (token && user) {
+      this.setState({
+        token: token,
+        user: user,
       });
     }
   }
@@ -267,8 +281,10 @@ class Main extends React.Component {
                 visibility={true}/>
               }>
               <Component 
-                user={this.props.user}
-                token={this.props.token}/>
+                user={this.state.user}
+                token={this.state.token}
+                onUserUpdate={this.onUserUpdate}
+                onChange={this.props.onChange}/>
             </Suspense>
           </div>
         </div>

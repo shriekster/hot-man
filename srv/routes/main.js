@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-var hotelRouter = require('./hotel');
+const authorization = require('../auth');
+
+var administrareRouter = require('./administrare');
 var setariRouter = require('./setari');
 
-router.use('/hotel', hotelRouter);
+router.use('/hotel', administrareRouter);
 router.use('/setari', setariRouter);
 
 router.options('/', function(req, res, next) {
@@ -22,17 +24,19 @@ router.options('/', function(req, res, next) {
 
 
 /* POST */
-router.post('/', function(req, res, next) {
+router.post('/', authorization, function(req, res, next, err) {
   res.set({
     'Allow': 'POST',
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': 'http://localhost:3000',
   });
 
-  console.log(req.body.token);
+  if (err) {
+    console.log(err)
+  }
 
   res.json({
-    hotel: 'main.js'
+    hotel: 'hotel'
   })
 });
 
