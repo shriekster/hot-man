@@ -9,7 +9,7 @@ class Administrare extends React.Component {
       title: 'Administrarea hotelului',
       hotel: ''
     };
-  }
+  } 
 
   componentDidMount() {
     const token = this.props.token;
@@ -55,6 +55,8 @@ class Administrare extends React.Component {
               </div>
               <form id='view-add-hotel-form'
                 className='view-add-hotel-form'>
+                <input>
+                </input>
                 <input>
                 </input>
                 <input>

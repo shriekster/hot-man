@@ -174,13 +174,13 @@ class Main extends React.Component {
             <a href='#'
               className={this.state.menuAdmClass}
               onClick={() => this.changeView('Administrare')}>
-              <i className='fas fa-building menu-icon'></i> 
+              <i className='fas fa-hotel menu-icon'></i> 
               <span className='menu-label'>Administrare</span>
             </a>
             <a href='#'
               className={this.state.menuRapClass}
               onClick={() => this.changeView('Rapoarte')}>
-              <i className='fas fa-chart-bar menu-icon'></i> 
+              <i className='fas fa-file-invoice menu-icon'></i> 
               <span className='menu-label'>Rapoarte</span>
             </a>
             <a href='#'
@@ -198,7 +198,7 @@ class Main extends React.Component {
             <a href='#'
               className={this.state.menuRezClass}
               onClick={() => this.changeView('Rezervari')}>
-              <i className='fas fa-calendar-plus menu-icon'></i> 
+              <i className='fas fa-calendar-alt menu-icon'></i> 
               <span className='menu-label'>Rezervări</span>
             </a>
             <a href='#'
@@ -284,7 +284,8 @@ class Main extends React.Component {
                 user={this.state.user}
                 token={this.state.token}
                 onUserUpdate={this.onUserUpdate}
-                onChange={this.props.onChange}/>
+                onChange={this.props.onChange}
+                changeMenu={this.changeView}/>
             </Suspense>
           </div>
         </div>

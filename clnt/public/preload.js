@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
     buttons: [],
     defaultId: 1,
     title: 'Hotelitary',
-    message: '\u00a9 MApN - U.M. 01616\nHotelitary v1.0.0-alpha.1\nAplicația este în faza de testare alpha!',
+    message: '\u00a9 MApN - U.M. 01616\n\u2714 Hotelitary v1.0.0-alpha.1\n\u2762 Aplicația este în faza de testare alpha. \u2762\n\u260E 0769 388 493 - lt. Moldoveanu Dan',
   };
 
 	const menu = new Menu();

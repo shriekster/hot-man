@@ -17,7 +17,7 @@ router.options('/', function(req, res, next) {
   .status(200)
   .send();
 });
-
+ 
 
 /* POST */
 router.post('/', authorization, function(req, res, next) {
