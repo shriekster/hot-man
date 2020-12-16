@@ -1,25 +1,25 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 
+import HotelCreator from './HotelCreator';
+import HotelUpdater from './HotelUpdater';
+
 class Administrare extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      title: 'Administrarea hotelului',
       hotel: ''
     };
   } 
 
   componentDidMount() {
-    const token = this.props.token;
-
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        token: token
+        token: this.props.token
       })
     };
 
@@ -37,46 +37,17 @@ class Administrare extends React.Component {
       <div>
         <div id='administrare-title'
           className='administrare-title'>
-          {this.state.hotel.nume || this.state.title}
+          Administrarea hotelului
         </div>
         <hr className='view--separator'/>
         <div id='view-administrare'
           className='view-administrare'>
           {
             this.state.hotel.nume  ?
-            <div id='view-manage-hotel'
-              className='view-manage-hotel'>
-              DA
-            </div>     :
-            <div id='view-add-hotel'
-              className='view-add-hotel'>
-              <div className='view-add-hotel-info regular'>
-                Completează informațiile referitoare la hotelul pe care îl administrezi:
-              </div>
-              <form id='view-add-hotel-form'
-                className='view-add-hotel-form'>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-                <input>
-                </input>
-              </form>
-            </div>
+            <HotelCreator
+              token={this.props.token} /> :
+            <HotelUpdater
+              token={this.props.token} />
           }
         </div>
       </div>

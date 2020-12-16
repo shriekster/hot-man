@@ -134,7 +134,10 @@ class Setari extends React.Component {
     this.numeInput = React.createRef();
     this.prenumeInput = React.createRef();
     this.utilizatorInput = React.createRef();
-    this.parolaInput = React.createRef();   
+    this.parolaInput = React.createRef();
+
+    // React Select use case: blur input on select, then click on the save icon
+    this.saveGrad = React.createRef();
     
     this.focusInput = this.focusInput.bind(this);
   }
@@ -146,9 +149,13 @@ class Setari extends React.Component {
       this.cnpInput.current.focus();
     } else
 
+    /** Important! Check the previous state, 
+     * otherwise the select menu will stay 
+     * open when it's not supposed to */
     if (this.state.editGrad) {
-      if(!prevState.editGrad) /** Important! Check the previous state, otherwise the select menu will stay open when it's not supposed to */
+      if(!prevState.editGrad) {
         this.gradInput.current.select.focus()
+      }
     } else
 
     if (this.state.editNume) {
@@ -419,23 +426,19 @@ class Setari extends React.Component {
   }
 
   handleSettingsSubmit(e) {
+    console.log(e.target.id)
     if (e && '--settings-form' === e.target.className) {
       e.preventDefault();
     }
 
     if (e && e.target && e.target.id) {
+
       switch (e.target.id) {
 
         case '--settings-cnp-form':
         case '--settings-edit-cnp': {
           let className = this.state.editCnpClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueCnpClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-          
-          //if (!this.state.nextCnp){
-          //  this.setState({
-              //nextCnp: this.props.user.cnp
-          //  })
-          //}
 
           if (this.state.editCnp) {
             this.update( 'cnp', this.state.nextCnp);
@@ -468,18 +471,17 @@ class Setari extends React.Component {
           break;
         }
 
+        //case '--grad-select-input' : //{
+        //  console.log('SELECT')
+        //}
         case '--settings-grad-form':
         case '--settings-edit-grad': {
-          
+        console.log(this.state.editGrad)
           let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-          
-          // !!!
-          //if (this.state.editGrad) {
-          //  this.gradInput.current.select.blur();
-          //}
 
           if (this.state.editGrad) {
+            this.gradInput.current.select.blur();
             this.update( 'grad', this.state.nextGrad);
           }
 
@@ -711,17 +713,9 @@ class Setari extends React.Component {
   onSelect(e, optional) {
 
     if (optional && optional !== undefined) {
-      /*
-      this.setState({
-        showCnpError: false,
-        showGradError: false,
-        showNumeError: false,
-        showPrenumeError: false,
-        showUtilizatorError: false,
-        showParolaError: false,
-      });
-      */
+
       if (optional.id === 'grad' && optional.action === 'select-option') {
+        
         this.setState({
           nextGrad: optional.value.trim(),
 
@@ -966,6 +960,7 @@ class Setari extends React.Component {
 
   componentDidUpdate (prevProps, prevState) {
     // Focus input elements when they are enabled
+    console.log(this.state.editGrad, this.state.nextGrad)
     this.focusInput(prevState);
   }
 
@@ -1000,6 +995,7 @@ class Setari extends React.Component {
                   <input id='--settings-cnp'
                     autoComplete='off'
                     autoCorrect='off'
+                    spellCheck={false}
                     className={this.state.valueCnpClass}
                     disabled={!this.state.editCnp}
                     onInput={this.onValueInput}
@@ -1055,10 +1051,13 @@ class Setari extends React.Component {
                       ref={this.gradInput}
                       openMenuOnFocus={true}
                       closeMenuOnSelect={true}
-                      /> 
+                      blurInputOnSelect={true}
+                      onBlur={this.handleSettingsSubmit}
+                      inputId='--grad-select-input'/> 
                     <i id='--settings-edit-grad'  
                       className={this.state.editGradClass}
-                      onClick={this.handleSettingsSubmit}></i>
+                      onClick={this.handleSettingsSubmit}
+                      ref={this.saveGrad}></i>
                   </form>
               </Tippy>
               <Spinner
@@ -1090,6 +1089,7 @@ class Setari extends React.Component {
                   <input id='--settings-nume'
                     autoComplete='off'
                     autoCorrect='off'
+                    spellCheck={false}
                     className={this.state.valueNumeClass}
                     disabled={!this.state.editNume}
                     onInput={this.onValueInput}
@@ -1131,6 +1131,7 @@ class Setari extends React.Component {
                   <input id='--settings-prenume'
                     autoComplete='off'
                     autoCorrect='off'
+                    spellCheck={false}
                     className={this.state.valuePrenumeClass}
                     disabled={!this.state.editPrenume}
                     onInput={this.onValueInput}
@@ -1172,6 +1173,7 @@ class Setari extends React.Component {
                   <input id='--settings-utilizator'
                     autoComplete='off'
                     autoCorrect='off'
+                    spellCheck={false}
                     className={this.state.valueUtilizatorClass}
                     disabled={!this.state.editUtilizator}
                     onInput={this.onValueInput}
@@ -1213,6 +1215,7 @@ class Setari extends React.Component {
                 <input id='--settings-parola'
                   autoComplete='off'
                   autoCorrect='off'
+                  spellCheck={false}
                   className={this.state.valueParolaClass + ' --settings-parola'}
                   disabled={!this.state.editParola}
                   onInput={this.onValueInput}

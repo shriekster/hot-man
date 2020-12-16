@@ -292,7 +292,6 @@ CREATE TABLE Hoteluri (
     ID         INTEGER,
     Nume       TEXT,
     Judet      TEXT,
-    Sector     TEXT,
     Localitate TEXT,
     Strada     TEXT,
     Numar      TEXT,

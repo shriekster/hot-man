@@ -9,7 +9,7 @@ const fs = require('fs');
 let db;
 let error = null;
 let dbPath = path.join(__dirname, 'db/data.db');
-let sqlPath = path.join(__dirname, 'db/data.sql')
+let sqlPath = path.join(__dirname, 'db/win-data.sql')
 
 try {
   if (!fs.existsSync(dbPath)) {
