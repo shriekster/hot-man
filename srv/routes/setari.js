@@ -272,31 +272,6 @@ function updateParola(value, username) {
         }
       }
     }
-
-    /*
-    crypto.pbkdf2(value, salt, 10000, 32, 'sha512', (err, derivedKey) => {
-      if (err) {
-        console.log(err);
-      } else {
-        let hash = derivedKey.toString('base64');
-
-        try {
-          const info = update.run(hash, salt, username);
-          console.log('PAROLA: ', info);
-        } catch(err) {
-          error = err;
-          console.log(err);
-        } finally {
-
-          if (error) {
-            return 'unknown';
-          }
-
-          return 'valid';
-        }
-      }
-    });
-    */
   }
   
   return 'invalid';

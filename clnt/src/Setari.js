@@ -26,6 +26,8 @@ class Setari extends React.Component {
 
     this.onPasswordBlur = this.onPasswordBlur.bind(this);
 
+    this.submitOnMenuClose = this.submitOnMenuClose.bind(this);
+
     /** Update user attributes (fetch - POST) */
     this.update = this.update.bind(this);
 
@@ -360,7 +362,7 @@ class Setari extends React.Component {
                 cnp: this.state.nextCnp,
                 grad: this.state.nextGrad,
                 nume: this.state.nextNume,
-                prenume: this.state.Prenume,
+                prenume: this.state.nextPrenume,
                 utilizator: this.state.nextUtilizator,
                 rol: this.props.user.rol,
               };
@@ -426,7 +428,7 @@ class Setari extends React.Component {
   }
 
   handleSettingsSubmit(e) {
-    console.log(e.target.id)
+    //console.log(e.target.id)
     if (e && '--settings-form' === e.target.className) {
       e.preventDefault();
     }
@@ -471,20 +473,18 @@ class Setari extends React.Component {
           break;
         }
 
-        //case '--grad-select-input' : //{
-        //  console.log('SELECT')
-        //}
         case '--settings-grad-form':
         case '--settings-edit-grad': {
-        console.log(this.state.editGrad)
           let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
 
           if (this.state.editGrad) {
-            this.gradInput.current.select.blur();
-            this.update( 'grad', this.state.nextGrad);
+            this.submitOnMenuClose(e);
+            //this.gradInput.current.select.blur();
+            //this.update( 'grad', this.state.nextGrad);
           }
 
+          else
           this.setState({
             editGrad: !this.state.editGrad,
             editGradClass: className,
@@ -508,6 +508,7 @@ class Setari extends React.Component {
             valueUtilizatorClass: this.state.valueClassNames.edit,
             valueParolaClass: this.state.valueClassNames.edit,
           });
+          
           break;
         }
 
@@ -662,6 +663,44 @@ class Setari extends React.Component {
     }
   }
 
+  submitOnMenuClose(e) {
+
+    let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+    let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+
+    if (this.state.editGrad) {
+      this.gradInput.current.select.blur();
+
+      this.setState({
+        editGrad: !this.state.editGrad,
+        editGradClass: className,
+        valueGradClass: valueClassName,
+
+        editCnp: false,
+        editNume: false,
+        editPrenume: false,
+        editUtilizator: false,
+        editParola: false,
+
+        editCnpClass: this.state.iconClassNames.edit,
+        editNumeClass: this.state.iconClassNames.edit,
+        editPrenumeClass: this.state.iconClassNames.edit,
+        editUtilizatorClass: this.state.iconClassNames.edit,
+        editParolaClass: this.state.iconClassNames.edit,
+
+        valueCnpClass: this.state.valueClassNames.edit,
+        valueNumeClass: this.state.valueClassNames.edit,
+        valuePrenumeClass: this.state.valueClassNames.edit,
+        valueUtilizatorClass: this.state.valueClassNames.edit,
+        valueParolaClass: this.state.valueClassNames.edit,
+      },
+      () => 
+      {
+        this.update( 'grad', this.state.nextGrad);
+      });
+    }
+  }
+
   // numeric input only
   onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
@@ -695,7 +734,7 @@ class Setari extends React.Component {
   onGenericKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
-    if (27 === charCode) {
+    if (27 === charCode) {console.log(e.target)
       this.onViewSettingsClick({target: {id: 'view-user-settings'}})
     } 
 
@@ -725,7 +764,11 @@ class Setari extends React.Component {
           showPrenumeError: false,
           showUtilizatorError: false,
           showParolaError: false,
+        },
+        () => {
+          this.submitOnMenuClose(e);
         });
+
       }
     }
   }
@@ -960,7 +1003,7 @@ class Setari extends React.Component {
 
   componentDidUpdate (prevProps, prevState) {
     // Focus input elements when they are enabled
-    console.log(this.state.editGrad, this.state.nextGrad)
+    //console.log(this.state.editGrad, this.state.nextGrad)
     this.focusInput(prevState);
   }
 
@@ -1052,7 +1095,7 @@ class Setari extends React.Component {
                       openMenuOnFocus={true}
                       closeMenuOnSelect={true}
                       blurInputOnSelect={true}
-                      onBlur={this.handleSettingsSubmit}
+                      //onMenuClose={this.submitOnMenuClose}
                       inputId='--grad-select-input'/> 
                     <i id='--settings-edit-grad'  
                       className={this.state.editGradClass}

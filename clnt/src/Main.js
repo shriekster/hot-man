@@ -259,10 +259,10 @@ class Main extends React.Component {
                     <i className='fas fa-user-cog user-icon--big'></i>
                     }
                   </div>
-                  <div className='bold'>{this.props.user.grad} {this.props.user.nume} {this.props.user.prenume}</div>
+                  <div className='bold'>{this.state.user.grad + ' ' + this.state.user.nume + ' ' + this.state.user.prenume}</div>
                   <div>
                     <div className='user-settings--attribute'>
-                      <i className='fas fa-id-card --attribute-icon'></i> <span className='bold --attribute-text'>{this.props.user.utilizator}</span>
+                      <i className='fas fa-id-card --attribute-icon'></i> <span className='bold --attribute-text'>{this.state.user.utilizator}</span>
                     </div>
                     <div className='user-settings--attribute'>
                       <i className='fas fa-user-tag --attribute-icon'></i> <span className='bold --attribute-text'>{this.props.user.rol}</span>
