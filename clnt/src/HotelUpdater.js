@@ -980,8 +980,7 @@ class HotelUpdater extends React.Component {
   render() {
     return (
       <div>
-        <div>Setările contului de utilizator</div>
-        <hr className='view--separator'/>
+        <div>Actualizează datele hotelului pe care îl administrezi:</div>
         <div id='view-user-settings' 
           className='view-user-settings'
           onClick={this.onViewSettingsClick}>

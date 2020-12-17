@@ -89,7 +89,7 @@ class Main extends React.Component {
       }
 
     } else {
-      nextView = Rezervari;
+      nextView = Administrare;
       nextClass = '';
     }
 
@@ -188,10 +188,15 @@ class Main extends React.Component {
           this.setState({
             hiddenMenuClass: '--hidden-menu',
           });
+        } else {
+          this.setState({
+            hiddenMenuClass: '',
+          });
         }
       }
     });
   }
+
 
   render() {
     let Component = this.state.view;
