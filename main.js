@@ -63,7 +63,9 @@ app.whenReady().then(() => {
   server.on('error', onError);
   server.on('listening', onListening);
 
-  createWindow()
+  createWindow();
+
+  process.stderr.write('\x07'); //?? play a sound on launch
   
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
