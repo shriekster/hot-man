@@ -169,14 +169,14 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    const token = this.props.token;
 
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        token: token
+        token: this.props.token,
+        task: 'read',
       })
     };
 

@@ -39,47 +39,71 @@ router.post('/', authorization, function(req, res, next) {
     email: '',
   }
 
-  const hCount = db.prepare(`SELECT COUNT(*) AS value
+  if (req.body) {
+    switch (req.body.task) {
+
+      case 'create': {
+        break;
+      }
+
+      case 'read': {
+        const hCount = db.prepare(`SELECT COUNT(*) AS value
                                 FROM Hoteluri`);
-  const who = db.prepare(`SELECT *
-                          FROM Hoteluri`);
+        const who = db.prepare(`SELECT *
+                                FROM Hoteluri`);
 
-  const hotelCount = hCount.get();
+        const hotelCount = hCount.get();
 
-  if (hotelCount && undefined !== hotelCount) {
-    switch(hotelCount.value) {
-      case 0: {}
+        if (hotelCount && undefined !== hotelCount) {
+          switch(hotelCount.value) {
 
+            case 1: {
+              let single = who.get();
+              
+              if (single && undefined !== single) {
+                hotel = {
+                  nume: single.Nume,
+                  judet: single.Judet,
+                  sector: single.Sector,
+                  strada: single.Strada,
+                  numar: single.Numar,
+                  codPostal: single.CodPostal,
+                  telefon: single.Telefon,
+                  fax: single.Fax,
+                  email: single.Email,
+                }
+              }
 
-      case 1: {
-        let single = who.get();
-        
-        if (single && undefined !== single) {
-          hotel = {
-            nume: single.Nume,
-            judet: single.Judet,
-            sector: single.Sector,
-            strada: single.Strada,
-            numar: single.Numar,
-            codPostal: single.CodPostal,
-            telefon: single.Telefon,
-            fax: single.Fax,
-            email: single.Email,
+              break;
+            }
+
+            default: {
+              break;
+            }
           }
         }
 
+        res.json({
+          hotel: hotel
+        });
+        break;
+      }
+
+      case 'update': {
         break;
       }
 
       default: {
+
+        res.json({
+          status: 'error',
+          hotel: hotel
+        });
+
         break;
       }
     }
   }
-
-  res.json({
-    hotel: hotel
-  })
 });
 
 router.all('/', function(req, res, next) {

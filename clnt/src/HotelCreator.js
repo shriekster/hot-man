@@ -24,6 +24,8 @@ class HotelCreator extends React.Component {
 
       fetching: false,
 
+      completed: false,
+
       nextNume: '',
       nextJudet: '',
       nextLocalitate: '',
@@ -56,12 +58,85 @@ class HotelCreator extends React.Component {
 
       showError: false,
     };
+
+    this.localitateInput = React.createRef();
   }
 
   handleSubmit(e) {
     //console.log(e.target.id)
     if (e) {
       e.preventDefault();
+
+      let wnume = false;
+      let wjudet = false;
+      let wlocalitate = false;
+      let wstrada = false;
+      let wnumar = false;
+      let wtelefon = false;
+
+      if (!this.state.nextNume) wnume = true;
+      if (!this.state.nextJudet) wjudet = true;
+      if (!this.state.nextLocalitate) wlocalitate = true;
+      if (!this.state.nextStrada) wstrada = true;
+      if (!this.state.nextNumar) wnumar = true;
+      if (!this.state.nextTelefon) wtelefon = true;
+
+      let fetchAllowed = !(wnume || wjudet || wlocalitate || wstrada || wnumar || wtelefon);
+
+      this.setState({
+        showNumeWarning: wnume,
+        showJudetWarning: wjudet,
+        showLocalitateWarning: wlocalitate,
+        showStradaWarning: wstrada,
+        showNumarWarning: wnumar,
+        showTelefonWarning: wtelefon,
+      }, () => {
+
+        if (fetchAllowed) {
+          let hotel = {
+            nume: this.state.nextNume,
+            judet: this.state.nextJudet,
+            localitate: this.state.nextLocalitate,
+            strada: this.state.nextStrada,
+            numar: this.state.nextNumar,
+            codPostal: this.state.nextCodPostal,
+            telefon: this.state.nextTelefon,
+            fax: this.state.nextFax,
+            email: this.state.nextEmail,
+          };
+        
+          const requestOptions = {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token: this.props.token,
+              task: 'create',
+              hotel: hotel,
+            })
+          };
+  
+          this.setState({fetching: true}, () => {
+            fetch('http://localhost:3001/main/administrare', requestOptions)
+            .then(response => response.json())
+            .then(registered => {
+              this.setState({fetching: false}, () => {
+                console.log(registered);
+  
+                this.props.onChange('Login')
+              });
+            })
+            .catch(error => {
+              console.log(error); // dev mode only!
+  
+              this.setState({
+                fetching: false,
+                showError: true,
+              });
+            });
+          });
+        }
+      });
     }
   }
 
@@ -117,6 +192,8 @@ class HotelCreator extends React.Component {
         }
 
         if (judet.includes('București')) {
+          this.localitateInput.current.value = 'București';
+
           this.setState({
             nextJudet: optional.value.trim(),
             nextLocalitate: 'București',
@@ -416,302 +493,415 @@ class HotelCreator extends React.Component {
 
   componentDidMount() {}
 
-  componentDidUpdate (prevProps, prevState) {}
+  componentDidUpdate (prevProps, prevState) {
+    let nextCompleted = 
+    this.state.nextNume && this.state.nextJudet && this.state.nextLocalitate && 
+    this.state.nextStrada && this.state.nextNumar && this.state.nextTelefon;
+
+    if (this.state.completed !== nextCompleted) {
+      this.setState({
+        completed: nextCompleted,
+      });
+    }
+  }
 
   render() {
     return (
-      <div>
-        <form id='create-hotel-form'
-          className='create-hotel-form'>
-        <div className='create-hotel-container'>Completează datele hotelului pe care îl administrezi:</div>
-        <div id='view-hotel-settings' 
-          className='view-hotel-settings'>
-          <div id='hotel-settings-container'>
-          <div className='--settings-item'>
+      <div className='create-hotel'>
+          <form id='create-hotel-form'
+            className='create-hotel-form'
+            onSubmit={this.handleSubmit}>
+          <div id='hotel-form-container' 
+            className='hotel-form-container'>
+            <div id='hotel-attributes-container'
+              className='hotel-attributes-container'>
               <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Nume invalid
-                  </>
-                }
                 allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showNumeError}>
-                <div className='--settings-input'>
-                  <span>Nume<span className='bold red'> *</span></span>
-                  <input id='--settings-nume'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextNume}
-                    placeholder='Introdu numele'>
-                  </input>
-                </div>
-              </Tippy>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
                 content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Judet invalid
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showJudetError}>
-                <div className='--settings-input'>
-                <span>Judet<span className='bold red'> *</span></span>
-                    <Select
-                      id='--settings-judet'
-                      onInputChange={(inputValue, action) => this.onSelect(null, {id: 'judet', value: inputValue, action: action.action})}
-                      onChange={(inputValue, action) => this.onSelect(null, {id: 'judet', label: inputValue.label, value: inputValue.value, action: action.action})}
-                      maxMenuHeight={100}
-                      placeholder='Selectează...'
-                      noOptionsMessage={(msg) => 'Nu există'}
-                      className='selhc-container'
-                      classNamePrefix='selhc' 
-                      options={this.props.judete} 
-                      inputId='--judet-select-input'/> 
+                  <div className='create-hotel-info'>
+                    <i className='fas fa-clipboard-list --todo-icon'></i>
+                    <hr className='view--separator'/>
+                    <div>Completează datele hotelului pe care îl administrezi</div>
                   </div>
-              </Tippy>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Localitate invalidă
-                  </>
                 }
-                allowHTML={true}
                 placement='right'
                 arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showLocalitateError}>
-                <div className='--settings-input'>
-                <span>Localitate<span className='bold red'> *</span></span>
-                  <input id='--settings-localitate'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextLocalitate}
-                    placeholder='Introdu localitatea'>
-                  </input>
-                </div>
-              </Tippy>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Stradă invalidă
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showStradaError}>
-                <div className='--settings-input'>
-                <span>Stradă<span className='bold red'> *</span></span>
-                  <input id='--settings-strada'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextStrada}
-                    placeholder='Introdu denumirea străzii'>
-                  </input>
-                </div>
-              </Tippy>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
+                theme='blue-material-thin'
+                visible={!this.state.completed}
+                offset={[0, 350]}>
+                <div id='--required-attributes'>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-exclamation-circle --hotel-icon'></i> Introdu numele hotelului
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    visible={this.state.showNumeWarning}>
+                    <Tippy
+                      content={
+                        <div className='hotel-tippy-content'>
+                          <i className='fas fa-minus-circle'></i> Nume invalid
+                        </div>
+                      }
+                      allowHTML={true}
+                      placement='right'
+                      arrow={false}
+                      theme='red-material-warning'
+                      visible={this.state.showNumeError}>
+                      <div className='--hotel-item'>
+                        <div className='--hotel-input'>
+                          <span>Nume<span className='bold red'> *</span></span>
+                            <input id='--settings-nume'
+                              autoComplete='off'
+                              autoCorrect='off'
+                              spellCheck={false}
+                              className='--settings-value --value-editing--adm -inline'
+                              onInput={this.onValueInput}
+                              onKeyDown={this.onGenericKeyDown}
+                              placeholder='Introdu numele'>
+                            </input>
+                        </div>
+                      </div>
+                    </Tippy>
+                  </Tippy>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-exclamation-circle --hotel-icon'></i> Selectează județul
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    visible={this.state.showJudetWarning}>
+                    <Tippy
+                      content={
+                        <div className='hotel-tippy-content'>
+                          <i className='fas fa-minus-circle --hotel-icon'></i> Judet invalid
+                        </div>
+                      }
+                      allowHTML={true}
+                      placement='right'
+                      arrow={false}
+                      theme='red-material-warning'
+                      offset={[0, 10]}
+                      visible={this.state.showJudetError}>
+                      <div className='--hotel-item'>
+                        <div className='--hotel-input'>
+                          <span>Judet<span className='bold red'> *</span></span>
+                          <Select
+                            id='--settings-judet'
+                            onInputChange={(inputValue, action) => this.onSelect(null, {id: 'judet', value: inputValue, action: action.action})}
+                            onChange={(inputValue, action) => this.onSelect(null, {id: 'judet', label: inputValue.label, value: inputValue.value, action: action.action})}
+                            maxMenuHeight={100}
+                            placeholder='Selectează...'
+                            noOptionsMessage={(msg) => 'Nu există'}
+                            className='selhc-container'
+                            classNamePrefix='selhc' 
+                            options={this.props.judete} 
+                            inputId='--judet-select-input'/> 
+                        </div>
+                      </div>
+                    </Tippy>
+                  </Tippy>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-exclamation-circle --hotel-icon'></i> Introdu localitatea
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    visible={this.state.showLocalitateWarning}>
+                    <Tippy
+                      content={
+                        <div className='hotel-tippy-content'>
+                          <i className='fas fa-minus-circle --hotel-icon'></i> Localitate invalidă
+                        </div>
+                      }
+                      allowHTML={true}
+                      placement='right'
+                      arrow={false}
+                      theme='red-material-warning'
+                      offset={[0, 10]}
+                      visible={this.state.showLocalitateError}>
+                      <div className='--hotel-item'>
+                        <div className='--hotel-input'>
+                          <span>Localitate<span className='bold red'> *</span></span>
+                          <input id='--settings-localitate'
+                            autoComplete='off'
+                            autoCorrect='off'
+                            spellCheck={false}
+                            className='--settings-value --value-editing--adm -inline'
+                            onInput={this.onValueInput}
+                            onKeyDown={this.onGenericKeyDown}
+                            placeholder='Introdu localitatea'
+                            ref={this.localitateInput}>
+                          </input>
+                        </div>
+                      </div>
+                    </Tippy>
+                  </Tippy>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-exclamation-circle --hotel-icon'></i> Introdu denumirea străzii
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    visible={this.state.showStradaWarning}>
+                    <Tippy
+                      content={
+                        <div className='hotel-tippy-content'>
+                          <i className='fas fa-minus-circle --hotel-icon'></i> Stradă invalidă
+                        </div>
+                      }
+                      allowHTML={true}
+                      placement='right'
+                      arrow={false}
+                      theme='red-material-warning'
+                      offset={[0, 10]}
+                      visible={this.state.showStradaError}>
+                      <div className='--hotel-item'>
+                        <div className='--hotel-input'>
+                          <span>Stradă<span className='bold red'> *</span></span>
+                          <input id='--settings-strada'
+                            autoComplete='off'
+                            autoCorrect='off'
+                            spellCheck={false}
+                            className='--settings-value --value-editing--adm -inline'
+                            onInput={this.onValueInput}
+                            onKeyDown={this.onGenericKeyDown}
+                            placeholder='Introdu denumirea străzii'>
+                          </input>
+                        </div>
+                      </div>
+                    </Tippy>
+                  </Tippy>
+                  <Tippy
                   content={
-                    <>
-                      <i className='fas fa-minus-circle'></i> Număr invalid
-                    </>
+                    <div className='hotel-tippy-content'>
+                      <i className='fas fa-exclamation-circle --hotel-icon'></i> Introdu numărul străzii
+                    </div>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={false}
+                  theme='red-material-warning'
+                  visible={this.state.showNumarWarning}>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-minus-circle --hotel-icon'></i> Număr invalid
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    offset={[0, 10]}
+                    visible={this.state.showNumarError}>
+                    <div className='--hotel-item'>
+                      <div className='--hotel-input'>
+                        <span>Număr<span className='bold red'> *</span></span>
+                        <input id='--settings-numar'
+                          autoComplete='off'
+                          autoCorrect='off'
+                          spellCheck={false}
+                          className='--settings-value --value-editing--adm -inline'
+                          onInput={this.onValueInput}
+                          onKeyDown={this.onKeyDown}
+                          placeholder='Introdu numărul străzii'>
+                        </input>
+                      </div>
+                    </div>
+                  </Tippy>
+                </Tippy>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-exclamation-circle --hotel-icon'></i> Introdu numărul de telefon
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    visible={this.state.showTelefonWarning}>
+                    <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-minus-circle --hotel-icon'></i> Telefon invalid
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    offset={[0, 10]}
+                    visible={this.state.showTelefonError}>
+                    <div className='--hotel-item'>
+                      <div className='--hotel-input'>
+                        <span>Telefon<span className='bold red'> *</span></span>
+                        <input id='--settings-telefon'
+                          autoComplete='off'
+                          autoCorrect='off'
+                          spellCheck={false}
+                          className='--settings-value --value-editing--adm -inline'
+                          onInput={this.onValueInput}
+                          onKeyDown={this.onKeyDown}
+                          placeholder='Introdu numărul de telefon'>
+                        </input>
+                      </div>
+                    </div>
+                    </Tippy>
+                  </Tippy>
+                </div>
+              </Tippy>
+              <Tippy
+                allowHTML={true}
+                content={
+                  <div className='create-hotel-info'>
+                    <i className='fas fa-clipboard-check --info-icon'></i>
+                    <hr className='view--separator'/>
+                    <div>Poți completa câmpurile rămase (opțional) sau poți face click pe butonul</div>
+                    <div className='--mock'>
+                    <i className='fas fa-angle-left --mock-icon'></i>
+                      <span>Creează hotel</span>
+                      <i className='fas fa-angle-right --mock-icon'></i>
+                    </div>
+                  </div>
+                }
+                placement='right'
+                arrow={false}
+                theme='blue-material-thin'
+                visible={this.state.completed}
+                offset={[0, 350]}>
+                <div id='--optional-attributes'>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-minus-circle --hotel-icon'></i> Cod poștal invalid
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    offset={[0, 10]}
+                    visible={this.state.showCodPostalError}>
+                    <div className='--hotel-item'>
+                      <div className='--hotel-input'>
+                        <span>
+                          Cod poștal
+                        </span>
+                        <input id='--settings-cod-postal'
+                          autoComplete='off'
+                          autoCorrect='off'
+                          spellCheck={false}
+                          className='--settings-value --value-editing--adm -inline'
+                          onInput={this.onValueInput}
+                          onKeyDown={this.onKeyDown}
+                          placeholder='Introdu codul poștal'>
+                        </input>
+                      </div>
+                    </div>
+                  </Tippy>
+                  <Tippy
+                    content={
+                      <div className='hotel-tippy-content'>
+                        <i className='fas fa-minus-circle --hotel-icon'></i> Fax invalid
+                      </div>
+                    }
+                    allowHTML={true}
+                    placement='right'
+                    arrow={false}
+                    theme='red-material-warning'
+                    offset={[0, 10]}
+                    visible={this.state.showFaxError}>
+                    <div className='--hotel-item'>
+                      <div className='--hotel-input'>
+                        <span>
+                          Fax
+                        </span>
+                        <input id='--settings-fax'
+                          autoComplete='off'
+                          autoCorrect='off'
+                          spellCheck={false}
+                          className='--settings-value --value-editing--adm -inline'
+                          onInput={this.onValueInput}
+                          onKeyDown={this.onKeyDown}
+                          placeholder='Introdu numărul de fax'>
+                        </input>
+                      </div>
+                    </div>
+                  </Tippy>
+                  <Tippy
+                  content={
+                    <div className='hotel-tippy-content'>
+                      <i className='fas fa-minus-circle --hotel-icon'></i> Email invalid
+                    </div>
                   }
                   allowHTML={true}
                   placement='right'
                   arrow={false}
                   theme='red-material-warning'
                   offset={[0, 10]}
-                  visible={this.state.showNumarError}>
-                <div className='--settings-input'>
-                <span>Număr<span className='bold red'> *</span></span>
-                  <input id='--settings-numar'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onKeyDown}
-                    value={this.state.nextNumar}
-                    placeholder='Introdu numărul străzii'>
-                  </input>
+                  visible={this.state.showEmailError}>
+                  <div className='--hotel-item'>
+                    <div className='--hotel-input'>
+                      <span>
+                        Email
+                      </span>
+                      <input id='--settings-email'
+                        autoComplete='off'
+                        autoCorrect='off'
+                        spellCheck={false}
+                        className='--settings-value --value-editing--adm -inline'
+                        onInput={this.onValueInput}
+                        onKeyDown={this.onGenericKeyDown}
+                        placeholder='Introdu adresa de email'>
+                      </input>
+                    </div>
+                  </div>
+                </Tippy>
                 </div>
               </Tippy>
             </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Cod poștal invalid
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showCodPostalError}>
-                <div className='--settings-input'>
-                  <span>
-                    Cod poștal
-                  </span>
-                  <input id='--settings-cod-postal'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onKeyDown}
-                    value={this.state.nextCodPostal}
-                    placeholder='Introdu codul poștal'>
-                  </input>
-                </div>
-              </Tippy>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Telefon invalid
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showTelefonError}>
-                <div className='--settings-input'>
-                  <span>
-                    Telefon
-                  </span>
-                  <input id='--settings-telefon'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onKeyDown}
-                    value={this.state.nextTelefon}
-                    placeholder='Introdu numărul de telefon'>
-                  </input>
-                </div>
-              </Tippy>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Fax invalid
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showFaxError}>
-                <div className='--settings-input'>
-                  <span>
-                    Fax
-                  </span>
-                  <input id='--settings-fax'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onKeyDown}
-                    value={this.state.nextFax}
-                    placeholder='Introdu numărul de fax'>
-                  </input>
-                </div>
-              </Tippy>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Email invalid
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 10]}
-                visible={this.state.showEmailError}>
-                <div className='--settings-input'>
-                  <span>
-                    Email
-                  </span>
-                  <input id='--settings-email'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className='--settings-value --value-editing--adm -inline'
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextEmail}
-                    placeholder='Introdu adresa de email'>
-                  </input>
-                </div>
-              </Tippy>
-            </div>
+            <Tippy
+              allowHTML={true}
+              content={
+                <>
+                  <i className='fas fa-times-circle'></i> Eroare! Încearcă din nou.
+                </>
+              }
+              placement='bottom'
+              arrow={false}
+              theme='red-material-warning'
+              visible={this.state.showError}
+              offset={[0, 40]}>
+              <button className='--create-hotel-btn'>
+                Creează hotel
+              </button>
+            </Tippy>
+            <Spinner
+              className='--hotel-loading'
+              width='50px'
+              height='50px'
+              status='altLoading'
+              visibility={this.state.fetching}/>
           </div>
-          <Tippy
-            allowHTML={true}
-            content={
-              <>
-                <i className='fas fa-times-circle'></i> Eroare! Încearcă din nou.
-              </>
-            }
-            placement='bottom'
-            arrow={false}
-            theme='red-material-warning'
-            visible={this.state.showError}>
-            <button className='--create-hotel-btn'>
-              Creează hotel
-            </button>
-          </Tippy>
-          <Spinner
-                className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
-                visibility={this.state.fetching}/>
-        </div>
-        </form>
+          </form>
       </div>
     );
   }

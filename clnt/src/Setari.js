@@ -186,7 +186,7 @@ class Setari extends React.Component {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       attributeName: attributeName,
-      attributeValue: attributeValue,
+      attributeValue: attributeValue.trim(),
       token: this.state.token,
       username: this.state.utilizator,
     })
@@ -756,7 +756,7 @@ class Setari extends React.Component {
       if (optional.id === 'grad' && optional.action === 'select-option') {
         
         this.setState({
-          nextGrad: optional.value.trim(),
+          nextGrad: optional.value,
 
           showCnpError: false,
           showGradError: false,
@@ -792,7 +792,7 @@ class Setari extends React.Component {
           }
           else {
             this.setState({
-              nextCnp: e.target.value.trim(),
+              nextCnp: e.target.value,
 
               showCnpError: false,
               showGradError: false,
@@ -807,7 +807,7 @@ class Setari extends React.Component {
 
         case '--settings-nume': {
           this.setState({
-            nextNume: e.target.value.trim(),
+            nextNume: e.target.value,
 
             showCnpError: false,
             showGradError: false,
@@ -821,7 +821,7 @@ class Setari extends React.Component {
 
         case '--settings-prenume': {
           this.setState({
-            nextPrenume: e.target.value.trim(),
+            nextPrenume: e.target.value,
 
             showCnpError: false,
             showGradError: false,
@@ -835,7 +835,7 @@ class Setari extends React.Component {
 
         case '--settings-utilizator': {
           this.setState({
-            nextUtilizator: e.target.value.trim(),
+            nextUtilizator: e.target.value,
 
             showCnpError: false,
             showGradError: false,
@@ -849,7 +849,7 @@ class Setari extends React.Component {
 
         case '--settings-parola': {
           this.setState({
-            nextParola: e.target.value.trim(),
+            nextParola: e.target.value,
 
             showCnpError: false,
             showGradError: false,

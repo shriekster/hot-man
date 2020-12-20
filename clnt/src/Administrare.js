@@ -79,7 +79,8 @@ class Administrare extends React.Component {
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        token: this.props.token
+        token: this.props.token,
+        task: 'read',
       })
     };
 
@@ -108,12 +109,14 @@ class Administrare extends React.Component {
               token={this.props.token}
               judete={this.state.judete}
               hotel={this.state.hotel}
-              hotelUpdate={this.onHotelUpdate} /> :
+              hotelUpdate={this.onHotelUpdate}
+              onChange={this.props.onChange} /> :
             <HotelCreator
               token={this.props.token}
               judete={this.state.judete}
               hotel={this.state.hotel}
-              hotelUpdate={this.onHotelUpdate} />
+              hotelUpdate={this.onHotelUpdate}
+              onChange={this.props.onChange} />
           }
         </div>
       </div>

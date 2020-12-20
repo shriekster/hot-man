@@ -784,7 +784,13 @@ div[class^='sel-'] > * {
 
 /* Administrare */
 
-.--settings-input {
+.create-hotel {
+  display: flex;
+  align-items: center;
+  height: 82vh;
+}
+
+.--hotel-input {
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -796,18 +802,13 @@ div[class^='sel-'] > * {
   font-size: 18px;
 }
 
-.view-hotel-settings {
+.hotel-form-container {
   font-size: 18px;
-  height: 70vh;
+  /*height: 80vh;*/
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
-}
-
-.view-create-hotel {
-  font-size: 18px;
-  font-family: 'Source Sans Pro Regular';
 }
 
 .create-hotel-form {
@@ -817,7 +818,7 @@ div[class^='sel-'] > * {
   justify-content: space-evenly;
 }
 
-.create-hotel-container {
+.create-hotel-help {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -898,6 +899,11 @@ div[class^='selhc__control'] {
   margin: 0 0 0 -4px !important;
 }
 
+/* !!! all react select input wrapper divs !!! */
+div[class*='-Input'] {
+  margin: 0 !important;
+}
+
 .selhc__placeholder {
   margin-left: -4px !important;
 }
@@ -927,4 +933,66 @@ button.--create-hotel-btn {
 
 button.--create-hotel-btn:hover {
   color: #009500;
+}
+
+.hotel-tippy-content {
+  /*
+  position: absolute;
+  left: 390px;
+  width: max-content;
+  */
+}
+
+.--hotel-loading {
+  margin: 8px auto;
+}
+
+.--hotel-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(37, 170, 169, 1);
+  margin-bottom: 2vh;
+  width: 450px;
+  height: 44px;
+  position: relative;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+}
+
+.create-hotel-info {
+  font-size: 18px;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif ;
+  color: darkslategray;
+  text-align: center;
+}
+
+.--todo-icon {
+  font-size: 50px;
+  color: #D72C25;
+}
+
+.--info-icon {
+  font-size: 50px;
+  color: #009500;
+}
+
+.--hotel-info-highlight {
+  color: #009500;
+}
+
+.--mock {
+  min-width: fit-content;
+  width: 50%;
+  margin: 4px auto;
+  color: darkslategray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.--mock-icon {
+  font-size: 24px;
+}
+
+.create-hotel-info::selection {
+  background-color: transparent !important;
 }
