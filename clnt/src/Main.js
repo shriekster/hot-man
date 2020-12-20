@@ -184,7 +184,7 @@ class Main extends React.Component {
     .then(response => response.json())
     .then(who => {
       if (who.hotel) {
-        if(who.hotel.nume) { //
+        if(!who.hotel.nume) { //
           this.setState({
             hiddenMenuClass: '--hidden-menu',
           });
