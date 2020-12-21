@@ -29,6 +29,8 @@ class Main extends React.Component {
 
     this.onUserUpdate = this.onUserUpdate.bind(this);
 
+    this.onHotelUpdate = this.onHotelUpdate.bind(this);
+
     this.state = {
       showUserSettings: false,
       userSettingsClass: '',
@@ -56,6 +58,7 @@ class Main extends React.Component {
 
       token: this.props.token,
       user: this.props.user,
+      hotel: '',
     };
   }
 
@@ -168,8 +171,16 @@ class Main extends React.Component {
     }
   }
 
-  componentDidMount() {
+  onHotelUpdate(hotel) {
+    if (hotel) {
+      this.setState({
+        hotel: hotel,
+        hiddenMenuClass: '',
+      })
+    }
+  }
 
+  componentDidMount() {
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -183,16 +194,23 @@ class Main extends React.Component {
     fetch('http://localhost:3001/main/administrare', requestOptions)
     .then(response => response.json())
     .then(who => {
-      if (who.hotel) {
-        if(!who.hotel.nume) { //
+      if ('empty' === who.status) {
+        if (who.hotel && !who.hotel.nume) { //
           this.setState({
             hiddenMenuClass: '--hidden-menu',
           });
-        } else {
+        } 
+      } else 
+      if ('valid' === who.status) {
+        if (who.hotel && who.hotel.nume) {
           this.setState({
             hiddenMenuClass: '',
+            hotel: who.hotel,
           });
         }
+      } else 
+      if ('denied' === who.status) {
+        this.signOut();
       }
     });
   }
@@ -319,9 +337,11 @@ class Main extends React.Component {
               <Component 
                 user={this.state.user}
                 token={this.state.token}
+                hotel={this.state.hotel}
                 onUserUpdate={this.onUserUpdate}
                 onChange={this.props.onChange}
-                changeMenu={this.changeView}/>
+                changeMenu={this.changeView}
+                onHotelUpdate={this.onHotelUpdate}/>
             </Suspense>
           </div>
         </div>

@@ -8,11 +8,7 @@ class Administrare extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onHotelUpdate = this.onHotelUpdate.bind(this);
-
     this.state = {
-      hotel: '',
-
       judete: [
         { value: 'AB', label: 'Alba' },
         { value: 'AR', label: 'Arad' },
@@ -65,32 +61,7 @@ class Administrare extends React.Component {
     };
   } 
 
-  onHotelUpdate(hotel) {
-    if (hotel) {
-      this.setState({
-        hotel: hotel,
-      })
-    }
-  }
-
   componentDidMount() {
-    const requestOptions = {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: this.props.token,
-        task: 'read',
-      })
-    };
-
-    fetch('http://localhost:3001/main/administrare', requestOptions)
-    .then(response => response.json())
-    .then(who => {
-      this.setState({
-        hotel: who.hotel,
-      });
-    });
   }
 
   render() {
@@ -104,18 +75,18 @@ class Administrare extends React.Component {
         <div id='view-administrare'
           className='view-administrare'>
           {
-            this.state.hotel.nume  ?
+            this.props.hotel.nume  ?
             <HotelUpdater
               token={this.props.token}
               judete={this.state.judete}
-              hotel={this.state.hotel}
-              hotelUpdate={this.onHotelUpdate}
+              hotel={this.props.hotel}
+              hotelUpdate={this.props.onHotelUpdate}
               onChange={this.props.onChange} /> :
             <HotelCreator
               token={this.props.token}
               judete={this.state.judete}
-              hotel={this.state.hotel}
-              hotelUpdate={this.onHotelUpdate}
+              hotel={this.props.hotel}
+              hotelUpdate={this.props.onHotelUpdate}
               onChange={this.props.onChange} />
           }
         </div>

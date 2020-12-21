@@ -121,7 +121,7 @@ class Signup extends React.Component {
     
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && 
+        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
         !(charCode >= 37 && charCode <= 40)) {
         e.preventDefault();
         return false;
@@ -130,7 +130,7 @@ class Signup extends React.Component {
 
     if (e.target.value.length > 13) {
       if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && 
+        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
         !(charCode >= 37 && charCode <= 40))  {
         e.preventDefault();
         return false;
@@ -146,7 +146,7 @@ class Signup extends React.Component {
 
     if (e.target.value.length > 64) {
       if(charCode !== 8 && charCode !== 9 && 
-         charCode !== 17 && charCode !== 46 && 
+         charCode !== 17 && charCode !== 46 && charCode !== 13 &&
          !(charCode >= 37 && charCode <= 40)) {
         e.preventDefault();
         return false;
@@ -430,7 +430,8 @@ class Signup extends React.Component {
         <form 
           onSubmit={this.handleSubmit}
           autoComplete='off'
-          autoCorrect='off'>
+          autoCorrect='off'
+          spellCheck={false}>
           <div className='Form-field'>
             <label htmlFor='cnp'>
               Cod numeric personal

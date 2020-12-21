@@ -711,7 +711,7 @@ class Setari extends React.Component {
     
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && 
+        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
         !(charCode >= 37 && charCode <= 40)) {
         e.preventDefault();
         return false;
@@ -720,7 +720,7 @@ class Setari extends React.Component {
 
     if (e && e.target.value.length > 13) {
       if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && 
+        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
         !(charCode >= 37 && charCode <= 40))  {
         e.preventDefault();
         return false;
@@ -740,7 +740,7 @@ class Setari extends React.Component {
 
     if (e && e.target.value.length > 64) {
       if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && 
+          charCode !== 17 && charCode !== 46 && charCode !== 13 &&
           !(charCode >= 37 && charCode <= 40)) {
         e.preventDefault();
         return false;

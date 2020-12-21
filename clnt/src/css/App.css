@@ -990,7 +990,9 @@ button.--create-hotel-btn:hover {
 }
 
 .--mock-icon {
-  font-size: 24px;
+  font-size: 16px;
+  margin: 2px;
+  color: darkgreen;
 }
 
 .create-hotel-info::selection {

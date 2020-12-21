@@ -86,7 +86,7 @@ function isValidUsername(user) {
 // Nume, prenume etc.
 function isValidOtherName(name) {
   let valid = false;
-  let regex = /(\b[A-Z][a-z]*[\s-]*\b)+/;
+  let regex = /(\b[A-Z][a-z]*[\s-]?\b)+/;
   let test = regex.exec(name);
 
   // If the string matched by the regex matches the input string => the input string conforms to the requirements

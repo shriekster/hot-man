@@ -123,7 +123,39 @@ class HotelCreator extends React.Component {
               this.setState({fetching: false}, () => {
                 console.log(registered);
   
-                this.props.onChange('Login')
+                if (registered) {
+                  switch (registered.status) {
+                    case 'valid' : {
+                      this.props.hotelUpdate(hotel)
+                      break;
+                    }
+
+                    case 'invalid': {
+                      this.setState({
+                        showNumeError: registered.hotel.nume,
+                        showJudetError: registered.hotel.judet,
+                        showLocalitateError: registered.hotel.localitate,
+                        showStradaError: registered.hotel.strada,
+                        showNumarError: registered.hotel.numar,
+                        showCodPostalError: registered.hotel.codPostal,
+                        showTelefonError: registered.hotel.telefon,
+                        showFaxError: registered.hotel.fax,
+                        showEmailError: registered.hotel.email,
+                      });
+                      break;
+                    }
+
+                    /** It should be handled separately!!! */
+                    case 'error': {
+
+                    } 
+                    case 'full':
+                    case 'denied': {
+                      this.props.onChange('Login');
+                      break;
+                    }
+                  }
+                }
               });
             })
             .catch(error => {
@@ -146,16 +178,16 @@ class HotelCreator extends React.Component {
     
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && 
+        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
         !(charCode >= 37 && charCode <= 40)) {
         e.preventDefault();
         return false;
       }
     }
 
-    if (e && e.target.value.length > 24) {
+    if (e && e.target.value.length > 9) {
       if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && 
+        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
         !(charCode >= 37 && charCode <= 40))  {
         e.preventDefault();
         return false;
@@ -169,8 +201,8 @@ class HotelCreator extends React.Component {
   onGenericKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
-    if (e && e.target.value.length > 64) {
-      if(charCode !== 8 && charCode !== 9 && 
+    if (e && e.target.value.length > 63) {
+      if(charCode !== 8 && charCode !== 9 && charCode !== 13 &&
           charCode !== 17 && charCode !== 46 && 
           !(charCode >= 37 && charCode <= 40)) {
         e.preventDefault();
@@ -510,6 +542,9 @@ class HotelCreator extends React.Component {
       <div className='create-hotel'>
           <form id='create-hotel-form'
             className='create-hotel-form'
+            autoComplete='off'
+            autoCorrect='off'
+            spellCheck={false}
             onSubmit={this.handleSubmit}>
           <div id='hotel-form-container' 
             className='hotel-form-container'>
@@ -776,9 +811,9 @@ class HotelCreator extends React.Component {
                     <hr className='view--separator'/>
                     <div>Poți completa câmpurile rămase (opțional) sau poți face click pe butonul</div>
                     <div className='--mock'>
-                    <i className='fas fa-angle-left --mock-icon'></i>
+                    <i className='fas fa-caret-left --mock-icon'></i>
                       <span>Creează hotel</span>
-                      <i className='fas fa-angle-right --mock-icon'></i>
+                      <i className='fas fa-caret-right --mock-icon'></i>
                     </div>
                   </div>
                 }
