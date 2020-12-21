@@ -998,3 +998,56 @@ button.--create-hotel-btn:hover {
 .create-hotel-info::selection {
   background-color: transparent !important;
 }
+
+/* Hotel overview */
+
+.hotel-overview {
+  font-size: 18px;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 80vh; /*adjust?*/
+  width: 100%;
+}
+
+.--overview-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 80%;
+  width: 100%;
+}
+
+.--icon-wrapper {
+  width: fit-content;
+}
+
+.--overview-icon {
+  font-size: 20px;
+  margin: 2px auto;
+}
+
+.--overview-posr {
+  position: relative;
+  cursor: pointer;
+  transition: all .1s linear;
+  width: 24.9%;
+  margin: 2px .08%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.--overview-posr:hover {
+  color: #009500;
+}
+
+.--overview-posr::selection {
+  background: none;
+}
+
+
+.--overview-posd {
+  margin: 0 4px;
+}

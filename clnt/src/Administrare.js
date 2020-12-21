@@ -3,6 +3,7 @@ import Tippy from '@tippyjs/react';
 
 import HotelCreator from './HotelCreator';
 import HotelUpdater from './HotelUpdater';
+import HotelOverview from './HotelOverview';
 
 class Administrare extends React.Component {
   constructor(props) {
@@ -75,8 +76,8 @@ class Administrare extends React.Component {
         <div id='view-administrare'
           className='view-administrare'>
           {
-            this.props.hotel.nume  ?
-            <HotelUpdater
+            this.props.hotel.nume  ?  /** Previously HotelUpdater was rendered */
+            <HotelOverview
               token={this.props.token}
               judete={this.state.judete}
               hotel={this.props.hotel}

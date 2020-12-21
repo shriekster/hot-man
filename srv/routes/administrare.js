@@ -5,6 +5,8 @@ const authorization = require('../auth');
 
 const db = require('../db');
 
+/** Validators */
+
 function isValidHotelName (name) {
   let valid = false;
   let regex = /(\b[A-Z][a-z]*[\s-]?\b)+/;
@@ -89,6 +91,18 @@ function isValidEmail (email) {
 
   return valid;
 }
+
+/** Updaters */
+
+function updateHotelName(name) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET Parola = ?,
+                                Extra = ?
+                            WHERE Utilizator = ?`);
+
+
+}
+
 
 router.options('/', function(req, res) {
   res.set({
@@ -215,7 +229,7 @@ router.post('/', authorization, function(req, res) {
                     const hotelInfo = insertHotel.run(
                       id, nume, judet, localitate, strada, numar, codPostal, telefon, fax, email
                     );
-                    console.log(hotelInfo)
+
                   } catch (error) {
                     if (error) {
                       status = 'error';
@@ -224,13 +238,13 @@ router.post('/', authorization, function(req, res) {
                     }
                   } finally {
                     if (inserted) {
-                      // ??
+                      // do nothing, everything seems ok
                     }
                   }
                 }
 
               } else {
-                status = error;
+                status = 'error';
               }
 
               break;

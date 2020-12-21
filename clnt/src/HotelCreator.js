@@ -145,9 +145,10 @@ class HotelCreator extends React.Component {
                       break;
                     }
 
-                    /** It should be handled separately!!! */
                     case 'error': {
-
+                      this.setState({
+                        showError: false,
+                      });
                     } 
                     case 'full':
                     case 'denied': {
@@ -249,6 +250,8 @@ class HotelCreator extends React.Component {
             showTelefonError: false,
             showFaxError: false,
             showEmailError: false,
+
+            showError: false,
           });
         } else {
           this.setState({
@@ -274,6 +277,8 @@ class HotelCreator extends React.Component {
             showTelefonError: false,
             showFaxError: false,
             showEmailError: false,
+
+            showError: false,
           });
         }
       }
@@ -307,6 +312,8 @@ class HotelCreator extends React.Component {
             showTelefonError: false,
             showFaxError: false,
             showEmailError: false,
+
+            showError: false,
           })
           break;
         }
@@ -334,6 +341,8 @@ class HotelCreator extends React.Component {
             showTelefonError: false,
             showFaxError: false,
             showEmailError: false,
+
+            showError: false,
           })
           break;
         }
@@ -361,6 +370,8 @@ class HotelCreator extends React.Component {
             showTelefonError: false,
             showFaxError: false,
             showEmailError: false,
+
+            showError: false,
           })
           break;
         }
@@ -392,6 +403,8 @@ class HotelCreator extends React.Component {
               showTelefonError: false,
               showFaxError: false,
               showEmailError: false,
+
+              showError: false,
             })
           }
           break;
@@ -424,6 +437,8 @@ class HotelCreator extends React.Component {
               showTelefonError: false,
               showFaxError: false,
               showEmailError: false,
+
+              showError: false,
             })
           }
           break;
@@ -456,6 +471,8 @@ class HotelCreator extends React.Component {
               showTelefonError: false,
               showFaxError: false,
               showEmailError: false,
+
+              showError: false,
             })
           }
           break;
@@ -488,6 +505,8 @@ class HotelCreator extends React.Component {
               showTelefonError: false,
               showFaxError: false,
               showEmailError: false,
+
+              showError: false,
             })
           }
           break;
@@ -516,6 +535,8 @@ class HotelCreator extends React.Component {
             showTelefonError: false,
             showFaxError: false,
             showEmailError: false,
+
+            showError: false,
           })
           break;
         }
