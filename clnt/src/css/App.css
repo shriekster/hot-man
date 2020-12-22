@@ -673,7 +673,7 @@ input[type='password'].--value-editing:focus,
   position: absolute;
   left: 460px;
   font-size: 36px;
-  transition: all .3s linear;
+  transition: all .2s linear;
 }
 
 .--editing {
@@ -787,7 +787,7 @@ div[class^='sel-'] > * {
 }
 
 .sel__indicator {
-  transition: all .3s linear;
+  transition: all .2s linear;
   color: darkslategray !important;
 }
 
@@ -926,7 +926,7 @@ div[class*='-Input'] {
 }
 
 .selhc__indicator {
-  transition: all .3s linear;
+  transition: all .2s linear;
   color: darkslategray !important;
 }
 
@@ -1048,7 +1048,7 @@ button.--create-hotel-btn:hover {
 }
 
 .--overview-icon {
-  font-size: 24px;
+  font-size: 20px;
   margin: 2px auto;
 }
 
@@ -1082,4 +1082,66 @@ button.--create-hotel-btn:hover {
 .--overview-component-container {
   height: 100%;
   width: 100%;
+}
+
+/* Rapoarte */
+
+/* zilnic */
+
+.--zilnic-table {
+  width: 100%;
+  margin: 4px;
+}
+
+ 
+.--zilnic-table,
+.--zilnic-table th,
+.--zilnic-table tr,
+.--zilnic-table td {
+  border-collapse: collapse;
+  border: 1px solid #25AAA9;
+  text-align: center;
+}
+
+.--zilnic-table th {
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-size: 18px;
+}
+
+.--zilnic-table tr,
+.--zilnic-table td {
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
+  font-size: 16px;
+}
+
+.--zilnic-th {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-collapse: collapse;
+}
+
+.--zilnic-right-arrow {
+  font-size: 30px;
+  cursor: pointer;
+  transition: color .2s linear;
+  position: absolute;
+  right: 30%;
+}
+
+.--zilnic-right-arrow:hover {
+  color: #009500;
+}
+
+.--zilnic-left-arrow {
+  font-size: 30px;
+  cursor: pointer;
+  transition: color .2s linear;
+  position: absolute;
+  left: 30%;
+}
+
+.--zilnic-left-arrow:hover {
+  color: #009500;
 }

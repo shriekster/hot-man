@@ -3,6 +3,8 @@ import Tippy from '@tippyjs/react';
 import Select from 'react-select';
 import Spinner from './Spinner'
 
+import RaportZilnicTable from './RaportZilnicTable'
+
 class RaportZilnic extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +77,7 @@ class RaportZilnic extends React.Component {
     return (
       <div id='raport-zilnic'
         className='raport-zilnic-container'>
-        <div>Raport zilnic</div>
+        <RaportZilnicTable />
       </div>
     );
   }
