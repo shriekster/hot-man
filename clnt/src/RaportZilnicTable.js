@@ -8,13 +8,132 @@ function Romani (props) {
     <>
   <thead>
   <tr>
-    <th className='--zilnic-th'><span>Cetățeni români </span>
+    <th className='--zilnic-th'>
+      <i className='fas fa-caret-left --zilnic-left-arrow --arrow-disabled'></i>
+      <span>Cetățeni români</span>
       <i className='fas fa-caret-right --zilnic-right-arrow'
         onClick={() => {props.changeTable('Straini')}}></i>
       </th>
   </tr>
   </thead>
-  <tbody>
+  <tbody className='--zilnic-tbody'>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
+    <tr>
+      <td>Table data</td>
+    </tr>
     <tr>
       <td>Table data</td>
     </tr>
@@ -35,11 +154,13 @@ function Straini (props) {
   <tr>
   <th className='--zilnic-th'>
     <i className='fas fa-caret-left --zilnic-left-arrow'
-      onClick={() => {props.changeTable('Romani')}}></i><span> Cetățeni străini</span>
+      onClick={() => {props.changeTable('Romani')}}></i>
+    <span>Cetățeni străini</span>
+    <i className='fas fa-caret-right --zilnic-right-arrow --arrow-disabled'></i>
   </th>
   </tr>
   </thead>
-  <tbody>
+  <tbody className='--zilnic-tbody'>
     <tr>
       <td>Table data</td>
     </tr>
@@ -63,6 +184,8 @@ class RaportZilnicTable extends React.Component {
     
     this.changeTable = this.changeTable.bind(this);
 
+    this.onTableKeyDown = this.onTableKeyDown.bind(this);
+
     this.state = {
       components: {
         Romani: Romani,
@@ -72,6 +195,8 @@ class RaportZilnicTable extends React.Component {
       defaultComponent: Romani,
       defaultComponentName: 'Romani',
     };
+
+    this.tableRef = React.createRef();
   }
 
 
@@ -123,8 +248,31 @@ class RaportZilnicTable extends React.Component {
     return true;
   }
 
-  changeTable(component=this.state.defaultComponntName) {
+  onTableKeyDown(e) {
+    /**
+     * 37 - left arrow
+     * 39 - right arrow
+     */
+    if (e) {
+      let charCode = (e.which) ? e.which : e.keyCode;
+
+      switch (charCode) {
+        case 37: {
+          this.changeTable('Romani');
+          break;
+        }
+
+        case 39:{
+          this.changeTable('Straini');
+          break;
+        }
+      }
+    }
+  }
+
+  changeTable(component=this.state.defaultComponentName) {
     let nextView = component;
+    
 
     if(Object.keys(this.state.components).includes(nextView)) {
       nextView = this.state.components[component];
@@ -148,10 +296,11 @@ class RaportZilnicTable extends React.Component {
   }
 
   componentDidMount() {
-    
+    this.tableRef.current.focus();
   }
 
   componentDidUpdate (prevProps, prevState) {
+    this.tableRef.current.focus();
   }
 
   render() {
@@ -160,7 +309,10 @@ class RaportZilnicTable extends React.Component {
     return (
       <div id='raport-zilnic-table'
         className='zilnic-table-container'>
-        <table className='--zilnic-table'>
+        <table tabIndex='0'
+          className='--zilnic-table'
+          ref={this.tableRef}
+          onKeyDown={this.onTableKeyDown}>
           <Component
             changeTable={this.changeTable} />
         </table>

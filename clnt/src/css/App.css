@@ -1093,6 +1093,51 @@ button.--create-hotel-btn:hover {
   margin: 4px;
 }
 
+.--zilnic-table:focus{
+  outline: none;
+}
+
+ /* table scroll */
+.--zilnic-table tbody,
+.--zilnic-table thead tr {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.--zilnic-table td {
+  width: 100%;
+}
+
+.--zilnic-table tbody {
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  height: 50vh;
+}
+
+
+.--zilnic-tbody::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 3px;
+  background-color: rgba(79, 183, 183, .9);
+}
+
+.--zilnic-tbody::-webkit-scrollbar {
+  width: 6px;
+  background-color: #9fd9d9;
+}
+
+.--zilnic-tbody::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: lightgreen;
+}
+
+/**/
+
  
 .--zilnic-table,
 .--zilnic-table th,
@@ -1119,7 +1164,7 @@ button.--create-hotel-btn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-collapse: collapse;
+  border: 1px solid #25AAA9;/*??*/
 }
 
 .--zilnic-right-arrow {
@@ -1144,4 +1189,9 @@ button.--create-hotel-btn:hover {
 
 .--zilnic-left-arrow:hover {
   color: #009500;
+}
+
+.--arrow-disabled {
+  color: lightslategray !important;
+  cursor: default;
 }
