@@ -1,41 +1,37 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 
+import HotelCreator from './HotelCreator';
+import HotelUpdater from './HotelUpdater';
+import RapoarteOverview from './RapoarteOverview';
+
 class Rapoarte extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      hotel: '',
     };
-  }
+  } 
 
   componentDidMount() {
-    const token = this.props.token;
-
-    const requestOptions = {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: token
-      })
-    };
-
-    fetch('http://localhost:3001/main/administrare', requestOptions)
-    .then(response => response.json())
-    .then(who => {
-      this.setState({
-        hotel: who.hotel,
-      });
-    });
   }
 
   render() {
     return (
       <div>
-        <div>Rapoarte</div>
+        <div id='rapoarte-title'
+          className='rapoarte-title'>
+          Rapoarte
+        </div>
         <hr className='view--separator'/>
+        <div id='view-rapoarte'
+          className='view-rapoarte'>
+          <RapoarteOverview
+            token={this.props.token}
+            hotel={this.props.hotel}
+            user={this.props.user}
+            onChange={this.props.onChange} /> 
+        </div>
       </div>
     );
   }

@@ -28,6 +28,16 @@ body {
   overflow-y: hidden;
 }
 
+:not(input)::selection {
+  background: transparent;
+}
+
+input::selection {
+  background: #25AAA9;
+  color: lemonchiffon;
+}
+
+
 input[type='text'], 
 input[type='password'],
 select {
@@ -387,11 +397,11 @@ div[class^='select-'] {
 #style-1 {
   scroll-behavior: smooth;
 }
-
+/*
 #style-1::selection {
   background: rgba(215, 44, 37, .6);
 }
-
+*/
 #style-1::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -442,8 +452,13 @@ div[class^='select-'] {
   margin-top: 40px;
 }
 
-.--active-menu {
-  color: #009500 !important;
+.sidenav-container .--active-menu {
+  color: #009300;
+}
+
+/* On mouse-over */
+.sidenav a:hover {
+  color: rgba(0, 149, 0, .7);
 }
 
 /* Style the sidenav links and the dropdown button */
@@ -460,11 +475,6 @@ div[class^='select-'] {
   cursor: pointer;
   outline: none;
   transition: color .2s linear;
-}
-
-/* On mouse-over */
-.sidenav a:hover, .dropdown-btn:hover {
-  color: #009500;;
 }
 
 /* content */
@@ -705,14 +715,21 @@ input[type='password'].--value-editing:focus,
   height: 36px !important;
 }
 
+/*
 .--settings-loading > img::selection {
   background: transparent;
 }
+*/
 
 hr.view--separator {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: rgba(37, 170, 169, 1);
+  margin-block-start: 1px;
+  margin-block-end: 1px;
+  margin-inline-start: 1px;
+  margin-inline-end: 1px;
+  width: 100%;
 }
 
 /* React Select customization via CSS classes */
@@ -968,11 +985,13 @@ button.--create-hotel-btn:hover {
 .--todo-icon {
   font-size: 50px;
   color: #D72C25;
+  margin: 4px;
 }
 
-.--info-icon {
+.--done-icon {
   font-size: 50px;
   color: #009500;
+  margin: 4px;
 }
 
 .--hotel-info-highlight {
@@ -995,9 +1014,11 @@ button.--create-hotel-btn:hover {
   color: darkgreen;
 }
 
+/*
 .create-hotel-info::selection {
   background-color: transparent !important;
 }
+*/
 
 /* Hotel overview */
 
@@ -1015,8 +1036,11 @@ button.--create-hotel-btn:hover {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  height: 80%;
+  height: 30px;
   width: 100%;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif !important;
+  font-size: 18px;
+  margin-bottom: 5px;
 }
 
 .--icon-wrapper {
@@ -1024,30 +1048,38 @@ button.--create-hotel-btn:hover {
 }
 
 .--overview-icon {
-  font-size: 20px;
+  font-size: 24px;
   margin: 2px auto;
 }
 
 .--overview-posr {
   position: relative;
   cursor: pointer;
-  transition: all .1s linear;
+  transition: color .2s linear;
   width: 24.9%;
   margin: 2px .08%;
   height: 30px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  box-sizing: content-box;
 }
 
 .--overview-posr:hover {
+  color: rgba(0, 149, 0, .7);
+  border-bottom: 1px solid rgba(0, 149, 0, .1);
+}
+
+.--overview-active-menu {
   color: #009500;
+  border-bottom: 1px solid rgba(0, 149, 0, .3);
 }
-
-.--overview-posr::selection {
-  background: none;
-}
-
 
 .--overview-posd {
   margin: 0 4px;
+}
+
+.--overview-component-container {
+  height: 100%;
+  width: 100%;
 }

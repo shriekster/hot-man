@@ -35,7 +35,7 @@ class Main extends React.Component {
       showUserSettings: false,
       userSettingsClass: '',
 
-      menuAdmClass: 'sidenav-a --active-menu',
+      menuAdmClass: 'sidenav-a',
       menuRapClass: 'sidenav-a',
       menuPayClass: 'sidenav-a',
       menuTarClass: 'sidenav-a',
@@ -54,7 +54,8 @@ class Main extends React.Component {
         Solicitari: Solicitari,
       },
 
-      view: Administrare,
+      defaultComponent: Administrare,
+      defaultComponentName: 'Administrare',
 
       token: this.props.token,
       user: this.props.user,
@@ -78,7 +79,7 @@ class Main extends React.Component {
     this.props.onChange('Login');
   }
 
-  changeView(component='Administrare') {
+  changeView(component=this.state.defaultComponentName) {
     let nextView = component;
     let nextUserSettings = this.state.showUserSettings;
     let nextClass = this.state.userSettingsClass;
@@ -136,7 +137,7 @@ class Main extends React.Component {
     }
 
     this.setState({
-      view: nextView,
+      defaultComponent: nextView,
       showUserSettings: nextUserSettings,
       userSettingsClass: nextClass,
       menuAdmClass: nextMenuAdmClass,
@@ -198,6 +199,9 @@ class Main extends React.Component {
         if (who.hotel && !who.hotel.nume) { //
           this.setState({
             hiddenMenuClass: '--hidden-menu',
+            defaultComponent: Administrare,
+            defaultComponentName: 'Administrare',
+            menuAdmClass: 'sidenav-a --active-menu',
           });
         } 
       } else 
@@ -206,6 +210,9 @@ class Main extends React.Component {
           this.setState({
             hiddenMenuClass: '',
             hotel: who.hotel,
+            defaultComponent: Rezervari,
+            defaultComponentName: 'Rezervari',
+            menuRezClass: 'sidenav-a --active-menu',
           });
         }
       } else 
@@ -217,7 +224,7 @@ class Main extends React.Component {
 
 
   render() {
-    let Component = this.state.view;
+    let Component = this.state.defaultComponent;
     
     return (
       <div className='Main'>

@@ -828,7 +828,7 @@ class HotelCreator extends React.Component {
                 allowHTML={true}
                 content={
                   <div className='create-hotel-info'>
-                    <i className='fas fa-clipboard-check --info-icon'></i>
+                    <i className='fas fa-clipboard-check --done-icon'></i>
                     <hr className='view--separator'/>
                     <div>Poți completa câmpurile rămase (opțional) sau poți face click pe butonul</div>
                     <div className='--mock'>

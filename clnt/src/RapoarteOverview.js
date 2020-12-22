@@ -3,13 +3,13 @@ import Tippy from '@tippyjs/react';
 import Select from 'react-select';
 import Spinner from './Spinner';
 
-import ConfortUpdater from './HotelUpdater';
+import ConfortUpdater from './RaportZilnic';
 import SpatiiUpdater from './HotelUpdater';
 import PaturiUpdater from './HotelUpdater';
 import HotelUpdater from './HotelUpdater';
 
 
-class HotelOverview extends React.Component {
+class RapoarteOverview extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,13 +28,13 @@ class HotelOverview extends React.Component {
         HotelUpdater: HotelUpdater,
       },
 
-      defaultComponent: HotelUpdater,
-      defaultComponentName: 'HotelUpdater',
+      defaultComponent: ConfortUpdater,
+      defaultComponentName: 'ConfortUpdater',
 
-      confortMenuClass: '',
+      confortMenuClass: ' --overview-active-menu ',
       spatiiMenuClass: '',
       paturiMenuClass: '',
-      hotelMenuClass: '--overview-active-menu ',
+      hotelMenuClass: ' ',
   
     };
   }
@@ -51,8 +51,8 @@ class HotelOverview extends React.Component {
       nextView = this.state.components[component];
 
     } else {
-      nextView = HotelUpdater;
-      nextHotelMenuClass = ' --overview-active-menu ';
+      nextView = ConfortUpdater;
+      nextConfortMenuClass = ' --overview-active-menu ';
     }
 
     switch(component) {
@@ -140,19 +140,19 @@ class HotelOverview extends React.Component {
         <div className='--overview-container'>
           <div className={'--overview-comfort-levels --overview-posr ' + this.state.confortMenuClass}
             onClick={() => this.changeView('ConfortUpdater')}>
-            <span className='--icon-wrapper'><i className='fas fa-couch --overview-icon'></i></span><span className='--overview-posd'> Confort</span>
+            <span className='--icon-wrapper'><i className='fas fa-calendar-day --overview-icon'></i></span><span className='--overview-posd'> Zilnic</span>
           </div>
           <div className={'--overview-room-types --overview-posr ' + this.state.spatiiMenuClass}
             onClick={() => this.changeView('SpatiiUpdater')}>
-            <span className='--icon-wrapper'><i className='fas fa-house-user --overview-icon'></i></span><span className='--overview-posd'> Spații</span>
+            <span className='--icon-wrapper'><i className='fas fa-calendar-alt --overview-icon'></i></span><span className='--overview-posd'> Lunar</span>
           </div>
           <div className={'--overview-bed-types --overview-posr ' + this.state.paturiMenuClass}
             onClick={() => this.changeView('PaturiUpdater')}>
-            <span className='--icon-wrapper'><i className='fas fa-bed --overview-icon'></i></span><span className='--overview-posd'> Paturi</span>
+            <span className='--icon-wrapper'><i className='fas fa-calendar-check --overview-icon'></i></span><span className='--overview-posd'> Anual</span>
           </div>
           <div className={'--overview-hotel-info --overview-posr ' + this.state.hotelMenuClass}
             onClick={() => this.changeView('HotelUpdater')}>
-           <span className='--icon-wrapper'><i className='fas fa-map-marked-alt --overview-icon'></i></span><span className='--overview-posd'> Hotel</span>
+           <span className='--icon-wrapper'><i className='fas fa-calendar-plus --overview-icon'></i></span><span className='--overview-posd'> Personalizat</span>
           </div>
         </div>
         <div className='--overview-component-container'>
@@ -177,4 +177,4 @@ class HotelOverview extends React.Component {
   }
 }
 
-export default HotelOverview;
+export default RapoarteOverview;
