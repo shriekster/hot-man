@@ -186,6 +186,8 @@ class RaportZilnicTable extends React.Component {
 
     this.onTableKeyDown = this.onTableKeyDown.bind(this);
 
+    this.onComponentClick = this.onComponentClick.bind(this);
+
     this.state = {
       components: {
         Romani: Romani,
@@ -295,6 +297,14 @@ class RaportZilnicTable extends React.Component {
     });
   }
 
+  onComponentClick(e) {
+    if (e) {
+      console.log(e.target)
+    }
+
+    this.tableRef.current.focus();
+  }
+
   componentDidMount() {
     this.tableRef.current.focus();
   }
@@ -308,7 +318,8 @@ class RaportZilnicTable extends React.Component {
 
     return (
       <div id='raport-zilnic-table'
-        className='zilnic-table-container'>
+        className='zilnic-table-container'
+        onClick={this.onComponentClick}>
         <table tabIndex='0'
           className='--zilnic-table'
           ref={this.tableRef}
