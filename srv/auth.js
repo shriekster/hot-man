@@ -15,10 +15,12 @@ module.exports = function (req, res, next) {
 
   let decoded;
   const token = req.body.token;
+  /*
   const roles = [
     'operator',
     'manager'
   ];
+  */
 
 
   const now = Math.floor(Date.now() / 1000);
@@ -35,16 +37,9 @@ module.exports = function (req, res, next) {
         let user = selectUser.get(decoded.usr);
 
         if (user) {
-          if (roles.includes(decoded.rle)) {
-            if (now < decoded.exp) {
-              return next();
 
-            } else {
-              res.status(404)
-              .json({
-                status: 'denied'
-              })
-            }
+          if (now < decoded.exp) {
+            return next();
 
           } else {
             res.status(404)

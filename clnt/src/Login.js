@@ -162,6 +162,9 @@ class Login extends React.Component {
               displayRolWarning={false}/>
           </div>
           <div className='Form-field'>
+            <span onClick={() => this.props.onChange('Forgot')} className='Form-hint bold glow'>Ai uitat parola?</span>
+          </div>
+          <div className='Form-field'>
           <Tippy
             allowHTML={true}
             content={

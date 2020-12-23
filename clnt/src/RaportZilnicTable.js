@@ -8,16 +8,38 @@ function Romani (props) {
     <>
   <thead>
   <tr>
-    <th className='--zilnic-th'>
+    <th className='--zilnic-th' colSpan='4'>
       <i className='fas fa-caret-left --zilnic-left-arrow --arrow-disabled'></i>
-      <span>Cetățeni români</span>
+      <span>Români</span>
       <i className='fas fa-caret-right --zilnic-right-arrow'
         onClick={() => {props.changeTable('Straini')}}></i>
       </th>
   </tr>
+  <tr>
+    <th rowSpan='2'>
+      Misiuni
+    </th>
+    <th rowSpan='2'>
+      Detașări
+    </th>
+    <th colSpan='2'>
+      Cu plată
+    </th>
+  </tr>
+  <tr>
+    <th>
+      Interes personal
+    </th>
+    <th>
+      Permanenți
+    </th>
+  </tr>
   </thead>
   <tbody className='--zilnic-tbody'>
     <tr>
+      <td>Table data</td>
+      <td>Table data</td>
+      <td>Table data</td>
       <td>Table data</td>
     </tr>
     <tr>
@@ -140,7 +162,10 @@ function Romani (props) {
   </tbody>
   <tfoot>
     <tr>
-      <td>Table footer data</td>
+      <td>Total persoane: ##</td>
+    </tr>
+    <tr>
+      <td>Valoare totală (RON): ##</td>
     </tr>
   </tfoot>
   </>
@@ -155,7 +180,7 @@ function Straini (props) {
   <th className='--zilnic-th'>
     <i className='fas fa-caret-left --zilnic-left-arrow'
       onClick={() => {props.changeTable('Romani')}}></i>
-    <span>Cetățeni străini</span>
+    <span>Străini</span>
     <i className='fas fa-caret-right --zilnic-right-arrow --arrow-disabled'></i>
   </th>
   </tr>
@@ -167,7 +192,10 @@ function Straini (props) {
   </tbody>
   <tfoot>
     <tr>
-      <td>Table footer data</td>
+      <td>Total persoane: ##</td>
+    </tr>
+    <tr>
+      <td>Valoare totală (RON): ##</td>
     </tr>
   </tfoot>
   </>

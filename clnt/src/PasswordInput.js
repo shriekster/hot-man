@@ -99,19 +99,6 @@ class PasswordInput extends React.Component {
             arrow={false}
             theme='red-material-warning'
             visible={this.props.displayError}>
-            <Tippy
-              content={
-                <>
-                  <i className='fas fa-exclamation-circle'></i> Selectează rolul
-                </>
-              }
-              
-              allowHTML={true}
-              placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              visible={this.props.displayRolWarning}
-              offset={[75, 10]}>
               <Tippy
                 content=
                 {
@@ -135,7 +122,6 @@ class PasswordInput extends React.Component {
                     onInput={this.props.onInput} />
                 </span>
               </Tippy>
-            </Tippy>
           </Tippy>
         </Tippy>
         <Tippy content={display.tippyContent}

@@ -284,18 +284,12 @@ class Main extends React.Component {
               <>
                 <div className='user-settings--menu'>
                   <div className='user-icon--big--container'>
-                    {'operator' === this.props.user.rol ? 
-                    <i className='fas fa-user user-icon--big'></i> :
                     <i className='fas fa-user-cog user-icon--big'></i>
-                    }
                   </div>
                   <div className='bold'>{this.state.user.grad + ' ' + this.state.user.nume + ' ' + this.state.user.prenume}</div>
                   <div>
                     <div className='user-settings--attribute'>
-                      <i className='fas fa-id-card --attribute-icon'></i> <span className='bold --attribute-text'>{this.state.user.utilizator}</span>
-                    </div>
-                    <div className='user-settings--attribute'>
-                      <i className='fas fa-user-tag --attribute-icon'></i> <span className='bold --attribute-text'>{this.props.user.rol}</span>
+                      <i className='fas fa-user-tag --attribute-icon'></i> <span className='bold --attribute-text'>{this.state.user.utilizator}</span>
                     </div>
                   </div>
                   <hr className='user-settings--separator'/>

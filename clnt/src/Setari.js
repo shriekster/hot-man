@@ -51,7 +51,7 @@ class Setari extends React.Component {
       passwordVisible: false,
       passwordFocused: false,
 
-      cnp: this.props.user.cnp,
+      cnp: this.props.user.loc,
       grad: this.props.user.grad,
       nume: this.props.user.nume,
       prenume: this.props.user.prenume,
@@ -59,7 +59,7 @@ class Setari extends React.Component {
       rol: this.props.user.rol,
       parola: '',
 
-      nextCnp: this.props.user.cnp,
+      nextCnp: this.props.user.loc,
       nextGrad: this.props.user.grad,
       nextNume: this.props.user.nume,
       nextPrenume: this.props.user.prenume,
@@ -1020,7 +1020,7 @@ class Setari extends React.Component {
               <Tippy
                 content={
                   <>
-                    <i className='fas fa-minus-circle'></i> CNP invalid
+                    <i className='fas fa-minus-circle'></i> Localitate invalidă
                   </>
                 }
                 allowHTML={true}
@@ -1033,7 +1033,7 @@ class Setari extends React.Component {
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
-                    CNP
+                    Locul nașterii
                   </span>
                   <input id='--settings-cnp'
                     autoComplete='off'
@@ -1042,7 +1042,7 @@ class Setari extends React.Component {
                     className={this.state.valueCnpClass}
                     disabled={!this.state.editCnp}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onKeyDown}
+                    onKeyDown={this.onGenericKeyDown}
                     value={this.state.nextCnp}
                     ref={this.cnpInput}>
                   </input>

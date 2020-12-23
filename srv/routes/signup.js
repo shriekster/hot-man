@@ -130,25 +130,23 @@ router.post('/', function(req, res, next) {
   });
 
   let valid = {
-    cnp: false,
+    loc: false,
     grad: false,
     nume: false,
     prenume: false,
     user: false, 
     pass: false,
-    rol: false,
   };
 
-  let cnp = req.body.cnp;
+  let loc = req.body.loc;
   let grad = req.body.grad;
   let nume = req.body.nume;
   let prenume = req.body.prenume;
   let user = req.body.user;
   let pass = req.body.pass;
-  let rol = req.body.rol;
 
-  if (cnp && undefined != cnp) {
-    valid.cnp = isValidCNP(cnp);
+  if (loc && undefined != loc) {
+    valid.loc = isValidOtherName(loc);
   }
 
   if (grad && undefined !== grad) {
@@ -171,30 +169,28 @@ router.post('/', function(req, res, next) {
     valid.pass = isValidPassword(pass);
   }
 
-  if (rol && undefined !== rol) {
-    valid.rol = 
-    (
-      'operator' === rol ||
-      'manager' === rol
-    );
-  }
-
-  if (valid.cnp && valid.grad && valid.nume && valid.prenume && valid.user && valid.pass && valid.rol) {
+  if (valid.loc && valid.grad && valid.nume && valid.prenume && valid.user && valid.pass) {
     let uId;
+    /*
     let urId;
     let rolId = 'operator' === rol ? 1 : 2; //! hardcoded
+    */
 
     const selectUserCount = db.prepare(`SELECT COUNT(*) AS count 
                                         FROM Utilizatori`);
+    /*
     const selectUserRoleCount = db.prepare(`SELECT COUNT(*) AS count
                                             FROM UtilizatoriRoluri`);
-    const insertUser = db.prepare(`INSERT INTO Utilizatori (ID, CNP, Grad, Nume, Prenume, Utilizator, Parola, Extra) 
+    */
+    const insertUser = db.prepare(`INSERT INTO Utilizatori (ID, LocNastere, Grad, Nume, Prenume, Utilizator, Parola, Extra) 
                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
+    /*
     const insertUserRole = db.prepare(`INSERT INTO UtilizatoriRoluri(ID, UtilizatorID, RolID)
                                        VALUES (?, ?, ?)`);
+    */
 
     const users = selectUserCount.get();
-    const userRoles = selectUserRoleCount.get();
+    //const userRoles = selectUserRoleCount.get();
 
     if (users && undefined !== users) {
       if (0 === users.count) {
@@ -205,14 +201,16 @@ router.post('/', function(req, res, next) {
       }
     }
 
+    /*
     if (userRoles && undefined !== userRoles) {
       if (0 === userRoles.count) {
-        urId = 1;
+        urId = 1; 
       }
       else {
         urId = userRoles.count;
       }
     }
+    */
 
     let salt = crypto.randomBytes(12).toString('base64');
 
@@ -221,10 +219,10 @@ router.post('/', function(req, res, next) {
 
       let hash = derivedKey.toString('base64');
 
-      const userInfo = insertUser.run(uId, cnp, grad, nume, prenume, user, hash, salt);
+      const userInfo = insertUser.run(uId, loc, grad, nume, prenume, user, hash, salt);
       //console.log(userInfo);
 
-      const userRoleInfo = insertUserRole.run(urId, uId, rolId);
+      //const userRoleInfo = insertUserRole.run(urId, uId, rolId);
       //console.log(userRoleInfo);
     });
   }

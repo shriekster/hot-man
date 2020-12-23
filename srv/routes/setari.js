@@ -107,10 +107,10 @@ function isValidPassword(pass) {
 
 function updateCnp(value, username) {
   const update = db.prepare(`UPDATE Utilizatori
-                            SET CNP = ?
+                            SET LocNastere = ?
                             WHERE Utilizator = ?`);
 
-  if (isValidCNP(value)) {
+  if (isValidOtherName(value)) { /** UPDATED! */
     let error;
 
     try {
@@ -311,14 +311,14 @@ router.post('/', authorization, function(req, res, next) {
     token = req.body.token;
 
     const selectUser = db.prepare(`SELECT ID AS _id,
-                                  CNP AS _cnp,
+                                  LocNastere AS _loc,
                                   Grad AS _grad,
                                   Nume AS _nume,
                                   Prenume AS _prenume,
                                   Utilizator AS _user
                                   FROM Utilizatori 
                                   WHERE Utilizator = ?`);
-
+    /*
     const selectRolId = db.prepare(`SELECT RolID AS _val
                                   FROM UtilizatoriRoluri
                                   WHERE UtilizatorID = ?`);
@@ -326,6 +326,7 @@ router.post('/', authorization, function(req, res, next) {
     const selectRol = db.prepare(`SELECT Denumire as _val
                                 FROM Roluri
                                 WHERE ID = ?`);
+    */
 
     switch (key) {
       case 'cnp': {
@@ -366,22 +367,14 @@ router.post('/', authorization, function(req, res, next) {
       const userRow = selectUser.get(username);
       
       if (userRow) {
-        const rolId = selectRolId.get(userRow._id);
-  
-        if (rolId && undefined !== rolId) {
-          const denumireRol = selectRol.get(rolId._val);
-  
-          if (denumireRol && undefined !== denumireRol) {
-            token = jwt.sign(
-              {
-                usr: username,
-                rle: denumireRol._val,
-                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */,
-                iat: Math.floor(Date.now() / 1000),
-              }, 
-              secret);
-          }
-        }
+        token = jwt.sign(
+          {
+            usr: username,
+            loc: userRow._loc,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */,
+            iat: Math.floor(Date.now() / 1000),
+          }, 
+          secret);
       }
     }
   }

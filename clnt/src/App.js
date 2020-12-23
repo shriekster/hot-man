@@ -10,6 +10,7 @@ import './css/custom-material.css';
 
 const Login = React.lazy(() => import('./Login'));
 const Signup = React.lazy(() => import('./Signup'));
+const Forgot = React.lazy(() => import('./Forgot'));
 const Main = React.lazy(() => import('./Main'));
 
 /**
@@ -27,6 +28,7 @@ class App extends React.Component {
       components: {
         Login: Login, 
         Signup: Signup, 
+        Forgot: Forgot,
         Main: Main
       },
       
@@ -64,8 +66,8 @@ class App extends React.Component {
 
   render() {
     let Component = this.state.toRender;
-    let className = (Component === Login) || (Component === Signup) ? 'App --with-background-image' : 'App';
-    
+    let className = (Component === Login) || (Component === Signup) || (Component === Forgot) ? 'App --with-background-image' : 'App';
+
     // The props are defined here (onChange)
     return (
       <div className={className}>

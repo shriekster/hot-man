@@ -37,7 +37,7 @@ router.post('/', function(req, res, next) {
 
   // Prepare the SQL statements
   const selectUser = db.prepare(`SELECT ID AS _id,
-                                CNP AS _cnp,
+                                LocNastere AS _loc,
                                 Grad AS _grad,
                                 Nume AS _nume,
                                 Prenume AS _prenume,
@@ -47,6 +47,7 @@ router.post('/', function(req, res, next) {
                                 FROM Utilizatori 
                                 WHERE Utilizator = ?`);
 
+  /*
   const selectRolId = db.prepare(`SELECT RolID AS _val
                                 FROM UtilizatoriRoluri
                                 WHERE UtilizatorID = ?`);
@@ -54,12 +55,13 @@ router.post('/', function(req, res, next) {
   const selectRol = db.prepare(`SELECT Denumire as _val
                               FROM Roluri
                               WHERE ID = ?`);
+  */
                               
   // Check if the username is correct and get the hashed password and the salt
   const userRow = selectUser.get(user);
   
   if (userRow && undefined !== userRow){
-    const rolId = selectRolId.get(userRow._id);
+    //const rolId = selectRolId.get(userRow._id);
 
     crypto.pbkdf2(pass, userRow._salt, 10000, 32, 'sha512', (err, derivedKey) => {
       if (err) {
@@ -76,30 +78,26 @@ router.post('/', function(req, res, next) {
       if(hash === userRow._hashedPass) {
         status = 'allowed';
 
-        if (rolId && undefined !== rolId) {
-          const denumireRol = selectRol.get(rolId._val);
 
-          if (denumireRol && undefined !== denumireRol) {
             realUser = {
-              cnp: userRow._cnp,
+              loc: userRow._loc,
               grad: userRow._grad,
               nume: userRow._nume,
               prenume: userRow._prenume,
               utilizator: userRow._user,
-              rol: denumireRol._val,
             };
 
             token = jwt.sign(
               {
                 usr: user,
-                rle: denumireRol._val,
+                loc: userRow._loc,
                 exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */,
                 iat: Math.floor(Date.now() / 1000),
               }, 
               secret
             );
-          }
-        }
+          
+        
         //console.log('Login successful.')
       } else {
         //console.log('Login failed!')

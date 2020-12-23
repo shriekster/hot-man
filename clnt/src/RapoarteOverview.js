@@ -135,8 +135,8 @@ class RapoarteOverview extends React.Component {
     let Component = this.state.defaultComponent;
 
     return (
-      <div id='hotel-overview'
-        className='hotel-overview'>
+      <div id='rapoarte-overview'
+        className='rapoarte-overview'>
         <div className='--overview-container'>
           <div className={'--overview-comfort-levels --overview-posr ' + this.state.confortMenuClass}
             onClick={() => this.changeView('ConfortUpdater')}>

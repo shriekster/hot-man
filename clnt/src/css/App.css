@@ -72,6 +72,38 @@ button {
   outline: none;
 }
 
+.cancel-button {
+  display: flex;
+  justify-content: center;
+  width: 150px;
+  border-radius: 5px;
+  padding: 4px;
+  background-color: #D72C25CC;
+  color: whitesmoke;
+  margin: 0 auto;
+  outline: none;
+}
+
+.cancel-button:hover {
+  color: yellowgreen;
+}
+
+.continue-button {
+  display: flex;
+  justify-content: center;
+  width: 150px;
+  border-radius: 5px;
+  padding: 4px;
+  background-color: #3377AACC;
+  color: whitesmoke;
+  margin: 0 auto;
+  outline: none;
+}
+
+.continue-button:hover {
+  color: greenyellow;
+}
+
 button:hover {
   color: lime;
 }
@@ -111,6 +143,7 @@ span.legacy {
   justify-content: left;
   width: 100%;
   height: 100vh;
+  position: relative; /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!! UPDATED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 }
 
 .--with-background-image {
@@ -123,7 +156,7 @@ span.legacy {
   background-color: rgb(37, 170, 169);
 }
 
-.Form {
+.Form, .Form-forgot {
   color:  darkslategray; /*whitesmoke;*/
   
   display: flex;
@@ -532,7 +565,7 @@ div[class^='select-'] {
 }
 
 .user-icon--big {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .user-icon--big--container {
@@ -619,10 +652,11 @@ button.sign-out:hover {
   align-items: center;
   border: 1px solid rgba(37, 170, 169, 1);
   margin-bottom: 2vh;
-  width: 450px;
+  width: 470px;
   height: 44px;
   position: relative;
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  padding-left: 3px;
 }
 
 .--settings-form {
@@ -647,7 +681,7 @@ input[type='password'].--settings-value,
   font-size: 18px;
   align-items: center;
   position: absolute;
-  left: 92px;
+  left: 112px;
   outline: none;
   width: 355px;
   height: 40px;
@@ -671,13 +705,13 @@ input[type='password'].--value-editing:focus,
 
 .--settings-edit {
   position: absolute;
-  left: 460px;
+  left: 480px;
   font-size: 36px;
   transition: all .2s linear;
 }
 
 .--editing {
-  animation: editing .75s infinite alternate;
+  animation: editing .6s infinite alternate;
 }
 
 .--settings-edit:hover {
@@ -690,7 +724,7 @@ input[type='password'].--value-editing:focus,
 
 .--settings-parola-icon {
   position: absolute;
-  left: 412px;
+  left: 432px;
   z-index: 4;
   font-size: 24px !important;
   color: darkslategray !important;
@@ -706,7 +740,7 @@ input[type='password'].--value-editing:focus,
 
 .--settings-loading {
   position: absolute;
-  left: 520px;
+  left: 540px;
   /*transition: all .3s linear;*/
 }
 
@@ -735,7 +769,7 @@ hr.view--separator {
 /* React Select customization via CSS classes */
 div[class^='sel-'] {
   position: absolute;
-  left: 92px;
+  left: 112px;
   font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
   width: 355px;
   color: #009500;
@@ -1086,9 +1120,19 @@ button.--create-hotel-btn:hover {
 
 /* Rapoarte */
 
+.rapoarte-overview {
+  font-size: 18px;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 80vh; /*adjust?*/
+  width: 100%;
+}
+
 /* zilnic */
 
-.--zilnic-table {
+table.--zilnic-table {
   width: 100%;
   margin: 4px;
   height: 100%;
@@ -1099,27 +1143,11 @@ button.--create-hotel-btn:hover {
 }
 
  /* table scroll */
-.--zilnic-table tbody,
-.--zilnic-table thead,
-.--zilnic-table tr,
-.--zilnic-table td {
-  display: block;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
 .--zilnic-table tbody {
   scroll-behavior: smooth;
   overflow-y: auto;
-  height: calc(100% - 30px);
+  height: calc(100% - 55px);
 }
-
-.--zilnic-table tfoot {
-  height: 30px;
-}
-
 
 .--zilnic-tbody::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -1139,16 +1167,58 @@ button.--create-hotel-btn:hover {
   box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   background-color: #009500;
 }
-
 /**/
 
+.--zilnic-table tbody,
+.--zilnic-table thead { /*tr also*/
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /*width: 100%;*/
+}
+
+.--zilnic-table tr {
+  width: 100%;
+  border: 1px solid #25AAA9;
+}
+
+.--zilnic-table td {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /*width: 100%;*/
+  background-color: #00950044;
+}
+
+.--zilnic-table thead,
+.--zilnic-table tfoot {
+
+}
+
+table.--zilnic-table {
+  border: 1px solid #25AAA9;
+}
+
+.--zilnic-table tr {
+  border-bottom: 1px solid #25AAA9;
+}
+
+.--zilnic-table tfoot {
+  /*height: 30px;*/
+  border-top: 1px solid #25AAA9;
+}
+
+.--zilnic-table tfoot > tr {
+  border-bottom: none;
+}
  
 .--zilnic-table,
 .--zilnic-table th,
 .--zilnic-table tr,
 .--zilnic-table td {
   border-collapse: collapse;
-  border: 1px solid #25AAA9;
+  /*border: 1px solid #25AAA9;*/
   text-align: center;
 }
 
@@ -1168,7 +1238,7 @@ button.--create-hotel-btn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #25AAA9;/*??*/
+ /* border: 1px solid #25AAA9;*/
 }
 
 .--zilnic-right-arrow {
@@ -1207,4 +1277,38 @@ button.--create-hotel-btn:hover {
 
 .--zilnic-tbody {
   height: 70vh;
+}
+
+/* Forgot */
+
+.Form, .Form-forgot {
+  transition: transform .3s;
+  animation: fadeInDown .3s linear;
+}
+
+.--fade-in-left {
+  transition: transform .3s;
+  animation: fadeInLeft .3s linear;
+}
+
+@keyframes fadeInLeft {
+  0% {
+     opacity: 0;
+     transform: translateX(10px);
+  }
+  100% {
+     opacity: 1;
+     transform: translateX(0);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+     opacity: 0;
+     transform: translateY(-5px);
+  }
+  100% {
+     opacity: 1;
+     transform: translateY(0);
+  }
 }
