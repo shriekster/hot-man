@@ -78,14 +78,14 @@ button {
   width: 150px;
   border-radius: 5px;
   padding: 4px;
-  background-color: #D72C25CC;
+  background-color: #D72C25;
   color: whitesmoke;
   margin: 0 auto;
   outline: none;
 }
 
 .cancel-button:hover {
-  color: yellowgreen;
+  color: #25AAA9CC;
 }
 
 .continue-button {
@@ -94,17 +94,15 @@ button {
   width: 150px;
   border-radius: 5px;
   padding: 4px;
-  background-color: #3377AACC;
+  background-color: #3377AA;
   color: whitesmoke;
   margin: 0 auto;
   outline: none;
 }
 
-.continue-button:hover {
-  color: greenyellow;
-}
 
 button:hover {
+  /* color: #EE3924CC; */
   color: lime;
 }
 
