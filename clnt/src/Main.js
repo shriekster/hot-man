@@ -264,8 +264,8 @@ class Main extends React.Component {
               <a href='#'
                 className={this.state.menuSolClass}
                 onClick={() => this.changeView('Solicitari')}>
-                <i className='fas fa-clock menu-icon'></i> 
-                <span className='menu-label'>Solicitări</span>
+                  <i className='fas fa-clock menu-icon'></i> 
+                  <span className='menu-label'>Solicitări<span className='menu-label-counter'>0</span></span>
               </a>
             </div>
           </div>

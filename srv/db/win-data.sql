@@ -763,7 +763,7 @@ CREATE TABLE TuristiSolicitari (
 -- Table: Utilizatori
 CREATE TABLE Utilizatori (
     ID         INTEGER,
-    CNP        TEXT    UNIQUE,
+    LocNastere        TEXT,
     Grad       TEXT,
     Nume       TEXT,
     Prenume    TEXT,
@@ -777,7 +777,7 @@ CREATE TABLE Utilizatori (
 
 INSERT INTO Utilizatori (
                             ID,
-                            CNP,
+                            LocNastere,
                             Grad,
                             Nume,
                             Prenume,
@@ -798,7 +798,7 @@ INSERT INTO Utilizatori (
 
 INSERT INTO Utilizatori (
                             ID,
-                            CNP,
+                            LocNastere,
                             Grad,
                             Nume,
                             Prenume,
@@ -816,50 +816,6 @@ INSERT INTO Utilizatori (
                             'NdzAyNEbgYWdWOvKTbz7LFoCde9gBQ6oRAmdFZfqkRY=',
                             'sbY9tmKktt6XolYV'
                         );
-
-
--- Table: UtilizatoriRoluri
-CREATE TABLE UtilizatoriRoluri (
-    ID           INTEGER,
-    UtilizatorID INTEGER,
-    RolID        INTEGER,
-    PRIMARY KEY (
-        ID
-    ),
-    FOREIGN KEY (
-        RolID
-    )
-    REFERENCES Roluri (ID) ON UPDATE CASCADE
-                           ON DELETE NO ACTION,
-    FOREIGN KEY (
-        UtilizatorID
-    )
-    REFERENCES Utilizatori (ID) ON UPDATE CASCADE
-                                ON DELETE NO ACTION
-);
-
-INSERT INTO UtilizatoriRoluri (
-                                  ID,
-                                  UtilizatorID,
-                                  RolID
-                              )
-                              VALUES (
-                                  0,
-                                  0,
-                                  0
-                              );
-
-INSERT INTO UtilizatoriRoluri (
-                                  ID,
-                                  UtilizatorID,
-                                  RolID
-                              )
-                              VALUES (
-                                  1,
-                                  1,
-                                  1
-                              );
-
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

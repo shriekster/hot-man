@@ -56,8 +56,9 @@ class PasswordInput extends React.Component {
         <label htmlFor='pass'>
           {
             //!this.props.text &&
+            this.props.label ||
             <>
-            Parola 
+              Parola 
             </>
           }
           {
@@ -118,8 +119,9 @@ class PasswordInput extends React.Component {
                     type={display.inputType} 
                     name='pass'
                     id='pass'
-                    placeholder='Introdu parola'
-                    onInput={this.props.onInput} />
+                    placeholder={this.props.placeholder || 'Introdu parola'}
+                    onInput={this.props.onInput} 
+                    autoFocus={this.props.autoFocus}/>
                 </span>
               </Tippy>
           </Tippy>

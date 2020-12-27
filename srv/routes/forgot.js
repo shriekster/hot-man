@@ -1,14 +1,78 @@
 var express = require('express');
 var router = express.Router();
 
-const authorization = require('../auth');
-
-const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../db');
-const secret = require('../secret');
 
-router.options('/:id', function(req, res, next) {
+let id = 0;
+
+const timeout = 120;
+
+let user = '', 
+    loc = '';
+
+const selectUser = db.prepare(`SELECT Utilizator AS _user
+                              FROM Utilizatori 
+                              WHERE Utilizator = ?`);
+
+const selectLoc = db.prepare(`SELECT LocNastere AS _loc
+                              FROM Utilizatori 
+                              WHERE Utilizator = ?`);
+
+function isValidPassword(pass) {
+  /* at least 8 characters, with at least one character from each of the 
+  * 4 character classes (alphabetic lower and upper case; numeric, symbols)
+  */
+  let regex = /(?=.{8,})(?=.*?[^\w\s])(?=.*?[0-9])(?=.*?[A-Z]).*?[a-z].*/;
+
+  // Whether the password conforms to the password policy or not
+  return regex.test(pass);
+}
+
+function updateParola(value, username) {
+  const update = db.prepare(`UPDATE Utilizatori
+                            SET Parola = ?,
+                                Extra = ?
+                            WHERE Utilizator = ?`);
+
+  if (isValidPassword(value)) {
+    let error;
+
+    let salt = crypto.randomBytes(12).toString('base64');
+
+    let derived;
+
+    try {
+      derived = crypto.pbkdf2Sync(value, salt, 10000, 32, 'sha512');
+    } catch (e) {
+      if (e) console.log(e)
+    } finally {
+      if (derived) {
+        let hash = derived.toString('base64');
+
+        try {
+          const info = update.run(hash, salt, username);
+          //console.log('PAROLA: ', info);
+        } catch(err) {
+          error = err;
+          console.log(err);
+        } finally {
+
+          if (error) {
+            return 'unknown';
+          }
+
+          return 'valid';
+        }
+      }
+    }
+  }
+  
+  return 'invalid';
+
+}
+
+router.options('/*', function(req, res, next) {
   res.set({
     'Allow': 'OPTIONS',
     'Content-Type': 'application/json',
@@ -30,83 +94,55 @@ router.post('/:id', function(req, res, next) {
     'Access-Control-Allow-Origin': 'http://localhost:3000'
   });
 
-  console.log(req.body)
-  console.log(req.params)
-
-
-  const selectUser = db.prepare(`SELECT ID AS _id,
-                                LocNastere AS _loc,
-                                Grad AS _grad,
-                                Nume AS _nume,
-                                Prenume AS _prenume,
-                                Utilizator AS _user
-                                FROM Utilizatori 
-                                WHERE Utilizator = ?`);
-
   let status = 'unknown';
-  let token;
+  let code = 0;
 
-  if (req.body) {
-    let key = req.body.attributeName;
-    let value = req.body.attributeValue;
-    let username = req.body.username;
+  if (req && req.params && req.params.id) {
+    if ('user' === req.params.id) {
+      if (req.body && req.body.user) {
+        const usr = selectUser.get(req.body.user);
 
-    token = req.body.token;
-
-    switch (key) {
-      case 'cnp': {
-        status = updateCnp(value, username);
-        break;
-      }
-
-      case 'grad': {
-        status = updateGrad(value, username);
-        break;
-      }
-
-      case 'nume': {
-        status = updateNume(value, username);
-        break;
-      }
-
-      case 'prenume': {
-        status = updatePrenume(value, username);
-        break;
-      }
-
-      case 'utilizator': {
-        status = updateUtilizator(value, username);
-        if ('valid' === status) {
-          username = value;
+        if (usr && usr._user) {
+          user = usr._user;
+          status = 'allowed';
         }
-        break;
       }
+    } else 
+    if ('loc' === req.params.id) {
+      if (req.body && req.body.loc) {
+        if (user){
+          const lc = selectLoc.get(user);
 
-      case 'parola': {
-        status = updateParola(value, username);
-        break;
+          if (lc && lc._loc) {
+            if (req.body.loc === lc._loc) {
+              loc = lc._loc;
+              status = 'allowed';
+            }
+          }
+        }
       }
-    }
+    } else
+    if ('pass' === req.params.id) {
+      console.log(req.body)
+      if (req.body && req.body.newPass && req.body.time) {
+        let serverTime = Math.floor((Date.now() + 60 * 2 * 1000) / 1000);
+        if (user) {
+          if (serverTime - req.body.time <= 0) { //TODO!
+            status = updateParola(req.body.newPass, user)
+          } else {
+            status = 'expired';
+          }
+        }
+      }
+    } 
+    else {
 
-    if ('valid' === status) {
-      const userRow = selectUser.get(username);
-      
-      if (userRow) {
-        token = jwt.sign(
-          {
-            usr: username,
-            loc: userRow._loc,
-            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365) /* expires in 1 year */,
-            iat: Math.floor(Date.now() / 1000),
-          }, 
-          secret);
-      }
     }
   }
 
+
   res.json({
     status: status,
-    token: token,
   })
 
 });

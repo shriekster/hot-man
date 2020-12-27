@@ -51,7 +51,7 @@ class Login extends React.Component {
   onGenericKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
-    if (e.target.value.length > 64) {
+    if (e.target.value.length > 63) {
       if(charCode !== 8 && charCode !== 9 && 
          charCode !== 17 && charCode !== 46 && charCode !== 13 &&
          !(charCode >= 37 && charCode <= 40)) {

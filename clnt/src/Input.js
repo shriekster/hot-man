@@ -20,7 +20,7 @@ class Input extends React.Component {
         placeholder={this.props.placeholder}
         value={this.props.value}
         onInput={this.props.onInput}
-      />
+        autoFocus={this.props.autoFocus}/>
     );
   }
 }

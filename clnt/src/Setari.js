@@ -1015,7 +1015,7 @@ class Setari extends React.Component {
         <div id='view-user-settings' 
           className='view-user-settings'
           onClick={this.onViewSettingsClick}>
-          <div id='user-settings-container'>
+            <div id='user-settings-container'>
             <div className='--settings-item'>
               <Tippy
                 content={
