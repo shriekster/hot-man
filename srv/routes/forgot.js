@@ -8,6 +8,8 @@ let id = 0;
 
 const timeout = 120;
 
+let serverTime = 0;
+
 let user = '', 
     loc = '';
 
@@ -117,6 +119,8 @@ router.post('/:id', function(req, res, next) {
             if (req.body.loc === lc._loc) {
               loc = lc._loc;
               status = 'allowed';
+
+              serverTime = Math.floor((Date.now() + 60 * 2 * 1000) / 1000);
             }
           }
         }
@@ -125,9 +129,9 @@ router.post('/:id', function(req, res, next) {
     if ('pass' === req.params.id) {
       console.log(req.body)
       if (req.body && req.body.newPass && req.body.time) {
-        let serverTime = Math.floor((Date.now() + 60 * 2 * 1000) / 1000);
+        //let serverTime = Math.floor((Date.now() + 60 * 2 * 1000) / 1000);
         if (user) {
-          if (serverTime - req.body.time <= 0) { //TODO!
+          if (serverTime - req.body.time <= timeout) { //TODO!
             status = updateParola(req.body.newPass, user)
           } else {
             status = 'expired';

@@ -360,6 +360,8 @@ class Forgot extends React.Component {
               validPob: false,
               validNewPass: false,
 
+              buttonsHidden: true,
+
               defaultComponent: Expired,
             });
           } else {
@@ -377,6 +379,12 @@ class Forgot extends React.Component {
           showPobWarning: false,
           showNewPassWarning: true,
           showNewPassInfo: true,
+
+          validUser: false,
+          validPob: false,
+          validNewPass: false,
+
+          buttonsHidden: false, //??
         });
       }
     }
