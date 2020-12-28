@@ -1363,16 +1363,68 @@ table.--zilnic-table {
 }
 
 .seconds {
+  width: fit-content;
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-size: 20px;
+  position: relative;
+  animation: fadeInZoom2 .75s linear;
 }
+
+.seconds-fill {
+  position: absolute;
+  color: #D72C25;
+  left: 0;
+  overflow: hidden;
+  width: 0%;
+  z-index: 1;
+}
+
+.warned {
+  animation: warned .75s infinite alternate !important;
+  transform-origin: bottom;
+}
+
+@keyframes fadeInZoom2 {
+  0% {
+     opacity: 0;
+     transform: scale(.1);
+  }
+  100% {
+     opacity: 1;
+     transform: scale(1);
+  }
+}
+
+@keyframes warned {
+  0% {
+     transform: scale(.9);
+  }
+  100% {
+     transform: scale(1.1);
+  }
+}
+
 
 .stopwatch {
   font-size: 20px;
   display: inline;
   position: absolute;
-  right: 42px;
-  top: 6px;
+  right: 80px;
+  top: 5px;
+  transition: all .5s linear; /*?*/
+  animation: rotateIn .75s linear;
+}
+
+@keyframes rotateIn {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg) scale(.1);
+  } to {
+    transform: rotate(720deg) scale(1);
+    opacity: 1;
+  }
 }
 
 .--reset-message {
