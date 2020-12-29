@@ -60,6 +60,8 @@ class Main extends React.Component {
       token: this.props.token,
       user: this.props.user,
       hotel: '',
+
+      solicitariUrgente: 0,
     };
   }
 
@@ -182,6 +184,7 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
+    /** 1: exista hotel? */
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -220,6 +223,8 @@ class Main extends React.Component {
         this.signOut();
       }
     });
+
+    /** 2: exista solicitari a caror data incepe de maine? */
   }
 
 
@@ -233,7 +238,7 @@ class Main extends React.Component {
             <a href='#'
               className={this.state.menuAdmClass} 
               onClick={() => this.changeView('Administrare')}>
-              <i className='fas fa-hotel menu-icon'></i> 
+              <i className='fas fa-cogs menu-icon'></i> 
               <span className='menu-label'>Administrare</span>
             </a>
             <div className={this.state.hiddenMenuClass}>
@@ -258,16 +263,19 @@ class Main extends React.Component {
               <a href='#'
                 className={this.state.menuRezClass}
                 onClick={() => this.changeView('Rezervari')}>
-                <i className='fas fa-calendar-alt menu-icon'></i> 
+                <span className='menu-icon-container'>
+                  <i className='fas fa-calendar-alt menu-icon'></i>
+                  <i className='fas fa-clock menu-icon-small'></i>  
+                </span>
                 <span className='menu-label'>Rezervări</span>
               </a>
               <a href='#'
                 className={this.state.menuSolClass}
                 onClick={() => this.changeView('Solicitari')}>
-                  <i className='fas fa-clock menu-icon'></i> 
+                  <i className='fas fa-file-alt menu-icon'></i> 
                   <span className='menu-label'>
                     Solicitări
-                    <span className='--solicitari-count'>100</span>
+                    <span className='--solicitari-number'>10000</span>
                   </span>
               </a>
             </div>

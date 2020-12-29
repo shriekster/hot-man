@@ -478,7 +478,7 @@ div[class^='select-'] {
   z-index: 1;
   background-color: rgba(79, 183, 183, .9);
   overflow-x: hidden;
-  padding-top: 20px;
+  padding-top: 50px;
   position: relative;
 }
 
@@ -488,6 +488,7 @@ div[class^='select-'] {
 
 .sidenav-container .--active-menu {
   color: #009300;
+  background-color: #9fd9d9;
 }
 
 /* On mouse-over */
@@ -497,7 +498,7 @@ div[class^='select-'] {
 
 /* Style the sidenav links and the dropdown button */
 .sidenav-a {
-  padding: 6px 8px 6px 16px;
+  padding: 6px 8px 6px 12px;
   text-decoration: none;
   font-size: 20px;
   color: darkslategray;
@@ -592,23 +593,47 @@ div[class^='select-'] {
 }
 
 .menu-icon {
-  font-size: 20px;
+  font-size: 22px;
+}
+
+.menu-icon-container {
+  position: relative;
+}
+
+.menu-icon-small {
+  font-size: 14px;
+  position: absolute;
+  right: -10px;
+  top: 16px;
 }
 
 .menu-label {
   position: absolute;
-  left: 45px;
+  left: 50px;
 }
 
-.--solicitari-count {
-  color: darkslategray;
-  border: 2px solid darkslategray;
-  border-radius: 4px;
+.--solicitari-number {
+  padding: 1px 2px;
+  color: whitesmoke;
+  border-radius: 5px;
+  border: 2px solid rgba(79, 183, 183, 1);
+
+  margin-left: 2px;
+  font-size: 10px;
+  background-color: #D72C25;
+  background-clip: padding-box;
+
+  position: absolute;
+  right: -24px;
+  top: 3px;
+
   display: inline-flex;
   justify-content: center;
   align-content: center;
-  margin-left: 2px;
-  font-size: 12px;
+}
+
+.--active-menu .--solicitari-number {
+  border: 2px solid #9fd9d9;
 }
 
 hr.user-settings--separator {
@@ -1093,7 +1118,7 @@ button.--create-hotel-btn:hover {
   width: 100%;
   font-family: 'Source Sans Pro Bold', Verdana, sans-serif !important;
   font-size: 18px;
-  margin-bottom: 5px;
+  margin: 4px 0px;
 }
 
 .--icon-wrapper {
@@ -1107,7 +1132,7 @@ button.--create-hotel-btn:hover {
 }
 
 .--overview-icon {
-  font-size: 20px;
+  font-size: 22px;
   margin: 2px auto;
 }
 
