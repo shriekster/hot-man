@@ -145,7 +145,7 @@ class Login extends React.Component {
                   id='user'
                   placeholder='Introdu numele de utilizator'
                   onInput={this.onInput}
-                  />
+                  autoFocus={true}/>
                 </span>
               </Tippy>
             </div>

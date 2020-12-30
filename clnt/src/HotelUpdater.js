@@ -19,12 +19,6 @@ class HotelUpdater extends React.Component {
 
     this.onViewSettingsClick = this.onViewSettingsClick.bind(this);
 
-    this.togglePasswordVisibility = this.togglePasswordVisibility.bind(this);
-
-    this.onPasswordFocus = this.onPasswordFocus.bind(this);
-
-    this.onPasswordBlur = this.onPasswordBlur.bind(this);
-
     this.submitOnMenuClose = this.submitOnMenuClose.bind(this);
 
     /** Update user attributes (fetch - POST) */
@@ -948,24 +942,6 @@ class HotelUpdater extends React.Component {
     }
   }
 
-  togglePasswordVisibility () {
-    this.setState({
-      passwordVisible: !this.state.passwordVisible
-    });
-  }
-
-  onPasswordFocus () {
-    this.setState({
-      passwordFocused: true,
-    })
-  }
-
-  onPasswordBlur () {
-    this.setState({
-      passwordFocused: false,
-    })
-  }
-
   componentDidMount() {
     
   }
@@ -979,16 +955,15 @@ class HotelUpdater extends React.Component {
   render() {
     return (
       <div>
-        <div>Actualizează datele hotelului pe care îl administrezi:</div>
         <div id='view-user-settings' 
           className='view-user-settings'
           onClick={this.onViewSettingsClick}>
-          <div id='user-settings-container'>
+          <div className='hotel-settings-update'>
             <div className='--settings-item'>
               <Tippy
                 content={
                   <>
-                    <i className='fas fa-minus-circle'></i> CNP invalid
+                    <i className='fas fa-minus-circle'></i> Nume invalid
                   </>
                 }
                 allowHTML={true}
@@ -1001,7 +976,7 @@ class HotelUpdater extends React.Component {
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
-                    CNP
+                    Nume
                   </span>
                   <input id='--settings-cnp'
                     autoComplete='off'
@@ -1030,7 +1005,7 @@ class HotelUpdater extends React.Component {
               <Tippy
                 content={
                   <>
-                    <i className='fas fa-minus-circle'></i> Grad invalid
+                    <i className='fas fa-minus-circle'></i> Județ invalid
                   </>
                 }
                 allowHTML={true}
@@ -1043,7 +1018,7 @@ class HotelUpdater extends React.Component {
                     className='--settings-form'
                     onSubmit={this.handleSettingsSubmit}>
                     <span>
-                      Grad
+                      Județ
                     </span>
                     <Select
                       id='--settings-grad'
@@ -1079,7 +1054,7 @@ class HotelUpdater extends React.Component {
               <Tippy
                 content={
                   <>
-                    <i className='fas fa-minus-circle'></i> Nume invalid
+                    <i className='fas fa-minus-circle'></i> Localitate invalidă
                   </>
                 }
                 allowHTML={true}
@@ -1092,7 +1067,7 @@ class HotelUpdater extends React.Component {
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
-                    Nume
+                    Localitate
                   </span>
                   <input id='--settings-nume'
                     autoComplete='off'
@@ -1121,7 +1096,7 @@ class HotelUpdater extends React.Component {
               <Tippy
                 content={
                   <>
-                    <i className='fas fa-minus-circle'></i> Prenume invalid
+                    <i className='fas fa-minus-circle'></i> Stradă invalidă
                   </>
                 }
                 allowHTML={true}
@@ -1134,7 +1109,7 @@ class HotelUpdater extends React.Component {
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
-                    Prenume
+                    Stradă
                   </span>
                   <input id='--settings-prenume'
                     autoComplete='off'
@@ -1163,7 +1138,7 @@ class HotelUpdater extends React.Component {
               <Tippy
                   content={
                     <>
-                      <i className='fas fa-minus-circle'></i> Utilizator invalid sau indisponibil
+                      <i className='fas fa-minus-circle'></i> Număr invalid
                     </>
                   }
                   allowHTML={true}
@@ -1176,7 +1151,7 @@ class HotelUpdater extends React.Component {
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
-                    Utilizator
+                    Număr
                   </span>
                   <input id='--settings-utilizator'
                     autoComplete='off'
@@ -1202,57 +1177,173 @@ class HotelUpdater extends React.Component {
                 visibility={this.state.fetchingUtilizator}/>
             </div>
             <div className='--settings-item'>
-            <Tippy
-              content={
-                <>
-                  <i className='fas fa-minus-circle'></i> Parolă invalidă
-                </>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={false}
-              theme='red-material-warning'
-              offset={[0, 65]}
-              visible={this.state.showParolaError}>
-              <form id='--settings-parola-form'
-                className='--settings-form'
-                onSubmit={this.handleSettingsSubmit}>
-                <span>
-                  Parolă
-                </span>
-                <input id='--settings-parola'
-                  autoComplete='off'
-                  autoCorrect='off'
-                  spellCheck={false}
-                  className={this.state.valueParolaClass + ' --settings-parola'}
-                  disabled={!this.state.editParola}
-                  onInput={this.onValueInput}
-                  onKeyDown={this.onGenericKeyDown}
-                  value={this.state.nextParola}
-                  type={this.state.passwordVisible ? 'text' : 'password'}
-                  ref={this.parolaInput}>
-                </input>
-                <i id='--settings-parola-icon'
-                  className={(this.state.passwordVisible ? 
-                              'fas fa-eye-slash --settings-parola-icon' : 
-                              'fas fa-eye --settings-parola-icon') 
-                              + 
-                            (this.state.editParola ? 
-                              ' --parola-is-visible' : 
-                                ' --parola-is-invisible')}
-                  onClick={this.togglePasswordVisibility}></i>
-                <i id='--settings-edit-parola' 
-                  className={this.state.editParolaClass}
-                  onClick={this.handleSettingsSubmit}></i>
-              </form>
-            </Tippy>
-            <Spinner
+              <Tippy
+                  content={
+                    <>
+                      <i className='fas fa-minus-circle'></i> Cod poștal invalid
+                    </>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={false}
+                  theme='red-material-warning'
+                  offset={[0, 65]}
+                  visible={this.state.showUtilizatorError}>
+                <form id='--settings-utilizator-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Cod poștal
+                  </span>
+                  <input id='--settings-utilizator'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    spellCheck={false}
+                    className={this.state.valueUtilizatorClass}
+                    disabled={!this.state.editUtilizator}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextUtilizator}
+                    ref={this.utilizatorInput}>
+                  </input>
+                  <i id='--settings-edit-utilizator' 
+                    className={this.state.editUtilizatorClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
                 className='--settings-loading'
                 width='50px'
                 height='50px'
                 status='altLoading'
-                visibility={this.state.fetchingParola}/>
-          </div>
+                visibility={this.state.fetchingUtilizator}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                  content={
+                    <>
+                      <i className='fas fa-minus-circle'></i> Telefon invalid
+                    </>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={false}
+                  theme='red-material-warning'
+                  offset={[0, 65]}
+                  visible={this.state.showUtilizatorError}>
+                <form id='--settings-utilizator-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Telefon
+                  </span>
+                  <input id='--settings-utilizator'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    spellCheck={false}
+                    className={this.state.valueUtilizatorClass}
+                    disabled={!this.state.editUtilizator}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextUtilizator}
+                    ref={this.utilizatorInput}>
+                  </input>
+                  <i id='--settings-edit-utilizator' 
+                    className={this.state.editUtilizatorClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingUtilizator}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                  content={
+                    <>
+                      <i className='fas fa-minus-circle'></i> Fax invalid
+                    </>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={false}
+                  theme='red-material-warning'
+                  offset={[0, 65]}
+                  visible={this.state.showUtilizatorError}>
+                <form id='--settings-utilizator-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Fax
+                  </span>
+                  <input id='--settings-utilizator'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    spellCheck={false}
+                    className={this.state.valueUtilizatorClass}
+                    disabled={!this.state.editUtilizator}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextUtilizator}
+                    ref={this.utilizatorInput}>
+                  </input>
+                  <i id='--settings-edit-utilizator' 
+                    className={this.state.editUtilizatorClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingUtilizator}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                  content={
+                    <>
+                      <i className='fas fa-minus-circle'></i> Email invalid
+                    </>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={false}
+                  theme='red-material-warning'
+                  offset={[0, 65]}
+                  visible={this.state.showUtilizatorError}>
+                <form id='--settings-utilizator-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Email
+                  </span>
+                  <input id='--settings-utilizator'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    spellCheck={false}
+                    className={this.state.valueUtilizatorClass}
+                    disabled={!this.state.editUtilizator}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextUtilizator}
+                    ref={this.utilizatorInput}>
+                  </input>
+                  <i id='--settings-edit-utilizator' 
+                    className={this.state.editUtilizatorClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingUtilizator}/>
+            </div>
           </div>
         </div>
       </div>

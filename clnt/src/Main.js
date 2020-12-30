@@ -275,14 +275,15 @@ class Main extends React.Component {
                   <i className='fas fa-file-alt menu-icon'></i> 
                   <span className='menu-label'>
                     Solicitări
-                    <span className='--solicitari-number'>10000</span>
+                    <span className='--solicitari-number'>{this.state.solicitariUrgente}</span>
                   </span>
               </a>
             </div>
           </div>
         </div>
 
-        <div className='content'>
+        <div className='content'
+          onClick={() => {if (this.state.showUserSettings) this.closeUserSettings()}}>
           <div className='user-settings'>
             <span id='--settings-arrow'>
             {true === this.state.showUserSettings ?

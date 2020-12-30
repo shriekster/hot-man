@@ -137,7 +137,7 @@ INSERT INTO CategoriiSpatii (
                             )
                             VALUES (
                                 4,
-                                'virtual',
+                                'temporar',
                                 NULL
                             );
 

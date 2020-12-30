@@ -491,9 +491,13 @@ div[class^='select-'] {
   background-color: #9fd9d9;
 }
 
-/* On mouse-over */
-.sidenav a:hover {
+.sidenav-a:hover {
   color: rgba(0, 149, 0, .7);
+  background-color: rgba(159, 217, 217, .5);
+}
+
+.sidenav-a:hover .--solicitari-number {
+  border: 2px solid transparent;
 }
 
 /* Style the sidenav links and the dropdown button */
@@ -510,6 +514,7 @@ div[class^='select-'] {
   cursor: pointer;
   outline: none;
   transition: color .2s linear;
+  transition: background-color .2s linear;
 }
 
 /* content */
@@ -613,27 +618,25 @@ div[class^='select-'] {
 }
 
 .--solicitari-number {
-  padding: 1px 2px;
+  padding: 0px 2px 1px 2px;
   color: whitesmoke;
-  border-radius: 5px;
-  border: 2px solid rgba(79, 183, 183, 1);
+  border-radius: 8px 8px 8px 0px;
+  border: 2px solid transparent;
 
-  margin-left: 2px;
-  font-size: 10px;
+  font-size: 11px;
   background-color: #D72C25;
   background-clip: padding-box;
 
   position: absolute;
-  right: -24px;
-  top: 3px;
+  top: -5px;
 
   display: inline-flex;
   justify-content: center;
-  align-content: center;
+  align-items: flex-start;
 }
 
 .--active-menu .--solicitari-number {
-  border: 2px solid #9fd9d9;
+  border: 2px solid transparent;
 }
 
 hr.user-settings--separator {
@@ -669,6 +672,38 @@ button.sign-out:hover {
 /* Component views */
 .view {
   height: 90vh;
+}
+
+.view > div {
+  animation: fadeIn .2s linear;
+  transform-origin: left;
+}
+
+.view--separator {
+  animation: fadeInFromLeft .4s ease-in;
+  transform-origin: left;
+}
+
+@keyframes fadeInFromLeft {
+  0% {
+    border-color: darkslategray;
+    transform: scaleX(.0);
+  }
+  100% {
+    border-color: #25AAA9;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+     opacity: .0;
+     transform: scale(.99);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .view-user-settings {
@@ -798,8 +833,9 @@ input[type='password'].--value-editing:focus,
 }
 */
 
-hr.view--separator {
-  border-width: 1px 0 0 0;
+hr.view--separator,
+hr.view--separator-normal {
+  border-width: 2px 0 0 0;
   border-style: solid;
   border-color: rgba(37, 170, 169, 1);
   margin-block-start: 1px;
@@ -807,6 +843,8 @@ hr.view--separator {
   margin-inline-start: 1px;
   margin-inline-end: 1px;
   width: 100%;
+  cursor: default;
+  transition: all .4s ease-in;
 }
 
 /* React Select customization via CSS classes */
@@ -1129,6 +1167,7 @@ button.--create-hotel-btn:hover {
   fill: darkslategray;
   height: 32px;
   width: 32px;
+  transition: fill .2s linear;
 }
 
 .--overview-icon {
@@ -1147,11 +1186,37 @@ button.--create-hotel-btn:hover {
   justify-content: center;
   align-items: center;
   box-sizing: content-box;
+  transition: all .2s linear;
+
+  
+  position:relative; 
 }
 
 .--overview-posr:hover {
   color: rgba(0, 149, 0, .7);
-  border-bottom: 1px solid rgba(0, 149, 0, .1);
+  /*border-bottom: 1px solid rgba(0, 149, 0, .1);*/
+}
+
+.--overview-posr:after{
+  position:absolute;
+  bottom: 0;
+  left: 0%;
+  bottom: -1px;
+  height:0px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  width: 0%;
+  border-bottom: 1px solid rgba(0, 149, 0, .7);
+  display:block;
+  content: '';
+  transition: all 0.2s linear;
+}
+
+.--overview-posr:hover:after{
+  left:0;
+  width:100%;
+  background-color:rgba(0, 149, 0, .1);
 }
 
 .--overview-posr:hover svg {
@@ -1160,7 +1225,14 @@ button.--create-hotel-btn:hover {
 
 .--overview-active-menu {
   color: #009500;
-  border-bottom: 1px solid rgba(0, 149, 0, .3);
+  /*border-bottom: 1px solid rgba(0, 149, 0, 1);*/
+}
+
+.--overview-active-menu:after {
+  left:0;
+  width: 100%;
+  background-color: #009500;
+  /*border-bottom: 1px solid rgba(0, 149, 0, 1);*/
 }
 
 .--overview-active-menu svg {
@@ -1174,6 +1246,10 @@ button.--create-hotel-btn:hover {
 .--overview-component-container {
   height: 100%;
   width: 100%;
+}
+.hotel-settings-update {
+  height: 100%;
+  margin-top: 100px;
 }
 
 /* Rapoarte */
@@ -1210,20 +1286,22 @@ table.--zilnic-table {
 .--zilnic-tbody::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  border-radius: 4px;
-  background-color: rgba(79, 183, 183, .9);
+  border-radius: 5px;
+  /*background-color: rgba(79, 183, 183, .9);*/
+  background-color: transparent;
 }
 
 .--zilnic-tbody::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
   background-color: #9fd9d9;
 }
 
 .--zilnic-tbody::-webkit-scrollbar-thumb {
-  border-radius: 4px;
+  border-radius: 5px;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  background-color: #009500;
+  /*background-color: #009300;*/
+  background-image: linear-gradient(rgba(79, 183, 183, .9), rgba(0, 147, 0, .7), rgba(79, 183, 183, .9));
 }
 /**/
 
@@ -1408,7 +1486,7 @@ table.--zilnic-table {
   box-sizing: border-box;
   font-size: 20px;
   position: relative;
-  animation: fadeInZoom2 .75s linear;
+  animation: fadeInZoom2 .5s ease-in;
 }
 
 .seconds-fill {
@@ -1452,8 +1530,8 @@ table.--zilnic-table {
   position: absolute;
   right: 80px;
   top: 5px;
-  transition: all .5s linear; /*?*/
-  animation: rotateIn .75s linear;
+  transition: all .5s ease-in; 
+  animation: rotateIn .5s ease-in;
 }
 
 @keyframes rotateIn {
@@ -1461,7 +1539,7 @@ table.--zilnic-table {
     opacity: 0;
     transform: rotate(0deg) scale(.1);
   } to {
-    transform: rotate(720deg) scale(1);
+    transform: rotate(360deg) scale(1);
     opacity: 1;
   }
 }

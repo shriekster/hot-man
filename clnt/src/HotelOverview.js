@@ -175,6 +175,7 @@ class HotelOverview extends React.Component {
                 user={this.state.user}
                 token={this.state.token}
                 hotel={this.state.hotel}
+                judete={this.props.judet}
                 onChange={this.props.onChange}
                 changeMenu={this.changeView}
                 onHotelUpdate={this.props.hotelUpdate} />

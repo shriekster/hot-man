@@ -413,7 +413,8 @@ class Signup extends React.Component {
                     name='loc'
                     id='loc'
                     placeholder='Introdu locul nașterii'
-                    onInput={this.onInput}/>
+                    onInput={this.onInput}
+                    autoFocus={true}/>
                   </span>
                 </Tippy>
               </Tippy>

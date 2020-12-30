@@ -576,7 +576,7 @@ class HotelCreator extends React.Component {
                 content={
                   <div className='create-hotel-info'>
                     <i className='fas fa-clipboard-list --todo-icon'></i>
-                    <hr className='view--separator'/>
+                    <hr className='view--separator-normal'/>
                     <div>Completează datele hotelului pe care îl administrezi</div>
                   </div>
                 }
@@ -618,7 +618,8 @@ class HotelCreator extends React.Component {
                               className='--settings-value --value-editing--adm -inline'
                               onInput={this.onValueInput}
                               onKeyDown={this.onGenericKeyDown}
-                              placeholder='Introdu numele'>
+                              placeholder='Introdu numele'
+                              autoFocus={true}>
                             </input>
                         </div>
                       </div>
@@ -829,7 +830,7 @@ class HotelCreator extends React.Component {
                 content={
                   <div className='create-hotel-info'>
                     <i className='fas fa-clipboard-check --done-icon'></i>
-                    <hr className='view--separator'/>
+                    <hr className='view--separator-normal'/>
                     <div>Poți completa câmpurile rămase (opțional) sau poți face click pe butonul</div>
                     <div className='--mock'>
                     <i className='fas fa-caret-left --mock-icon'></i>
