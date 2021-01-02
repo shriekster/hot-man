@@ -163,7 +163,7 @@ class HotelUpdater extends React.Component {
     }
   }
 
-  update (attributeName, attributeValue) {
+  update (key, value) {
   /* Simple POST request 
   ** with a JSON body using fetch */
   const requestOptions = {
@@ -171,10 +171,11 @@ class HotelUpdater extends React.Component {
     mode: 'cors',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      token: this.state.token,
+      token: this.props.token,
       task: 'update',
-      attributeName: attributeName,
-      attributeValue: attributeValue,
+      name: this.props.hotel.nume,
+      key: key,
+      value: value.trim(),
     })
   };
 
@@ -188,9 +189,7 @@ class HotelUpdater extends React.Component {
   let fFax = false;
   let fEmail = false;
 
-  
-
-  switch(attributeName) {
+  switch(key) {
     case 'nume': {
       if (this.props.hotel.nume !== this.state.nextNume){
         fNume = true;
@@ -283,8 +282,8 @@ class HotelUpdater extends React.Component {
             this.props.onChange('Login'); 
             /* Go to Login when something is wrong with authorization (!) */
           } else {
-            if ('invalid' === updated.status) {
-              switch(attributeName) {
+            if ('invalid' === updated.status || 'error' === updated.status) {
+              switch(key) {
                 case 'nume': {
                   this.setState({
                     fetchingNume: false,
@@ -480,7 +479,7 @@ class HotelUpdater extends React.Component {
               }, 
 
               () => {
-                this.props.onHotelUpdate( hotel )
+                this.props.onHotelUpdate(hotel)
               });
 
             } else { /** Any other case */
@@ -1011,7 +1010,6 @@ class HotelUpdater extends React.Component {
     }
   }
 
-  //TODO: localitatea devine Bucuresti atunci cand judetul e sector 1, 2, 3, 4, 5 sau 6
   submitOnMenuClose(e) {
 
     let className = this.state.editJudetClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
@@ -1114,7 +1112,7 @@ class HotelUpdater extends React.Component {
       if (optional.id === 'judet' && optional.action === 'select-option') {
 
         this.setState({
-          nextJudet: optional.value.trim(),
+          nextJudet: optional.value,
 
           showNumeError: false,
           showJudetError: false,
@@ -1139,7 +1137,7 @@ class HotelUpdater extends React.Component {
       switch (e.target.id) {
         case '--settings-nume': {
           this.setState({
-            nextNume: e.target.value.trim(),
+            nextNume: e.target.value,
 
             showNumeError: false,
             showJudetError: false,
@@ -1156,7 +1154,7 @@ class HotelUpdater extends React.Component {
 
         case '--settings-localitate': {
           this.setState({
-            nextLocalitate: e.target.value.trim(),
+            nextLocalitate: e.target.value,
 
             showNumeError: false,
             showJudetError: false,
@@ -1173,7 +1171,7 @@ class HotelUpdater extends React.Component {
 
         case '--settings-strada': {
           this.setState({
-            nextStrada: e.target.value.trim(),
+            nextStrada: e.target.value,
 
             showNumeError: false,
             showJudetError: false,
@@ -1190,7 +1188,7 @@ class HotelUpdater extends React.Component {
 
         case '--settings-numar': {
           this.setState({
-            nextNumar: e.target.value.trim(),
+            nextNumar: e.target.value,
 
             showNumeError: false,
             showJudetError: false,
@@ -1207,7 +1205,7 @@ class HotelUpdater extends React.Component {
 
         case '--settings-codPostal': {
           this.setState({
-            nextCodPostal: e.target.value.trim(),
+            nextCodPostal: e.target.value,
 
             showNumeError: false,
             showJudetError: false,
@@ -1224,7 +1222,7 @@ class HotelUpdater extends React.Component {
 
         case '--settings-telefon': {
           this.setState({
-            nextTelefon: e.target.value.trim(),
+            nextTelefon: e.target.value,
 
             showNumeError: false,
             showJudetError: false,
@@ -1241,7 +1239,7 @@ class HotelUpdater extends React.Component {
 
         case '--settings-fax': {
           this.setState({
-            nextFax: e.target.value.trim(),
+            nextFax: e.target.value,
 
             showNumeError: false,
             showJudetError: false,
@@ -1258,7 +1256,7 @@ class HotelUpdater extends React.Component {
 
         case '--settings-email': {
           this.setState({
-            nextEmail: e.target.value.trim(),
+            nextEmail: e.target.value,
 
             showNumeError: false,
             showJudetError: false,

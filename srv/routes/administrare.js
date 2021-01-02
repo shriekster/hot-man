@@ -94,13 +94,237 @@ function isValidEmail (email) {
 
 /** Updaters */
 
-function updateHotelName(name) {
-  const update = db.prepare(`UPDATE Utilizatori
-                            SET Parola = ?,
-                                Extra = ?
-                            WHERE Utilizator = ?`);
+function updateNume(nume, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Nume = ?
+                            WHERE Nume = ?`);
 
+  if (numeHotel && isValidHotelName(nume)) {
+    let error;
 
+    try {
+      const info = update.run(nume, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateJudet(judet, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Judet = ?
+                            WHERE Nume = ?`);
+
+  if (numeHotel && isValidCounty(judet)) {
+    let error;
+
+    try {
+      const info = update.run(judet, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateLocalitate(localitate, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Localitate = ?
+                            WHERE Nume = ?`);
+  if (numeHotel && isValidPartialLocationName(localitate)) {
+    let error;
+
+    try {
+      const info = update.run(localitate, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateStrada(strada, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Strada = ?
+                            WHERE Nume = ?`);
+
+  if (numeHotel && isValidPartialLocationName(strada)) {
+    let error;
+
+    try {
+      const info = update.run(strada, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateNumar(numar, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Numar = ?
+                            WHERE Nume = ?`);
+
+  if (numeHotel && isValidStreetNo(numar)) {
+    let error;
+
+    try {
+      const info = update.run(numar, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateCodPostal(codPostal, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET CodPostal = ?
+                            WHERE Nume = ?`);
+
+  if (numeHotel && isValidPostalCode(codPostal)) {
+    let error;
+
+    try {
+      const info = update.run(codPostal, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateTelefon(telefon, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Telefon = ?
+                            WHERE Nume = ?`);
+
+  if (numeHotel && isValidPhoneOrFax(telefon)) {
+    let error;
+
+    try {
+      const info = update.run(telefon, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateFax(fax, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Fax = ?
+                            WHERE Nume = ?`);
+
+  if (numeHotel && isValidPhoneOrFax(fax)) {
+    let error;
+
+    try {
+      const info = update.run(fax, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+function updateEmail(email, numeHotel) {
+  const update = db.prepare(`UPDATE Hoteluri
+                            SET Email = ?
+                            WHERE Nume = ?`);
+
+  if (numeHotel && isValidEmail(email)) {
+    let error;
+
+    try {
+      const info = update.run(email, numeHotel);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
 }
 
 
@@ -118,7 +342,7 @@ router.options('/', function(req, res) {
 });
  
 
-/* POST */
+/* POST - hotel */
 router.post('/', authorization, function(req, res) {
   res.set({
     'Allow': 'POST',
@@ -324,8 +548,69 @@ router.post('/', authorization, function(req, res) {
       }
 
       case 'update': {
+        console.log('UPDATE...')
         // task: update
-        // field: {key, value} -> switch (key)
+        if (req.body.name && req.body.key && req.body.value) {
+          let name = req.body.name;
+          let value = req.body.value;
+
+          switch(req.body.key) {
+
+            case 'nume': {
+              status = updateNume(value, name);
+              break;
+            }
+
+            case 'judet': {
+              status = updateJudet(value, name);
+              break;
+            }
+
+            case 'localitate': {
+              status = updateLocalitate(value, name);
+              break;
+            }
+
+            case 'strada': {
+              status = updateStrada(value, name);
+              break;
+            }
+
+            case 'numar': {
+              status = updateNumar(value, name);
+              break;
+            }
+
+            case 'codPostal': {
+              status = updateCodPostal(value, name);
+              break;
+            }
+
+            case 'telefon': {
+              status = updateTelefon(value, name);
+              break;
+            }
+
+            case 'fax': {
+              status = updateFax(value, name);
+              break;
+            }
+
+            case 'email': {
+              status = updateEmail(value, name);
+              break;
+            }
+
+          }
+
+        } else {
+          status = 'error';
+        }
+        
+        return res.json({
+          status: status,
+          hotel: hotel,
+        });
         break;
       }
 
@@ -337,6 +622,35 @@ router.post('/', authorization, function(req, res) {
         });
 
         break;
+      }
+    }
+  }
+});
+
+/** TODO */
+router.post('/:attribute', authorization, function(req, res) {
+  res.set({
+    'Allow': 'POST',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': 'http://localhost:3000',
+  });
+
+  if (req.params && req.body) {
+    if (req.params.attribute) {
+      switch (req.params.attribute) {
+
+        case 'confort': {
+          break;
+        }
+
+        case 'paturi': {
+          break;
+        }
+
+        case 'spatii': {
+          break;
+        }
+
       }
     }
   }
