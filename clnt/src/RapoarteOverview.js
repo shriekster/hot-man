@@ -4,9 +4,9 @@ import Select from 'react-select';
 import Spinner from './Spinner';
 
 import ConfortUpdater from './RaportZilnic';
-import SpatiiUpdater from './HotelUpdater';
-import PaturiUpdater from './HotelUpdater';
-import HotelUpdater from './HotelUpdater';
+import SpatiiUpdater from './RaportZilnic';
+import PaturiUpdater from './RaportZilnic';
+import HotelUpdater from './RaportZilnic';
 
 
 class RapoarteOverview extends React.Component {
@@ -164,9 +164,9 @@ class RapoarteOverview extends React.Component {
                 visibility={true}/>
               }>
               <Component 
-                user={this.state.user}
-                token={this.state.token}
-                hotel={this.state.hotel}
+                user={this.props.user}
+                token={this.props.token}
+                hotel={this.props.hotel}
                 onChange={this.props.onChange}
                 changeMenu={this.changeView}
                 onHotelUpdate={this.props.hotelUpdate} />

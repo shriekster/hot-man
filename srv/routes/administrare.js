@@ -296,7 +296,7 @@ router.post('/', authorization, function(req, res) {
                 hotel = {
                   nume: single.Nume,
                   judet: single.Judet,
-                  sector: single.Sector,
+                  localitate: single.Localitate,
                   strada: single.Strada,
                   numar: single.Numar,
                   codPostal: single.CodPostal,

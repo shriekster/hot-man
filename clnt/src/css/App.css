@@ -1214,8 +1214,8 @@ button.--create-hotel-btn:hover {
 }
 
 .--overview-posr:hover:after{
-  left:0;
-  width:100%;
+  left: 0;
+  width: 100%;
   background-color:rgba(0, 149, 0, .1);
 }
 

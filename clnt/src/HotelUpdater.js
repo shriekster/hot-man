@@ -21,66 +21,78 @@ class HotelUpdater extends React.Component {
 
     this.submitOnMenuClose = this.submitOnMenuClose.bind(this);
 
+    this.focusInput = this.focusInput.bind(this);
+
     /** Update user attributes (fetch - POST) */
     this.update = this.update.bind(this);
 
     this.state = {
-      token: this.props.token,
-      hotel: '',
+      /** The following 2 state data are redundant, because 
+       * they are provided by props and there are 2 methods
+       * provided in the same way which update the data
+       */
+      //token: this.props.token,
+      //hotel: this.props.hotel,
 
-      fetchingCnp: false,
-      fetchingGrad: false,
       fetchingNume: false,
-      fetchingPrenume: false,
-      fetchingUtilizator: false,
-      fetchingParola: false,
+      fetchingJudet: false,
+      fetchingLocalitate: false,
+      fetchingStrada: false,
+      fetchingNumar: false,
+      fetchingCodPostal: false,
+      fetchingTelefon: false,
+      fetchingFax: false,
+      fetchingEmail: false,
 
-      editCnp: false,
-      editGrad: false,
       editNume: false,
-      editPrenume: false,
-      editUtilizator: false,
-      editParola: false,
+      editJudet: false,
+      editLocalitate: false,
+      editStrada: false,
+      editNumar: false,
+      editCodPostal: false,
+      editTelefon: false,
+      editFax: false,
+      editEmail: false,
 
-      passwordVisible: false,
-      passwordFocused: false,
-
-      /*
-      cnp: this.props.user.cnp,
-      grad: this.props.user.grad,
-      nume: this.props.user.nume,
-      prenume: this.props.user.prenume,
-      utilizator: this.props.user.utilizator,
-      rol: this.props.user.rol,
-      parola: '',
-      */
-      nextCnp: '',
-      nextGrad: '',
-      nextNume: '',
-      nextPrenume: '',
-      nextUtilizator: '',
-      nextParola: '',
+      nextNume: this.props.hotel.nume,
+      nextJudet: this.props.hotel.judet,
+      nextLocalitate: this.props.hotel.localitate,
+      nextStrada: this.props.hotel.strada,
+      nextNumar: this.props.hotel.numar,
+      nextCodPostal: this.props.hotel.codPostal,
+      nextTelefon: this.props.hotel.telefon,
+      nextFax: this.props.hotel.fax,
+      nextEmail: this.props.hotel.email,
       
-      showCnpError: false,
-      showGradError: false,
       showNumeError: false,
-      showPrenumeError: false,
-      showUtilizatorError: false,
-      showParolaError: false,
+      showJudetError: false,
+      showLocalitateError: false,
+      showStradaError: false,
+      showNumarError: false,
+      showCodPostalError: false,
+      showTelefonError: false,
+      showFaxError: false,
+      showEmailError: false,
 
-      editCnpClass: 'fas fa-edit --settings-edit',
-      editGradClass: 'fas fa-edit --settings-edit',
       editNumeClass: 'fas fa-edit --settings-edit',
-      editPrenumeClass: 'fas fa-edit --settings-edit',
-      editUtilizatorClass: 'fas fa-edit --settings-edit',
-      editParolaClass: 'fas fa-edit --settings-edit',
+      editJudetClass: 'fas fa-edit --settings-edit',
+      editLocalitateClass: 'fas fa-edit --settings-edit',
+      editStradaClass: 'fas fa-edit --settings-edit',
+      editNumarClass: 'fas fa-edit --settings-edit',
+      editCodPostalClass: 'fas fa-edit --settings-edit',
+      editTelefonClass: 'fas fa-edit --settings-edit',
+      editFaxClass: 'fas fa-edit --settings-edit',
+      editEmailClass: 'fas fa-edit --settings-edit',
 
-      valueCnpClass: '--settings-value -inline',
-      valueGradClass: '--settings-value -inline',
       valueNumeClass: '--settings-value -inline',
-      valuePrenumeClass: '--settings-value -inline',
-      valueUtilizatorClass: '--settings-value -inline',
-      valueParolaClass: '--settings-value -inline',
+      valueJudetClass: '--settings-value -inline',
+      valueLocalitateClass: '--settings-value -inline',
+      valueStradaClass: '--settings-value -inline',
+      valueNumarClass: '--settings-value -inline',
+      valueCodPostalClass: '--settings-value -inline',
+      valueTelefonClass: '--settings-value -inline',
+      valueFaxClass: '--settings-value -inline',
+      valueEmailClass: '--settings-value -inline',
 
       iconClassNames: {
         edit: 'fas fa-edit --settings-edit',
@@ -94,49 +106,60 @@ class HotelUpdater extends React.Component {
     };
 
     // Focus inputs when they are enabled
-    this.cnpInput = React.createRef(); 
-    this.gradInput = React.createRef(); 
-    this.numeInput = React.createRef();
-    this.prenumeInput = React.createRef();
-    this.utilizatorInput = React.createRef();
-    this.parolaInput = React.createRef();
+    this.numeInput = React.createRef(); 
+    this.judetInput = React.createRef(); 
+    this.localitateInput = React.createRef();
+    this.stradaInput = React.createRef();
+    this.numarInput = React.createRef();
+    this.codPostalInput = React.createRef();
+    this.telefonInput = React.createRef();
+    this.faxInput = React.createRef();
+    this.emailInput = React.createRef();
 
     // React Select use case: blur input on select, then click on the save icon
-    this.saveGrad = React.createRef();
-    
-    this.focusInput = this.focusInput.bind(this);
+    this.saveJudet = React.createRef();
   }
 
   focusInput(prevState) {
-    // Explicitly focus the text input using the raw DOM API
-    // Note: we're accessing "current" to get the DOM node
-    if (this.state.editCnp) {
-      this.cnpInput.current.focus();
+    if (this.state.editNume) {
+      this.numeInput.current.focus();
     } else
 
     /** Important! Check the previous state, 
      * otherwise the select menu will stay 
      * open when it's not supposed to */
-    if (this.state.editGrad) {
-      if(!prevState.editGrad) {
-        this.gradInput.current.select.focus()
+    if (this.state.editJudet) {
+      if(!prevState.editJudet) {
+        this.judetInput.current.select.focus()
       }
     } else
 
-    if (this.state.editNume) {
-      this.numeInput.current.focus();
+    if (this.state.editLocalitate) {
+      this.localitateInput.current.focus();
     } else
 
-    if (this.state.editPrenume) {
-      this.prenumeInput.current.focus();
+    if (this.state.editStrada) {
+      this.stradaInput.current.focus();
     } else
 
-    if (this.state.editUtilizator) {
-      this.utilizatorInput.current.focus();
+    if (this.state.editNumar) {
+      this.numarInput.current.focus();
     } else
 
-    if (this.state.editParola) {
-      this.parolaInput.current.focus();
+    if (this.state.editCodPostal) {
+      this.codPostalInput.current.focus();
+    } else
+
+    if (this.state.editTelefon) {
+      this.telefonInput.current.focus();
+    } else
+
+    if (this.state.editFax) {
+      this.faxInput.current.focus();
+    } else
+
+    if (this.state.editEmail) {
+      this.emailInput.current.focus();
     }
   }
 
@@ -148,61 +171,85 @@ class HotelUpdater extends React.Component {
     mode: 'cors',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      token: this.state.token,
+      task: 'update',
       attributeName: attributeName,
       attributeValue: attributeValue,
-      token: this.state.token,
-      username: this.state.utilizator,
     })
   };
 
-  let fCnp = false;
-  let fGrad = false;
   let fNume = false;
-  let fPrenume = false;
-  let fUtilizator = false;
-  let fParola = false;
+  let fJudet = false;
+  let fLocalitate = false;
+  let fStrada = false;
+  let fNumar = false;
+  let fCodPostal = false;
+  let fTelefon = false;
+  let fFax = false;
+  let fEmail = false;
 
   
 
   switch(attributeName) {
-    case 'cnp': {
-      if (this.state.cnp !== this.state.nextCnp){
-        fCnp = true;
-      }
-      break;
-    }
-
-    case 'grad': {
-      if(this.state.grad !== this.state.nextGrad) {
-        fGrad = true;
-      }
-      break;
-    }
-
     case 'nume': {
-      if (this.state.nume !== this.state.nextNume) {
+      if (this.props.hotel.nume !== this.state.nextNume){
         fNume = true;
       }
       break;
     }
 
-    case 'prenume': {
-      if (this.state.prenume !== this.state.nextPrenume) {
-        fPrenume = true;
+    case 'judet': {
+      if(this.props.hotel.judet !== this.state.nextJudet) {
+        fJudet = true;
       }
       break;
     }
 
-    case 'utilizator': {
-      if (this.state.utilizator !== this.state.nextUtilizator) {
-        fUtilizator = true;
+    case 'localitate': {
+      if (this.props.hotel.localitate !== this.state.nextLocalitate) {
+        fLocalitate = true;
       }
       break;
     }
 
-    case 'parola': {
-      if (this.state.parola !== this.state.nextParola) {
-        fParola = true;
+    case 'strada': {
+      if (this.props.hotel.strada !== this.state.nextStrada) {
+        fStrada = true;
+      }
+      break;
+    }
+
+    case 'numar': {
+      if (this.props.hotel.numar !== this.state.nextNumar) {
+        fNumar = true;
+      }
+      break;
+    }
+
+    case 'codPostal': {
+      if (this.props.hotel.codPostal !== this.state.nextCodPostal) {
+        fCodPostal = true;
+      }
+      break;
+    }
+
+    case 'telefon': {
+      if (this.props.hotel.telefon !== this.state.nextTelefon) {
+        fTelefon = true;
+      }
+      break;
+    }
+
+    case 'fax': {
+      if (this.props.hotel.fax !== this.state.nextFax) {
+        fFax = true;
+      }
+      break;
+    }
+
+    case 'email': {
+      if (this.props.hotel.email !== this.state.nextEmail) {
+        fEmail = true;
       }
       break;
     }
@@ -210,110 +257,187 @@ class HotelUpdater extends React.Component {
 
   this.setState(
     {
-      fetchingCnp: fCnp,
-      fetchingGrad: fGrad,
       fetchingNume: fNume,
-      fetchingPrenume: fPrenume,
-      fetchingUtilizator: fUtilizator,
-      fetchingParola: fParola,
+      fetchingJudet: fJudet,
+      fetchingLocalitate: fLocalitate,
+      fetchingStrada: fStrada,
+      fetchingNumar: fNumar,
+      fetchingCodPostal: fCodPostal,
+      fetchingTelefon: fTelefon,
+      fetchingFax: fFax,
+      fetchingEmail: fEmail,
     }, 
 
     () => 
     {
       let fetchApproved = (
-        fCnp || fGrad || fNume || fPrenume || fUtilizator || fParola
+        fNume || fJudet || fLocalitate || fStrada || fNumar || fCodPostal || fTelefon || fFax || fEmail
       );
 
       if (fetchApproved) {
-        fetch('http://localhost:3001/main/setari', requestOptions)
+        fetch('http://localhost:3001/main/administrare', requestOptions)
         .then(response => response.json())
         .then(updated => {
 
           if ('denied' === updated.status) {
-            this.props.onChange('Login'); /* render login component when something is wrong with authorization (!) */
+            this.props.onChange('Login'); 
+            /* Go to Login when something is wrong with authorization (!) */
           } else {
             if ('invalid' === updated.status) {
               switch(attributeName) {
-                case 'cnp': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    showCnpError: true,
-                  });
-                  break;
-                }
-            
-                case 'grad': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    showGradError: true,
-                  });
-                  break;
-                }
-            
                 case 'nume': {
                   this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
                     fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,              
 
                     showNumeError: true,
                   });
                   break;
                 }
             
-                case 'prenume': {
+                case 'judet': {
                   this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
                     fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,              
 
-                    showPrenumeError: true,
+                    showJudetError: true,
                   });
                   break;
                 }
             
-                case 'utilizator': {
+                case 'localitate': {
                   this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
                     fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    showUtilizatorError: true,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,
+              
+                    showLocalitateError: true,
                   });
                   break;
                 }
             
-                case 'parola': {
+                case 'strada': {
                   this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
                     fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,
+              
+                    showStradaError: true,
+                  });
+                  break;
+                }
+            
+                case 'numar': {
+                  this.setState({
+                    fetchingNume: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,              
 
-                    showParolaError: true,
+                    showNumarError: true,
+                  });
+                  break;
+                }
+            
+                case 'codPostal': {
+                  this.setState({
+                    fetchingNume: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,
+              
+
+                    showCodPostalError: true,
+                  });
+                  break;
+                }
+
+                case 'telefon': {
+                  this.setState({
+                    fetchingNume: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,
+              
+
+                    showTelefonError: true,
+                  });
+                  break;
+                }
+
+                case 'fax': {
+                  this.setState({
+                    fetchingNume: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,
+              
+
+                    showFaxError: true,
+                  });
+                  break;
+                }
+
+                case 'email': {
+                  this.setState({
+                    fetchingNume: false,
+                    fetchingJudet: false,
+                    fetchingLocalitate: false,
+                    fetchingStrada: false,
+                    fetchingNumar: false,
+                    fetchingCodPostal: false,
+                    fetchingTelefon: false,
+                    fetchingFax: false,
+                    fetchingEmail: false,
+              
+
+                    showEmailError: true,
                   });
                   break;
                 }
@@ -321,54 +445,55 @@ class HotelUpdater extends React.Component {
             } else
 
             if ('valid' === updated.status) {
-              let usr = {
-                cnp: this.state.nextCnp,
-                grad: this.state.nextGrad,
+              let hotel = {
                 nume: this.state.nextNume,
-                prenume: this.state.nextPrenume,
-                utilizator: this.state.nextUtilizator,
-                rol: this.props.user.rol,
+                judet: this.state.nextJudet,
+                localitate: this.state.nextLocalitate,
+                strada: this.state.nextStrada,
+                numar: this.state.nextNumar,
+                codPostal: this.state.nextCodPostal,
+                telefon: this.state.nextTelefon,
+                fax: this.state.nextFax,
+                email: this.state.nextEmail
               };
 
-              let tok = updated.token;
-
               this.setState({
-                token: tok,
-
-                fetchingCnp: false,
-                fetchingGrad: false,
                 fetchingNume: false,
-                fetchingPrenume: false,
-                fetchingUtilizator: false,
-                fetchingParola: false,
+                fetchingJudet: false,
+                fetchingLocalitate: false,
+                fetchingStrada: false,
+                fetchingNumar: false,
+                fetchingCodPostal: false,
+                fetchingTelefon: false,
+                fetchingFax: false,
+                fetchingEmail: false,
 
-                cnp: usr.cnp,
-                grad: usr.grad,
-                nume: usr.nume,
-                prenume: usr.prenume,
-                utilizator: usr.utilizator,
-                rol: usr.rol,
-                parola: '',
-                nextParola: '',
-
-                //??
-                showCnpError: false,
-                showGradError: false,
                 showNumeError: false,
-                showPrenumeError: false,
-                showUtilizatorError: false,
-                showParolaError: false,
+                showJudetError: false,
+                showLocalitateError: false,
+                showStradaError: false,
+                showNumarError: false,
+                showCodPostalError: false,
+                showTelefonError: false,
+                showFaxError: false,
+                showEmailError: false,
               }, 
-              () => {this.props.onUserUpdate(tok, usr)});
+
+              () => {
+                this.props.onHotelUpdate( hotel )
+              });
 
             } else { /** Any other case */
               this.setState({
-                fetchingCnp: false,
-                fetchingGrad: false,
                 fetchingNume: false,
-                fetchingPrenume: false,
-                fetchingUtilizator: false,
-                fetchingParola: false,
+                fetchingJudet: false,
+                fetchingLocalitate: false,
+                fetchingStrada: false,
+                fetchingNumar: false,
+                fetchingCodPostal: false,
+                fetchingTelefon: false,
+                fetchingFax: false,
+                fetchingEmail: false,
               });
             }
           }
@@ -377,12 +502,15 @@ class HotelUpdater extends React.Component {
         console.log(error); // dev mode only!
 
         this.setState({
-          fetchingCnp: false,
-          fetchingGrad: false,
           fetchingNume: false,
-          fetchingPrenume: false,
-          fetchingUtilizator: false,
-          fetchingParola: false,
+          fetchingJudet: false,
+          fetchingLocalitate: false,
+          fetchingStrada: false,
+          fetchingNumar: false,
+          fetchingCodPostal: false,
+          fetchingTelefon: false,
+          fetchingFax: false,
+          fetchingEmail: false,
           //showError: true,
         });
       });
@@ -391,7 +519,6 @@ class HotelUpdater extends React.Component {
   }
 
   handleSettingsSubmit(e) {
-    //console.log(e.target.id)
     if (e && '--settings-form' === e.target.className) {
       e.preventDefault();
     }
@@ -400,86 +527,11 @@ class HotelUpdater extends React.Component {
 
       switch (e.target.id) {
 
-        case '--settings-cnp-form':
-        case '--settings-edit-cnp': {
-          let className = this.state.editCnpClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueCnpClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-
-          if (this.state.editCnp) {
-            this.update( 'cnp', this.state.nextCnp);
-          }
-
-          this.setState({
-            editCnp: !this.state.editCnp,
-            editCnpClass: className,
-            valueCnpClass: valueClassName,
-
-            editGrad: false,
-            editNume: false,
-            editPrenume: false,
-            editUtilizator: false,
-            editParola: false,
-
-            editGradClass: this.state.iconClassNames.edit,
-            editNumeClass: this.state.iconClassNames.edit,
-            editPrenumeClass: this.state.iconClassNames.edit,
-            editUtilizatorClass: this.state.iconClassNames.edit,
-            editParolaClass: this.state.iconClassNames.edit,
-
-            valueGradClass: this.state.valueClassNames.edit,
-            valueNumeClass: this.state.valueClassNames.edit,
-            valuePrenumeClass: this.state.valueClassNames.edit,
-            valueUtilizatorClass: this.state.valueClassNames.edit,
-            valueParolaClass: this.state.valueClassNames.edit,
-
-          });
-          break;
-        }
-
-        case '--settings-grad-form':
-        case '--settings-edit-grad': {
-          let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-
-          if (this.state.editGrad) {
-            this.submitOnMenuClose(e);
-            //this.gradInput.current.select.blur();
-            //this.update( 'grad', this.state.nextGrad);
-          }
-
-          else
-          this.setState({
-            editGrad: !this.state.editGrad,
-            editGradClass: className,
-            valueGradClass: valueClassName,
-
-            editCnp: false,
-            editNume: false,
-            editPrenume: false,
-            editUtilizator: false,
-            editParola: false,
-
-            editCnpClass: this.state.iconClassNames.edit,
-            editNumeClass: this.state.iconClassNames.edit,
-            editPrenumeClass: this.state.iconClassNames.edit,
-            editUtilizatorClass: this.state.iconClassNames.edit,
-            editParolaClass: this.state.iconClassNames.edit,
-
-            valueCnpClass: this.state.valueClassNames.edit,
-            valueNumeClass: this.state.valueClassNames.edit,
-            valuePrenumeClass: this.state.valueClassNames.edit,
-            valueUtilizatorClass: this.state.valueClassNames.edit,
-            valueParolaClass: this.state.valueClassNames.edit,
-          });
-          
-          break;
-        }
-
         case '--settings-nume-form':
         case '--settings-edit-nume': {
           let className = this.state.editNumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
           let valueClassName = this.state.valueNumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-          
+
           if (this.state.editNume) {
             this.update( 'nume', this.state.nextNume);
           }
@@ -489,177 +541,520 @@ class HotelUpdater extends React.Component {
             editNumeClass: className,
             valueNumeClass: valueClassName,
 
-            editCnp: false,
-            editGrad: false,
-            editPrenume: false,
-            editUtilizator: false,
-            editParola: false,
+            editJudet: false,
+            editLocalitate: false,
+            editStrada: false,
+            editNumar: false,
+            editCodPostal: false,
+            editTelefon: false,
+            editFax: false,
+            editEmail: false,
 
-            editCnpClass: this.state.iconClassNames.edit,
-            editGradClass: this.state.iconClassNames.edit,
-            editPrenumeClass: this.state.iconClassNames.edit,
-            editUtilizatorClass: this.state.iconClassNames.edit,
-            editParolaClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
 
-            valueCnpClass: this.state.valueClassNames.edit,
-            valueGradClass: this.state.valueClassNames.edit,
-            valuePrenumeClass: this.state.valueClassNames.edit,
-            valueUtilizatorClass: this.state.valueClassNames.edit,
-            valueParolaClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextJudet: this.props.hotel.judet,
+            nextLocalitate: this.props.hotel.localitate,
+            nextStrada: this.props.hotel.strada,
+            nextNumar: this.props.hotel.numar,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextTelefon: this.props.hotel.telefon,
+            nextFax: this.props.hotel.fax,
+            nextEmail: this.props.hotel.email,
           });
           break;
         }
 
-        case '--settings-prenume-form':
-        case '--settings-edit-prenume': {
-          let className = this.state.editPrenumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valuePrenumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+        case '--settings-judet-form':
+        case '--settings-edit-judet': {
+          let className = this.state.editJudetClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueJudetClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+
+          if (this.state.editJudet) {
+            this.submitOnMenuClose(e);
+            //this.gradInput.current.select.blur();
+            //this.update( 'grad', this.state.nextGrad);
+          }
+
+          else
+          this.setState({
+            editJudet: !this.state.editJudet,
+            editJudetClass: className,
+            valueJudetClass: valueClassName,
+
+            editNume: false,
+            editLocalitate: false,
+            editStrada: false,
+            editNumar: false,
+            editCodPostal: false,
+            editTelefon: false,
+            editFax: false,
+            editEmail: false,
+
+            editNumeClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
+
+            valueNumeClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextLocalitate: this.props.hotel.localitate,
+            nextStrada: this.props.hotel.strada,
+            nextNumar: this.props.hotel.numar,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextTelefon: this.props.hotel.telefon,
+            nextFax: this.props.hotel.fax,
+            nextEmail: this.props.hotel.email,
+          });
           
-          if (this.state.editPrenume) {
-            this.update( 'prenume', this.state.nextPrenume);
-          }
-
-          this.setState({
-            editPrenume: !this.state.editPrenume,
-            editPrenumeClass: className,
-            valuePrenumeClass: valueClassName,
-
-            editCnp: false,
-            editGrad: false,
-            editNume: false,
-            editUtilizator: false,
-            editParola: false,
-
-            editCnpClass: this.state.iconClassNames.edit,
-            editGradClass: this.state.iconClassNames.edit,
-            editNumeClass: this.state.iconClassNames.edit,
-            editUtilizatorClass: this.state.iconClassNames.edit,
-            editParolaClass: this.state.iconClassNames.edit,
-
-            valueCnpClass: this.state.valueClassNames.edit,
-            valueGradClass: this.state.valueClassNames.edit,
-            valueNumeClass: this.state.valueClassNames.edit,
-            valueUtilizatorClass: this.state.valueClassNames.edit,
-            valueParolaClass: this.state.valueClassNames.edit,
-          });
           break;
         }
 
-        case '--settings-utilizator-form':
-        case '--settings-edit-utilizator': {
-          let className = this.state.editUtilizatorClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueUtilizatorClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+        case '--settings-localitate-form':
+        case '--settings-edit-localitate': {
+          let className = this.state.editLocalitateClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueLocalitateClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
-          if (this.state.editUtilizator) {
-            this.update( 'utilizator', this.state.nextUtilizator);
+          if (this.state.editLocalitate) {
+            this.update( 'localitate', this.state.nextLocalitate);
           }
 
           this.setState({
-            editUtilizator: !this.state.editUtilizator,
-            editUtilizatorClass: className,
-            valueUtilizatorClass: valueClassName,
+            editLocalitate: !this.state.editLocalitate,
+            editLocalitateClass: className,
+            valueLocalitateClass: valueClassName,
 
-            editCnp: false,
-            editGrad: false,
             editNume: false,
-            editPrenume: false,
-            editParola: false,
+            editJudet: false,
+            editStrada: false,
+            editNumar: false,
+            editCodPostal: false,
+            editTelefon: false,
+            editFax: false,
+            editEmail: false,
 
-            editCnpClass: this.state.iconClassNames.edit,
-            editGradClass: this.state.iconClassNames.edit,
             editNumeClass: this.state.iconClassNames.edit,
-            editPrenumeClass: this.state.iconClassNames.edit,
-            editParolaClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
 
-            valueCnpClass: this.state.valueClassNames.edit,
-            valueGradClass: this.state.valueClassNames.edit,
             valueNumeClass: this.state.valueClassNames.edit,
-            valuePrenumeClass: this.state.valueClassNames.edit,
-            valueParolaClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextJudet: this.props.hotel.judet,
+            nextStrada: this.props.hotel.strada,
+            nextNumar: this.props.hotel.numar,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextTelefon: this.props.hotel.telefon,
+            nextFax: this.props.hotel.fax,
+            nextEmail: this.props.hotel.email,
           });
           break;
         }
 
-        case '--settings-parola-form':
-        case '--settings-edit-parola': {
-          let className = this.state.editParolaClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueParolaClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-          let passwordVisible = false;
-
-          if (className === this.state.iconClassNames.edit &&
-              valueClassName == this.state.valueClassNames.edit) {
-                passwordVisible = false;
-          }
-
-          if (this.state.editParola) {
-            this.update( 'parola', this.state.nextParola);
+        case '--settings-strada-form':
+        case '--settings-edit-strada': {
+          let className = this.state.editStradaClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueStradaClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          
+          if (this.state.editStrada) {
+            this.update( 'strada', this.state.nextStrada);
           }
 
           this.setState({
-            editParola: !this.state.editParola,
-            editParolaClass: className,
-            valueParolaClass: valueClassName,
+            editStrada: !this.state.editStrada,
+            editStradaClass: className,
+            valueStradaClass: valueClassName,
 
-            passwordVisible: passwordVisible,
-
-            editCnp: false,
-            editGrad: false,
             editNume: false,
-            editPrenume: false,
-            editUtilizator: false,
+            editJudet: false,
+            editLocalitate: false,
+            editNumar: false,
+            editCodPostal: false,
+            editTelefon: false,
+            editFax: false,
+            editEmail: false,
 
-            editCnpClass: this.state.iconClassNames.edit,
-            editGradClass: this.state.iconClassNames.edit,
             editNumeClass: this.state.iconClassNames.edit,
-            editPrenumeClass: this.state.iconClassNames.edit,
-            editUtilizatorClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
 
-            valueCnpClass: this.state.valueClassNames.edit,
-            valueGradClass: this.state.valueClassNames.edit,
             valueNumeClass: this.state.valueClassNames.edit,
-            valuePrenumeClass: this.state.valueClassNames.edit,
-            valueUtilizatorClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextJudet: this.props.hotel.judet,
+            nextLocalitate: this.props.hotel.localitate,
+            nextNumar: this.props.hotel.numar,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextTelefon: this.props.hotel.telefon,
+            nextFax: this.props.hotel.fax,
+            nextEmail: this.props.hotel.email,
           });
           break;
         }
+
+        case '--settings-numar-form':
+        case '--settings-edit-numar': {
+          let className = this.state.editNumarClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueNumarClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          
+          if (this.state.editNumar) {
+            this.update( 'numar', this.state.nextNumar);
+          }
+
+          this.setState({
+            editNumar: !this.state.editNumar,
+            editNumarClass: className,
+            valueNumarClass: valueClassName,
+
+            editNume: false,
+            editJudet: false,
+            editLocalitate: false,
+            editStrada: false,
+            editCodPostal: false,
+            editTelefon: false,
+            editFax: false,
+            editEmail: false,
+
+            editNumeClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
+
+            valueNumeClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextJudet: this.props.hotel.judet,
+            nextLocalitate: this.props.hotel.localitate,
+            nextStrada: this.props.hotel.strada,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextTelefon: this.props.hotel.telefon,
+            nextFax: this.props.hotel.fax,
+            nextEmail: this.props.hotel.email,
+          });
+          break;
+        }
+
+        case '--settings-codPostal-form':
+        case '--settings-edit-codPostal': {
+          let className = this.state.editCodPostalClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueCodPostalClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+
+          if (this.state.editCodPostal) {
+            this.update( 'codPostal', this.state.nextCodPostal);
+          }
+
+          this.setState({
+            editCodPostal: !this.state.editCodPostal,
+            editCodPostalClass: className,
+            valueCodPostalClass: valueClassName,
+
+            editNume: false,
+            editJudet: false,
+            editLocalitate: false,
+            editStrada: false,
+            editNumar: false,
+            editTelefon: false,
+            editFax: false,
+            editEmail: false,
+
+            editNumeClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
+
+            valueNumeClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextJudet: this.props.hotel.judet,
+            nextLocalitate: this.props.hotel.localitate,
+            nextStrada: this.props.hotel.strada,
+            nextNumar: this.props.hotel.numar,
+            nextTelefon: this.props.hotel.telefon,
+            nextFax: this.props.hotel.fax,
+            nextEmail: this.props.hotel.email,
+          });
+          break;
+        }
+
+        case '--settings-telefon-form':
+        case '--settings-edit-telefon': {
+          let className = this.state.editTelefonClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueTelefonClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+
+          if (this.state.editTelefon) {
+            this.update( 'telefon', this.state.nextTelefon);
+          }
+
+          this.setState({
+            editTelefon: !this.state.editTelefon,
+            editTelefonClass: className,
+            valueTelefonClass: valueClassName,
+
+            editNume: false,
+            editJudet: false,
+            editLocalitate: false,
+            editStrada: false,
+            editNumar: false,
+            editCodPostal: false,
+            editFax: false,
+            editEmail: false,
+
+            editNumeClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
+
+            valueNumeClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextJudet: this.props.hotel.judet,
+            nextLocalitate: this.props.hotel.localitate,
+            nextStrada: this.props.hotel.strada,
+            nextNumar: this.props.hotel.numar,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextFax: this.props.hotel.fax,
+            nextEmail: this.props.hotel.email,
+          });
+          break;
+        }
+
+        case '--settings-fax-form':
+        case '--settings-edit-fax': {
+          let className = this.state.editFaxClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueFaxClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+
+          if (this.state.editFax) {
+            this.update( 'fax', this.state.nextFax);
+          }
+
+          this.setState({
+            editFax: !this.state.editFax,
+            editFaxClass: className,
+            valueFaxClass: valueClassName,
+
+            editNume: false,
+            editJudet: false,
+            editLocalitate: false,
+            editStrada: false,
+            editNumar: false,
+            editCodPostal: false,
+            editTelefon: false,
+            editEmail: false,
+
+            editNumeClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editEmailClass: this.state.iconClassNames.edit,
+
+            valueNumeClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextJudet: this.props.hotel.judet,
+            nextLocalitate: this.props.hotel.localitate,
+            nextStrada: this.props.hotel.strada,
+            nextNumar: this.props.hotel.numar,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextTelefon: this.props.hotel.telefon,
+            nextEmail: this.props.hotel.email,
+          });
+          break;
+        }
+
+        case '--settings-email-form':
+        case '--settings-edit-email': {
+          let className = this.state.editEmailClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueEmailClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+
+          if (this.state.editEmail) {
+            this.update( 'email', this.state.nextEmail);
+          }
+
+          this.setState({
+            editEmail: !this.state.editEmail,
+            editEmailClass: className,
+            valueEmailClass: valueClassName,
+
+            editNume: false,
+            editJudet: false,
+            editLocalitate: false,
+            editStrada: false,
+            editNumar: false,
+            editCodPostal: false,
+            editTelefon: false,
+            editFax: false,
+
+            editNumeClass: this.state.iconClassNames.edit,
+            editJudetClass: this.state.iconClassNames.edit,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            editStradaClass: this.state.iconClassNames.edit,
+            editNumarClass: this.state.iconClassNames.edit,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            editTelefonClass: this.state.iconClassNames.edit,
+            editFaxClass: this.state.iconClassNames.edit,
+
+            valueNumeClass: this.state.valueClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+
+            nextNume: this.props.hotel.nume,
+            nextJudet: this.props.hotel.judet,
+            nextLocalitate: this.props.hotel.localitate,
+            nextStrada: this.props.hotel.strada,
+            nextNumar: this.props.hotel.numar,
+            nextCodPostal: this.props.hotel.codPostal,
+            nextTelefon: this.props.hotel.telefon,
+            nextFax: this.props.hotel.fax,
+          });
+          break;
+        } 
       }
     }
   }
 
+  //TODO: localitatea devine Bucuresti atunci cand judetul e sector 1, 2, 3, 4, 5 sau 6
   submitOnMenuClose(e) {
 
-    let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-    let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+    let className = this.state.editJudetClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+    let valueClassName = this.state.valueJudetClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
 
-    if (this.state.editGrad) {
-      this.gradInput.current.select.blur();
+    if (this.state.editJudet) {
+      this.judetInput.current.select.blur();
 
       this.setState({
-        editGrad: !this.state.editGrad,
-        editGradClass: className,
-        valueGradClass: valueClassName,
+        editJudet: !this.state.editJudet,
+        editJudetClass: className,
+        valueJudetClass: valueClassName,
 
-        editCnp: false,
         editNume: false,
-        editPrenume: false,
-        editUtilizator: false,
-        editParola: false,
+        editLocalitate: false,
+        editStrada: false,
+        editNumar: false,
+        editCodPostal: false,
+        editTelefon: false,
+        editFax: false,
+        editEmail: false,
 
-        editCnpClass: this.state.iconClassNames.edit,
         editNumeClass: this.state.iconClassNames.edit,
-        editPrenumeClass: this.state.iconClassNames.edit,
-        editUtilizatorClass: this.state.iconClassNames.edit,
-        editParolaClass: this.state.iconClassNames.edit,
+        editLocalitateClass: this.state.iconClassNames.edit,
+        editStradaClass: this.state.iconClassNames.edit,
+        editNumarClass: this.state.iconClassNames.edit,
+        editCodPostalClass: this.state.iconClassNames.edit,
+        editTelefonClass: this.state.iconClassNames.edit,
+        editFaxClass: this.state.iconClassNames.edit,
+        editEmailClass: this.state.iconClassNames.edit,
 
-        valueCnpClass: this.state.valueClassNames.edit,
         valueNumeClass: this.state.valueClassNames.edit,
-        valuePrenumeClass: this.state.valueClassNames.edit,
-        valueUtilizatorClass: this.state.valueClassNames.edit,
-        valueParolaClass: this.state.valueClassNames.edit,
+        valueLocalitateClass: this.state.valueClassNames.edit,
+        valueStradaClass: this.state.valueClassNames.edit,
+        valueNumarClass: this.state.valueClassNames.edit,
+        valueCodPostalClass: this.state.valueClassNames.edit,
+        valueTelefonClass: this.state.valueClassNames.edit,
+        valueFaxClass: this.state.valueClassNames.edit,
+        valueEmailClass: this.state.valueClassNames.edit,
       },
       () => 
       {
-        this.update( 'grad', this.state.nextGrad);
+        this.update( 'judet', this.state.nextJudet);
       });
     }
   }
@@ -716,17 +1111,20 @@ class HotelUpdater extends React.Component {
 
     if (optional && optional !== undefined) {
 
-      if (optional.id === 'grad' && optional.action === 'select-option') {
-        
-        this.setState({
-          nextGrad: optional.value.trim(),
+      if (optional.id === 'judet' && optional.action === 'select-option') {
 
-          showCnpError: false,
-          showGradError: false,
+        this.setState({
+          nextJudet: optional.value.trim(),
+
           showNumeError: false,
-          showPrenumeError: false,
-          showUtilizatorError: false,
-          showParolaError: false,
+          showJudetError: false,
+          showLocalitateError: false,
+          showStradaError: false,
+          showNumarError: false,
+          showCodPostalError: false,
+          showTelefonError: false,
+          showFaxError: false,
+          showEmailError: false,
         },
         () => {
           this.submitOnMenuClose(e);
@@ -738,88 +1136,139 @@ class HotelUpdater extends React.Component {
 
   onValueInput(e) {
     if (e && e.target && e.target.id) {
-      /*
-      this.setState({
-        showCnpError: false,
-        showGradError: false,
-        showNumeError: false,
-        showPrenumeError: false,
-        showUtilizatorError: false,
-        showParolaError: false,
-      });
-      */
       switch (e.target.id) {
-        case '--settings-cnp': {
-          if (e.target.value.length > 13) {
-            e.preventDefault();
-          }
-          else {
-            this.setState({
-              nextCnp: e.target.value.trim(),
-
-              showCnpError: false,
-              showGradError: false,
-              showNumeError: false,
-              showPrenumeError: false,
-              showUtilizatorError: false,
-              showParolaError: false,
-            })
-          }
-          break;
-        }
-
         case '--settings-nume': {
           this.setState({
             nextNume: e.target.value.trim(),
 
-            showCnpError: false,
-            showGradError: false,
             showNumeError: false,
-            showPrenumeError: false,
-            showUtilizatorError: false,
-            showParolaError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           })
           break;
         }
 
-        case '--settings-prenume': {
+        case '--settings-localitate': {
           this.setState({
-            nextPrenume: e.target.value.trim(),
+            nextLocalitate: e.target.value.trim(),
 
-            showCnpError: false,
-            showGradError: false,
             showNumeError: false,
-            showPrenumeError: false,
-            showUtilizatorError: false,
-            showParolaError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           })
           break;
         }
 
-        case '--settings-utilizator': {
+        case '--settings-strada': {
           this.setState({
-            nextUtilizator: e.target.value.trim(),
+            nextStrada: e.target.value.trim(),
 
-            showCnpError: false,
-            showGradError: false,
             showNumeError: false,
-            showPrenumeError: false,
-            showUtilizatorError: false,
-            showParolaError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           })
           break;
         }
 
-        case '--settings-parola': {
+        case '--settings-numar': {
           this.setState({
-            nextParola: e.target.value.trim(),
+            nextNumar: e.target.value.trim(),
 
-            showCnpError: false,
-            showGradError: false,
             showNumeError: false,
-            showPrenumeError: false,
-            showUtilizatorError: false,
-            showParolaError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
+          })
+          break;
+        }
+
+        case '--settings-codPostal': {
+          this.setState({
+            nextCodPostal: e.target.value.trim(),
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
+          })
+          break;
+        }
+
+        case '--settings-telefon': {
+          this.setState({
+            nextTelefon: e.target.value.trim(),
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
+          })
+          break;
+        }
+
+        case '--settings-fax': {
+          this.setState({
+            nextFax: e.target.value.trim(),
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
+          })
+          break;
+        }
+
+        case '--settings-email': {
+          this.setState({
+            nextEmail: e.target.value.trim(),
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           })
           break;
         }
@@ -829,113 +1278,194 @@ class HotelUpdater extends React.Component {
 
   onViewSettingsClick(e) {
     if (e && e.target) {
-      if ('view-user-settings' === e.target.id || 'user-settings-container' === e.target.id) {
-
-        if (this.state.editCnp) {
-          this.setState({
-            editCnp: false,
-            nextCnp: this.state.cnp,
-            editCnpClass: this.state.iconClassNames.edit,
-            valueCnpClass: this.state.valueClassNames.edit,
-
-            fetchingCnp: false,
-            fetchingGrad: false,
-            fetchingNume: false,
-            fetchingPrenume: false,
-            fetchingUtilizator: false,
-            fetchingParola: false,
-
-            showCnpError: false,
-          })
-        }
-
-        if (this.state.editGrad) {
-          this.setState({
-            editGrad: false,
-            nextGrad: this.state.grad,
-            editGradClass: this.state.iconClassNames.edit,
-            valueGradClass: this.state.valueClassNames.edit,
-
-            fetchingCnp: false,
-            fetchingGrad: false,
-            fetchingNume: false,
-            fetchingPrenume: false,
-            fetchingUtilizator: false,
-            fetchingParola: false,
-
-            showGradError: false,
-          })
-        }
+      if ('view-user-settings' === e.target.id || 'hotel-settings-update' === e.target.id) {
 
         if (this.state.editNume) {
           this.setState({
             editNume: false,
-            nextNume: this.state.nume,
+            nextNume: this.props.hotel.nume,
             editNumeClass: this.state.iconClassNames.edit,
             valueNumeClass: this.state.valueClassNames.edit,
 
-            fetchingCnp: false,
-            fetchingGrad: false,
             fetchingNume: false,
-            fetchingPrenume: false,
-            fetchingUtilizator: false,
-            fetchingParola: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
 
             showNumeError: false,
           })
         }
 
-        if (this.state.editPrenume) {
+        if (this.state.editJudet) {
           this.setState({
-            editPrenume: false,
-            nextPrenume: this.state.prenume,
-            editPrenumeClass: this.state.iconClassNames.edit,
-            valuePrenumeClass: this.state.valueClassNames.edit,
+            editJudet: false,
+            nextJudet: this.props.hotel.judet,
+            editJudetClass: this.state.iconClassNames.edit,
+            valueJudetClass: this.state.valueClassNames.edit,
 
-            fetchingCnp: false,
-            fetchingGrad: false,
             fetchingNume: false,
-            fetchingPrenume: false,
-            fetchingUtilizator: false,
-            fetchingParola: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
 
-            showPrenumeError: false,
+            showJudetError: false,
           })
         }
 
-        if (this.state.editUtilizator) {
+        if (this.state.editLocalitate) {
           this.setState({
-            editUtilizator: false,
-            nextUtilizator: this.state.utilizator,
-            editUtilizatorClass: this.state.iconClassNames.edit,
-            valueUtilizatorClass: this.state.valueClassNames.edit,
+            editLocalitate: false,
+            nextLocalitate: this.props.hotel.localitate,
+            editLocalitateClass: this.state.iconClassNames.edit,
+            valueLocalitateClass: this.state.valueClassNames.edit,
 
-            fetchingCnp: false,
-            fetchingGrad: false,
             fetchingNume: false,
-            fetchingPrenume: false,
-            fetchingUtilizator: false,
-            fetchingParola: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
 
-            showUtilizatorError: false,
+            showLocalitateError: false,
           })
         }
 
-        if (this.state.editParola) {
+        if (this.state.editStrada) {
           this.setState({
-            editParola: false,
-            nextParola: this.state.parola,
-            editParolaClass: this.state.iconClassNames.edit,
-            valueParolaClass: this.state.valueClassNames.edit,
+            editStrada: false,
+            nextStrada: this.props.hotel.strada,
+            editStradaClass: this.state.iconClassNames.edit,
+            valueStradaClass: this.state.valueClassNames.edit,
 
-            fetchingCnp: false,
-            fetchingGrad: false,
             fetchingNume: false,
-            fetchingPrenume: false,
-            fetchingUtilizator: false,
-            fetchingParola: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
 
-            showParolaError: false,
+            showStradaError: false,
+          })
+        }
+
+        if (this.state.editNumar) {
+          this.setState({
+            editNumar: false,
+            nextNumar: this.props.hotel.numar,
+            editNumarClass: this.state.iconClassNames.edit,
+            valueNumarClass: this.state.valueClassNames.edit,
+
+            fetchingNume: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
+
+            showNumarError: false,
+          })
+        }
+
+        if (this.state.editCodPostal) {
+          this.setState({
+            editCodPostal: false,
+            nextCodPostal: this.props.hotel.codPostal,
+            editCodPostalClass: this.state.iconClassNames.edit,
+            valueCodPostalClass: this.state.valueClassNames.edit,
+
+            fetchingNume: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
+
+            showCodPostalError: false,
+          })
+        }
+
+        if (this.state.editTelefon) {
+          this.setState({
+            editTelefon: false,
+            nextTelefon: this.props.hotel.telefon,
+            editTelefonClass: this.state.iconClassNames.edit,
+            valueTelefonClass: this.state.valueClassNames.edit,
+
+            fetchingNume: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
+
+            showTelefonError: false,
+          })
+        }
+
+        if (this.state.editFax) {
+          this.setState({
+            editFax: false,
+            nextFax: this.props.hotel.fax,
+            editFaxClass: this.state.iconClassNames.edit,
+            valueFaxClass: this.state.valueClassNames.edit,
+
+            fetchingNume: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
+
+            showFaxError: false,
+          })
+        }
+
+        if (this.state.editEmail) {
+          this.setState({
+            editEmail: false,
+            nextEmail: this.props.hotel.email,
+            editEmailClass: this.state.iconClassNames.edit,
+            valueEmailClass: this.state.valueClassNames.edit,
+
+            fetchingNume: false,
+            fetchingJudet: false,
+            fetchingLocalitate: false,
+            fetchingStrada: false,
+            fetchingNumar: false,
+            fetchingCodPostal: false,
+            fetchingTelefon: false,
+            fetchingFax: false,
+            fetchingEmail: false,
+
+            showEmailError: false,
           })
         }
       }
@@ -943,7 +1473,6 @@ class HotelUpdater extends React.Component {
   }
 
   componentDidMount() {
-    
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -958,7 +1487,8 @@ class HotelUpdater extends React.Component {
         <div id='view-user-settings' 
           className='view-user-settings'
           onClick={this.onViewSettingsClick}>
-          <div className='hotel-settings-update'>
+          <div id='hotel-settings-update' 
+          className='hotel-settings-update'>
             <div className='--settings-item'>
               <Tippy
                 content={
@@ -971,103 +1501,12 @@ class HotelUpdater extends React.Component {
                 arrow={false}
                 theme='red-material-warning'
                 offset={[0, 65]}
-                visible={this.state.showCnpError}>
-                <form id='--settings-cnp-form'
-                  className='--settings-form'
-                  onSubmit={this.handleSettingsSubmit}>
-                  <span>
-                    Nume
-                  </span>
-                  <input id='--settings-cnp'
-                    autoComplete='off'
-                    autoCorrect='off'
-                    spellCheck={false}
-                    className={this.state.valueCnpClass}
-                    disabled={!this.state.editCnp}
-                    onInput={this.onValueInput}
-                    onKeyDown={this.onKeyDown}
-                    value={this.state.nextCnp}
-                    ref={this.cnpInput}>
-                  </input>
-                  <i id='--settings-edit-cnp' 
-                    className={this.state.editCnpClass}
-                    onClick={this.handleSettingsSubmit}></i>
-                </form>
-              </Tippy>
-              <Spinner
-                className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
-                visibility={this.state.fetchingCnp}/>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Județ invalid
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 65]}
-                visible={this.state.showGradError}>
-                <form id='--settings-grad-form'
-                    className='--settings-form'
-                    onSubmit={this.handleSettingsSubmit}>
-                    <span>
-                      Județ
-                    </span>
-                    <Select
-                      id='--settings-grad'
-                      isDisabled={!this.state.editGrad}
-                      onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
-                      onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
-                      maxMenuHeight={100}
-                      placeholder='Selectează...'
-                      noOptionsMessage={(msg) => 'Nu există'}
-                      className='sel-container'
-                      classNamePrefix='sel' 
-                      options={this.props.judete} 
-                      onKeyDown={this.onGenericKeyDown}
-                      ref={this.gradInput}
-                      openMenuOnFocus={true}
-                      closeMenuOnSelect={true}
-                      blurInputOnSelect={true}
-                      inputId='--grad-select-input'/> 
-                    <i id='--settings-edit-grad'  
-                      className={this.state.editGradClass}
-                      onClick={this.handleSettingsSubmit}
-                      ref={this.saveGrad}></i>
-                  </form>
-              </Tippy>
-              <Spinner
-                className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
-                visibility={this.state.fetchingGrad}/>
-            </div>
-            <div className='--settings-item'>
-              <Tippy
-                content={
-                  <>
-                    <i className='fas fa-minus-circle'></i> Localitate invalidă
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={false}
-                theme='red-material-warning'
-                offset={[0, 65]}
                 visible={this.state.showNumeError}>
                 <form id='--settings-nume-form'
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
-                    Localitate
+                    Nume
                   </span>
                   <input id='--settings-nume'
                     autoComplete='off'
@@ -1096,7 +1535,7 @@ class HotelUpdater extends React.Component {
               <Tippy
                 content={
                   <>
-                    <i className='fas fa-minus-circle'></i> Stradă invalidă
+                    <i className='fas fa-minus-circle'></i> Județ invalid
                   </>
                 }
                 allowHTML={true}
@@ -1104,26 +1543,76 @@ class HotelUpdater extends React.Component {
                 arrow={false}
                 theme='red-material-warning'
                 offset={[0, 65]}
-                visible={this.state.showPrenumeError}>
-                <form id='--settings-prenume-form'
+                visible={this.state.showJudetError}>
+                <form id='--settings-judet-form'
+                    className='--settings-form'
+                    onSubmit={this.handleSettingsSubmit}>
+                    <span>
+                      Județ
+                    </span>
+                    <Select
+                      id='--settings-judet'
+                      isDisabled={!this.state.editJudet}
+                      defaultValue={this.props.judete.find(option => option.value === this.state.nextJudet)}
+                      onInputChange={(inputValue, action) => this.onSelect(null, {id: 'judet', value: inputValue, action: action.action})}
+                      onChange={(inputValue,action) => this.onSelect(null, {id: 'judet', value: inputValue.value, action: action.action})}
+                      maxMenuHeight={100}
+                      placeholder='Selectează...'
+                      noOptionsMessage={(msg) => 'Nu există'}
+                      className='sel-container'
+                      classNamePrefix='sel' 
+                      options={this.props.judete} 
+                      onKeyDown={this.onGenericKeyDown}
+                      ref={this.judetInput}
+                      openMenuOnFocus={true}
+                      closeMenuOnSelect={true}
+                      blurInputOnSelect={true}
+                      inputId='--judet-select-input'/> 
+                    <i id='--settings-edit-judet'  
+                      className={this.state.editJudetClass}
+                      onClick={this.handleSettingsSubmit}
+                      ref={this.saveJudet}></i>
+                  </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingJudet}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-minus-circle'></i> Localitate invalidă
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 65]}
+                visible={this.state.showLocalitateError}>
+                <form id='--settings-localitate-form'
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
-                    Stradă
+                    Localitate
                   </span>
-                  <input id='--settings-prenume'
+                  <input id='--settings-localitate'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
-                    className={this.state.valuePrenumeClass}
-                    disabled={!this.state.editPrenume}
+                    className={this.state.valueLocalitateClass}
+                    disabled={!this.state.editLocalitate}
                     onInput={this.onValueInput}
                     onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextPrenume}
-                    ref={this.prenumeInput}>
+                    value={this.state.nextLocalitate}
+                    ref={this.localitateInput}>
                   </input>
-                  <i id='--settings-edit-prenume'
-                    className={this.state.editPrenumeClass}
+                  <i id='--settings-edit-localitate' 
+                    className={this.state.editLocalitateClass}
                     onClick={this.handleSettingsSubmit}></i>
                 </form>
               </Tippy>
@@ -1132,7 +1621,49 @@ class HotelUpdater extends React.Component {
                 width='50px'
                 height='50px'
                 status='altLoading'
-                visibility={this.state.fetchingPrenume}/>
+                visibility={this.state.fetchingLocalitate}/>
+            </div>
+            <div className='--settings-item'>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-minus-circle'></i> Stradă invalidă
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 65]}
+                visible={this.state.showStradaError}>
+                <form id='--settings-strada-form'
+                  className='--settings-form'
+                  onSubmit={this.handleSettingsSubmit}>
+                  <span>
+                    Stradă
+                  </span>
+                  <input id='--settings-strada'
+                    autoComplete='off'
+                    autoCorrect='off'
+                    spellCheck={false}
+                    className={this.state.valueStradaClass}
+                    disabled={!this.state.editStrada}
+                    onInput={this.onValueInput}
+                    onKeyDown={this.onGenericKeyDown}
+                    value={this.state.nextStrada}
+                    ref={this.stradaInput}>
+                  </input>
+                  <i id='--settings-edit-strada'
+                    className={this.state.editStradaClass}
+                    onClick={this.handleSettingsSubmit}></i>
+                </form>
+              </Tippy>
+              <Spinner
+                className='--settings-loading'
+                width='50px'
+                height='50px'
+                status='altLoading'
+                visibility={this.state.fetchingStrada}/>
             </div>
             <div className='--settings-item'>
               <Tippy
@@ -1146,26 +1677,26 @@ class HotelUpdater extends React.Component {
                   arrow={false}
                   theme='red-material-warning'
                   offset={[0, 65]}
-                  visible={this.state.showUtilizatorError}>
-                <form id='--settings-utilizator-form'
+                  visible={this.state.showNumarError}>
+                <form id='--settings-numar-form'
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
                     Număr
                   </span>
-                  <input id='--settings-utilizator'
+                  <input id='--settings-numar'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
-                    className={this.state.valueUtilizatorClass}
-                    disabled={!this.state.editUtilizator}
+                    className={this.state.valueNumarClass}
+                    disabled={!this.state.editNumar}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextUtilizator}
-                    ref={this.utilizatorInput}>
+                    onKeyDown={this.onKeyDown}
+                    value={this.state.nextNumar}
+                    ref={this.numarInput}>
                   </input>
-                  <i id='--settings-edit-utilizator' 
-                    className={this.state.editUtilizatorClass}
+                  <i id='--settings-edit-numar' 
+                    className={this.state.editNumarClass}
                     onClick={this.handleSettingsSubmit}></i>
                 </form>
               </Tippy>
@@ -1174,7 +1705,7 @@ class HotelUpdater extends React.Component {
                 width='50px'
                 height='50px'
                 status='altLoading'
-                visibility={this.state.fetchingUtilizator}/>
+                visibility={this.state.fetchingNumar}/>
             </div>
             <div className='--settings-item'>
               <Tippy
@@ -1188,26 +1719,26 @@ class HotelUpdater extends React.Component {
                   arrow={false}
                   theme='red-material-warning'
                   offset={[0, 65]}
-                  visible={this.state.showUtilizatorError}>
-                <form id='--settings-utilizator-form'
+                  visible={this.state.showCodPostalError}>
+                <form id='--settings-codPostal-form'
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
                     Cod poștal
                   </span>
-                  <input id='--settings-utilizator'
+                  <input id='--settings-codPostal'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
-                    className={this.state.valueUtilizatorClass}
-                    disabled={!this.state.editUtilizator}
+                    className={this.state.valueCodPostalClass}
+                    disabled={!this.state.editCodPostal}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextUtilizator}
-                    ref={this.utilizatorInput}>
+                    onKeyDown={this.onKeyDown}
+                    value={this.state.nextCodPostal}
+                    ref={this.codPostalInput}>
                   </input>
-                  <i id='--settings-edit-utilizator' 
-                    className={this.state.editUtilizatorClass}
+                  <i id='--settings-edit-codPostal' 
+                    className={this.state.editCodPostalClass}
                     onClick={this.handleSettingsSubmit}></i>
                 </form>
               </Tippy>
@@ -1216,7 +1747,7 @@ class HotelUpdater extends React.Component {
                 width='50px'
                 height='50px'
                 status='altLoading'
-                visibility={this.state.fetchingUtilizator}/>
+                visibility={this.state.fetchingCodPostal}/>
             </div>
             <div className='--settings-item'>
               <Tippy
@@ -1230,26 +1761,26 @@ class HotelUpdater extends React.Component {
                   arrow={false}
                   theme='red-material-warning'
                   offset={[0, 65]}
-                  visible={this.state.showUtilizatorError}>
-                <form id='--settings-utilizator-form'
+                  visible={this.state.showTelefonError}>
+                <form id='--settings-telefon-form'
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
                     Telefon
                   </span>
-                  <input id='--settings-utilizator'
+                  <input id='--settings-telefon'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
-                    className={this.state.valueUtilizatorClass}
-                    disabled={!this.state.editUtilizator}
+                    className={this.state.valueTelefonClass}
+                    disabled={!this.state.editTelefon}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextUtilizator}
-                    ref={this.utilizatorInput}>
+                    onKeyDown={this.onKeyDown}
+                    value={this.state.nextTelefon}
+                    ref={this.telefonInput}>
                   </input>
-                  <i id='--settings-edit-utilizator' 
-                    className={this.state.editUtilizatorClass}
+                  <i id='--settings-edit-telefon' 
+                    className={this.state.editTelefonClass}
                     onClick={this.handleSettingsSubmit}></i>
                 </form>
               </Tippy>
@@ -1258,7 +1789,7 @@ class HotelUpdater extends React.Component {
                 width='50px'
                 height='50px'
                 status='altLoading'
-                visibility={this.state.fetchingUtilizator}/>
+                visibility={this.state.fetchingTelefon}/>
             </div>
             <div className='--settings-item'>
               <Tippy
@@ -1272,26 +1803,26 @@ class HotelUpdater extends React.Component {
                   arrow={false}
                   theme='red-material-warning'
                   offset={[0, 65]}
-                  visible={this.state.showUtilizatorError}>
-                <form id='--settings-utilizator-form'
+                  visible={this.state.showFaxError}>
+                <form id='--settings-fax-form'
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
                     Fax
                   </span>
-                  <input id='--settings-utilizator'
+                  <input id='--settings-fax'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
-                    className={this.state.valueUtilizatorClass}
-                    disabled={!this.state.editUtilizator}
+                    className={this.state.valueFaxClass}
+                    disabled={!this.state.editFax}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextUtilizator}
-                    ref={this.utilizatorInput}>
+                    onKeyDown={this.onKeyDown}
+                    value={this.state.nextFax}
+                    ref={this.faxInput}>
                   </input>
-                  <i id='--settings-edit-utilizator' 
-                    className={this.state.editUtilizatorClass}
+                  <i id='--settings-edit-fax' 
+                    className={this.state.editFaxClass}
                     onClick={this.handleSettingsSubmit}></i>
                 </form>
               </Tippy>
@@ -1300,7 +1831,7 @@ class HotelUpdater extends React.Component {
                 width='50px'
                 height='50px'
                 status='altLoading'
-                visibility={this.state.fetchingUtilizator}/>
+                visibility={this.state.fetchingFax}/>
             </div>
             <div className='--settings-item'>
               <Tippy
@@ -1314,26 +1845,26 @@ class HotelUpdater extends React.Component {
                   arrow={false}
                   theme='red-material-warning'
                   offset={[0, 65]}
-                  visible={this.state.showUtilizatorError}>
-                <form id='--settings-utilizator-form'
+                  visible={this.state.showEmailError}>
+                <form id='--settings-email-form'
                   className='--settings-form'
                   onSubmit={this.handleSettingsSubmit}>
                   <span>
                     Email
                   </span>
-                  <input id='--settings-utilizator'
+                  <input id='--settings-email'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
-                    className={this.state.valueUtilizatorClass}
-                    disabled={!this.state.editUtilizator}
+                    className={this.state.valueEmailClass}
+                    disabled={!this.state.editEmail}
                     onInput={this.onValueInput}
                     onKeyDown={this.onGenericKeyDown}
-                    value={this.state.nextUtilizator}
-                    ref={this.utilizatorInput}>
+                    value={this.state.nextEmail}
+                    ref={this.emailInput}>
                   </input>
-                  <i id='--settings-edit-utilizator' 
-                    className={this.state.editUtilizatorClass}
+                  <i id='--settings-edit-email' 
+                    className={this.state.editEmailClass}
                     onClick={this.handleSettingsSubmit}></i>
                 </form>
               </Tippy>
@@ -1342,7 +1873,7 @@ class HotelUpdater extends React.Component {
                 width='50px'
                 height='50px'
                 status='altLoading'
-                visibility={this.state.fetchingUtilizator}/>
+                visibility={this.state.fetchingEmail}/>
             </div>
           </div>
         </div>
