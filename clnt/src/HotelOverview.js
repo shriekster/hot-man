@@ -3,7 +3,7 @@ import Tippy from '@tippyjs/react';
 import Select from 'react-select';
 import Spinner from './Spinner';
 
-import ConfortUpdater from './HotelUpdater';
+import ConfortUpdater from './ConfortUpdater';
 import SpatiiUpdater from './HotelUpdater';
 import PaturiUpdater from './HotelUpdater';
 import HotelUpdater from './HotelUpdater';

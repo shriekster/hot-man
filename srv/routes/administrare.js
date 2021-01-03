@@ -92,6 +92,7 @@ function isValidEmail (email) {
   return valid;
 }
 
+
 /** Updaters */
 
 function updateNume(nume, numeHotel) {
@@ -328,7 +329,9 @@ function updateEmail(email, numeHotel) {
 }
 
 
-router.options('/', function(req, res) {
+/** Routes */
+
+router.options('/:attribute?', function(req, res) {
   res.set({
     'Allow': 'OPTIONS',
     'Content-Type': 'application/json',
@@ -627,7 +630,7 @@ router.post('/', authorization, function(req, res) {
   }
 });
 
-/** TODO */
+/* POST - confort, paturi, spatii */
 router.post('/:attribute', authorization, function(req, res) {
   res.set({
     'Allow': 'POST',
@@ -640,14 +643,71 @@ router.post('/:attribute', authorization, function(req, res) {
       switch (req.params.attribute) {
 
         case 'confort': {
+
+          if (req.body.task) {
+            switch (req.body.task) {
+
+              case 'create': {
+                break;
+              }
+
+              case 'read': {
+                let error;
+
+                const selectConfort = db.prepare(`SELECT Denumire FROM CategoriiConfort`);
+
+                let conforts;
+
+                try {
+
+                  conforts = selectConfort.all()
+
+                } catch(err) {
+
+                  if (err) {
+
+                    console.log(err);
+                    error = err;
+
+                    return res.json({
+                      status: 'error',
+                    });
+                  } 
+                } finally {
+
+                  if (!error) {
+                    let categorii = Object.values(conforts);
+
+                    return res.json({
+                      status: 'valid',
+                      categoriiConfort: categorii,
+                    });
+                  } 
+                }
+
+                break;
+              }
+
+              case 'update': {
+                break;
+              }
+
+              case 'delete': {
+                break;
+              }
+
+            }
+          }
           break;
         }
 
         case 'paturi': {
+          let status = '';
           break;
         }
 
         case 'spatii': {
+          let status = '';
           break;
         }
 

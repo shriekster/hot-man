@@ -723,6 +723,7 @@ button.sign-out:hover {
   display: flex;
   align-items: center;
   border: 1px solid rgba(37, 170, 169, 1);
+  border-radius: 4px;
   margin-bottom: 2vh;
   width: 470px;
   height: 44px;
@@ -1200,7 +1201,7 @@ button.--create-hotel-btn:hover {
 .--overview-posr:after{
   position:absolute;
   bottom: 0;
-  left: 0%;
+  left: 50%;
   bottom: -1px;
   height:0px;
   padding: 0;
@@ -1575,4 +1576,140 @@ table.--zilnic-table {
   background-color: #D72C25;
   color: whitesmoke;
   cursor: default;
+}
+
+/* Categorii Confort */
+.view-confort-categories {
+  font-size: 18px;
+  height: 76vh;
+  display: flex;
+  flex-direction: column;
+  /*
+  justify-content: center;
+  align-content: center;
+  */
+}
+
+ /* categorii scroll */
+
+.confort-categories {
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  height: 100%;
+  width: 350px;
+  margin-top: 25px;
+}
+
+.confort-categories::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 5px;
+  /*background-color: rgba(79, 183, 183, .9);*/
+  background-color: transparent;
+}
+
+.confort-categories::-webkit-scrollbar {
+  width: 10px;
+  background-color: #9fd9d9;
+}
+
+.confort-categories::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  /*background-color: #009300;*/
+  background-image: linear-gradient(rgba(79, 183, 183, .9), rgba(0, 147, 0, .7), rgba(79, 183, 183, .9));
+}
+/**/
+
+.--confort-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(37, 170, 169, 1);
+  border-radius: 4px;
+  margin-bottom: 2vh;
+  width: 260px;
+  height: 36px;
+  position: relative;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  padding-left: 3px;
+}
+
+.--confort-form {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.--confort-form > span {
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  font-size: 18px;
+}
+
+.--confort-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 260px;
+  margin-top: 8px;
+  position: relative;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+}
+
+.--add-icon {
+  font-size: 36px;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.--add-icon:hover {
+  color: #009500;
+}
+
+input[type='text'].--confort-value {
+  outline: none !important;
+  border: none;
+  display: flex;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-size: 18px;
+  align-items: center;
+  position: absolute;
+  left: 100px;
+  width: 156px;
+  height: 32px;
+  padding: 2px 34px 2px 4px;
+  background-color: #9fd9d9;
+  color: darkslategray;
+}
+
+.--delete-icon {
+  font-size: 21px;
+  cursor: pointer;
+  transition: color .2s linear;
+  position: absolute;
+  right: -26px;
+}
+
+.--save-icon  {
+  font-size: 24px;
+  cursor: pointer;
+  transition: color .2s linear;
+  position: absolute;
+  right: 32px !important;
+  top: -11px !important;
+}
+
+.--delete-icon:hover {
+  color: #D72C25;
+}
+
+.--save-icon:hover {
+  color: #009500;
+}
+
+.--confort-loading {
+  position: absolute;
+  right: -60px;
+  /*transition: all .3s linear;*/
 }
