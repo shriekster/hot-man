@@ -95,6 +95,8 @@ function isValidEmail (email) {
 
 /** Updaters */
 
+/** Hotel updaters */
+
 function updateNume(nume, numeHotel) {
   const update = db.prepare(`UPDATE Hoteluri
                             SET Nume = ?
@@ -328,6 +330,36 @@ function updateEmail(email, numeHotel) {
   return 'invalid';
 }
 
+/** Confort updaters */
+
+function updateConfort(oldValue, newValue) {
+    const update = db.prepare(`UPDATE CategoriiConfort
+                            SET Denumire = ?
+                            WHERE Denumire = ?`);
+
+  if (oldValue && isValidStreetNo(newValue)) {
+    let error;
+
+    try {
+      const info = update.run(newValue, oldValue);
+      //console.log(info);
+    } catch(err) {
+      error = err;
+      console.log(err);
+    } finally {
+      if (error) {
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+  
+  return 'invalid';
+}
+
+/** Spatii updaters */
+
 
 /** Routes */
 
@@ -551,7 +583,6 @@ router.post('/', authorization, function(req, res) {
       }
 
       case 'update': {
-        console.log('UPDATE...')
         // task: update
         if (req.body.name && req.body.key && req.body.value) {
           let name = req.body.name;
@@ -689,6 +720,9 @@ router.post('/:attribute', authorization, function(req, res) {
               }
 
               case 'update': {
+                if (req.body && undefined !== req.body.oldValue && undefined !== req.body.newValue) {
+                  updateConfort(req.body.oldValue, req.body.newValue);
+                }
                 break;
               }
 

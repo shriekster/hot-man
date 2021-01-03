@@ -15,6 +15,10 @@ class ConfortUpdater extends React.Component {
 
     this.disableSave = this.disableSave.bind(this);
 
+    this.focus = this.focus.bind(this);
+
+    this.blur = this.blur.bind(this);
+
     this.save = this.save.bind(this);
 
     this.submit = this.submit.bind(this);
@@ -55,24 +59,37 @@ class ConfortUpdater extends React.Component {
   }
 
   enableSave() {
-    this.setState({
-      saveEnabled: true,
-      inputClassName: '--confort-value -inline --value-editing'
-    });
+    if (!this.state.saveEnabled) {
+      this.setState({
+        saveEnabled: true,
+      });
+    }
   }
 
   disableSave() {
+    if (this.state.saveEnabled) {
+      this.setState({
+        saveEnabled: false,
+      });
+    }
+  }
+
+  focus() {
+    this.setState({
+      inputClassName: '--confort-value -inline --value-editing',
+    });
+  }
+
+  blur() {
     if (this.state.nextValue){
 
       this.setState({
-        saveEnabled: false,
         inputClassName: '--confort-value -inline'
       });
     } else {
 
       this.setState({
         nextValue: this.props.value,
-        saveEnabled: false,
         inputClassName: '--confort-value -inline'
       });
     }
@@ -84,15 +101,20 @@ class ConfortUpdater extends React.Component {
   }
 
   save(value) {
-    this.setState({
-      fetching: true,
-    },
-    () => {
-      this.props.saveItem(value);
-    });
+    if (this.state.saveEnabled) {
+      this.setState({
+        fetching: true,
+      },
+      () => {
+        this.props.saveItem(value);
+      });
+  }
   }
 
   componentDidMount() {
+    if (this.props.focus) {
+      this.input.current.focus();
+    }
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -112,35 +134,25 @@ class ConfortUpdater extends React.Component {
         <span>
           Confort
         </span>
-        <Tippy
-          content={
-            <div>
-              <i className='fas fa-save --save-icon'
-                onClick={() => {this.save(this.state.nextValue)}}></i>
-            </div>
-          }
-          allowHTML={true}
-          interactive={true}
-          interactiveBorder={10}
-          visible={this.state.saveEnabled}
-          placement='right'
-          arrow={false}
-          theme='material-confort'
-          offset={[0, 20]}>
-          <input
-            type='text'
-            autoComplete='off'
-            autoCorrect='off'
-            spellCheck={false}
-            className={this.state.inputClassName}
-            onInput={this.onInput}
-            onKeyDown={this.onGenericKeyDown}
-            value={this.state.nextValue}
-            onFocus={this.enableSave}
-            onBlur={this.disableSave}
-            ref={this.input}>
-          </input>
-        </Tippy>
+        <input
+          type='text'
+          autoComplete='off'
+          autoCorrect='off'
+          spellCheck={false}
+          className={this.state.inputClassName}
+          onInput={this.onInput}
+          onKeyDown={this.onGenericKeyDown}
+          value={this.state.nextValue}
+          onMouseEnter={this.enableSave}
+          onFocus={this.focus}
+          onMouseLeave={this.disableSave}
+          onBlur={this.blur}
+          ref={this.input}>
+        </input>
+        <div>
+            <i className='fas fa-save --save-icon'
+              onClick={() => {this.save(this.state.nextValue)}}></i>
+        </div>
       </form>
       <i className='fas fa-trash-alt --delete-icon'></i>
       <Spinner

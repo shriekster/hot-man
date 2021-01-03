@@ -94,7 +94,7 @@ class ConfortUpdater extends React.Component {
   createItem() {
     let categorii = this.state.categoriiConfort;
     if (categorii[categorii.length - 1].Denumire){
-      categorii.push({Denumire: ''});
+      categorii.push({Denumire: '', focus: true});
 
       this.setState({
         categoriiConfort: categorii,
@@ -139,11 +139,15 @@ class ConfortUpdater extends React.Component {
 // input: --settings-value -inline ; --value-editing
   render() {
 
-    const categories = this.state.categoriiConfort.map((categorie) =>
-    <CategorieConfort 
-    value={categorie.Denumire}
-    saveItem={this.saveItem}
-    deleteItem={this.deleteItem}/>);
+    const categories = this.state.categoriiConfort.map(
+      (categorie) =>
+
+      <CategorieConfort 
+      value={categorie.Denumire}
+      saveItem={this.saveItem}
+      deleteItem={this.deleteItem}
+      focus={false || categorie.focus}/>
+    );
 
     return (
       <div id='view-confort-categories' 

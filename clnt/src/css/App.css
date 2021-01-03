@@ -1696,8 +1696,8 @@ input[type='text'].--confort-value {
   cursor: pointer;
   transition: color .2s linear;
   position: absolute;
-  right: 32px !important;
-  top: -11px !important;
+  right: 8px !important;
+  top: 5px !important;
 }
 
 .--delete-icon:hover {
