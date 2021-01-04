@@ -127,7 +127,7 @@ class ConfortUpdater extends React.Component {
 
       else 
       
-      if(!prevState.hasFocus && !this.state.hasFocus) {
+      if(prevState.hasFocus && !this.state.hasFocus) {
         console.log('PRE')
         if (!prevState.saveClicked && this.state.saveClicked) {
           console.log('SECOND')
