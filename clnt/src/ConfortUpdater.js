@@ -174,7 +174,7 @@ class ConfortUpdater extends React.Component {
       deleteItem={this.deleteItem}
       enableEditing={this.enableEditing}
       disableEditing={this.disableEditing}
-      editing={false || categorie.editing}/>
+      editing={undefined === categorie.editing || false === categorie.editing ? false : true}/>
     );
 
     return (

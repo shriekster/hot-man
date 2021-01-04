@@ -27,6 +27,10 @@ class ConfortUpdater extends React.Component {
     this.state = {
       nextValue: this.props.value,
 
+      saveClicked: false,
+
+      hasFocus: false,
+
       editing: false || this.props.editing,
       fetching: false,
     };
@@ -56,21 +60,22 @@ class ConfortUpdater extends React.Component {
   }
 
   focus() {
+    this.setState({
+      hasFocus: true,
+    });
   }
 
   blur(e) {
     if (!this.state.nextValue){
       this.setState({
         nextValue: this.props.value,
-        editing: false,
+        hasFocus: false,
       });
     } else {
       this.setState({
-        editing: false,
+        hasFocus: false,
       });
     }
-
-    return false;
   }
 
   submit(e) {
@@ -79,9 +84,8 @@ class ConfortUpdater extends React.Component {
   }
 
   save() {
-    console.log('save')
     this.setState({
-      editing: false,
+      saveClicked: true,
       fetching: true,
     },
     () => {
@@ -95,6 +99,7 @@ class ConfortUpdater extends React.Component {
   enableEditing() {
     this.setState({
       editing: true,
+      hasFocus: true,
     },
     () => {
       this.input.current.focus();
@@ -108,11 +113,33 @@ class ConfortUpdater extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    if (prevState.nextValue !== this.state.nextValue) {
-      this.setState({
-        fetching: false,
-      });
-    }
+    console.log(this.state.editing, this.state.hasFocus, this.state.saveClicked)
+    if (prevState.editing && this.state.editing) {
+      
+      if (prevState.hasFocus && !this.state.hasFocus) {
+
+        if (!prevState.saveClicked && !this.state.saveClicked) {
+          this.setState({
+            editing: false,
+          });
+        } 
+      }
+
+      else 
+      
+      if(!prevState.hasFocus && !this.state.hasFocus) {
+        console.log('PRE')
+        if (!prevState.saveClicked && this.state.saveClicked) {
+          console.log('SECOND')
+          this.setState({
+            editing: false,
+            saveClicked: false,
+          });
+        }
+
+      }
+
+    }    
   }
 
   render() {
@@ -133,7 +160,7 @@ class ConfortUpdater extends React.Component {
           onInput={this.onInput}
           onKeyDown={this.onGenericKeyDown}
           defaultValue={this.state.nextValue}
-          /*onFocus={this.focus}*/
+          onFocus={this.focus}
           onBlur={this.blur}
           ref={this.input}>
         </input>
