@@ -114,6 +114,7 @@ class PasswordInput extends React.Component {
                 visible={this.props.displayWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input
+                    tabIndex={this.props.tabIndex || '0'}
                     onKeyDown={this.props.onKeyDown}
                     className={display.inputClass}
                     type={display.inputType} 

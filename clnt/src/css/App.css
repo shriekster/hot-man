@@ -765,6 +765,7 @@ input[type='password'].--settings-value,
 
 .--value-editing {
   outline: none;
+  border: none;
   text-decoration: none;
   color: #009500 !important;
 }
@@ -1596,7 +1597,7 @@ table.--zilnic-table {
   scroll-behavior: smooth;
   overflow-y: auto;
   height: 100%;
-  width: 350px;
+  width: 400px;
   margin-top: 25px;
 }
 
@@ -1622,19 +1623,6 @@ table.--zilnic-table {
 }
 /**/
 
-.--confort-item {
-  display: flex;
-  align-items: center;
-  border: 1px solid rgba(37, 170, 169, 1);
-  border-radius: 4px;
-  margin-bottom: 2vh;
-  width: 260px;
-  height: 36px;
-  position: relative;
-  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
-  padding-left: 3px;
-}
-
 .--confort-form {
   display: flex;
   align-items: center;
@@ -1647,11 +1635,24 @@ table.--zilnic-table {
   font-size: 18px;
 }
 
+.--confort-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(37, 170, 169, 1);
+  border-radius: 4px;
+  margin-bottom: 2vh;
+  width: 300px;
+  height: 45px;
+  position: relative;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  padding-left: 3px;
+}
+
 .--confort-add {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 260px;
+  width: 300px;
   margin-top: 8px;
   position: relative;
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
@@ -1660,11 +1661,20 @@ table.--zilnic-table {
 .--add-icon {
   font-size: 36px;
   cursor: pointer;
-  transition: color .2s linear;
+  transition: all .2s linear;
 }
 
 .--add-icon:hover {
   color: #009500;
+}
+
+.--add-disabled {
+  color: slategray;
+  cursor: not-allowed;
+}
+
+.--add-disabled:hover {
+  color: slategray;
 }
 
 input[type='text'].--confort-value {
@@ -1675,41 +1685,87 @@ input[type='text'].--confort-value {
   font-size: 18px;
   align-items: center;
   position: absolute;
-  left: 100px;
-  width: 156px;
-  height: 32px;
+  left: 140px;
+  width: 157px;
+  height: 41px;
   padding: 2px 34px 2px 4px;
   background-color: #9fd9d9;
   color: darkslategray;
 }
 
-.--delete-icon {
-  font-size: 21px;
+input[type='text'].--confort-value:focus {
+  color: #009500;
+  border: 1px #009500 inset;
+  border-radius: 4px;
+}
+
+.--confort-icons,
+.--confort-icons-editing {
+  transition: all .2s linear;
+}
+
+.--edit-icon  {
+  font-size: 36px;
   cursor: pointer;
   transition: color .2s linear;
   position: absolute;
-  right: -26px;
+  right: -45px !important;
+  top: 3px !important;
 }
 
 .--save-icon  {
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   transition: color .2s linear;
   position: absolute;
-  right: 8px !important;
-  top: 5px !important;
+  right: -24px;
+  top: 1px;
+  z-index: 9999;
 }
 
-.--delete-icon:hover {
-  color: #D72C25;
+.--delete-icon {
+  font-size: 18px;
+  cursor: pointer;
+  transition: color .2s linear;
+  position: absolute;
+  right: -23px;
+  top: 26px;
+  z-index: 9999;
+}
+
+.--close-icon {
+  font-size: 39px;
+  cursor: pointer;
+  transition: color .2s linear;
+  position: absolute;
+  right: -75px;
+  top: 1px;
+  border: 2px solid darkslategray;
+  border-radius: 4px;
+  padding: 2px 4px;
+  transition: all .2s linear;
+}
+
+.--confort-loading {
+  position: absolute;
+  right: -76px;
+  /*transition: all .3s linear;*/
+}
+
+.--edit-icon:hover {
+  color: #009500;
 }
 
 .--save-icon:hover {
   color: #009500;
 }
 
-.--confort-loading {
-  position: absolute;
-  right: -60px;
-  /*transition: all .3s linear;*/
+.--delete-icon:hover {
+  color: #D72C25;
 }
+
+.--close-icon:hover {
+  color: #D72C25;
+  border-color: #D72C25;
+}
+

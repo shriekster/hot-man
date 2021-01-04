@@ -138,6 +138,7 @@ class Login extends React.Component {
                 visible={this.state.showUserWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input
+                  tabIndex='1'
                   onKeyDown={this.onGenericKeyDown}
                   className='fixed-height'
                   type='text' 
@@ -152,6 +153,7 @@ class Login extends React.Component {
           </div>
           <div className='Form-field'>
             <PasswordInput
+              tabIndex='2'
               onKeyDown={this.onGenericKeyDown}
               onInput={this.onInput} 
               displayWarning={this.state.showPassWarning}

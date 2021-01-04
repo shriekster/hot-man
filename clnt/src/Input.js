@@ -11,6 +11,7 @@ class Input extends React.Component {
   render() {
     return (
       <input
+        tabIndex={this.props.tabIndex || '0'}
         onKeyDown={this.props.onKeyDown}
         list={this.props.list}
         className={this.props.className}

@@ -1,7 +1,6 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
-import Select from 'react-select';
-import Spinner from './Spinner'
+import Spinner from './Spinner';
 
 class ConfortUpdater extends React.Component {
   constructor(props) {
@@ -11,10 +10,6 @@ class ConfortUpdater extends React.Component {
 
     this.onInput = this.onInput.bind(this);
 
-    this.enableSave = this.enableSave.bind(this);
-
-    this.disableSave = this.disableSave.bind(this);
-
     this.focus = this.focus.bind(this);
 
     this.blur = this.blur.bind(this);
@@ -23,14 +18,16 @@ class ConfortUpdater extends React.Component {
 
     this.submit = this.submit.bind(this);
 
+    this.delete = this.delete.bind(this);
+
+    this.enableEditing = this.enableEditing.bind(this);
+
     this.input = React.createRef();
 
     this.state = {
       nextValue: this.props.value,
-      saveEnabled: false,
 
-      inputClassName: '--confort-value -inline',
-
+      editing: false || this.props.editing,
       fetching: false,
     };
   }
@@ -58,41 +55,22 @@ class ConfortUpdater extends React.Component {
     }
   }
 
-  enableSave() {
-    if (!this.state.saveEnabled) {
-      this.setState({
-        saveEnabled: true,
-      });
-    }
-  }
-
-  disableSave() {
-    if (this.state.saveEnabled) {
-      this.setState({
-        saveEnabled: false,
-      });
-    }
-  }
-
   focus() {
-    this.setState({
-      inputClassName: '--confort-value -inline --value-editing',
-    });
   }
 
-  blur() {
-    if (this.state.nextValue){
-
-      this.setState({
-        inputClassName: '--confort-value -inline'
-      });
-    } else {
-
+  blur(e) {
+    if (!this.state.nextValue){
       this.setState({
         nextValue: this.props.value,
-        inputClassName: '--confort-value -inline'
+        editing: false,
+      });
+    } else {
+      this.setState({
+        editing: false,
       });
     }
+
+    return false;
   }
 
   submit(e) {
@@ -100,19 +78,31 @@ class ConfortUpdater extends React.Component {
     this.save(this.state.nextValue);
   }
 
-  save(value) {
-    if (this.state.saveEnabled) {
-      this.setState({
-        fetching: true,
-      },
-      () => {
-        this.props.saveItem(value);
-      });
+  save() {
+    console.log('save')
+    this.setState({
+      editing: false,
+      fetching: true,
+    },
+    () => {
+      this.props.saveItem(this.state.nextValue.trim());
+    });
   }
+
+  delete(value) {
+  }
+
+  enableEditing() {
+    this.setState({
+      editing: true,
+    },
+    () => {
+      this.input.current.focus();
+    });
   }
 
   componentDidMount() {
-    if (this.props.focus) {
+    if (this.state.editing) {
       this.input.current.focus();
     }
   }
@@ -134,27 +124,35 @@ class ConfortUpdater extends React.Component {
         <span>
           Confort
         </span>
-        <input
+        <input disabled={!this.state.editing}
           type='text'
           autoComplete='off'
           autoCorrect='off'
           spellCheck={false}
-          className={this.state.inputClassName}
+          className='--confort-value -inline'
           onInput={this.onInput}
           onKeyDown={this.onGenericKeyDown}
-          value={this.state.nextValue}
-          onMouseEnter={this.enableSave}
-          onFocus={this.focus}
-          onMouseLeave={this.disableSave}
+          defaultValue={this.state.nextValue}
+          /*onFocus={this.focus}*/
           onBlur={this.blur}
           ref={this.input}>
         </input>
-        <div>
-            <i className='fas fa-save --save-icon'
-              onClick={() => {this.save(this.state.nextValue)}}></i>
-        </div>
       </form>
-      <i className='fas fa-trash-alt --delete-icon'></i>
+      {
+        this.state.editing  ?
+        <div className='--confort-icons-editing'>
+          <i className='fas fa-save --save-icon'
+                  onClick={this.save}>
+                </i>
+          <i className='fas fa-trash-alt --delete-icon'
+            onMouseDown={() => this.delete()}></i>
+        </div>
+                            :
+        <div className='--confort-icons'>
+          <i className='fas fa-edit --edit-icon'
+            onClick={this.enableEditing}></i>
+        </div>
+      }
       <Spinner
         className='--confort-loading'
         width='50px'

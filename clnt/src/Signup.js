@@ -407,6 +407,7 @@ class Signup extends React.Component {
                   visible={this.state.showLocWarning}>
                   <span className='legacy' tabIndex='0'>
                     <Input
+                    tabIndex='1'
                     onKeyDown={this.onGenericKeyDown}
                     className='fixed-height'
                     type='text' 
@@ -428,6 +429,7 @@ class Signup extends React.Component {
             </label>
             <div className='Form-name'>
               <Select
+                tabIndex='2'
                 onInputChange={(inputValue, action) => this.onInput(null, {id: 'grad', value: inputValue, action: action.action})}
                 onChange={(inputValue,action) => this.onInput(null, {id: 'grad', value: inputValue.value, action: action.action})}
                 maxMenuHeight={100}
@@ -468,6 +470,7 @@ class Signup extends React.Component {
                 visible={this.state.showNumeWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input 
+                  tabIndex='3'
                   onKeyDown={this.onGenericKeyDown}
                   className='fixed-height'
                   type='text' 
@@ -510,6 +513,7 @@ class Signup extends React.Component {
                 visible={this.state.showPrenumeWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input 
+                  tabIndex='4'
                   onKeyDown={this.onGenericKeyDown}
                   className='fixed-height'
                   type='text' 
@@ -553,6 +557,7 @@ class Signup extends React.Component {
                 visible={this.state.showUserWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input
+                  tabIndex='5'
                   onKeyDown={this.onGenericKeyDown}
                   className='fixed-height'
                   type='text' 
@@ -567,6 +572,7 @@ class Signup extends React.Component {
           </div>
           <div className='Form-field'>
             <PasswordInput
+              tabIndex='6'
               onInput={this.onInput}
               onKeyDown={this.onGenericKeyDown}
               visibility='visible' 

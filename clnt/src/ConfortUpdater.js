@@ -1,7 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 import Select from 'react-select';
-import Spinner from './Spinner'
+import Spinner from './Spinner';
 
 import CategorieConfort from './CategorieConfort'
 
@@ -19,12 +19,18 @@ class ConfortUpdater extends React.Component {
 
     this.createItem = this.createItem.bind(this);
 
+    this.enableEditing = this.enableEditing.bind(this);
+
+    this.disableEditing = this.disableEditing.bind(this);
+
+    this.generateKey = this.generateKey.bind(this);
+
     this.state = {
       categoriiConfort: [],
+
+      creating: false,
     };
   }
-
- 
 
   // numeric input only
   onKeyDown(e) {
@@ -93,13 +99,32 @@ class ConfortUpdater extends React.Component {
 
   createItem() {
     let categorii = this.state.categoriiConfort;
+
     if (categorii[categorii.length - 1].Denumire){
-      categorii.push({Denumire: '', focus: true});
+      categorii.push({Denumire: '', editing: true});
 
       this.setState({
         categoriiConfort: categorii,
+
+        creating: true,
       });
     }
+  }
+
+  enableEditing() {
+    this.setState({
+      editing: true,
+    });
+  }
+
+  disableEditing() {
+    this.setState({
+      editing: false,
+    });
+  }
+
+  generateKey() {
+    return Math.floor(new Date().getTime() * Math.random());
   }
 
   componentDidMount() {
@@ -143,10 +168,13 @@ class ConfortUpdater extends React.Component {
       (categorie) =>
 
       <CategorieConfort 
+      key={this.generateKey()}
       value={categorie.Denumire}
       saveItem={this.saveItem}
       deleteItem={this.deleteItem}
-      focus={false || categorie.focus}/>
+      enableEditing={this.enableEditing}
+      disableEditing={this.disableEditing}
+      editing={false || categorie.editing}/>
     );
 
     return (
@@ -157,20 +185,37 @@ class ConfortUpdater extends React.Component {
             {categories}
           </div>
           <div className='--confort-add'>
-              <Tippy
-                content={
-                  <>
-                    Adaugă o categorie de confort
-                  </>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={true}
-                theme='material-confort-hints'
-                offset={[0, 20]}>
-                <i className='fas fa-plus-square --add-icon'
-                  onClick={this.createItem}></i>
-              </Tippy>
+          {
+            this.state.creating ?
+            <Tippy
+              content={
+                <>
+                  Introdu denumirea categoriei de confort
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={true}
+              theme='material-confort-disabled'
+              offset={[0, 20]}>
+              <i className='fas fa-plus-square --add-icon --add-disabled'></i>
+            </Tippy>
+                              :
+            <Tippy
+              content={
+                <>
+                  Adaugă o categorie de confort
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={true}
+              theme='material-confort-hints'
+              offset={[0, 20]}>
+              <i className='fas fa-plus-square --add-icon'
+                onClick={this.createItem}></i>
+            </Tippy>
+          }
             </div>
         </div>
     );
