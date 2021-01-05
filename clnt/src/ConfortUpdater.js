@@ -80,17 +80,52 @@ class ConfortUpdater extends React.Component {
     return true;
   }
 
-  saveItem(value) { // TODO: 'stale' item, i.e. the item is not fresh anymore
+  saveItem(value, isFresh) { // TODO: 'stale' item, i.e. the item is not fresh anymore
+    let body;
+
+    if (isFresh) {
+      body = {
+        token: this.props.token,
+        task: 'create',
+        value: value.trim(),
+      };
+    } else {
+      body = {
+        token: this.props.token,
+        task: 'update',
+        value: value.trim(),
+      };
+    }
+  
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: this.props.token,
-        task: 'update',
-        value: value.trim(),
-      })
+      body: JSON.stringify(body),
     };
+
+    fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+    .then(response => response.json())
+    .then(updated => {
+      console.log(updated) //TO:DO: finish
+
+      if ('valid' === updated.status) {
+        /** Make the item 'stale' */
+        let categorii = this.state.categoriiConfort;
+
+        categorii.forEach(item => {
+
+        if (item.Denumire === body.value) {
+          item.fresh = false;
+          item.editing = false;
+        }
+        });
+
+        this.setState({
+          categoriiConfort: categorii,
+        });
+      }
+    });
   }
 
   deleteItem(value) {
@@ -178,8 +213,8 @@ class ConfortUpdater extends React.Component {
       <CategorieConfort 
       key={this.generateKey()}
       value={categorie.Denumire}
-      saveItem={this.saveItem}
-      deleteItem={this.deleteItem}
+      save={this.saveItem}
+      delete={this.deleteItem}
       cancel={this.cancelCreating}
       editing={undefined === categorie.editing || false === categorie.editing ? false : true}
       fresh={undefined === categorie.fresh || false === categorie.fresh ? false : true}

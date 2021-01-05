@@ -333,81 +333,137 @@ function updateEmail(email, numeHotel) {
 /** Confort data manipulation - CRUD */
 
 function createConfort(value) {
-  const update = db.prepare(`UPDATE CategoriiConfort
-                          SET Denumire = ?
+  const create = db.prepare(`INSERT INTO CategoriiConfort (Denumire)
+                          VALUES (?)`);
+
+  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
                           WHERE Denumire = ?`);
 
-if (oldValue && isValidStreetNo(newValue)) {
-  let error;
+  if (value) {
+    const exists = check.get(value);
 
-  try {
-    const info = update.run(newValue, oldValue);
-    //console.log(info);
-  } catch(err) {
-    error = err;
-    console.log(err);
-  } finally {
-    if (error) {
-      return 'error';
+    if (exists && exists.Denumire) {
+
+      return 'duplicate';
+
+    } 
+
+    else 
+
+    if (!isValidStreetNo(value)) {
+
+      return 'invalid';
+
     }
+    
+    else {
+      let error;
+      try {
 
-    return 'valid';
+        const info = create.run(value);
+      } catch (err) {
+
+        if (err) {
+
+          console.log(err);
+          error = err;
+        }
+      } finally {
+
+        if (error) {
+
+          return 'error';
+        }
+      }
+
+
+      return 'valid';
+    }
   }
-}
 
-return 'invalid';
+  return 'invalid';
 }
 
 function updateConfort(oldValue, newValue) {
-    const update = db.prepare(`UPDATE CategoriiConfort
+  const create = db.prepare(`UPDATE CategoriiConfort 
                             SET Denumire = ?
                             WHERE Denumire = ?`);
 
-  if (oldValue && isValidStreetNo(newValue)) {
+  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (oldValue && newValue) {
+    const exists = check.get(newValue);
+
+    if (exists && exists.Denumire) {
+
+      return 'duplicate';
+
+    } 
+
+    else 
+
+    if (!isValidStreetNo(newValue)) {
+
+      return 'invalid';
+
+    }
+    
+    else {
+      let error;
+      try {
+
+        const info = create.run(newValue);
+      } catch (err) {
+
+        if (err) {
+
+          console.log(err);
+          error = err;
+        }
+      } finally {
+
+        if (error) {
+
+          return 'error';
+        }
+      }
+
+
+      return 'valid';
+    }
+  }
+
+  return 'invalid';
+}
+
+function deleteConfort(value) {
+  const _delete = db.prepare(`DELETE FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (value) {
     let error;
 
     try {
-      const info = update.run(newValue, oldValue);
+      const info = _delete.run(value);
       //console.log(info);
     } catch(err) {
+
       error = err;
       console.log(err);
+
     } finally {
+
       if (error) {
+
         return 'error';
       }
 
       return 'valid';
     }
   }
-  
+
   return 'invalid';
-}
-
-function deleteConfort(value) {
-  const update = db.prepare(`UPDATE CategoriiConfort
-                          SET Denumire = ?
-                          WHERE Denumire = ?`);
-
-if (oldValue && isValidStreetNo(newValue)) {
-  let error;
-
-  try {
-    const info = update.run(newValue, oldValue);
-    //console.log(info);
-  } catch(err) {
-    error = err;
-    console.log(err);
-  } finally {
-    if (error) {
-      return 'error';
-    }
-
-    return 'valid';
-  }
-}
-
-return 'invalid';
 }
 
 /** Spatii updaters */
@@ -726,15 +782,18 @@ router.post('/:attribute', authorization, function(req, res) {
       switch (req.params.attribute) {
 
         case 'confort': {
-
+          let status = '';
           if (req.body.task) {
             switch (req.body.task) {
 
               case 'create': {
-                if (req.body && undefined !== req.value) {
-                  createConfort(req.body.value);
-                }
+                if (req.body && undefined !== req.body.value) {
+                  status = createConfort(req.body.value);
 
+                  return res.json({
+                    status: status,
+                  });
+                }
                 break;
               }
 
@@ -777,7 +836,11 @@ router.post('/:attribute', authorization, function(req, res) {
 
               case 'update': {
                 if (req.body && undefined !== req.body.oldValue && undefined !== req.body.newValue) {
-                  updateConfort(req.body.oldValue, req.body.newValue);
+                  status = updateConfort(req.body.oldValue, req.body.newValue);
+
+                  return res.json({
+                    status: status,
+                  });
                 }
 
                 break;

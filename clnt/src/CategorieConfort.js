@@ -108,7 +108,7 @@ class ConfortUpdater extends React.Component {
         editing: false,
       },
       () => {
-        this.props.saveItem(this.state.nextValue.trim());
+        this.props.save(this.state.nextValue, this.props.fresh);
       });
     } else {
       this.setState({
@@ -121,7 +121,7 @@ class ConfortUpdater extends React.Component {
     }
   }
 
-  delete(value) {
+  delete() {
   }
 
   cancel() {
