@@ -1693,6 +1693,12 @@ input[type='text'].--confort-value {
   color: darkslategray;
 }
 
+input[type='text'].--confort-value::placeholder {
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-size: 14px;
+  color: #D72C25;
+}
+
 input[type='text'].--confort-value:focus {
   color: #009500;
   border: 1px #009500 inset;
@@ -1733,17 +1739,13 @@ input[type='text'].--confort-value:focus {
   z-index: 9999;
 }
 
-.--close-icon {
-  font-size: 39px;
+.--cancel-icon {
+  font-size: 20px;
   cursor: pointer;
   transition: color .2s linear;
   position: absolute;
-  right: -75px;
+  right: -50px;
   top: 1px;
-  border: 2px solid darkslategray;
-  border-radius: 4px;
-  padding: 2px 4px;
-  transition: all .2s linear;
 }
 
 .--confort-loading {
@@ -1764,8 +1766,15 @@ input[type='text'].--confort-value:focus {
   color: #D72C25;
 }
 
-.--close-icon:hover {
-  color: #D72C25;
-  border-color: #D72C25;
+.--cancel-icon:hover {
+  color: slategray;
+}
+
+.--editing-hint {
+
+}
+
+.--hint-caret {
+  font-size: 16px;
 }
 

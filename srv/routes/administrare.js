@@ -330,7 +330,33 @@ function updateEmail(email, numeHotel) {
   return 'invalid';
 }
 
-/** Confort updaters */
+/** Confort data manipulation - CRUD */
+
+function createConfort(value) {
+  const update = db.prepare(`UPDATE CategoriiConfort
+                          SET Denumire = ?
+                          WHERE Denumire = ?`);
+
+if (oldValue && isValidStreetNo(newValue)) {
+  let error;
+
+  try {
+    const info = update.run(newValue, oldValue);
+    //console.log(info);
+  } catch(err) {
+    error = err;
+    console.log(err);
+  } finally {
+    if (error) {
+      return 'error';
+    }
+
+    return 'valid';
+  }
+}
+
+return 'invalid';
+}
 
 function updateConfort(oldValue, newValue) {
     const update = db.prepare(`UPDATE CategoriiConfort
@@ -356,6 +382,32 @@ function updateConfort(oldValue, newValue) {
   }
   
   return 'invalid';
+}
+
+function deleteConfort(value) {
+  const update = db.prepare(`UPDATE CategoriiConfort
+                          SET Denumire = ?
+                          WHERE Denumire = ?`);
+
+if (oldValue && isValidStreetNo(newValue)) {
+  let error;
+
+  try {
+    const info = update.run(newValue, oldValue);
+    //console.log(info);
+  } catch(err) {
+    error = err;
+    console.log(err);
+  } finally {
+    if (error) {
+      return 'error';
+    }
+
+    return 'valid';
+  }
+}
+
+return 'invalid';
 }
 
 /** Spatii updaters */
@@ -679,6 +731,10 @@ router.post('/:attribute', authorization, function(req, res) {
             switch (req.body.task) {
 
               case 'create': {
+                if (req.body && undefined !== req.value) {
+                  createConfort(req.body.value);
+                }
+
                 break;
               }
 
@@ -723,10 +779,15 @@ router.post('/:attribute', authorization, function(req, res) {
                 if (req.body && undefined !== req.body.oldValue && undefined !== req.body.newValue) {
                   updateConfort(req.body.oldValue, req.body.newValue);
                 }
+
                 break;
               }
 
               case 'delete': {
+                if (req.body && undefined !== req.value) {
+                  deleteConfort(req.body.value);
+                }
+
                 break;
               }
 

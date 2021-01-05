@@ -20,16 +20,32 @@ class ConfortUpdater extends React.Component {
 
     this.delete = this.delete.bind(this);
 
+    this.cancel = this.cancel.bind(this);
+
     this.enableEditing = this.enableEditing.bind(this);
+
+    this.onIconMouseOut = this.onIconMouseOut.bind(this);
+
+    this.onSaveMouseOver = this.onSaveMouseOver.bind(this);
+
+    this.onCancelMouseOver = this.onCancelMouseOver.bind(this);
+
+    this.onDeleteMouseOver = this.onDeleteMouseOver.bind(this);
 
     this.input = React.createRef();
 
     this.state = {
       nextValue: this.props.value,
 
-      saveClicked: false,
-
       hasFocus: false,
+
+      placeholder: '',
+
+      showError: false,
+
+      editingHint: '(neutru)',
+      hintVisible: false,
+      hintOffsetY: 0,
 
       editing: false || this.props.editing,
       fetching: false,
@@ -39,6 +55,12 @@ class ConfortUpdater extends React.Component {
   // input max length: 16
   onGenericKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
+
+    if (27 === charCode) {
+      this.cancel();
+    }
+
+    else
 
     if (e && e.target.value.length > 15) {
       if(charCode !== 8 && charCode !== 9 && 
@@ -55,6 +77,8 @@ class ConfortUpdater extends React.Component {
     if (e && e.target) {
       this.setState({
         nextValue: e.target.value,
+        showError: false,
+        placeholder: '',
       });
     }
   }
@@ -66,16 +90,9 @@ class ConfortUpdater extends React.Component {
   }
 
   blur(e) {
-    if (!this.state.nextValue){
-      this.setState({
-        nextValue: this.props.value,
-        hasFocus: false,
-      });
-    } else {
-      this.setState({
-        hasFocus: false,
-      });
-    }
+    this.setState({
+      hasFocus: false,
+    });
   }
 
   submit(e) {
@@ -84,25 +101,76 @@ class ConfortUpdater extends React.Component {
   }
 
   save() {
-    this.setState({
-      saveClicked: true,
-      fetching: true,
-    },
-    () => {
-      this.props.saveItem(this.state.nextValue.trim());
-    });
+    if (this.state.nextValue) {
+      this.setState({
+        fetching: true,
+
+        editing: false,
+      },
+      () => {
+        this.props.saveItem(this.state.nextValue.trim());
+      });
+    } else {
+      this.setState({
+        showError: true,
+        placeholder: 'Introdu o valoare',
+      }, 
+      () => {
+        this.input.current.focus();
+      });
+    }
   }
 
   delete(value) {
   }
 
+  cancel() {
+    if (!this.props.fresh) {
+      this.setState({
+        nextValue: this.props.value,
+        editing: false,
+      });
+    } else {
+      this.props.cancel();
+    }
+  }
+
   enableEditing() {
     this.setState({
       editing: true,
-      hasFocus: true,
     },
     () => {
       this.input.current.focus();
+    });
+  }
+
+  onIconMouseOut() {
+    this.setState({
+      hintVisible: false,
+    })
+  }
+
+  onSaveMouseOver() {
+    this.setState({
+      editingHint: 'Salvează',
+      hintVisible: true,
+      hintOffsetY: -12,
+    });
+  }
+
+  onCancelMouseOver() {
+    this.setState({
+      editingHint: 'Renunță',
+      hintVisible: true,
+      hintOffsetY: -12,
+    });
+  }
+
+  onDeleteMouseOver() {
+    this.setState({
+      editingHint: 'Șterge',
+      hintVisible: true,
+      hintOffsetY: 15,
     });
   }
 
@@ -112,34 +180,7 @@ class ConfortUpdater extends React.Component {
     }
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    console.log(this.state.editing, this.state.hasFocus, this.state.saveClicked)
-    if (prevState.editing && this.state.editing) {
-      
-      if (prevState.hasFocus && !this.state.hasFocus) {
-
-        if (!prevState.saveClicked && !this.state.saveClicked) {
-          this.setState({
-            editing: false,
-          });
-        } 
-      }
-
-      else 
-      
-      if(prevState.hasFocus && !this.state.hasFocus) {
-        console.log('PRE')
-        if (!prevState.saveClicked && this.state.saveClicked) {
-          console.log('SECOND')
-          this.setState({
-            editing: false,
-            saveClicked: false,
-          });
-        }
-
-      }
-
-    }    
+  componentDidUpdate (prevProps, prevState) {  
   }
 
   render() {
@@ -159,21 +200,46 @@ class ConfortUpdater extends React.Component {
           className='--confort-value -inline'
           onInput={this.onInput}
           onKeyDown={this.onGenericKeyDown}
-          defaultValue={this.state.nextValue}
+          value={this.state.nextValue}
           onFocus={this.focus}
           onBlur={this.blur}
+          placeholder={this.state.placeholder}
           ref={this.input}>
         </input>
       </form>
       {
         this.state.editing  ?
-        <div className='--confort-icons-editing'>
-          <i className='fas fa-save --save-icon'
-                  onClick={this.save}>
-                </i>
-          <i className='fas fa-trash-alt --delete-icon'
-            onMouseDown={() => this.delete()}></i>
-        </div>
+        <Tippy
+            content={
+              <div className='--editing-hint'>
+                <i className='fas fa-caret-left --hint-caret' ></i>
+                <span> {this.state.editingHint}</span>
+              </div>
+            }
+            allowHTML={true}
+            placement='right'
+            arrow={false}
+            theme='material-confort'
+            offset={[this.state.hintOffsetY, 65]}
+            visible={this.state.hintVisible}>
+          <div className='--confort-icons-editing'>
+            <i className='fas fa-save --save-icon'
+              onMouseOver={this.onSaveMouseOver}
+              onMouseOut={this.onIconMouseOut}
+              onClick={this.save}></i>
+            {
+              !this.props.fresh &&
+            <i className='fas fa-trash-alt --delete-icon'
+              onMouseOver={this.onDeleteMouseOver}
+              onMouseOut={this.onIconMouseOut}
+              onClick={this.delete}></i>
+            }
+            <i className='fas fa-window-close --cancel-icon'
+              onMouseOver={this.onCancelMouseOver}
+              onMouseOut={this.onIconMouseOut}
+              onClick={this.cancel}></i>
+          </div>
+        </Tippy>
                             :
         <div className='--confort-icons'>
           <i className='fas fa-edit --edit-icon'

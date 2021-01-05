@@ -19,9 +19,9 @@ class ConfortUpdater extends React.Component {
 
     this.createItem = this.createItem.bind(this);
 
-    this.enableEditing = this.enableEditing.bind(this);
+    this.startCreating = this.startCreating.bind(this);
 
-    this.disableEditing = this.disableEditing.bind(this);
+    this.cancelCreating = this.cancelCreating.bind(this);
 
     this.generateKey = this.generateKey.bind(this);
 
@@ -80,7 +80,7 @@ class ConfortUpdater extends React.Component {
     return true;
   }
 
-  saveItem(value) {
+  saveItem(value) { // TODO: 'stale' item, i.e. the item is not fresh anymore
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -101,7 +101,7 @@ class ConfortUpdater extends React.Component {
     let categorii = this.state.categoriiConfort;
 
     if (categorii[categorii.length - 1].Denumire){
-      categorii.push({Denumire: '', editing: true});
+      categorii.push({Denumire: '', editing: true, fresh: true});
 
       this.setState({
         categoriiConfort: categorii,
@@ -111,16 +111,24 @@ class ConfortUpdater extends React.Component {
     }
   }
 
-  enableEditing() {
+  startCreating() {
     this.setState({
-      editing: true,
+      creating: true
     });
   }
 
-  disableEditing() {
-    this.setState({
-      editing: false,
-    });
+  cancelCreating() {
+    let categorii = this.state.categoriiConfort;
+
+    if('' === categorii[categorii.length - 1].Denumire) {
+      categorii.pop();
+
+      this.setState({
+        categoriiConfort: categorii,
+
+        creating: false,
+      });
+    }  
   }
 
   generateKey() {
@@ -172,9 +180,10 @@ class ConfortUpdater extends React.Component {
       value={categorie.Denumire}
       saveItem={this.saveItem}
       deleteItem={this.deleteItem}
-      enableEditing={this.enableEditing}
-      disableEditing={this.disableEditing}
-      editing={undefined === categorie.editing || false === categorie.editing ? false : true}/>
+      cancel={this.cancelCreating}
+      editing={undefined === categorie.editing || false === categorie.editing ? false : true}
+      fresh={undefined === categorie.fresh || false === categorie.fresh ? false : true}
+      />
     );
 
     return (
