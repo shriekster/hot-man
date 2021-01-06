@@ -39,16 +39,15 @@ class ConfortUpdater extends React.Component {
 
       hasFocus: false,
 
-      placeholder: '',
-
-      showError: false,
+      showWarning: false,
+      showError: false || this.props.error,
 
       editingHint: '(neutru)',
       hintVisible: false,
       hintOffsetY: 0,
 
       editing: false || this.props.editing,
-      fetching: false,
+      fetching: false || this.props.fetching,
     };
   }
 
@@ -78,7 +77,7 @@ class ConfortUpdater extends React.Component {
       this.setState({
         nextValue: e.target.value,
         showError: false,
-        placeholder: '',
+        showWarning: false,
       });
     }
   }
@@ -102,18 +101,30 @@ class ConfortUpdater extends React.Component {
 
   save() {
     if (this.state.nextValue) {
-      this.setState({
-        fetching: true,
 
+      this.setState({
         editing: false,
       },
       () => {
-        this.props.save(this.state.nextValue, this.props.fresh);
+
+        if (this.state.nextValue !== this.props.value) {
+          
+          this.setState({
+            fetching: true,
+          }, 
+          () => {
+            this.props.save(this.props.fresh, this.props.value, this.state.nextValue);
+          });
+
+        } else {
+          //
+        }
       });
+
     } else {
+
       this.setState({
-        showError: true,
-        placeholder: 'Introdu o valoare',
+        showWarning: true,
       }, 
       () => {
         this.input.current.focus();
@@ -122,6 +133,12 @@ class ConfortUpdater extends React.Component {
   }
 
   delete() {
+    this.setState({
+      editing: false,
+    },
+    () => {
+      this.props.delete(this.props.value);
+    });
   }
 
   cancel() {
@@ -129,6 +146,8 @@ class ConfortUpdater extends React.Component {
       this.setState({
         nextValue: this.props.value,
         editing: false,
+        showError: false,
+        showWarning: false,
       });
     } else {
       this.props.cancel();
@@ -192,20 +211,45 @@ class ConfortUpdater extends React.Component {
         <span>
           Confort
         </span>
-        <input disabled={!this.state.editing}
-          type='text'
-          autoComplete='off'
-          autoCorrect='off'
-          spellCheck={false}
-          className='--confort-value -inline'
-          onInput={this.onInput}
-          onKeyDown={this.onGenericKeyDown}
-          value={this.state.nextValue}
-          onFocus={this.focus}
-          onBlur={this.blur}
-          placeholder={this.state.placeholder}
-          ref={this.input}>
-        </input>
+        <Tippy
+          content={
+            <>
+              <span><i className='fas fa-exclamation-circle'></i> Introdu denumirea categoriei</span>
+            </>
+          }
+          allowHTML={true}
+          placement='right'
+          arrow={false}
+          theme='red-material-warning'
+          offset={[0, 140]}
+          visible={this.state.showWarning}>
+          <Tippy
+            content={
+              <>
+                <span><i className='fas fa-minus-circle'></i> Denumire invalidă</span>
+              </>
+            }
+            allowHTML={true}
+            placement='right'
+            arrow={false}
+            theme='red-material-warning'
+            offset={[0, 140]}
+            visible={this.state.showError}>
+            <input disabled={!this.state.editing}
+              type='text'
+              autoComplete='off'
+              autoCorrect='off'
+              spellCheck={false}
+              className='--confort-value -inline'
+              onInput={this.onInput}
+              onKeyDown={this.onGenericKeyDown}
+              value={this.state.nextValue}
+              onFocus={this.focus}
+              onBlur={this.blur}
+              ref={this.input}>
+            </input>
+          </Tippy>
+        </Tippy>
       </form>
       {
         this.state.editing  ?
@@ -220,7 +264,7 @@ class ConfortUpdater extends React.Component {
             placement='right'
             arrow={false}
             theme='material-confort'
-            offset={[this.state.hintOffsetY, 65]}
+            offset={[this.state.hintOffsetY, 55]}
             visible={this.state.hintVisible}>
           <div className='--confort-icons-editing'>
             <i className='fas fa-save --save-icon'

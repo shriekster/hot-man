@@ -4,6 +4,7 @@ import Select from 'react-select';
 import Spinner from './Spinner';
 
 import CategorieConfort from './CategorieConfort'
+import { unstable_batchedUpdates } from 'react-dom';
 
 class ConfortUpdater extends React.Component {
   constructor(props) {
@@ -16,8 +17,6 @@ class ConfortUpdater extends React.Component {
     this.saveItem = this.saveItem.bind(this);
 
     this.deleteItem = this.deleteItem.bind(this);
-
-    this.createItem = this.createItem.bind(this);
 
     this.startCreating = this.startCreating.bind(this);
 
@@ -80,20 +79,24 @@ class ConfortUpdater extends React.Component {
     return true;
   }
 
-  saveItem(value, isFresh) { // TODO: 'stale' item, i.e. the item is not fresh anymore
+  saveItem(isFresh, oldValue, newValue) {
     let body;
 
     if (isFresh) {
+
       body = {
         token: this.props.token,
         task: 'create',
-        value: value.trim(),
+        value: newValue.trim(),
       };
+
     } else {
+
       body = {
         token: this.props.token,
         task: 'update',
-        value: value.trim(),
+        oldValue: oldValue.trim(),
+        newValue: newValue.trim(),
       };
     }
   
@@ -107,22 +110,81 @@ class ConfortUpdater extends React.Component {
     fetch('http://localhost:3001/main/administrare/confort', requestOptions)
     .then(response => response.json())
     .then(updated => {
-      console.log(updated) //TO:DO: finish
 
       if ('valid' === updated.status) {
         /** Make the item 'stale' */
         let categorii = this.state.categoriiConfort;
+        let value = newValue.trim();
 
         categorii.forEach(item => {
 
-        if (item.Denumire === body.value) {
-          item.fresh = false;
-          item.editing = false;
-        }
+          if (item.Denumire === '') {
+            item.fresh = false;
+            item.editing = false;
+            item.fetching = false;
+            item.error = false;
+            item.Denumire = value;
+          }
+
+          else 
+
+          if (item.Denumire === body.oldValue) {
+            item.Denumire = value;
+          }
+        });
+
+        let sorted = categorii.sort(function compare(a, b) {
+          return a.Denumire - b.Denumire;
+        });
+
+        this.setState({
+          categoriiConfort: sorted,
+
+          creating: false,
+        });
+      }
+
+      else
+
+      if ('error' === updated.status || 'invalid' === updated.status){
+
+        let categorii = this.state.categoriiConfort;
+        let value = newValue.trim();
+
+        categorii.forEach(item => {
+
+          if (item.Denumire === value) {
+            item.fresh = false;
+            item.editing = false;
+            item.fetching = false;
+            item.error = true;
+          }
         });
 
         this.setState({
           categoriiConfort: categorii,
+          creating: false,
+        });
+      }
+
+      else 
+
+      if ('duplicate' === updated.status){
+
+        /*
+        let categorii = this.state.categoriiConfort;
+
+        categorii.forEach(item => {
+
+          item.fresh = false;
+          item.editing = false;
+          item.fetching = false;
+          item.error = false;
+        });
+        */
+        this.setState({
+          //categoriiConfort: categorii,
+          creating: false,
         });
       }
     });
@@ -130,9 +192,64 @@ class ConfortUpdater extends React.Component {
 
   deleteItem(value) {
 
+    const requestOptions = {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: this.props.token,
+        task: 'delete',
+        value: value.trim(),
+      }),
+    };
+
+    fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+    .then(response => response.json())
+    .then(updated => {
+      if ('valid' === updated.status) {
+        
+        let categorii = this.state.categoriiConfort;
+        let val = value.trim();
+        let index = 0;
+
+        for (let i = 0; i < categorii.length; i++ ) {
+
+          if (val === categorii[i].Denumire) {
+
+            index = i;
+          }
+        }
+        
+        categorii.splice(index, 1);
+
+        this.setState({
+          categoriiConfort: categorii,
+
+          creating: false,
+        })
+        
+      }
+
+      else {
+
+        let categorii = this.state.categoriiConfort;
+
+        categorii.forEach(item => {
+          item.fresh = false;
+          item.editing = false;
+          item.fetching = false;
+          item.error = false;
+        });
+
+        this.setState({
+          categoriiConfort: categorii,
+          creating: false,
+        });
+      }
+    });
   }
 
-  createItem() {
+  startCreating() {
     let categorii = this.state.categoriiConfort;
 
     if (categorii[categorii.length - 1].Denumire){
@@ -144,12 +261,6 @@ class ConfortUpdater extends React.Component {
         creating: true,
       });
     }
-  }
-
-  startCreating() {
-    this.setState({
-      creating: true
-    });
   }
 
   cancelCreating() {
@@ -185,18 +296,29 @@ class ConfortUpdater extends React.Component {
     fetch('http://localhost:3001/main/administrare/confort', requestOptions)
     .then(response => response.json())
     .then(categorii => {
+
       if ('error' === categorii.status) {
         console.log('Eroare - categorii confort')
-      } else 
+      } 
+      
+      else 
       
       if ('valid' === categorii.status) {
-        this.setState({
-          categoriiConfort: categorii.categoriiConfort,
+
+        let sorted = categorii.categoriiConfort.sort(function compare(a, b) {
+          return a.Denumire - b.Denumire;
         });
 
-      } else 
+        this.setState({
+          categoriiConfort: sorted,
+        });
+
+      } 
+      
+      else
+
       if ('denied' === categorii.status) {
-        this.signOut();
+        this.props.onChange('Login');
       }
     });
   }
@@ -207,7 +329,9 @@ class ConfortUpdater extends React.Component {
 // input: --settings-value -inline ; --value-editing
   render() {
 
-    const categories = this.state.categoriiConfort.map(
+    let categorii = this.state.categoriiConfort;
+
+    const categories = categorii.map(
       (categorie) =>
 
       <CategorieConfort 
@@ -218,6 +342,8 @@ class ConfortUpdater extends React.Component {
       cancel={this.cancelCreating}
       editing={undefined === categorie.editing || false === categorie.editing ? false : true}
       fresh={undefined === categorie.fresh || false === categorie.fresh ? false : true}
+      fetching={undefined === categorie.fetching || false === categorie.fetching ? false : true}
+      error={undefined === categorie.error || false === categorie.error ? false : true}
       />
     );
 
@@ -226,7 +352,9 @@ class ConfortUpdater extends React.Component {
           className='view-confort-categories'>
           <div id='confort-categories' 
           className='confort-categories'>
-            {categories}
+            <div className='confort-categories-inside'>
+              {categories}
+            </div>
           </div>
           <div className='--confort-add'>
           {
@@ -257,7 +385,7 @@ class ConfortUpdater extends React.Component {
               theme='material-confort-hints'
               offset={[0, 20]}>
               <i className='fas fa-plus-square --add-icon'
-                onClick={this.createItem}></i>
+                onClick={this.startCreating}></i>
             </Tippy>
           }
             </div>

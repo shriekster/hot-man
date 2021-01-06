@@ -1597,8 +1597,18 @@ table.--zilnic-table {
   scroll-behavior: smooth;
   overflow-y: auto;
   height: 100%;
-  width: 400px;
+  width: 700px;
   margin-top: 25px;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  position: relative;
+}
+
+.confort-categories-inside {
+  direction: ltr;
+  position: absolute;
+  width: 350px;
+  right: 320px;
 }
 
 .confort-categories::-webkit-scrollbar-track {
@@ -1652,7 +1662,7 @@ table.--zilnic-table {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
+  width: 350px;
   margin-top: 8px;
   position: relative;
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;

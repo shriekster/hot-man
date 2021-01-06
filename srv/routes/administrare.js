@@ -46,7 +46,7 @@ function isValidPartialLocationName (name) {
 
 function isValidStreetNo (number) {
   let valid = false;
-  let regex = /^[1-9]+$/;
+  let regex = /^[1-9]{1}[0-9]*$/;
   let test = regex.exec(number);
 
   if (test && undefined !== test) {
@@ -330,22 +330,22 @@ function updateEmail(email, numeHotel) {
   return 'invalid';
 }
 
-/** Confort data manipulation - CRUD */
+/** Confort data manipulation - C R U D */
 
 function createConfort(value) {
-  const create = db.prepare(`INSERT INTO CategoriiConfort (Denumire)
-                          VALUES (?)`);
+  const create = db.prepare(`INSERT INTO CategoriiConfort (ID, Denumire)
+                          VALUES (?, ?)`);
 
   const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
                           WHERE Denumire = ?`);
 
   if (value) {
+
     const exists = check.get(value);
 
     if (exists && exists.Denumire) {
 
       return 'duplicate';
-
     } 
 
     else 
@@ -353,14 +353,15 @@ function createConfort(value) {
     if (!isValidStreetNo(value)) {
 
       return 'invalid';
-
     }
     
     else {
       let error;
+
       try {
 
-        const info = create.run(value);
+        const info = create.run(null, value);
+
       } catch (err) {
 
         if (err) {
@@ -368,24 +369,17 @@ function createConfort(value) {
           console.log(err);
           error = err;
         }
+
       } finally {
 
-        if (error) {
-
-          return 'error';
-        }
+        return error ? 'error' : 'valid';
       }
-
-
-      return 'valid';
     }
   }
-
-  return 'invalid';
 }
 
 function updateConfort(oldValue, newValue) {
-  const create = db.prepare(`UPDATE CategoriiConfort 
+  const update = db.prepare(`UPDATE CategoriiConfort 
                             SET Denumire = ?
                             WHERE Denumire = ?`);
 
@@ -393,6 +387,7 @@ function updateConfort(oldValue, newValue) {
                           WHERE Denumire = ?`);
 
   if (oldValue && newValue) {
+
     const exists = check.get(newValue);
 
     if (exists && exists.Denumire) {
@@ -410,10 +405,13 @@ function updateConfort(oldValue, newValue) {
     }
     
     else {
+
       let error;
+
       try {
 
-        const info = create.run(newValue);
+        const info = update.run(newValue, oldValue);
+
       } catch (err) {
 
         if (err) {
@@ -421,20 +419,13 @@ function updateConfort(oldValue, newValue) {
           console.log(err);
           error = err;
         }
+
       } finally {
 
-        if (error) {
-
-          return 'error';
-        }
+        return error ? 'error': 'valid';
       }
-
-
-      return 'valid';
     }
   }
-
-  return 'invalid';
 }
 
 function deleteConfort(value) {
@@ -445,8 +436,9 @@ function deleteConfort(value) {
     let error;
 
     try {
+
       const info = _delete.run(value);
-      //console.log(info);
+
     } catch(err) {
 
       error = err;
@@ -778,16 +770,22 @@ router.post('/:attribute', authorization, function(req, res) {
   });
 
   if (req.params && req.body) {
+
     if (req.params.attribute) {
+
       switch (req.params.attribute) {
 
         case 'confort': {
-          let status = '';
+
+          let status = 'invalid';
+
           if (req.body.task) {
+
             switch (req.body.task) {
 
               case 'create': {
-                if (req.body && undefined !== req.body.value) {
+                if (req.body && (undefined !== req.body.value)) {
+
                   status = createConfort(req.body.value);
 
                   return res.json({
@@ -847,8 +845,12 @@ router.post('/:attribute', authorization, function(req, res) {
               }
 
               case 'delete': {
-                if (req.body && undefined !== req.value) {
-                  deleteConfort(req.body.value);
+                if (req.body && undefined !== req.body.value) {
+                  status = deleteConfort(req.body.value);
+
+                  return res.json({
+                    status: status,
+                  });
                 }
 
                 break;
