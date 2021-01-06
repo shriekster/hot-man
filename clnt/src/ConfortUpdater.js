@@ -1,10 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
-import Select from 'react-select';
-import Spinner from './Spinner';
 
-import CategorieConfort from './CategorieConfort'
-import { unstable_batchedUpdates } from 'react-dom';
+import CategorieConfort from './CategorieConfort';
 
 class ConfortUpdater extends React.Component {
   constructor(props) {
@@ -14,13 +11,17 @@ class ConfortUpdater extends React.Component {
 
     this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
 
-    this.saveItem = this.saveItem.bind(this);
+    this.add = this.add.bind(this);
 
-    this.deleteItem = this.deleteItem.bind(this);
+    this.edit = this.edit.bind(this);
 
-    this.startCreating = this.startCreating.bind(this);
+    this.input = this.input.bind(this);
 
-    this.cancelCreating = this.cancelCreating.bind(this);
+    this.save = this.save.bind(this);
+
+    this.cancel = this.cancel.bind(this);
+
+    this.delete = this.delete.bind(this);
 
     this.generateKey = this.generateKey.bind(this);
 
@@ -79,118 +80,277 @@ class ConfortUpdater extends React.Component {
     return true;
   }
 
-  saveItem(isFresh, oldValue, newValue) {
-    let body;
+  add() {
 
-    if (isFresh) {
+    this.setState({
 
-      body = {
-        token: this.props.token,
-        task: 'create',
-        value: newValue.trim(),
-      };
+      creating: true,
 
-    } else {
+    }, () => {
 
-      body = {
-        token: this.props.token,
-        task: 'update',
-        oldValue: oldValue.trim(),
-        newValue: newValue.trim(),
-      };
-    }
-  
-    const requestOptions = {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    };
-
-    fetch('http://localhost:3001/main/administrare/confort', requestOptions)
-    .then(response => response.json())
-    .then(updated => {
-
-      if ('valid' === updated.status) {
-        /** Make the item 'stale' */
-        let categorii = this.state.categoriiConfort;
-        let value = newValue.trim();
-
-        categorii.forEach(item => {
-
-          if (item.Denumire === '') {
-            item.fresh = false;
-            item.editing = false;
-            item.fetching = false;
-            item.error = false;
-            item.Denumire = value;
-          }
-
-          else 
-
-          if (item.Denumire === body.oldValue) {
-            item.Denumire = value;
-          }
-        });
-
-        let sorted = categorii.sort(function compare(a, b) {
-          return a.Denumire - b.Denumire;
-        });
-
-        this.setState({
-          categoriiConfort: sorted,
-
-          creating: false,
-        });
-      }
-
-      else
-
-      if ('error' === updated.status || 'invalid' === updated.status){
+      if (this.state.creating) {
 
         let categorii = this.state.categoriiConfort;
-        let value = newValue.trim();
 
-        categorii.forEach(item => {
+        if (0 === categorii.length) {
 
-          if (item.Denumire === value) {
-            item.fresh = false;
-            item.editing = false;
-            item.fetching = false;
-            item.error = true;
+          categorii.push({
+            Denumire: '',
+            showWarning: false,
+            showError: false,
+
+            isFresh: true,
+            isEditing: true,
+
+            isFetching: false,
+          });
+        }
+
+        else {
+
+          let last = categorii[categorii.length - 1].Denumire;
+
+          if (last) {
+            /** 'Reset' every other item's state when a new item is being added */
+            categorii.forEach( item => {
+
+              item.showWarning = false;
+              item.showError = false;
+              item.isFresh = false;
+              item.isEditing = false;
+              item.isFetching = false;
+
+            });
+
+            categorii.push({
+              Denumire: '',
+              showWarning: false,
+              showError: false,
+
+              isFresh: true,
+              isEditing: true,
+
+              isFetching: false,
+            });
           }
-        });
+        }
 
         this.setState({
           categoriiConfort: categorii,
-          creating: false,
-        });
-      }
-
-      else 
-
-      if ('duplicate' === updated.status){
-
-        /*
-        let categorii = this.state.categoriiConfort;
-
-        categorii.forEach(item => {
-
-          item.fresh = false;
-          item.editing = false;
-          item.fetching = false;
-          item.error = false;
-        });
-        */
-        this.setState({
-          //categoriiConfort: categorii,
-          creating: false,
         });
       }
     });
   }
 
-  deleteItem(value) {
+  edit(value) {
+
+    if (value) {
+
+      let categorii = this.state.categoriiConfort;
+
+      for (let i = 0; i < categorii.length; i++) {
+
+        if (value === categorii[i].Denumire) {
+
+          categorii[i].showWarning = false;
+          categorii[i].showError = false
+          categorii[i].isFresh = false;
+
+          categorii[i].isEditing = true;
+
+          categorii[i].isFetching = false;
+
+        } else {
+          /** 'Reset' every other item's state when a new item is being edited
+           *  and cancel the creation of a new item, if this applies
+           */
+          if (i === categorii.length - 1 && '' === categorii[i].Denumire) {
+
+            categorii.pop(); /** cancel creation */
+
+          } else {
+
+            categorii[i].showWarning = false;
+            categorii[i].showError = false
+            categorii[i].isFresh = false;
+            categorii[i].isEditing = false;
+            categorii[i].isFetching = false;
+          }
+        }
+      }
+
+      this.setState({
+        categoriiConfort: categorii,
+
+        creating: true, /** Block the creation of a new item while editing */
+      });
+    }
+  }
+
+  input(oldValue, newValue) {
+
+    if (oldValue) {
+      
+      let categorii = this.state.categoriiConfort;
+
+      for (let i = 0; i < categorii.length; i++) {
+
+        if (oldValue === categorii[i].Denumire) {
+
+          /** Hide the error or warning tippy */
+          categorii[i].showWarning = false;
+          categorii[i].showError = false;
+          
+          break;
+        }
+      }
+    }
+  }
+
+  save(isFresh, oldValue, newValue) {
+    let body;
+
+    /** Check if the input value is empty */
+    if (!newValue) {
+
+      let categorii = this.state.categoriiConfort;
+
+      for (let i = 0; i < categorii.length; i++) {
+
+        if (categorii[i].Denumire === oldValue) {
+
+          categorii[i].Denumire = newValue; /** empty value */
+
+          categorii[i].showWarning = true;
+
+          break;
+        }
+      }
+
+      this.setState({
+        categoriiConfort: categorii,
+      });
+
+    } else {
+
+      let categorii = this.state.categoriiConfort;
+
+      for (let i = 0; i < categorii.length; i++) {
+
+        if (categorii[i].Denumire === oldValue) {
+
+          categorii[i].isFetching = true;
+
+          break;
+        }
+      }
+
+      this.setState({
+        
+        categoriiConfort: categorii,
+
+      }, () => {
+
+        if (isFresh) {
+
+          body = {
+            token: this.props.token,
+            task: 'create',
+            value: newValue.trim(),
+          };
+    
+        } else {
+    
+          body = {
+            token: this.props.token,
+            task: 'update',
+            oldValue: oldValue,
+            newValue: newValue.trim(),
+          };
+        }
+      
+        const requestOptions = {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        };
+    
+        fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+        .then(response => response.json())
+        .then(updated => {
+          
+          if (updated && updated.status) {
+  
+            switch (updated.status) {
+  
+              case 'valid': {
+
+                let categorii = this.state.categoriiConfort;
+  
+                for (let i = 0; i < categorii.length; i++) {
+  
+                  if (oldValue === categorii[i].Denumire) {
+  
+                    categorii[i].Denumire = newValue.trim();
+  
+                    categorii[i].showWarning = false;
+                    categorii[i].showError = false
+                    categorii[i].isFresh = false;
+                    categorii[i].isEditing = false;
+                    categorii[i].isFetching = false;
+  
+                    break;
+                  }
+                }
+  
+                this.setState({
+                  categoriiConfort: categorii,
+                  creating: false,
+                });
+  
+                break;
+              }
+  
+              case 'error':
+              case 'invalid':
+              case 'duplicate': {
+
+                let categorii = this.state.categoriiConfort;
+  
+                for (let i = 0; i < categorii.length; i++) {
+  
+                  if (oldValue === categorii[i].Denumire) {
+  
+                    categorii[i].showWarning = false;
+
+                    categorii[i].showError = true;
+
+                    categorii[i].isFetching = false;
+  
+                    break;
+                  }
+                }
+  
+                this.setState({
+                  categoriiConfort: categorii,
+                });
+  
+                break;
+              }
+  
+              case 'denied': {
+                this.props.onChange('Login');
+                break;
+              }
+            }
+          }
+        });
+      });
+    }
+  }
+
+  delete(value) {
 
     const requestOptions = {
       method: 'POST',
@@ -249,23 +409,38 @@ class ConfortUpdater extends React.Component {
     });
   }
 
-  startCreating() {
+  cancel(value) {
     let categorii = this.state.categoriiConfort;
+    
+    categorii.forEach(item => {
+      
+      if (value === item.Denumire) {
+        
+        if (!value) {
+          categorii.pop();
+        }
 
-    if (categorii[categorii.length - 1].Denumire){
-      categorii.push({Denumire: '', editing: true, fresh: true});
+        else {
+          item.editing = false;
+          item.fresh = false;
+          item.fetching = false;
+          item.error = false;
+        }
+      }
+    });
 
-      this.setState({
-        categoriiConfort: categorii,
-
-        creating: true,
-      });
+    if (categorii.length && '' === categorii[categorii.length - 1].Denumire) {
+      categorii.pop();
     }
-  }
 
-  cancelCreating() {
-    let categorii = this.state.categoriiConfort;
 
+    this.setState({
+      categoriiConfort: categorii,
+
+      creating: false,
+    });
+
+    /*
     if('' === categorii[categorii.length - 1].Denumire) {
       categorii.pop();
 
@@ -275,6 +450,7 @@ class ConfortUpdater extends React.Component {
         creating: false,
       });
     }  
+    */
   }
 
   generateKey() {
@@ -309,6 +485,17 @@ class ConfortUpdater extends React.Component {
           return a.Denumire - b.Denumire;
         });
 
+        sorted.forEach(item => {
+
+          item.showWarning = false;
+          item.showError = false;
+    
+          item.isFresh = false;
+          item.isEditing = false;
+          item.isFetching = false;
+
+        });
+
         this.setState({
           categoriiConfort: sorted,
         });
@@ -325,8 +512,7 @@ class ConfortUpdater extends React.Component {
 
   componentDidUpdate (prevProps, prevState) {
   }
-// div: --settings-item
-// input: --settings-value -inline ; --value-editing
+
   render() {
 
     let categorii = this.state.categoriiConfort;
@@ -337,13 +523,20 @@ class ConfortUpdater extends React.Component {
       <CategorieConfort 
       key={this.generateKey()}
       value={categorie.Denumire}
-      save={this.saveItem}
-      delete={this.deleteItem}
-      cancel={this.cancelCreating}
-      editing={undefined === categorie.editing || false === categorie.editing ? false : true}
-      fresh={undefined === categorie.fresh || false === categorie.fresh ? false : true}
-      fetching={undefined === categorie.fetching || false === categorie.fetching ? false : true}
-      error={undefined === categorie.error || false === categorie.error ? false : true}
+
+      add={this.add}
+      edit={this.edit}
+      input={this.input}
+      save={this.save}
+      cancel={this.cancel}
+      delete={this.delete}
+
+      showWarning={undefined === categorie.showWarning || false === categorie.showWarning ? false : true}
+      showError={undefined === categorie.showError || false === categorie.showError ? false : true}
+
+      isFresh={undefined === categorie.isFresh || false === categorie.isFresh ? false : true}
+      isEditing={undefined === categorie.isEditing || false === categorie.isEditing ? false : true}
+      isFetching={undefined === categorie.isFetching || false === categorie.isFetching ? false : true}
       />
     );
 
@@ -385,7 +578,7 @@ class ConfortUpdater extends React.Component {
               theme='material-confort-hints'
               offset={[0, 20]}>
               <i className='fas fa-plus-square --add-icon'
-                onClick={this.startCreating}></i>
+                onClick={this.add}></i>
             </Tippy>
           }
             </div>

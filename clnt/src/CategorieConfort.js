@@ -14,15 +14,7 @@ class ConfortUpdater extends React.Component {
 
     this.blur = this.blur.bind(this);
 
-    this.save = this.save.bind(this);
-
     this.submit = this.submit.bind(this);
-
-    this.delete = this.delete.bind(this);
-
-    this.cancel = this.cancel.bind(this);
-
-    this.enableEditing = this.enableEditing.bind(this);
 
     this.onIconMouseOut = this.onIconMouseOut.bind(this);
 
@@ -39,15 +31,9 @@ class ConfortUpdater extends React.Component {
 
       hasFocus: false,
 
-      showWarning: false,
-      showError: false || this.props.error,
-
-      editingHint: '(neutru)',
+      editingHint: '',
       hintVisible: false,
       hintOffsetY: 0,
-
-      editing: false || this.props.editing,
-      fetching: false || this.props.fetching,
     };
   }
 
@@ -76,8 +62,9 @@ class ConfortUpdater extends React.Component {
     if (e && e.target) {
       this.setState({
         nextValue: e.target.value,
-        showError: false,
-        showWarning: false,
+      }, 
+      () => {
+        this.props.input(this.props.value, this.state.nextValue);
       });
     }
   }
@@ -96,71 +83,7 @@ class ConfortUpdater extends React.Component {
 
   submit(e) {
     e.preventDefault();
-    this.save(this.state.nextValue);
-  }
-
-  save() {
-    if (this.state.nextValue) {
-
-      this.setState({
-        editing: false,
-      },
-      () => {
-
-        if (this.state.nextValue !== this.props.value) {
-          
-          this.setState({
-            fetching: true,
-          }, 
-          () => {
-            this.props.save(this.props.fresh, this.props.value, this.state.nextValue);
-          });
-
-        } else {
-          //
-        }
-      });
-
-    } else {
-
-      this.setState({
-        showWarning: true,
-      }, 
-      () => {
-        this.input.current.focus();
-      });
-    }
-  }
-
-  delete() {
-    this.setState({
-      editing: false,
-    },
-    () => {
-      this.props.delete(this.props.value);
-    });
-  }
-
-  cancel() {
-    if (!this.props.fresh) {
-      this.setState({
-        nextValue: this.props.value,
-        editing: false,
-        showError: false,
-        showWarning: false,
-      });
-    } else {
-      this.props.cancel();
-    }
-  }
-
-  enableEditing() {
-    this.setState({
-      editing: true,
-    },
-    () => {
-      this.input.current.focus();
-    });
+    this.props.save(this.props.isFresh, this.props.value, this.state.nextValue);
   }
 
   onIconMouseOut() {
@@ -194,7 +117,7 @@ class ConfortUpdater extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.editing) {
+    if (this.props.isEditing) {
       this.input.current.focus();
     }
   }
@@ -222,7 +145,7 @@ class ConfortUpdater extends React.Component {
           arrow={false}
           theme='red-material-warning'
           offset={[0, 140]}
-          visible={this.state.showWarning}>
+          visible={this.props.showWarning}>
           <Tippy
             content={
               <>
@@ -234,8 +157,8 @@ class ConfortUpdater extends React.Component {
             arrow={false}
             theme='red-material-warning'
             offset={[0, 140]}
-            visible={this.state.showError}>
-            <input disabled={!this.state.editing}
+            visible={this.props.showError}>
+            <input disabled={!this.props.isEditing}
               type='text'
               autoComplete='off'
               autoCorrect='off'
@@ -252,7 +175,7 @@ class ConfortUpdater extends React.Component {
         </Tippy>
       </form>
       {
-        this.state.editing  ?
+        this.props.isEditing  ?
         <Tippy
             content={
               <div className='--editing-hint'>
@@ -270,24 +193,24 @@ class ConfortUpdater extends React.Component {
             <i className='fas fa-save --save-icon'
               onMouseOver={this.onSaveMouseOver}
               onMouseOut={this.onIconMouseOut}
-              onClick={this.save}></i>
+              onClick={() => {this.props.save(this.props.isFresh, this.props.value, this.state.nextValue)}}></i>
             {
-              !this.props.fresh &&
+              !this.props.isFresh &&
             <i className='fas fa-trash-alt --delete-icon'
               onMouseOver={this.onDeleteMouseOver}
               onMouseOut={this.onIconMouseOut}
-              onClick={this.delete}></i>
+              onClick={() => this.props.delete(this.props.value)}></i>
             }
             <i className='fas fa-window-close --cancel-icon'
               onMouseOver={this.onCancelMouseOver}
               onMouseOut={this.onIconMouseOut}
-              onClick={this.cancel}></i>
+              onClick={() => this.props.cancel(this.props.value)}></i>
           </div>
         </Tippy>
                             :
         <div className='--confort-icons'>
           <i className='fas fa-edit --edit-icon'
-            onClick={this.enableEditing}></i>
+            onClick={() => { this.props.edit(this.props.value) }}></i>
         </div>
       }
       <Spinner
@@ -295,7 +218,7 @@ class ConfortUpdater extends React.Component {
         width='50px'
         height='50px'
         status='altLoading'
-        visibility={this.state.fetching}/>
+        visibility={this.props.isFetching}/>
     </div>
 
     </>
