@@ -2,7 +2,7 @@ import React from 'react';
 import Tippy from '@tippyjs/react';
 import Spinner from './Spinner';
 
-class ConfortUpdater extends React.Component {
+class CategorieConfort extends React.Component {
   constructor(props) {
     super(props);
 
@@ -166,7 +166,8 @@ class ConfortUpdater extends React.Component {
               className='--confort-value -inline'
               onInput={this.onInput}
               onKeyDown={this.onGenericKeyDown}
-              value={this.state.nextValue}
+              //value={this.state.nextValue}
+              defaultValue={this.state.nextValue}
               onFocus={this.focus}
               onBlur={this.blur}
               ref={this.input}>
@@ -226,4 +227,4 @@ class ConfortUpdater extends React.Component {
   }
 }
 
-export default ConfortUpdater;
+export default CategorieConfort;

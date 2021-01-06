@@ -189,28 +189,29 @@ class ConfortUpdater extends React.Component {
 
   input(oldValue, newValue) {
 
-    if (oldValue) {
-      
-      let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiConfort;
 
-      for (let i = 0; i < categorii.length; i++) {
+    for (let i = 0; i < categorii.length; i++) {
 
-        if (oldValue === categorii[i].Denumire) {
+      if (oldValue === categorii[i].Denumire) {
 
-          /** Hide the error or warning tippy */
-          categorii[i].showWarning = false;
-          categorii[i].showError = false;
-          
-          break;
-        }
+        /** Hide the error or warning tippy */
+        categorii[i].showWarning = false;
+        categorii[i].showError = false;
+        
+        break;
       }
     }
+
+    //this.setState({
+    //  categoriiConfort: categorii,
+    //});
   }
 
   save(isFresh, oldValue, newValue) {
     let body;
 
-    /** Check if the input value is empty */
+    /** If the user saves and the input value is empty */
     if (!newValue) {
 
       let categorii = this.state.categoriiConfort;
@@ -219,9 +220,11 @@ class ConfortUpdater extends React.Component {
 
         if (categorii[i].Denumire === oldValue) {
 
-          categorii[i].Denumire = newValue; /** empty value */
+          //categorii[i].Denumire = newValue; /** empty value */
 
           categorii[i].showWarning = true;
+
+          categorii[i].showError = false;
 
           break;
         }
@@ -231,7 +234,37 @@ class ConfortUpdater extends React.Component {
         categoriiConfort: categorii,
       });
 
-    } else {
+    }
+    
+    else
+    
+    /** If the user saves without modifying the value */
+    if (oldValue && oldValue === newValue) {
+
+      let categorii = this.state.categoriiConfort;
+
+      for (let i = 0; i < categorii.length; i++) {
+
+        if (categorii[i].Denumire === oldValue) {
+
+          categorii[i].showWarning = false;
+          categorii[i].showError = false
+          categorii[i].isFresh = false;
+          categorii[i].isEditing = false;
+          categorii[i].isFetching = false;
+
+          break;
+        }
+      }
+
+      this.setState({
+        categoriiConfort: categorii,
+        creating: false,
+      });
+    }
+
+    /** If the user saves a new, non-empty value */
+    else {
 
       let categorii = this.state.categoriiConfort;
 
@@ -303,9 +336,13 @@ class ConfortUpdater extends React.Component {
                     break;
                   }
                 }
+
+                let sorted = categorii.sort(function compare(a, b) {
+                  return a.Denumire - b.Denumire;
+                });
   
                 this.setState({
-                  categoriiConfort: categorii,
+                  categoriiConfort: sorted,
                   creating: false,
                 });
   
@@ -366,15 +403,16 @@ class ConfortUpdater extends React.Component {
     fetch('http://localhost:3001/main/administrare/confort', requestOptions)
     .then(response => response.json())
     .then(updated => {
+
       if ('valid' === updated.status) {
         
         let categorii = this.state.categoriiConfort;
-        let val = value.trim();
+       
         let index = 0;
 
         for (let i = 0; i < categorii.length; i++ ) {
 
-          if (val === categorii[i].Denumire) {
+          if (value === categorii[i].Denumire) {
 
             index = i;
           }
@@ -395,10 +433,13 @@ class ConfortUpdater extends React.Component {
         let categorii = this.state.categoriiConfort;
 
         categorii.forEach(item => {
-          item.fresh = false;
-          item.editing = false;
-          item.fetching = false;
-          item.error = false;
+          
+          item.showWarning = false;
+          item.showError = false;
+          item.isFresh = false;
+          item.isEditing = false;
+          item.isFetching = false;
+          
         });
 
         this.setState({
@@ -416,41 +457,28 @@ class ConfortUpdater extends React.Component {
       
       if (value === item.Denumire) {
         
+        /** The user clicked cancel on a newly created item */
         if (!value) {
           categorii.pop();
         }
 
+        /** The user clicked cancel on an existing item */
         else {
-          item.editing = false;
-          item.fresh = false;
-          item.fetching = false;
-          item.error = false;
+
+          item.showWarning = false;
+          item.showError = false;
+          item.isFresh = false;
+          item.isEditing = false;
+          item.isFetching = false;
         }
       }
     });
-
-    if (categorii.length && '' === categorii[categorii.length - 1].Denumire) {
-      categorii.pop();
-    }
-
 
     this.setState({
       categoriiConfort: categorii,
 
       creating: false,
     });
-
-    /*
-    if('' === categorii[categorii.length - 1].Denumire) {
-      categorii.pop();
-
-      this.setState({
-        categoriiConfort: categorii,
-
-        creating: false,
-      });
-    }  
-    */
   }
 
   generateKey() {
