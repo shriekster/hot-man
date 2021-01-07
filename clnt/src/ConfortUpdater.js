@@ -106,28 +106,19 @@ class ConfortUpdater extends React.Component {
           isFetching: false,
         };
 
-        let newBackupItem = {
-          Denumire: '',
-          showWarning: false,
-          showError: false,
-
-          isFresh: true,
-          isEditing: true,
-
-          isFetching: false,
-        };
 
         if (0 === categorii.length) {
 
           categorii.push(newItem);
-          backup.push(newBackupItem);
+          backup.push('');
         }
 
         else {
 
           let last = categorii[categorii.length - 1].Denumire;
+          let backupLast = backup[backup.length - 1];
 
-          if (last) {
+          if (last && backupLast) {
             /** 'Reset' every other item's state when a new item is being added */
             categorii.forEach( item => {
 
@@ -140,7 +131,7 @@ class ConfortUpdater extends React.Component {
             });
 
             categorii.push(newItem);
-            backup.push(newBackupItem);
+            backup.push('');
           }
         }
 
@@ -157,6 +148,7 @@ class ConfortUpdater extends React.Component {
     if (value) {
 
       let categorii = this.state.categoriiConfort;
+      let backup = this.state.backup;
 
       for (let i = 0; i < categorii.length; i++) {
 
@@ -174,9 +166,11 @@ class ConfortUpdater extends React.Component {
           /** 'Reset' every other item's state when a new item is being edited
            *  and cancel the creation of a new item, if this applies
            */
-          if (i === categorii.length - 1 && '' === categorii[i].Denumire) {
+          if (i === categorii.length - 1 && '' === categorii[i].Denumire &&
+              i === backup.length - 1 && '' === backup[i]) {
 
             categorii.pop(); /** cancel creation */
+            backup.pop();
 
           } else {
 
@@ -190,6 +184,7 @@ class ConfortUpdater extends React.Component {
       }
 
       this.setState({
+        backup: backup,
         categoriiConfort: categorii,
 
         creating: true, /** Block the creation of a new item while editing */
@@ -220,44 +215,34 @@ class ConfortUpdater extends React.Component {
     });
   }
 
-  save(isFresh, oldValue, newValue) {
+  save(isFresh, currentValue) {
+
     let body;
+    let backup = this.state.backup;
+    let categorii = this.state.categoriiConfort;
 
-    /** If the user saves and the input value is empty */
-    if (!newValue) {
+    for (let i = 0; i < categorii.length; i++) {
 
-      let categorii = this.state.categoriiConfort;
+      /** Found the current item */
+      if (currentValue === categorii[i].Denumire) {
 
-      for (let i = 0; i < categorii.length; i++) {
-
-        if (categorii[i].Denumire === oldValue) {
-
-          //categorii[i].Denumire = newValue; /** empty value */
+        /** The current input value is empty */
+        if (!currentValue) {
 
           categorii[i].showWarning = true;
+          categorii[i].showError = false; //??
 
-          categorii[i].showError = false;
+          this.setState({
+            categoriiConfort: categorii,
+          });
 
-          break;
+          break; //??
         }
-      }
 
-      this.setState({
-        categoriiConfort: categorii,
-      });
+        else 
 
-    }
-    
-    else
-    
-    /** If the user saves without modifying the value */
-    if (oldValue && oldValue === newValue) {
-
-      let categorii = this.state.categoriiConfort;
-
-      for (let i = 0; i < categorii.length; i++) {
-
-        if (categorii[i].Denumire === oldValue) {
+        /** The input value is the same */
+        if (currentValue === backup[i]) {
 
           categorii[i].showWarning = false;
           categorii[i].showError = false
@@ -265,141 +250,126 @@ class ConfortUpdater extends React.Component {
           categorii[i].isEditing = false;
           categorii[i].isFetching = false;
 
-          break;
+          this.setState({
+            categoriiConfort: categorii,
+
+            creating: false,
+          });
+
+          break; //??
         }
-      }
 
-      this.setState({
-        categoriiConfort: categorii,
-        creating: false,
-      });
-    }
+        else {
 
-    /** If the user saves a new, non-empty value */
-    else {
+          if (isFresh) {
 
-      let categorii = this.state.categoriiConfort;
-
-      for (let i = 0; i < categorii.length; i++) {
-
-        if (categorii[i].Denumire === oldValue) {
-
-          categorii[i].isFetching = true;
-
-          break;
-        }
-      }
-
-      this.setState({
-        
-        categoriiConfort: categorii,
-
-      }, () => {
-
-        if (isFresh) {
-
-          body = {
-            token: this.props.token,
-            task: 'create',
-            value: newValue.trim(),
-          };
-    
-        } else {
-    
-          body = {
-            token: this.props.token,
-            task: 'update',
-            oldValue: oldValue,
-            newValue: newValue.trim(),
-          };
-        }
+            body = {
+              token: this.props.token,
+              task: 'create',
+              value: currentValue.trim(),
+            };
       
-        const requestOptions = {
-          method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        };
+          } else {
+      
+            body = {
+              token: this.props.token,
+              task: 'update',
+              oldValue: backup[i],
+              newValue: currentValue.trim(),
+            };
+          }
+        
+          const requestOptions = {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          };
+      
+          fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+          .then(response => response.json())
+          .then(updated => {
+            
+            if (updated && updated.status) {
     
-        fetch('http://localhost:3001/main/administrare/confort', requestOptions)
-        .then(response => response.json())
-        .then(updated => {
-          
-          if (updated && updated.status) {
+              switch (updated.status) {
+    
+                case 'valid': {
   
-            switch (updated.status) {
+                  categorii[i].Denumire = currentValue.trim();
+                  backup[i] = categorii[i].Denumire;
+    
+                  categorii[i].showWarning = false;
+                  categorii[i].showError = false
+                  categorii[i].isFresh = false;
+                  categorii[i].isEditing = false;
+                  categorii[i].isFetching = false;
   
-              case 'valid': {
+                  let sorted = categorii.sort(function compare(a, b) {
+                    return a.Denumire - b.Denumire;
+                  });
 
-                let categorii = this.state.categoriiConfort;
-  
-                for (let i = 0; i < categorii.length; i++) {
-  
-                  if (oldValue === categorii[i].Denumire) {
-  
-                    categorii[i].Denumire = newValue.trim();
-  
-                    categorii[i].showWarning = false;
-                    categorii[i].showError = false
-                    categorii[i].isFresh = false;
-                    categorii[i].isEditing = false;
-                    categorii[i].isFetching = false;
-  
-                    break;
-                  }
+                  let sortedBackup = backup.sort(function compare(a, b) {
+                    return a - b;
+                  });
+    
+                  this.setState({
+                    backup: sortedBackup,
+                    categoriiConfort: sorted,
+                    creating: false,
+                  });
+    
+                  break;
                 }
+    
+                case 'error':
+                case 'invalid':
+                case 'duplicate': {
 
-                let sorted = categorii.sort(function compare(a, b) {
-                  return a.Denumire - b.Denumire;
-                });
-  
-                this.setState({
-                  categoriiConfort: sorted,
-                  creating: false,
-                });
-  
-                break;
-              }
-  
-              case 'error':
-              case 'invalid':
-              case 'duplicate': {
+                  categorii[i].showWarning = false;
 
-                let categorii = this.state.categoriiConfort;
-  
-                for (let i = 0; i < categorii.length; i++) {
-  
-                  if (oldValue === categorii[i].Denumire) {
-  
-                    categorii[i].showWarning = false;
+                  categorii[i].showError = true;
+                  categorii[i].isEditing = true;
 
-                    categorii[i].showError = true;
-
-                    categorii[i].isFetching = false;
-  
-                    break;
-                  }
+                  categorii[i].isFetching = false;
+    
+                  this.setState({
+                    categoriiConfort: categorii,
+                  });
+    
+                  break;
                 }
-  
-                this.setState({
-                  categoriiConfort: categorii,
-                });
-  
-                break;
-              }
-  
-              case 'denied': {
-                this.props.onChange('Login');
-                break;
+    
+                case 'denied': {
+                  this.props.onChange('Login');
+                  break;
+                }
               }
             }
-          }
-        });
-      });
+          });
+
+        }
+
+      }
     }
   }
 
   delete(value) {
+
+    let categorii = this.state.categoriiConfort;
+    let backup = this.state.backup;
+   
+    let index = 0;
+    let toDelete = '';
+
+    for (let i = 0; i < categorii.length; i++ ) {
+
+      if (value === categorii[i].Denumire) {
+
+        toDelete = backup[i];
+        index = i;
+      }
+    }
 
     const requestOptions = {
       method: 'POST',
@@ -408,7 +378,7 @@ class ConfortUpdater extends React.Component {
       body: JSON.stringify({
         token: this.props.token,
         task: 'delete',
-        value: value.trim(),
+        value: toDelete,
       }),
     };
 
@@ -418,22 +388,11 @@ class ConfortUpdater extends React.Component {
 
       if ('valid' === updated.status) {
         
-        let categorii = this.state.categoriiConfort;
-       
-        let index = 0;
-
-        for (let i = 0; i < categorii.length; i++ ) {
-
-          if (value === categorii[i].Denumire) {
-
-            index = i;
-          }
-        }
-        
         categorii.splice(index, 1);
+        backup.splice(index, 1);
 
         this.setState({
-          backup: categorii,
+          backup: backup,
           categoriiConfort: categorii,
 
           creating: false,
@@ -456,7 +415,6 @@ class ConfortUpdater extends React.Component {
         });
 
         this.setState({
-          backup: categorii,
           categoriiConfort: categorii,
           creating: false,
         });
@@ -473,19 +431,17 @@ class ConfortUpdater extends React.Component {
       if (value === categorii[i].Denumire) {
         
         /** The user clicked cancel on a newly created item */
-        if (!value) {
-
-          if (value === backup[i].Denumire) {
-            categorii.pop();
-            backup.pop();
-          }
+        if (categorii[i].isFresh &&
+            '' === backup[i]) {
+          
+          categorii.pop();
+          backup.pop();
         }
 
         /** The user clicked cancel on an existing item */
         else {
           
-          categorii[i].Denumire = this.state.backup[i].Denumire;
-          console.log(categorii[i])
+          categorii[i].Denumire = backup[i];
 
           categorii[i].showWarning = false;
           categorii[i].showError = false;
@@ -495,29 +451,6 @@ class ConfortUpdater extends React.Component {
         }
       }
     }
-    
-    /*
-    categorii.forEach(item => {
-      
-      if (value === item.Denumire) {
-        
-        // The user clicked cancel on a newly created item 
-        if (!value) {
-          categorii.pop();
-        }
-
-        // The user clicked cancel on an existing item 
-        else {
-
-          item.showWarning = false;
-          item.showError = false;
-          item.isFresh = false;
-          item.isEditing = false;
-          item.isFetching = false;
-        }
-      }
-    });
-    */
 
     this.setState({
       backup: backup,
@@ -570,8 +503,7 @@ class ConfortUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
-          let backupItem = Object.assign({}, item);
-          sortedBackup.push(backupItem);
+          sortedBackup.push(item.Denumire);
 
         });
 
