@@ -59,17 +59,7 @@ class CategorieConfort extends React.Component {
   }
 
   onInput(e) {
-    /*
-    if (e && e.target) {
-      this.setState({
-        nextValue: e.target.value,
-      }, 
-      () => {
-        this.props.input(this.props.value, this.state.nextValue);
-      });
-    }
-    */
-   this.props.input(this.props.value, e.target.value);
+   this.props.input(this.props.key, this.props.value, e.target.value);
   }
 
   focus() {

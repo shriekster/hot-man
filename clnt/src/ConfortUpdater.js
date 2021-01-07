@@ -96,6 +96,9 @@ class ConfortUpdater extends React.Component {
         let backup = this.state.backup;
 
         let newItem = {
+
+          key: this.generateKey(),
+
           Denumire: '',
           showWarning: false,
           showError: false,
@@ -192,13 +195,14 @@ class ConfortUpdater extends React.Component {
     }
   }
 
-  input(oldValue, newValue) {
+  input(key, currentValue, newValue) {
 
     let categorii = this.state.categoriiConfort;
 
     for (let i = 0; i < categorii.length; i++) {
 
-      if (oldValue === categorii[i].Denumire) {
+      if (currentValue === categorii[i].Denumire &&
+          key === categorii[i].key) {
 
         categorii[i].Denumire = newValue;
 
@@ -297,10 +301,10 @@ class ConfortUpdater extends React.Component {
                 case 'valid': {
   
                   categorii[i].Denumire = currentValue.trim();
-                  backup[i] = categorii[i].Denumire;
+                  backup[i] = currentValue.trim();
     
                   categorii[i].showWarning = false;
-                  categorii[i].showError = false
+                  categorii[i].showError = false;
                   categorii[i].isFresh = false;
                   categorii[i].isEditing = false;
                   categorii[i].isFetching = false;
@@ -496,6 +500,8 @@ class ConfortUpdater extends React.Component {
 
         sorted.forEach(item => {
 
+          item.key = this.generateKey();
+
           item.showWarning = false;
           item.showError = false;
     
@@ -535,7 +541,7 @@ class ConfortUpdater extends React.Component {
       (categorie) =>
 
       <CategorieConfort 
-      key={this.generateKey()}
+      key={categorie.key}
       value={categorie.Denumire}
 
       add={this.add}
