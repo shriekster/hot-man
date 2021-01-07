@@ -27,8 +27,6 @@ class CategorieConfort extends React.Component {
     this.input = React.createRef();
 
     this.state = {
-      //nextValue: this.props.value,
-
       hasFocus: false,
 
       editingHint: '',
@@ -59,7 +57,7 @@ class CategorieConfort extends React.Component {
   }
 
   onInput(e) {
-   this.props.input(this.props.key, this.props.value, e.target.value);
+   this.props.input(this.props.index, e.target.value);
   }
 
   focus() {
@@ -76,7 +74,7 @@ class CategorieConfort extends React.Component {
 
   submit(e) {
     e.preventDefault();
-    this.props.save(this.props.isFresh, this.props.value, this.state.nextValue);
+    this.props.save(this.props.index);
   }
 
   onIconMouseOut() {
@@ -187,24 +185,24 @@ class CategorieConfort extends React.Component {
             <i className='fas fa-save --save-icon'
               onMouseOver={this.onSaveMouseOver}
               onMouseOut={this.onIconMouseOut}
-              onClick={() => {this.props.save(this.props.isFresh, this.props.value)}}></i>
+              onClick={() => {this.props.save(this.props.index)}}></i>
             {
               !this.props.isFresh &&
             <i className='fas fa-trash-alt --delete-icon'
               onMouseOver={this.onDeleteMouseOver}
               onMouseOut={this.onIconMouseOut}
-              onClick={() => this.props.delete(this.props.value)}></i>
+              onClick={() => this.props.delete(this.props.index)}></i>
             }
             <i className='fas fa-window-close --cancel-icon'
               onMouseOver={this.onCancelMouseOver}
               onMouseOut={this.onIconMouseOut}
-              onClick={() => this.props.cancel(this.props.value)}></i>
+              onClick={() => this.props.cancel(this.props.index)}></i>
           </div>
         </Tippy>
                             :
         <div className='--confort-icons'>
           <i className='fas fa-edit --edit-icon'
-            onClick={() => { this.props.edit(this.props.value) }}></i>
+            onClick={() => { this.props.edit(this.props.index) }}></i>
         </div>
       }
       <Spinner
