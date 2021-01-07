@@ -93,19 +93,34 @@ class ConfortUpdater extends React.Component {
       if (this.state.creating) {
 
         let categorii = this.state.categoriiConfort;
+        let backup = this.state.backup;
+
+        let newItem = {
+          Denumire: '',
+          showWarning: false,
+          showError: false,
+
+          isFresh: true,
+          isEditing: true,
+
+          isFetching: false,
+        };
+
+        let newBackupItem = {
+          Denumire: '',
+          showWarning: false,
+          showError: false,
+
+          isFresh: true,
+          isEditing: true,
+
+          isFetching: false,
+        };
 
         if (0 === categorii.length) {
 
-          categorii.push({
-            Denumire: '',
-            showWarning: false,
-            showError: false,
-
-            isFresh: true,
-            isEditing: true,
-
-            isFetching: false,
-          });
+          categorii.push(newItem);
+          backup.push(newBackupItem);
         }
 
         else {
@@ -124,21 +139,13 @@ class ConfortUpdater extends React.Component {
 
             });
 
-            categorii.push({
-              Denumire: '',
-              showWarning: false,
-              showError: false,
-
-              isFresh: true,
-              isEditing: true,
-
-              isFetching: false,
-            });
+            categorii.push(newItem);
+            backup.push(newBackupItem);
           }
         }
 
         this.setState({
-          backup: categorii,
+          backup: backup,
           categoriiConfort: categorii,
         });
       }
@@ -467,19 +474,18 @@ class ConfortUpdater extends React.Component {
         
         /** The user clicked cancel on a newly created item */
         if (!value) {
-          categorii.pop();
 
-          if (backup.length - 1 === categorii.length &&
-              '' === backup[backup.length - 1].Denumire) {
-
-                backup.pop();
+          if (value === backup[i].Denumire) {
+            categorii.pop();
+            backup.pop();
           }
         }
 
         /** The user clicked cancel on an existing item */
         else {
-
+          
           categorii[i].Denumire = this.state.backup[i].Denumire;
+          console.log(categorii[i])
 
           categorii[i].showWarning = false;
           categorii[i].showError = false;
@@ -585,8 +591,8 @@ class ConfortUpdater extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    console.log('N ', this.state.categoriiConfort[0].Denumire);
-    console.log('B ', this.state.backup[0].Denumire)
+    console.log('N ', this.state.categoriiConfort);
+    console.log('B ', this.state.backup)
   }
 
   render() {
