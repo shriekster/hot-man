@@ -27,7 +27,7 @@ class CategorieConfort extends React.Component {
     this.input = React.createRef();
 
     this.state = {
-      nextValue: this.props.value,
+      //nextValue: this.props.value,
 
       hasFocus: false,
 
@@ -59,6 +59,7 @@ class CategorieConfort extends React.Component {
   }
 
   onInput(e) {
+    /*
     if (e && e.target) {
       this.setState({
         nextValue: e.target.value,
@@ -67,6 +68,8 @@ class CategorieConfort extends React.Component {
         this.props.input(this.props.value, this.state.nextValue);
       });
     }
+    */
+   this.props.input(this.props.value, e.target.value);
   }
 
   focus() {
@@ -166,8 +169,8 @@ class CategorieConfort extends React.Component {
               className='--confort-value -inline'
               onInput={this.onInput}
               onKeyDown={this.onGenericKeyDown}
-              //value={this.state.nextValue}
-              defaultValue={this.state.nextValue}
+              value={this.props.value}
+              //defaultValue={this.state.nextValue}
               onFocus={this.focus}
               onBlur={this.blur}
               ref={this.input}>
@@ -194,7 +197,7 @@ class CategorieConfort extends React.Component {
             <i className='fas fa-save --save-icon'
               onMouseOver={this.onSaveMouseOver}
               onMouseOut={this.onIconMouseOut}
-              onClick={() => {this.props.save(this.props.isFresh, this.props.value, this.state.nextValue)}}></i>
+              onClick={() => {this.props.save(this.props.isFresh, this.props.value)}}></i>
             {
               !this.props.isFresh &&
             <i className='fas fa-trash-alt --delete-icon'

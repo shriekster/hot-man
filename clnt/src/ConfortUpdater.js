@@ -26,6 +26,8 @@ class ConfortUpdater extends React.Component {
     this.generateKey = this.generateKey.bind(this);
 
     this.state = {
+      backup: [],
+
       categoriiConfort: [],
 
       creating: false,
@@ -136,6 +138,7 @@ class ConfortUpdater extends React.Component {
         }
 
         this.setState({
+          backup: categorii,
           categoriiConfort: categorii,
         });
       }
@@ -195,6 +198,8 @@ class ConfortUpdater extends React.Component {
 
       if (oldValue === categorii[i].Denumire) {
 
+        categorii[i].Denumire = newValue;
+
         /** Hide the error or warning tippy */
         categorii[i].showWarning = false;
         categorii[i].showError = false;
@@ -203,9 +208,9 @@ class ConfortUpdater extends React.Component {
       }
     }
 
-    //this.setState({
-    //  categoriiConfort: categorii,
-    //});
+    this.setState({
+      categoriiConfort: categorii,
+    });
   }
 
   save(isFresh, oldValue, newValue) {
@@ -421,6 +426,7 @@ class ConfortUpdater extends React.Component {
         categorii.splice(index, 1);
 
         this.setState({
+          backup: categorii,
           categoriiConfort: categorii,
 
           creating: false,
@@ -443,6 +449,7 @@ class ConfortUpdater extends React.Component {
         });
 
         this.setState({
+          backup: categorii,
           categoriiConfort: categorii,
           creating: false,
         });
@@ -452,17 +459,48 @@ class ConfortUpdater extends React.Component {
 
   cancel(value) {
     let categorii = this.state.categoriiConfort;
-    
-    categorii.forEach(item => {
-      
-      if (value === item.Denumire) {
+    let backup = this.state.backup;
+
+    for (let i = 0; i < categorii.length; ++i) {
+
+      if (value === categorii[i].Denumire) {
         
         /** The user clicked cancel on a newly created item */
         if (!value) {
           categorii.pop();
+
+          if (backup.length - 1 === categorii.length &&
+              '' === backup[backup.length - 1].Denumire) {
+
+                backup.pop();
+          }
         }
 
         /** The user clicked cancel on an existing item */
+        else {
+
+          categorii[i].Denumire = this.state.backup[i].Denumire;
+
+          categorii[i].showWarning = false;
+          categorii[i].showError = false;
+          categorii[i].isFresh = false;
+          categorii[i].isEditing = false;
+          categorii[i].isFetching = false;
+        }
+      }
+    }
+    
+    /*
+    categorii.forEach(item => {
+      
+      if (value === item.Denumire) {
+        
+        // The user clicked cancel on a newly created item 
+        if (!value) {
+          categorii.pop();
+        }
+
+        // The user clicked cancel on an existing item 
         else {
 
           item.showWarning = false;
@@ -473,8 +511,10 @@ class ConfortUpdater extends React.Component {
         }
       }
     });
+    */
 
     this.setState({
+      backup: backup,
       categoriiConfort: categorii,
 
       creating: false,
@@ -513,6 +553,8 @@ class ConfortUpdater extends React.Component {
           return a.Denumire - b.Denumire;
         });
 
+       let sortedBackup = [];
+
         sorted.forEach(item => {
 
           item.showWarning = false;
@@ -522,9 +564,13 @@ class ConfortUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
+          let backupItem = Object.assign({}, item);
+          sortedBackup.push(backupItem);
+
         });
 
         this.setState({
+          backup: sortedBackup,
           categoriiConfort: sorted,
         });
 
@@ -539,6 +585,8 @@ class ConfortUpdater extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
+    console.log('N ', this.state.categoriiConfort[0].Denumire);
+    console.log('B ', this.state.backup[0].Denumire)
   }
 
   render() {
