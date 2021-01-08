@@ -269,7 +269,7 @@ class Setari extends React.Component {
           if ('denied' === updated.status) {
             this.props.onChange('Login'); /* render login component when something is wrong with authorization (!) */
           } else {
-            if ('invalid' === updated.status) {
+            if ('invalid' === updated.status || 'error' === updated.status) {
               switch(attributeName) {
                 case 'cnp': {
                   this.setState({
@@ -279,6 +279,10 @@ class Setari extends React.Component {
                     fetchingPrenume: false,
                     fetchingUtilizator: false,
                     fetchingParola: false,
+
+                    editCnp: true,
+                    valueCnpClass: this.state.valueClassNames.editing,
+                    editCnpClass: this.state.iconClassNames.editing,
 
                     showCnpError: true,
                   });
@@ -294,6 +298,10 @@ class Setari extends React.Component {
                     fetchingUtilizator: false,
                     fetchingParola: false,
 
+                    editGrad: true,
+                    valueGradClass: this.state.valueClassNames.editing,
+                    editGradClass: this.state.iconClassNames.editing,
+
                     showGradError: true,
                   });
                   break;
@@ -307,6 +315,10 @@ class Setari extends React.Component {
                     fetchingPrenume: false,
                     fetchingUtilizator: false,
                     fetchingParola: false,
+
+                    editNume: true,
+                    valueNumeClass: this.state.valueClassNames.editing,
+                    editNumeClass: this.state.iconClassNames.editing,
 
                     showNumeError: true,
                   });
@@ -322,6 +334,10 @@ class Setari extends React.Component {
                     fetchingUtilizator: false,
                     fetchingParola: false,
 
+                    editPrenume: true,
+                    valuePrenumeClass: this.state.valueClassNames.editing,
+                    editPrenumeClass: this.state.iconClassNames.editing,
+
                     showPrenumeError: true,
                   });
                   break;
@@ -336,6 +352,10 @@ class Setari extends React.Component {
                     fetchingUtilizator: false,
                     fetchingParola: false,
 
+                    editUtilizator: true,
+                    valueUtilizatorClass: this.state.valueClassNames.editing,
+                    editUtilizatorClass: this.state.iconClassNames.editing,
+
                     showUtilizatorError: true,
                   });
                   break;
@@ -349,6 +369,10 @@ class Setari extends React.Component {
                     fetchingPrenume: false,
                     fetchingUtilizator: false,
                     fetchingParola: false,
+
+                    editParola: true,
+                    valueParolaClass: this.state.valueClassNames.editing,
+                    editParolaClass: this.state.iconClassNames.editing,
 
                     showParolaError: true,
                   });
@@ -475,6 +499,12 @@ class Setari extends React.Component {
             nextUtilizator: this.props.user.utilizator,
             nextParola: '',
 
+            showGradError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
+
           });
           break;
         }
@@ -519,6 +549,12 @@ class Setari extends React.Component {
             nextPrenume: this.props.user.prenume,
             nextUtilizator: this.props.user.utilizator,
             nextParola: '',
+
+            showCnpError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
           });
           
           break;
@@ -561,6 +597,12 @@ class Setari extends React.Component {
             nextPrenume: this.props.user.prenume,
             nextUtilizator: this.props.user.utilizator,
             nextParola: '',
+
+            showCnpError: false,
+            showGradError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
           });
           break;
         }
@@ -602,6 +644,12 @@ class Setari extends React.Component {
             nextNume: this.props.user.nume,
             nextUtilizator: this.props.user.utilizator,
             nextParola: '',
+
+            showCnpError: false,
+            showGradError: false,
+            showNumeError: false,
+            showUtilizatorError: false,
+            showParolaError: false,
           });
           break;
         }
@@ -643,6 +691,12 @@ class Setari extends React.Component {
             nextNume: this.props.user.nume,
             nextPrenume: this.props.user.prenume,
             nextParola: '',
+
+            showCnpError: false,
+            showGradError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showParolaError: false,
           });
           break;
         }
@@ -692,6 +746,12 @@ class Setari extends React.Component {
             nextNume: this.props.user.nume,
             nextPrenume: this.props.user.prenume,
             nextUtilizator: this.props.user.utilizator,
+
+            showCnpError: false,
+            showGradError: false,
+            showNumeError: false,
+            showPrenumeError: false,
+            showUtilizatorError: false,
           });
           break;
         }
@@ -1030,7 +1090,6 @@ class Setari extends React.Component {
   }
 
   componentDidMount() {
-    
   }
 
   componentDidUpdate (prevProps, prevState) {
