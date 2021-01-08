@@ -123,10 +123,11 @@ class CategorieSpatiu extends React.Component {
     <div className='--spatiu-item'>
       <form className='--spatiu-form'
         onSubmit={this.submit}>
-        <span>
-          Denumire
-        </span>
-        <Tippy
+        <div className='--spatiu-denumire'>
+          <span>
+            Denumire
+          </span>
+          <Tippy
           content={
             <>
               <span><i className='fas fa-exclamation-circle'></i> Introdu denumirea categoriei</span>
@@ -166,19 +167,21 @@ class CategorieSpatiu extends React.Component {
             </input>
           </Tippy>
         </Tippy>
-
-        <textarea disabled={!this.props.isEditing}
-          autoComplete='off'
-          autoCorrect='off'
-          spellCheck={false}
-          className='--spatiu-detalii -inline'
-          //onInput={this.onInput}
-          //onKeyDown={this.onGenericKeyDown}
-          //value={this.props.value}
-          //onFocus={this.focus}
-          //onBlur={this.blur}
-          ref={this.detaliiTextArea}>
-        </textarea>
+        </div>
+         <div className=''>   
+          <textarea disabled={!this.props.isEditing}
+            autoComplete='off'
+            autoCorrect='off'
+            spellCheck={false}
+            className='--spatiu-detalii -inline'
+            //onInput={this.onInput}
+            //onKeyDown={this.onGenericKeyDown}
+            //value={this.props.value}
+            //onFocus={this.focus}
+            //onBlur={this.blur}
+            ref={this.detaliiTextArea}>
+          </textarea>
+        </div>
       </form>
       {
         this.props.isEditing  ?
