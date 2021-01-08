@@ -28,11 +28,13 @@ body {
   overflow-y: hidden;
 }
 
-:not(input)::selection {
+:not(input)::selection,
+input:disabled::selection {
   background: transparent;
 }
 
-input::selection {
+input:enabled::selection,
+textarea:enabled::selection {
   background: #25AAA9;
   color: lemonchiffon;
 }
@@ -1711,14 +1713,6 @@ input[type='text'].--confort-value:disabled {
   color: darkslategray;
 }
 
-/*
-input[type='text'].--confort-value::placeholder {
-  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
-  font-size: 14px;
-  color: #D72C25;
-}
-*/
-
 input[type='text'].--confort-value:focus {
   color: #009500;
   border: 1px #009500 inset;
@@ -1726,7 +1720,8 @@ input[type='text'].--confort-value:focus {
 }
 
 .--confort-icons,
-.--confort-icons-editing {
+.--confort-icons-editing,
+.--icons-editing {
   transition: all .2s linear;
 }
 
@@ -1804,45 +1799,87 @@ input[type='text'].--confort-value:focus {
 .--spatiu-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border: 1px solid rgba(37, 170, 169, 1);
   border-radius: 4px;
   margin-bottom: 2vh;
   width: 300px;
-  height: 145px;
-  position: relative;
+  height: 150px;
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
   padding-left: 3px;
+  position: relative;
 }
 
 .--spatiu-form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  justify-content: flex-start;
+  align-items: flex-start;
+  width: 300px;
+  height: 150px;
 }
 
-.--spatiu-form > span {
+.--spatiu-form span {
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
   font-size: 18px;
 }
 
-textarea.--spatiu-detalii {
+.--spatiu-denumire {
+  width: 292px;
+  height: 41px;
+  margin: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+input[type='text'].--denumire-text {
   outline: none !important;
   border: none;
-  display: flex;
+  display: inline;
   font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
   font-size: 18px;
-  align-items: center;
-  position: absolute;
-  left: 140px;
+  width: 157px;
+  height: 41px;
+  padding: 2px 2px 2px 4px;
+  background-color: #9fd9d9;
+  color: lightslategray;
 
-  top: 45px;
+  border: 1px solid lightslategray;
+  border-radius: 4px;
+}
+
+input[type='text'].--denumire-text:disabled {
+  border: none;
+  color: darkslategray;
+}
+
+input[type='text'].--denumire-text:focus {
+  color: #009500;
+  border: 1px #009500 inset;
+  border-radius: 4px;
+}
+
+.--spatiu-detalii {
+  width: 292px;
+  height: 90px;
+  margin: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+textarea.--detalii-text {
+  outline: none !important;
+  border: none;
+  display: inline;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-size: 18px;
 
   width: 157px;
-  height: 97px;
-  padding: 2px;
+  height: 90px;
   background-color: #9fd9d9;
   color: lightslategray;
 
@@ -1852,18 +1889,18 @@ textarea.--spatiu-detalii {
   overflow-y: auto;
 }
 
-textarea.--spatiu-detalii:disabled {
+textarea.--detalii-text:disabled {
   border: none;
   color: darkslategray;
 }
 
-textarea.--spatiu-detalii:focus {
+textarea.--detalii-text:focus {
   color: #009500;
   border: 1px #009500 inset;
   border-radius: 4px;
 }
 
-.--spatiu-detalii::-webkit-scrollbar-track {
+.--detalii-text::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
   border-radius: 2px;
@@ -1871,15 +1908,63 @@ textarea.--spatiu-detalii:focus {
   background-color: transparent;
 }
 
-.--spatiu-detalii::-webkit-scrollbar {
+.--detalii-text::-webkit-scrollbar {
   width: 4px;
   background-color: #9fd9d9;
 }
 
-.--spatiu-detalii::-webkit-scrollbar-thumb {
+.--detalii-text::-webkit-scrollbar-thumb {
   border-radius: 4px;
   -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,.3);
   box-shadow: inset 0 0 2px rgba(0,0,0,.3);
   /*background-color: #009300;*/
   background-image: linear-gradient(rgba(79, 183, 183, .9), rgba(0, 147, 0, .7), rgba(79, 183, 183, .9));
+}
+
+
+.-edit-icon  {
+  font-size: 36px;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.-save-icon  {
+  font-size: 20px;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.-delete-icon {
+  font-size: 18px;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.-cancel-icon {
+  font-size: 20px;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.-spinner-loading {
+  /*
+  position: absolute;
+  right: -76px;
+  */
+}
+
+.-edit-icon:hover {
+  color: #009500;
+}
+
+.-save-icon:hover {
+  color: #009500;
+}
+
+.-delete-icon:hover {
+  color: #D72C25;
+}
+
+.-cancel-icon:hover {
+  color: slategray;
 }

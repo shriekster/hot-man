@@ -156,7 +156,7 @@ class CategorieSpatiu extends React.Component {
               autoComplete='off'
               autoCorrect='off'
               spellCheck={false}
-              className='--confort-value -inline'
+              className='--denumire-text'
               onInput={this.onInput}
               onKeyDown={this.onGenericKeyDown}
               value={this.props.value}
@@ -168,12 +168,17 @@ class CategorieSpatiu extends React.Component {
           </Tippy>
         </Tippy>
         </div>
-         <div className=''>   
+
+        <div className='--spatiu-detalii'>
+          <span>
+            Detalii
+          </span>
           <textarea disabled={!this.props.isEditing}
+            className='--detalii-text'
             autoComplete='off'
             autoCorrect='off'
             spellCheck={false}
-            className='--spatiu-detalii -inline'
+            className='--detalii-text'
             //onInput={this.onInput}
             //onKeyDown={this.onGenericKeyDown}
             //value={this.props.value}
@@ -181,7 +186,7 @@ class CategorieSpatiu extends React.Component {
             //onBlur={this.blur}
             ref={this.detaliiTextArea}>
           </textarea>
-        </div>
+      </div>
       </form>
       {
         this.props.isEditing  ?
@@ -198,36 +203,36 @@ class CategorieSpatiu extends React.Component {
             theme='material-confort'
             offset={[this.state.hintOffsetY, 55]}
             visible={this.state.hintVisible}>
-          <div className='--confort-icons-editing'>
-            <i className='fas fa-save --save-icon'
+          <div className='--icons-editing'>
+            <i className='fas fa-save -save-icon'
               onMouseOver={this.onSaveMouseOver}
               onMouseOut={this.onIconMouseOut}
               onClick={() => {this.props.save(this.props.index)}}></i>
             {
               !this.props.isFresh &&
-            <i className='fas fa-trash-alt --delete-icon'
+            <i className='fas fa-trash-alt -delete-icon'
               onMouseOver={this.onDeleteMouseOver}
               onMouseOut={this.onIconMouseOut}
               onClick={() => this.props.delete(this.props.index)}></i>
             }
-            <i className='fas fa-window-close --cancel-icon'
+            <i className='fas fa-window-close -cancel-icon'
               onMouseOver={this.onCancelMouseOver}
               onMouseOut={this.onIconMouseOut}
               onClick={() => this.props.cancel(this.props.index)}></i>
           </div>
         </Tippy>
                             :
-        <div className='--confort-icons'>
-          <i className='fas fa-edit --edit-icon'
+        <div className='--icons-editing'>
+          <i className='fas fa-edit -edit-icon'
             onClick={() => { this.props.edit(this.props.index) }}></i>
         </div>
       }
       <Spinner
-        className='--confort-loading'
+        className='-spinner-loading'
         width='50px'
         height='50px'
         status='altLoading'
-        visibility={this.props.isFetching}/>
+        visibility={true}/>
     </div>
 
     </>
