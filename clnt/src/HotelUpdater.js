@@ -296,6 +296,10 @@ class HotelUpdater extends React.Component {
                     fetchingFax: false,
                     fetchingEmail: false,              
 
+                    editNume: true,
+                    valueNumeClass: this.state.valueClassNames.editing,
+                    editNumeClass: this.state.iconClassNames.editing,
+
                     showNumeError: true,
                   });
                   break;
@@ -311,7 +315,11 @@ class HotelUpdater extends React.Component {
                     fetchingCodPostal: false,
                     fetchingTelefon: false,
                     fetchingFax: false,
-                    fetchingEmail: false,              
+                    fetchingEmail: false,    
+                    
+                    editJudet: true,
+                    valueJudetClass: this.state.valueClassNames.editing,
+                    editJudetClass: this.state.iconClassNames.editing,
 
                     showJudetError: true,
                   });
@@ -329,6 +337,10 @@ class HotelUpdater extends React.Component {
                     fetchingTelefon: false,
                     fetchingFax: false,
                     fetchingEmail: false,
+
+                    editLocalitate: true,
+                    valueLocalitateClass: this.state.valueClassNames.editing,
+                    editLocalitateClass: this.state.iconClassNames.editing,
               
                     showLocalitateError: true,
                   });
@@ -346,6 +358,10 @@ class HotelUpdater extends React.Component {
                     fetchingTelefon: false,
                     fetchingFax: false,
                     fetchingEmail: false,
+
+                    editStrada: true,
+                    valueStradaClass: this.state.valueClassNames.editing,
+                    editStradaClass: this.state.iconClassNames.editing,
               
                     showStradaError: true,
                   });
@@ -362,7 +378,11 @@ class HotelUpdater extends React.Component {
                     fetchingCodPostal: false,
                     fetchingTelefon: false,
                     fetchingFax: false,
-                    fetchingEmail: false,              
+                    fetchingEmail: false,   
+                    
+                    editNumar: true,
+                    valueNumarClass: this.state.valueClassNames.editing,
+                    editNumarClass: this.state.iconClassNames.editing,
 
                     showNumarError: true,
                   });
@@ -380,8 +400,11 @@ class HotelUpdater extends React.Component {
                     fetchingTelefon: false,
                     fetchingFax: false,
                     fetchingEmail: false,
-              
 
+                    editCodPostal: true,
+                    valueCodPostalClass: this.state.valueClassNames.editing,
+                    editCodPostalClass: this.state.iconClassNames.editing,
+              
                     showCodPostalError: true,
                   });
                   break;
@@ -398,8 +421,11 @@ class HotelUpdater extends React.Component {
                     fetchingTelefon: false,
                     fetchingFax: false,
                     fetchingEmail: false,
-              
 
+                    editTelefon: true,
+                    valueTelefonClass: this.state.valueClassNames.editing,
+                    editTelefonClass: this.state.iconClassNames.editing,
+              
                     showTelefonError: true,
                   });
                   break;
@@ -416,8 +442,11 @@ class HotelUpdater extends React.Component {
                     fetchingTelefon: false,
                     fetchingFax: false,
                     fetchingEmail: false,
-              
 
+                    editFax: true,
+                    valueFaxClass: this.state.valueClassNames.editing,
+                    editFaxClass: this.state.iconClassNames.editing,
+              
                     showFaxError: true,
                   });
                   break;
@@ -434,8 +463,11 @@ class HotelUpdater extends React.Component {
                     fetchingTelefon: false,
                     fetchingFax: false,
                     fetchingEmail: false,
-              
 
+                    editEmail: true,
+                    valueEmailClass: this.state.valueClassNames.editing,
+                    editEmailClass: this.state.iconClassNames.editing,
+              
                     showEmailError: true,
                   });
                   break;
@@ -575,6 +607,15 @@ class HotelUpdater extends React.Component {
             nextTelefon: this.props.hotel.telefon,
             nextFax: this.props.hotel.fax,
             nextEmail: this.props.hotel.email,
+
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           });
           break;
         }
@@ -631,6 +672,15 @@ class HotelUpdater extends React.Component {
             nextTelefon: this.props.hotel.telefon,
             nextFax: this.props.hotel.fax,
             nextEmail: this.props.hotel.email,
+
+            showNumeError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           });
           
           break;
@@ -685,6 +735,15 @@ class HotelUpdater extends React.Component {
             nextTelefon: this.props.hotel.telefon,
             nextFax: this.props.hotel.fax,
             nextEmail: this.props.hotel.email,
+
+            showNumeError: false,
+            showJudetError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           });
           break;
         }
@@ -738,6 +797,15 @@ class HotelUpdater extends React.Component {
             nextTelefon: this.props.hotel.telefon,
             nextFax: this.props.hotel.fax,
             nextEmail: this.props.hotel.email,
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           });
           break;
         }
@@ -791,6 +859,15 @@ class HotelUpdater extends React.Component {
             nextTelefon: this.props.hotel.telefon,
             nextFax: this.props.hotel.fax,
             nextEmail: this.props.hotel.email,
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           });
           break;
         }
@@ -844,6 +921,15 @@ class HotelUpdater extends React.Component {
             nextTelefon: this.props.hotel.telefon,
             nextFax: this.props.hotel.fax,
             nextEmail: this.props.hotel.email,
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showTelefonError: false,
+            showFaxError: false,
+            showEmailError: false,
           });
           break;
         }
@@ -897,6 +983,15 @@ class HotelUpdater extends React.Component {
             nextCodPostal: this.props.hotel.codPostal,
             nextFax: this.props.hotel.fax,
             nextEmail: this.props.hotel.email,
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showFaxError: false,
+            showEmailError: false,
           });
           break;
         }
@@ -950,6 +1045,15 @@ class HotelUpdater extends React.Component {
             nextCodPostal: this.props.hotel.codPostal,
             nextTelefon: this.props.hotel.telefon,
             nextEmail: this.props.hotel.email,
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showEmailError: false,
           });
           break;
         }
@@ -1003,6 +1107,15 @@ class HotelUpdater extends React.Component {
             nextCodPostal: this.props.hotel.codPostal,
             nextTelefon: this.props.hotel.telefon,
             nextFax: this.props.hotel.fax,
+
+            showNumeError: false,
+            showJudetError: false,
+            showLocalitateError: false,
+            showStradaError: false,
+            showNumarError: false,
+            showCodPostalError: false,
+            showTelefonError: false,
+            showFaxError: false,
           });
           break;
         } 

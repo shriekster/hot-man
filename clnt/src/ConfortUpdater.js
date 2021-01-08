@@ -167,14 +167,22 @@ class ConfortUpdater extends React.Component {
           
         } else {
 
-          categorii[i].Denumire = backup[i];
+          if (categorii[i].isFresh) {
 
-          categorii[i].showWarning = false;
-          categorii[i].showError = false
-          categorii[i].isFresh = false;
-          categorii[i].isEditing = false;
-          categorii[i].isFetching = false;
+            categorii.pop();
+            backup.pop();
 
+          } else {
+
+            categorii[i].Denumire = backup[i];
+
+            categorii[i].showWarning = false;
+            categorii[i].showError = false
+            categorii[i].isFresh = false;
+            categorii[i].isEditing = false;
+            categorii[i].isFetching = false;
+
+          }
         }
       }
 
@@ -213,91 +221,135 @@ class ConfortUpdater extends React.Component {
 
     if (index >= 0 && index < categorii.length) {
 
-      if (categorii[index].isFresh) {
+      /** Empty input value on saving */
+      if (!categorii[index].Denumire) {
 
-        body = {
-          token: this.props.token,
-          task: 'create',
-          value: categorii[index].Denumire.trim(),
-        };
-  
-      } else {
-  
-        body = {
-          token: this.props.token,
-          task: 'update',
-          oldValue: backup[index],
-          newValue: categorii[index].Denumire.trim(),
-        };
+        categorii[index].showWarning = true;
+
+        categorii[index].showError = false;
+
+        categorii[index].isFetching = false;
+
+        this.setState({
+          categoriiConfort: categorii,
+        });
       }
+
+      else 
+      
+      /** The input value is the same as before being edited */
+      if (categorii[index].Denumire === backup[index]) {
+
+        categorii[index].showWarning = false;
+        categorii[index].showError = false;
+        categorii[index].isFresh = false;
+        categorii[index].isEditing = false;
+        categorii[index].isFetching = false;
+
+        this.setState({
+          categoriiConfort: categorii,
+        })
+      }
+
+      /** A new, non-empty value is to be saved */
+      else {
+
+        if (categorii[index].isFresh) {
+
+          body = {
+            token: this.props.token,
+            task: 'create',
+            value: categorii[index].Denumire.trim(),
+          };
     
-      const requestOptions = {
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      };
+        } else {
+    
+          body = {
+            token: this.props.token,
+            task: 'update',
+            oldValue: backup[index],
+            newValue: categorii[index].Denumire.trim(),
+          };
+        }
+      
+        const requestOptions = {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        };
+    
+        fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+        .then(response => response.json())
+        .then(updated => {
+          
+          if (updated && updated.status) {
   
-      fetch('http://localhost:3001/main/administrare/confort', requestOptions)
-      .then(response => response.json())
-      .then(updated => {
-        
-        if (updated && updated.status) {
-
-          switch (updated.status) {
-
-            case 'valid': {
-
-              backup[i] = currentValue.trim();
-
-              categorii[i].showWarning = false;
-              categorii[i].showError = false;
-              categorii[i].isFresh = false;
-              categorii[i].isEditing = false;
-              categorii[i].isFetching = false;
-
-              let sorted = categorii.sort(function compare(a, b) {
-                return a.Denumire - b.Denumire;
-              });
-
-              let sortedBackup = backup.sort(function compare(a, b) {
-                return a - b;
-              });
-
-              this.setState({
-                backup: sortedBackup,
-                categoriiConfort: sorted,
-                creating: false,
-              });
-
-              break;
-            }
-
-            case 'error':
-            case 'invalid':
-            case 'duplicate': {
-
-              categorii[index].showWarning = false;
-
-              categorii[index].showError = true;
-              categorii[index].isEditing = true;
-
-              categorii[index].isFetching = false;
-
-              this.setState({
-                categoriiConfort: categorii,
-              });
-
-              break;
-            }
-
-            case 'denied': {
-              this.props.onChange('Login');
-              break;
+            switch (updated.status) {
+  
+              case 'valid': {
+  
+                backup[index] = categorii[index].Denumire.trim();
+  
+                categorii[index].showWarning = false;
+                categorii[index].showError = false;
+                categorii[index].isFresh = false;
+                categorii[index].isEditing = false;
+                categorii[index].isFetching = false;
+  
+                let sorted = categorii.sort(function compare(a, b) {
+                  return a.Denumire - b.Denumire;
+                });
+  
+                /** Rewrite the indexes so that they are also sorted */
+                let _index = 0;
+  
+                sorted.forEach(item => {
+  
+                  item.index = _index++;
+  
+                });
+  
+                let sortedBackup = backup.sort(function compare(a, b) {
+                  return a - b;
+                });
+  
+                this.setState({
+                  backup: sortedBackup,
+                  categoriiConfort: sorted,
+                  creating: false,
+                });
+  
+                break;
+              }
+  
+              case 'error':
+              case 'invalid':
+              case 'duplicate': {
+  
+                categorii[index].showWarning = false;
+  
+                categorii[index].showError = true;
+                categorii[index].isEditing = true;
+  
+                categorii[index].isFetching = false;
+  
+                this.setState({
+                  categoriiConfort: categorii,
+                });
+  
+                break;
+              }
+  
+              case 'denied': {
+                this.props.onChange('Login');
+  
+                break;
+              }
             }
           }
-        }
-      });
+        });
+      }
     }
     
   }
