@@ -387,6 +387,15 @@ class ConfortUpdater extends React.Component {
         categorii.splice(index, 1);
         backup.splice(index, 1);
 
+        /** Rewrite the indexes so that they are also sorted */
+        let _index = 0;
+
+        categorii.forEach(item => {
+
+          item.index = _index++;
+
+        });
+
         this.setState({
           backup: backup,
           categoriiConfort: categorii,
