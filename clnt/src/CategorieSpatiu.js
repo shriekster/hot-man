@@ -25,6 +25,7 @@ class CategorieSpatiu extends React.Component {
     this.onDeleteMouseOver = this.onDeleteMouseOver.bind(this);
 
     this.input = React.createRef();
+    this.detaliiTextArea = React.createRef();
 
     this.state = {
       hasFocus: false,
@@ -119,11 +120,11 @@ class CategorieSpatiu extends React.Component {
   render() {
     return (
     <>
-    <div className='--confort-item'>
-      <form className='--confort-form'
+    <div className='--spatiu-item'>
+      <form className='--spatiu-form'
         onSubmit={this.submit}>
         <span>
-          Confort
+          Denumire
         </span>
         <Tippy
           content={
@@ -165,6 +166,19 @@ class CategorieSpatiu extends React.Component {
             </input>
           </Tippy>
         </Tippy>
+
+        <textarea disabled={!this.props.isEditing}
+          autoComplete='off'
+          autoCorrect='off'
+          spellCheck={false}
+          className='--spatiu-detalii -inline'
+          //onInput={this.onInput}
+          //onKeyDown={this.onGenericKeyDown}
+          //value={this.props.value}
+          //onFocus={this.focus}
+          //onBlur={this.blur}
+          ref={this.detaliiTextArea}>
+        </textarea>
       </form>
       {
         this.props.isEditing  ?
