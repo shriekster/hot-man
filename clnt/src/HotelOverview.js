@@ -4,8 +4,8 @@ import Select from 'react-select';
 import Spinner from './Spinner';
 
 import ConfortUpdater from './ConfortUpdater';
-import SpatiiUpdater from './HotelUpdater';
-import PaturiUpdater from './HotelUpdater';
+import SpatiiUpdater from './SpatiiUpdater';
+import PaturiUpdater from './PaturiUpdater';
 import HotelUpdater from './HotelUpdater';
 
 import contact from './images/contact.svg';
