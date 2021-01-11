@@ -157,6 +157,11 @@ span.legacy {
   background-color: rgb(37, 170, 169);
 }
 
+.-fallback-icon {
+  width: 250px;
+  height: 250px;
+}
+
 .Form, .Form-forgot {
   color:  darkslategray; /*whitesmoke;*/
   
@@ -189,9 +194,41 @@ span.legacy {
   margin-top: 5vh;
 }
 
-.Form-hint {
-  color:#D72C25;
+.Form-hint-forgot {
+  color: #D72C25;
   cursor: pointer;
+}
+
+.Form-hint-signup {
+  color:#009500;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.-user-icon-signup {
+  font-size: 30px;
+}
+
+.Form-hint-login {
+  color: #3377AA;
+  cursor: pointer;
+  transition: all .2s linear;
+  height: 50px;
+  width: 50px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.-user-icon-login {
+  font-size: 32px;
 }
 
 .icon-eye {
@@ -273,6 +310,7 @@ span.legacy {
   transform-origin: center;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+  transform-origin: center;
 }
 
 .glow {
@@ -281,6 +319,10 @@ span.legacy {
 
 .glow-green {
   animation: glowGreen .8s infinite alternate;
+}
+
+.glow-blue {
+  animation: glowBlue .8s infinite alternate;
 }
 
 .my-tippy {
@@ -364,9 +406,15 @@ span.legacy {
 
 @keyframes glowGreen {
   to {
-    color: #009500;
-    /*text-shadow: 0 0 14px rgba(79, 183, 183, .9);*/
+    /*color: #009500;*/
+    text-shadow: 0 0 10px rgba(0, 149, 0, .9);
   }	
+}
+
+@keyframes glowBlue {
+  to {
+    text-shadow: 0 0 10px #3377AA;
+  }
 }
 
 @keyframes editing {
@@ -653,6 +701,17 @@ button.manage-user {
   background-color: rgba(79, 183, 183, .9);
   border: 1px solid rgba(37, 170, 169, 1);
   outline: none;
+  display: flex;
+  align-items: center;
+  height: 30px;
+
+  position: relative;
+}
+
+.-user-icon-settings {
+  font-size: 16px;
+  position: absolute;
+  left: 10px;
 }
 
 button.manage-user:hover {
@@ -665,10 +724,37 @@ button.sign-out {
   background-color: rgba(79, 183, 183, .9);
   border: 1px solid rgba(37, 170, 169, 1);
   outline: none;
+  display: flex;
+  align-items: center;
+  height: 30px;
+
+  position: relative;
+}
+
+.-user-icon-sign-out {
+  font-size: 18px;
+  position: absolute;
+  left: 11px;
 }
 
 button.sign-out:hover {
   color: #D72C25;
+}
+
+.-settings-text {
+  position: absolute;
+  left: 50px;
+}
+
+.-settings-separator {
+  position: absolute;
+  left: -15px;
+  top: -2px;
+  height: 24px;
+  border-left: 2px solid rgba(37, 170, 169, 1);
+  margin: 0;
+  padding: 0;
+  display: inline-block;
 }
 
 /* Component views */
@@ -824,11 +910,6 @@ input[type='password'].--value-editing:focus,
   position: absolute;
   left: 540px;
   /*transition: all .3s linear;*/
-}
-
-.--settings-loading > img {
-  width: 36px !important;
-  height: 36px !important;
 }
 
 /*
@@ -1650,6 +1731,7 @@ table.--zilnic-table {
 .--confort-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border: 1px solid rgba(37, 170, 169, 1);
   border-radius: 4px;
   margin-bottom: 2vh;
@@ -1710,7 +1792,7 @@ input[type='text'].--confort-value {
 
 input[type='text'].--confort-value:disabled {
   border: none;
-  color: darkslategray;
+  color: #2f4f4f;
 }
 
 input[type='text'].--confort-value:focus {
@@ -1765,7 +1847,7 @@ input[type='text'].--confort-value:focus {
 
 .--confort-loading {
   position: absolute;
-  right: -76px;
+  right: -85px;
   /*transition: all .3s linear;*/
 }
 
@@ -1800,20 +1882,31 @@ input[type='text'].--confort-value:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid rgba(37, 170, 169, 1);
   border-radius: 4px;
   margin-bottom: 2vh;
-  width: 300px;
+  width: 400px;
   height: 150px;
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
   padding-left: 3px;
   position: relative;
 }
 
+.--spatiu-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 4px;
+  width: 360px;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  padding-left: 3px;
+}
+
 .--spatiu-form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border: 1px solid rgba(37, 170, 169, 1);
+  border-radius: 4px;
   align-items: flex-start;
   width: 300px;
   height: 150px;
@@ -1825,9 +1918,9 @@ input[type='text'].--confort-value:focus {
 }
 
 .--spatiu-denumire {
-  width: 292px;
+  width: 296px;
   height: 41px;
-  margin: 2px;
+  margin: 1px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1862,9 +1955,9 @@ input[type='text'].--denumire-text:focus {
 }
 
 .--spatiu-detalii {
-  width: 292px;
+  width: 296px;
   height: 90px;
-  margin: 2px;
+  margin: 1px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1947,10 +2040,20 @@ textarea.--detalii-text:focus {
 }
 
 .-spinner-loading {
-  /*
-  position: absolute;
-  right: -76px;
-  */
+  width: 36px;
+  height: 36px;
+}
+
+.-spinner-searching {
+  width: 50px;
+  height: 50px;
+}
+
+.-spinner-container {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .-edit-icon:hover {
@@ -1967,4 +2070,12 @@ textarea.--detalii-text:focus {
 
 .-cancel-icon:hover {
   color: slategray;
+}
+
+.--save-and-cancel,
+.--delete  {
+  height: 25px;
+  width: 45px;
+  display: flex;
+  justify-content: space-between;
 }

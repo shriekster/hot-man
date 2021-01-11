@@ -310,7 +310,10 @@ class Main extends React.Component {
                       id='settings-button'
                       className='manage-user'
                       onClick={() => this.changeView('Setari')}>
-                      Setări
+                      <i className='fas fa-cog -user-icon-settings'></i>
+                      <span className='-settings-text'>
+                        <div className='-settings-separator'></div> Setări cont
+                      </span>
                     </button>
                   </div>
                   <hr className='user-settings--separator'/>
@@ -318,7 +321,10 @@ class Main extends React.Component {
                     <button
                       className='sign-out' 
                       onClick={this.signOut}>
-                      Deconectare
+                      <i className='fas fa-sign-out-alt -user-icon-sign-out'></i> 
+                      <span className='-settings-text'>
+                        <div className='-settings-separator'></div> Deconectare
+                      </span>
                     </button>
                   </div>
                 </div>

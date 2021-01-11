@@ -1,5 +1,6 @@
 import React from 'react';
-import loading from './images/hotel-loading.svg'
+//import loading from './images/hotel-loading.svg'
+import fallback from './images/component-loading.svg'
 
 class Loading extends React.Component {
   constructor(props) {
@@ -30,10 +31,8 @@ class Loading extends React.Component {
     return (
       <div className='Form'>
         <img 
-          className={currentClass} 
-          src={loading}
-          width={this.props.width}
-          height={this.props.height} />
+          className='-fallback-icon'
+          src={fallback} />
       </div>
     );
   }

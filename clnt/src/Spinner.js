@@ -1,5 +1,7 @@
 import React from 'react';
 import loadingAlt from './images/hotel-icon.png'
+import spinner from './images/loading.svg';
+import searcher from './images/searching.svg'
 
 class Spinner extends React.Component {
   constructor(props) {
@@ -9,9 +11,9 @@ class Spinner extends React.Component {
 
     this.state = {
       classNames: {
-        loading: 'pulse loading',
-        altLoading: 'rotate altLoading',
-        done: 'rotateOut loading'
+        loading: '-spinner-loading',
+        searching: '-spinner-searching',
+        done: '-spinner-done'
       },
 
       currentClass: 'pulse loading' //misleading
@@ -27,19 +29,29 @@ class Spinner extends React.Component {
   render() {
     let status = this.props.status;
     let currentClass = this.state.classNames[status];
+    let src;
+
+    if (currentClass === '-spinner-loading') {
+      src = spinner;
+    }
+
+    else 
+
+    if (currentClass === '-spinner-searching') {
+      src = searcher;
+    }
 
     return (
-      <div 
+      <div className='-spinner-container'
         style={{
           visibility: this.props.visibility
                       ? 'visible' : 'hidden'
-        }}
-        className={'' || this.props.className}>
+        }}>
+
         <img 
-          className={currentClass} 
-          src={loadingAlt}
-          width={this.props.width}
-          height={this.props.height} />
+        className={currentClass + ' ' + this.props.className} 
+        src={src}/>
+        
       </div>
     );
   }

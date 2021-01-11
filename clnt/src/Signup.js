@@ -353,7 +353,6 @@ class Signup extends React.Component {
   }
 
   render() {
-    
     return (
       <>
       {
@@ -604,7 +603,16 @@ class Signup extends React.Component {
             visibility={this.state.fetching}/>
         </form>
         <div className='Form-field Form-text centered-text'>
-              Ai deja un cont? <span onClick={() => this.props.onChange('Login')} className='Form-hint bold glow'>Conectează-te</span>.
+              <div>Ai deja un cont? </div>
+              <Tippy
+                content='Conectează-te'
+                placement='right'
+                offset={[0, 20]}
+                theme='material-login-hints'>
+                <div onClick={() => this.props.onChange('Login')} className='Form-hint-login bold glow-blue'>
+                  <i className='fas fa-sign-in-alt -user-icon-login'></i>
+                </div>
+              </Tippy>
         </div>
       </div>
       }

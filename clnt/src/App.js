@@ -10,6 +10,13 @@ import './css/custom-material.css';
 
 const Login = React.lazy(() => import('./Login'));
 const Signup = React.lazy(() => import('./Signup'));
+/*
+const Signup = React.lazy(() => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(import("./Signup")), 10000);
+  });
+});
+*/
 const Forgot = React.lazy(() => import('./Forgot'));
 const Main = React.lazy(() => import('./Main'));
 

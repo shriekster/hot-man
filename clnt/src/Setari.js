@@ -1,8 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 import Select from 'react-select';
-import Spinner from './Spinner'
-//import { runAtThisOrScheduleAtNextAnimationFrame } from 'custom-electron-titlebar/lib/common/dom';
+import Spinner from './Spinner';
 
 class Setari extends React.Component {
   constructor(props) {
@@ -1373,11 +1372,9 @@ class Setari extends React.Component {
               </form>
             </Tippy>
             <Spinner
-                className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
-                visibility={this.state.fetchingParola}/>
+              className='--settings-loading'
+              status='loading'
+              visibility={this.state.fetchingParola}/>
           </div>
           </div>
         </div>

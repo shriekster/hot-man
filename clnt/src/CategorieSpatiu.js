@@ -88,7 +88,7 @@ class CategorieSpatiu extends React.Component {
     this.setState({
       editingHint: 'Salvează',
       hintVisible: true,
-      hintOffsetY: -12,
+      hintOffsetY: -15,
     });
   }
 
@@ -96,7 +96,7 @@ class CategorieSpatiu extends React.Component {
     this.setState({
       editingHint: 'Renunță',
       hintVisible: true,
-      hintOffsetY: -12,
+      hintOffsetY: -15,
     });
   }
 
@@ -104,7 +104,7 @@ class CategorieSpatiu extends React.Component {
     this.setState({
       editingHint: 'Șterge',
       hintVisible: true,
-      hintOffsetY: 15,
+      hintOffsetY: 12,
     });
   }
 
@@ -121,6 +121,7 @@ class CategorieSpatiu extends React.Component {
     return (
     <>
     <div className='--spatiu-item'>
+      <div className='--spatiu-inner'>
       <form className='--spatiu-form'
         onSubmit={this.submit}>
         <div className='--spatiu-denumire'>
@@ -201,24 +202,29 @@ class CategorieSpatiu extends React.Component {
             placement='right'
             arrow={false}
             theme='material-confort'
-            offset={[this.state.hintOffsetY, 55]}
+            offset={[this.state.hintOffsetY, 5]}
             visible={this.state.hintVisible}>
           <div className='--icons-editing'>
-            <i className='fas fa-save -save-icon'
-              onMouseOver={this.onSaveMouseOver}
-              onMouseOut={this.onIconMouseOut}
-              onClick={() => {this.props.save(this.props.index)}}></i>
+            <div className='--save-and-cancel'>
+              <i className='fas fa-save -save-icon'
+                onMouseOver={this.onSaveMouseOver}
+                onMouseOut={this.onIconMouseOut}
+                onClick={() => {this.props.save(this.props.index)}}></i>
+              <i className='fas fa-window-close -cancel-icon'
+                onMouseOver={this.onCancelMouseOver}
+                onMouseOut={this.onIconMouseOut}
+                onClick={() => this.props.cancel(this.props.index)}></i>
+            </div>
             {
               !this.props.isFresh &&
-            <i className='fas fa-trash-alt -delete-icon'
-              onMouseOver={this.onDeleteMouseOver}
-              onMouseOut={this.onIconMouseOut}
-              onClick={() => this.props.delete(this.props.index)}></i>
+              <div className='--delete'>
+                <i className='fas fa-trash-alt -delete-icon'
+                  onMouseOver={this.onDeleteMouseOver}
+                  onMouseOut={this.onIconMouseOut}
+                  onClick={() => this.props.delete(this.props.index)}></i>
+              </div>
             }
-            <i className='fas fa-window-close -cancel-icon'
-              onMouseOver={this.onCancelMouseOver}
-              onMouseOut={this.onIconMouseOut}
-              onClick={() => this.props.cancel(this.props.index)}></i>
+
           </div>
         </Tippy>
                             :
@@ -227,12 +233,10 @@ class CategorieSpatiu extends React.Component {
             onClick={() => { this.props.edit(this.props.index) }}></i>
         </div>
       }
+      </div>
       <Spinner
-        className='-spinner-loading'
-        width='50px'
-        height='50px'
-        status='altLoading'
-        visibility={true}/>
+        status='loading'
+        visibility={this.props.isFetching}/>
     </div>
 
     </>

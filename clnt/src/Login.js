@@ -164,7 +164,7 @@ class Login extends React.Component {
               displayRolWarning={false}/>
           </div>
           <div className='Form-field'>
-            <span onClick={() => this.props.onChange('Forgot')} className='Form-hint bold glow'>Ai uitat parola?</span>
+            <span onClick={() => this.props.onChange('Forgot')} className='Form-hint-forgot bold glow'>Ai uitat parola?</span>
           </div>
           <div className='Form-field'>
           <Tippy
@@ -183,7 +183,16 @@ class Login extends React.Component {
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>
-          Nu ai cont? <span onClick={() => this.props.onChange('Signup')} className='Form-hint bold glow'>Creează un cont</span>.
+          <div>Nu ai cont?</div>
+          <Tippy
+            content='Creează cont'
+            placement='right'
+            offset={[0, 20]}
+            theme='material-signup-hints'>
+            <div onClick={() => this.props.onChange('Signup')} className='Form-hint-signup bold glow-green'>
+              <i className='fas fa-user-plus -user-icon-signup'></i>
+            </div>
+          </Tippy>
         </div>
       </div>
     );

@@ -207,9 +207,7 @@ class CategorieConfort extends React.Component {
       }
       <Spinner
         className='--confort-loading'
-        width='50px'
-        height='50px'
-        status='altLoading'
+        status='loading'
         visibility={this.props.isFetching}/>
     </div>
 
