@@ -114,7 +114,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className='Form'>
+      <div className='Form-login'>
         <form 
           onSubmit={this.handleSubmit}
           autoComplete='off'

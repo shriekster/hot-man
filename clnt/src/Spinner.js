@@ -44,8 +44,7 @@ class Spinner extends React.Component {
     return (
       <div className='-spinner-container'
         style={{
-          visibility: this.props.visibility
-                      ? 'visible' : 'hidden'
+          visibility: this.props.visibility ? 'visible' : 'hidden'
         }}>
 
         <img 

@@ -27,11 +27,23 @@ class Setari extends React.Component {
 
     this.submitOnMenuClose = this.submitOnMenuClose.bind(this);
 
+    this.openModal = this.openModal.bind(this);
+
+    this.closeModal = this.closeModal.bind(this);
+
+    this.submitModal = this.submitModal.bind(this);
+
     /** Update user attributes (fetch - POST) */
     this.update = this.update.bind(this);
 
     this.state = {
       token: this.props.token,
+
+      backgroundClass: 'view-user-settings',
+      confirmNewPassword: false,
+      showModal: false,
+      modalPassword: '',
+      showModalError: false,
 
       fetchingCnp: false,
       fetchingGrad: false,
@@ -137,6 +149,8 @@ class Setari extends React.Component {
     this.utilizatorInput = React.createRef();
     this.parolaInput = React.createRef();
 
+    this.modalInput = React.createRef();
+
     // React Select use case: blur input on select, then click on the save icon
     this.saveGrad = React.createRef();
     
@@ -148,7 +162,9 @@ class Setari extends React.Component {
     // Note: we're accessing "current" to get the DOM node
     if (this.state.editCnp) {
       this.cnpInput.current.focus();
-    } else
+    } 
+    
+    else
 
     /** Important! Check the previous state, 
      * otherwise the select menu will stay 
@@ -157,22 +173,36 @@ class Setari extends React.Component {
       if(!prevState.editGrad) {
         this.gradInput.current.select.focus()
       }
-    } else
+    } 
+    
+    else
 
     if (this.state.editNume) {
       this.numeInput.current.focus();
-    } else
+    } 
+    
+    else
 
     if (this.state.editPrenume) {
       this.prenumeInput.current.focus();
-    } else
+    } 
+    
+    else
 
     if (this.state.editUtilizator) {
       this.utilizatorInput.current.focus();
-    } else
+    } 
+    
+    else
 
     if (this.state.editParola) {
       this.parolaInput.current.focus();
+    }
+
+    else
+
+    if (this.state.showModal) {
+      this.modalInput.current.focus();
     }
   }
 
@@ -244,209 +274,16 @@ class Setari extends React.Component {
     }
   }
 
-  this.setState(
-    {
+    this.setState({
       fetchingCnp: fCnp,
       fetchingGrad: fGrad,
       fetchingNume: fNume,
       fetchingPrenume: fPrenume,
       fetchingUtilizator: fUtilizator,
       fetchingParola: fParola,
-    }, 
 
-    () => 
-    {
-      let fetchApproved = (
-        fCnp || fGrad || fNume || fPrenume || fUtilizator || fParola
-      );
-
-      if (fetchApproved) {
-        fetch('http://localhost:3001/main/setari', requestOptions)
-        .then(response => response.json())
-        .then(updated => {
-
-          if ('denied' === updated.status) {
-            this.props.onChange('Login'); /* render login component when something is wrong with authorization (!) */
-          } else {
-            if ('invalid' === updated.status || 'error' === updated.status) {
-              switch(attributeName) {
-                case 'cnp': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    editCnp: true,
-                    valueCnpClass: this.state.valueClassNames.editing,
-                    editCnpClass: this.state.iconClassNames.editing,
-
-                    showCnpError: true,
-                  });
-                  break;
-                }
-            
-                case 'grad': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    editGrad: true,
-                    valueGradClass: this.state.valueClassNames.editing,
-                    editGradClass: this.state.iconClassNames.editing,
-
-                    showGradError: true,
-                  });
-                  break;
-                }
-            
-                case 'nume': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    editNume: true,
-                    valueNumeClass: this.state.valueClassNames.editing,
-                    editNumeClass: this.state.iconClassNames.editing,
-
-                    showNumeError: true,
-                  });
-                  break;
-                }
-            
-                case 'prenume': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    editPrenume: true,
-                    valuePrenumeClass: this.state.valueClassNames.editing,
-                    editPrenumeClass: this.state.iconClassNames.editing,
-
-                    showPrenumeError: true,
-                  });
-                  break;
-                }
-            
-                case 'utilizator': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    editUtilizator: true,
-                    valueUtilizatorClass: this.state.valueClassNames.editing,
-                    editUtilizatorClass: this.state.iconClassNames.editing,
-
-                    showUtilizatorError: true,
-                  });
-                  break;
-                }
-            
-                case 'parola': {
-                  this.setState({
-                    fetchingCnp: false,
-                    fetchingGrad: false,
-                    fetchingNume: false,
-                    fetchingPrenume: false,
-                    fetchingUtilizator: false,
-                    fetchingParola: false,
-
-                    editParola: true,
-                    valueParolaClass: this.state.valueClassNames.editing,
-                    editParolaClass: this.state.iconClassNames.editing,
-
-                    showParolaError: true,
-                  });
-                  break;
-                }
-              }
-            } else
-
-            if ('valid' === updated.status) {
-              let usr = {
-                cnp: this.state.nextCnp,
-                grad: this.state.nextGrad,
-                nume: this.state.nextNume,
-                prenume: this.state.nextPrenume,
-                utilizator: this.state.nextUtilizator,
-                rol: this.props.user.rol,
-              };
-
-              let tok = updated.token;
-
-              this.setState({
-                token: tok,
-
-                fetchingCnp: false,
-                fetchingGrad: false,
-                fetchingNume: false,
-                fetchingPrenume: false,
-                fetchingUtilizator: false,
-                fetchingParola: false,
-
-                cnp: usr.cnp,
-                grad: usr.grad,
-                nume: usr.nume,
-                prenume: usr.prenume,
-                utilizator: usr.utilizator,
-                rol: usr.rol,
-                parola: '',
-                nextParola: '',
-
-                //??
-                showCnpError: false,
-                showGradError: false,
-                showNumeError: false,
-                showPrenumeError: false,
-                showUtilizatorError: false,
-                showParolaError: false,
-              }, 
-              () => {this.props.onUserUpdate(tok, usr)});
-
-            } else { /** Any other case */
-              this.setState({
-                fetchingCnp: false,
-                fetchingGrad: false,
-                fetchingNume: false,
-                fetchingPrenume: false,
-                fetchingUtilizator: false,
-                fetchingParola: false,
-              });
-            }
-          }
-        })
-        .catch(error => {
-        console.log(error); // dev mode only!
-
-        this.setState({
-          fetchingCnp: false,
-          fetchingGrad: false,
-          fetchingNume: false,
-          fetchingPrenume: false,
-          fetchingUtilizator: false,
-          fetchingParola: false,
-          //showError: true,
-        });
-      });
-      }
+      backgroundClass: 'view-user-settings -modal-background',
+      showModal: true,
     });
   }
 
@@ -881,6 +718,16 @@ class Setari extends React.Component {
       });
       */
       switch (e.target.id) {
+
+        case '-modal-password': {
+          this.setState({
+            modalPassword: e.target.value,
+            showModalError: false,
+          })
+
+          break;
+        }
+
         case '--settings-cnp': {
 
           this.setState({
@@ -1088,8 +935,339 @@ class Setari extends React.Component {
     })
   }
 
-  componentDidMount() {
+  openModal(e) {
+    this.setState({
+      backgroundClass: 'view-user-settings -modal-background',
+      showModal: true,
+    });
   }
+
+  closeModal(e) {
+    this.setState({
+      backgroundClass: 'view-user-settings',
+      showModal: false,
+      modalPassword: '',
+    });
+  }
+
+  submitModal(e) {
+    e.preventDefault(); 
+
+    let user = this.state.utilizator;
+    let pass = this.state.modalPassword;
+
+    let show = this.state.showModal;
+
+    let credentials = {
+      user: user,
+      pass: pass,
+    };
+
+    let valid = (user !== '' && pass !== '');
+
+    if (show && valid) {
+      // Simple POST request with a JSON body using fetch
+      const requestOptions = {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+      };
+
+      fetch('http://localhost:3001/login', requestOptions)
+      .then(response => response.json())
+      .then(login => {
+
+        if (login.status === 'allowed') {
+
+          this.setState({
+
+            showModal: false,
+            showModalError: false,
+            backgroundClass: 'view-user-settings',
+
+            modalPassword: '',
+          }, 
+          
+          () => {
+
+            this.props.onUserUpdate(login.token, login.user);
+
+            let attributeName = '';
+            let attributeValue = '';
+  
+            if (this.state.fetchingCnp) {
+              attributeName = 'cnp';
+              attributeValue = this.state.nextCnp;
+            }
+  
+            else
+  
+            if (this.state.fetchingGrad) {
+              attributeName = 'grad';
+              attributeValue = this.state.nextGrad;
+            }
+  
+            else
+  
+            if (this.state.fetchingNume) {
+              attributeName = 'nume';
+              attributeValue = this.state.nextNume;
+            }
+  
+            else
+  
+            if (this.state.fetchingPrenume) {
+              attributeName = 'prenume';
+              attributeValue = this.state.nextPrenume;
+            }
+  
+            else 
+  
+            if (this.state.fetchingUtilizator) {
+              attributeName = 'utilizator';
+              attributeValue = this.state.nextUtilizator;
+            }
+  
+            else 
+  
+            if (this.state.fetchingParola) {
+              attributeName = 'parola';
+              attributeValue = this.state.nextParola;
+            }
+  
+            const requestSettingsOptions = {
+              method: 'POST',
+              mode: 'cors',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                attributeName: attributeName,
+                attributeValue: attributeValue.trim(),
+                token: this.state.token,
+                username: this.state.utilizator,
+              })
+            };
+  
+            let fetchApproved = (
+              this.state.fetchingCnp ||
+              this.state.fetchingGrad ||
+              this.state.fetchingNume ||
+              this.state.fetchingPrenume ||
+              this.state.fetchingUtilizator ||
+              this.state.fetchingParola
+            );
+      
+            if (fetchApproved && attributeName && attributeValue) {
+              fetch('http://localhost:3001/main/setari', requestSettingsOptions)
+              .then(response => response.json())
+              .then(updated => {
+      
+                if ('denied' === updated.status) {
+                  this.props.onChange('Login'); /* render login component when something is wrong with authorization (!) */
+                } else {
+                  if ('invalid' === updated.status || 'error' === updated.status) {
+                    switch(attributeName) {
+                      case 'cnp': {
+                        this.setState({
+                          fetchingCnp: false,
+                          fetchingGrad: false,
+                          fetchingNume: false,
+                          fetchingPrenume: false,
+                          fetchingUtilizator: false,
+                          fetchingParola: false,
+      
+                          editCnp: true,
+                          valueCnpClass: this.state.valueClassNames.editing,
+                          editCnpClass: this.state.iconClassNames.editing,
+      
+                          showCnpError: true,
+                        });
+                        break;
+                      }
+                  
+                      case 'grad': {
+                        this.setState({
+                          fetchingCnp: false,
+                          fetchingGrad: false,
+                          fetchingNume: false,
+                          fetchingPrenume: false,
+                          fetchingUtilizator: false,
+                          fetchingParola: false,
+      
+                          editGrad: true,
+                          valueGradClass: this.state.valueClassNames.editing,
+                          editGradClass: this.state.iconClassNames.editing,
+      
+                          showGradError: true,
+                        });
+                        break;
+                      }
+                  
+                      case 'nume': {
+                        this.setState({
+                          fetchingCnp: false,
+                          fetchingGrad: false,
+                          fetchingNume: false,
+                          fetchingPrenume: false,
+                          fetchingUtilizator: false,
+                          fetchingParola: false,
+      
+                          editNume: true,
+                          valueNumeClass: this.state.valueClassNames.editing,
+                          editNumeClass: this.state.iconClassNames.editing,
+      
+                          showNumeError: true,
+                        });
+                        break;
+                      }
+                  
+                      case 'prenume': {
+                        this.setState({
+                          fetchingCnp: false,
+                          fetchingGrad: false,
+                          fetchingNume: false,
+                          fetchingPrenume: false,
+                          fetchingUtilizator: false,
+                          fetchingParola: false,
+      
+                          editPrenume: true,
+                          valuePrenumeClass: this.state.valueClassNames.editing,
+                          editPrenumeClass: this.state.iconClassNames.editing,
+      
+                          showPrenumeError: true,
+                        });
+                        break;
+                      }
+                  
+                      case 'utilizator': {
+                        this.setState({
+                          fetchingCnp: false,
+                          fetchingGrad: false,
+                          fetchingNume: false,
+                          fetchingPrenume: false,
+                          fetchingUtilizator: false,
+                          fetchingParola: false,
+      
+                          editUtilizator: true,
+                          valueUtilizatorClass: this.state.valueClassNames.editing,
+                          editUtilizatorClass: this.state.iconClassNames.editing,
+      
+                          showUtilizatorError: true,
+                        });
+                        break;
+                      }
+                  
+                      case 'parola': {
+                        this.setState({
+                          fetchingCnp: false,
+                          fetchingGrad: false,
+                          fetchingNume: false,
+                          fetchingPrenume: false,
+                          fetchingUtilizator: false,
+                          fetchingParola: false,
+      
+                          editParola: true,
+                          valueParolaClass: this.state.valueClassNames.editing,
+                          editParolaClass: this.state.iconClassNames.editing,
+      
+                          showParolaError: true,
+                        });
+                        break;
+                      }
+                    }
+                  } else
+      
+                  if ('valid' === updated.status) {
+                    let usr = {
+                      cnp: this.state.nextCnp,
+                      grad: this.state.nextGrad,
+                      nume: this.state.nextNume,
+                      prenume: this.state.nextPrenume,
+                      utilizator: this.state.nextUtilizator,
+                      rol: this.props.user.rol,
+                    };
+      
+                    let tok = updated.token;
+      
+                    this.setState({
+                      token: tok,
+      
+                      fetchingCnp: false,
+                      fetchingGrad: false,
+                      fetchingNume: false,
+                      fetchingPrenume: false,
+                      fetchingUtilizator: false,
+                      fetchingParola: false,
+      
+                      cnp: usr.cnp,
+                      grad: usr.grad,
+                      nume: usr.nume,
+                      prenume: usr.prenume,
+                      utilizator: usr.utilizator,
+                      rol: usr.rol,
+                      parola: '',
+                      nextParola: '',
+      
+                      //??
+                      showCnpError: false,
+                      showGradError: false,
+                      showNumeError: false,
+                      showPrenumeError: false,
+                      showUtilizatorError: false,
+                      showParolaError: false,
+                    }, 
+                    () => {this.props.onUserUpdate(tok, usr)});
+      
+                  } else { /** Any other case */
+                    this.setState({
+                      fetchingCnp: false,
+                      fetchingGrad: false,
+                      fetchingNume: false,
+                      fetchingPrenume: false,
+                      fetchingUtilizator: false,
+                      fetchingParola: false,
+                    });
+                  }
+                }
+              })
+              .catch(error => {
+              console.log(error); // dev mode only!
+      
+              this.setState({
+                fetchingCnp: false,
+                fetchingGrad: false,
+                fetchingNume: false,
+                fetchingPrenume: false,
+                fetchingUtilizator: false,
+                fetchingParola: false,
+                //showError: true,
+              });
+            });
+            }
+          });
+
+        } else {
+
+          this.setState({
+            showModalError: true
+          });
+
+        }
+      });
+
+    } else {
+
+      if (show && !pass) {
+
+        this.setState({
+          showModalError: true,
+        });
+
+      }
+    }
+  }
+
+  componentDidMount() {}
 
   componentDidUpdate (prevProps, prevState) {
     // Focus input elements when they are enabled
@@ -1102,8 +1280,58 @@ class Setari extends React.Component {
       <div>
         <div>Setările contului de utilizator</div>
         <hr className='view--separator'/>
+        <div className='-modal'
+          style={{
+            visibility: this.state.showModal ? 'visible' : 'hidden'
+          }}>
+          <div className='-modal-container'
+            style={{
+              height: this.state.confirmNewPassword ? '400px' : '250px'
+            }}>
+            <div className='-modal-title'>
+              <i className='far fa-times-circle -modal-close'
+                onClick={this.closeModal}></i>
+              <i className='far fa-id-card -modal-title-icon'></i>
+              <span className='-modal-title-text'>
+                Introdu parola curentă pentru confirmare
+              </span>
+            </div>
+            <hr className='-modal-separator'/> 
+            <form id='-modal-content'
+              className='-modal-content'
+              onSubmit={this.submitModal}>
+              <Tippy
+                content={
+                  <>
+                    <i className='fas fa-minus-circle'></i> Parolă invalidă
+                  </>
+                }
+                allowHTML={true}
+                placement='bottom'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 2]}
+                visible={this.state.showModalError}>
+                <input id='-modal-password'
+                  className='-modal-password'
+                  autoComplete='off'
+                  autoCorrect='off'
+                  spellCheck={false}
+                  onInput={this.onValueInput}
+                  onKeyDown={this.onGenericKeyDown}
+                  value={this.state.modalPassword}
+                  type='password'
+                  ref={this.modalInput}>
+                </input>
+              </Tippy>
+              <button className='-modal-button'>
+                Continuă
+              </button>
+            </form>
+          </div>
+        </div>
         <div id='view-user-settings' 
-          className='view-user-settings'
+          className={this.state.backgroundClass}
           onClick={this.onViewSettingsClick}>
             <div id='user-settings-container'>
             <div className='--settings-item'>
@@ -1200,6 +1428,7 @@ class Setari extends React.Component {
                 status='altLoading'
                 visibility={this.state.fetchingGrad}/>
             </div>
+
             <div className='--settings-item'>
               <Tippy
                 content={
