@@ -821,8 +821,8 @@ button.sign-out:hover {
 
 .-modal-background {
   pointer-events: none;
-  filter: blur(5px);
-  opacity: .25;
+  filter: blur(1px);
+  opacity: .75;
 }
 
 .-modal {
@@ -840,7 +840,7 @@ button.sign-out:hover {
   font-size: 18px;
   border: 1px solid #25AAA9;
   border-radius: 4px;
-  background-color: rgba(37, 170, 169, .5);
+  background-color: rgba(37, 170, 169, .8);
   left: 120px;
   top: 15vh;
   z-index: 9999;

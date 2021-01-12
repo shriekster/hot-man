@@ -222,69 +222,182 @@ class Setari extends React.Component {
   };
 
   let fCnp = false;
-  let fGrad = false;
-  let fNume = false;
-  let fPrenume = false;
-  let fUtilizator = false;
-  let fParola = false;
+  let eCnp = false;
 
-  
+  let fGrad = false;
+  let eGrad = false;
+
+  let fNume = false;
+  let eNume = false;
+
+  let fPrenume = false;
+  let ePrenume = false;
+
+  let fUtilizator = false;
+  let eUtilizator = false;
+
+  let fParola = false;
+  let eParola = false;
 
   switch(attributeName) {
+ 
     case 'cnp': {
-      if (this.state.cnp !== this.state.nextCnp){
-        fCnp = true;
+
+      if (this.state.nextCnp !== '') {
+        if (this.state.cnp !== this.state.nextCnp){
+          fCnp = true;
+        }
+      } else {
+        eCnp = true;
       }
       break;
     }
 
     case 'grad': {
-      if(this.state.grad !== this.state.nextGrad) {
-        fGrad = true;
+
+      if (this.state.nextGrad !== '') {
+        if(this.state.grad !== this.state.nextGrad) {
+          fGrad = true;
+        }
+      } else {
+        eGrad = true;
       }
       break;
     }
 
     case 'nume': {
-      if (this.state.nume !== this.state.nextNume) {
-        fNume = true;
+
+      if (this.state.nextNume !== '') {
+        if (this.state.nume !== this.state.nextNume) {
+          fNume = true;
+        }
+      } else {
+        eNume = true;
       }
       break;
     }
 
     case 'prenume': {
-      if (this.state.prenume !== this.state.nextPrenume) {
-        fPrenume = true;
-      }
+
+      if (this.state.nextPrenume !== '') {
+        if (this.state.prenume !== this.state.nextPrenume) {
+          fPrenume = true;
+        }
+    } else {
+      ePrenume = true;
+    }
       break;
     }
 
     case 'utilizator': {
-      if (this.state.utilizator !== this.state.nextUtilizator) {
-        fUtilizator = true;
+
+      if (this.state.nextUtilizator !== '') {
+        if (this.state.utilizator !== this.state.nextUtilizator) {
+          fUtilizator = true;
+        }
+      } else {
+        eUtilizator = true;
       }
       break;
     }
 
     case 'parola': {
-      if (this.state.parola !== this.state.nextParola) {
-        fParola = true;
+      if (this.state.nextParola !== '') {
+        if (this.state.parola !== this.state.nextParola) {
+          fParola = true;
+        }
+      } else {
+        eParola = true;
       }
       break;
     }
   }
 
-    this.setState({
-      fetchingCnp: fCnp,
-      fetchingGrad: fGrad,
-      fetchingNume: fNume,
-      fetchingPrenume: fPrenume,
-      fetchingUtilizator: fUtilizator,
-      fetchingParola: fParola,
+    let approved = (
+      fCnp || fGrad || fNume || fPrenume || fUtilizator || fParola
+    );
 
-      backgroundClass: 'view-user-settings -modal-background',
-      showModal: true,
-    });
+    if (approved) {
+
+      this.setState({
+        fetchingCnp: fCnp,
+        fetchingGrad: fGrad,
+        fetchingNume: fNume,
+        fetchingPrenume: fPrenume,
+        fetchingUtilizator: fUtilizator,
+        fetchingParola: fParola,
+
+        backgroundClass: 'view-user-settings -modal-background',
+        showModal: true,
+      });
+
+    } else {
+
+      if (eCnp) {
+        this.setState({
+          editCnp: true,
+          editCnpClass: this.state.iconClassNames.editing,
+          valueCnpClass: this.state.valueClassNames.editing,
+          showCnpError: true,
+        });
+      }
+
+      else
+
+      if (eGrad) {
+        this.setState({
+          editGrad: true,
+          editGradClass: this.state.iconClassNames.editing,
+          valueGradClass: this.state.valueClassNames.editing,
+          showGradError: true,
+        });
+      }
+
+      else 
+
+      if (eNume) {
+        this.setState({
+          editNume: true,
+          editNumeClass: this.state.iconClassNames.editing,
+          valueNumeClass: this.state.valueClassNames.editing,
+          showNumeError: true,
+        });
+      }
+
+      else
+
+      if (ePrenume) {
+        this.setState({
+          editPrenume: true,
+          editPrenumeClass: this.state.iconClassNames.editing,
+          valuePrenumeClass: this.state.valueClassNames.editing,
+          showPrenumeError: true,
+        });
+      }
+
+      else
+
+      if (eUtilizator) {
+        this.setState({
+          editUtilizator: true,
+          editUtilizatorClass: this.state.iconClassNames.editing,
+          valueUtilizatorClass: this.state.valueClassNames.editing,
+          showUtilizatorError: true,
+        });
+      }
+
+      else
+
+      if (eParola) {
+        this.setState({
+          editParola: true,
+          editParolaClass: this.state.iconClassNames.editing,
+          valueParolaClass: this.state.valueClassNames.editing,
+          showParolaError: true,
+        });
+      }
+
+    }
   }
 
   handleSettingsSubmit(e) {
@@ -991,7 +1104,7 @@ class Setari extends React.Component {
           
           () => {
 
-            this.props.onUserUpdate(login.token, login.user);
+            //this.props.onUserUpdate(login.token, login.user);
 
             let attributeName = '';
             let attributeValue = '';
@@ -1226,6 +1339,8 @@ class Setari extends React.Component {
                       fetchingPrenume: false,
                       fetchingUtilizator: false,
                       fetchingParola: false,
+
+                      modalPassword: '',
                     });
                   }
                 }
@@ -1240,6 +1355,8 @@ class Setari extends React.Component {
                 fetchingPrenume: false,
                 fetchingUtilizator: false,
                 fetchingParola: false,
+
+                modalPassword: '',
                 //showError: true,
               });
             });
@@ -1370,10 +1487,8 @@ class Setari extends React.Component {
                 </form>
               </Tippy>
               <Spinner
+                status='loading'
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
                 visibility={this.state.fetchingCnp}/>
             </div>
             <div className='--settings-item'>
@@ -1422,13 +1537,10 @@ class Setari extends React.Component {
                   </form>
               </Tippy>
               <Spinner
+                status='loading'
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
                 visibility={this.state.fetchingGrad}/>
             </div>
-
             <div className='--settings-item'>
               <Tippy
                 content={
@@ -1465,10 +1577,8 @@ class Setari extends React.Component {
                 </form>
               </Tippy>
               <Spinner
+                status='loading'
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
                 visibility={this.state.fetchingNume}/>
             </div>
             <div className='--settings-item'>
@@ -1507,10 +1617,8 @@ class Setari extends React.Component {
                 </form>
               </Tippy>
               <Spinner
+                status='loading'
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
                 visibility={this.state.fetchingPrenume}/>
             </div>
             <div className='--settings-item'>
@@ -1549,10 +1657,8 @@ class Setari extends React.Component {
                 </form>
               </Tippy>
               <Spinner
+                status='loading'
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
                 visibility={this.state.fetchingUtilizator}/>
             </div>
             <div className='--settings-item'>
@@ -1601,8 +1707,8 @@ class Setari extends React.Component {
               </form>
             </Tippy>
             <Spinner
-              className='--settings-loading'
               status='loading'
+              className='--settings-loading'
               visibility={this.state.fetchingParola}/>
           </div>
           </div>
