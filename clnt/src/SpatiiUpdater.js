@@ -100,6 +100,22 @@ class SpatiiUpdater extends React.Component {
           index: this.state.backup.length, //??
 
           Denumire: '',
+          Detalii: '',
+          showWarning: false,
+          showError: false,
+
+          isFresh: true,
+          isEditing: true,
+
+          isFetching: false,
+        };
+
+        let newBackupItem = {
+
+          index: this.state.backup.length, //??
+
+          Denumire: '',
+          Detalii: '',
           showWarning: false,
           showError: false,
 
@@ -113,13 +129,13 @@ class SpatiiUpdater extends React.Component {
         if (0 === categorii.length) {
 
           categorii.push(newItem);
-          backup.push('');
+          backup.push(newBackupItem);
         }
 
         else {
 
           let last = categorii[categorii.length - 1].Denumire;
-          let backupLast = backup[backup.length - 1];
+          let backupLast = backup[backup.length - 1].Denumire;
 
           if (last && backupLast) {
             /** 'Reset' every other item's state when a new item is being added */
@@ -134,7 +150,7 @@ class SpatiiUpdater extends React.Component {
             });
 
             categorii.push(newItem);
-            backup.push('');
+            backup.push(newBackupItem);
           }
         }
 
@@ -174,7 +190,8 @@ class SpatiiUpdater extends React.Component {
 
           } else {
 
-            categorii[i].Denumire = backup[i];
+            categorii[i].Denumire = backup[i].Denumire;
+            categorii[i].Detalii = backup[i].Detalii;
 
             categorii[i].showWarning = false;
             categorii[i].showError = false
@@ -435,7 +452,7 @@ class SpatiiUpdater extends React.Component {
       
       /** The user clicked cancel on a newly created item */
       if (categorii[index].isFresh &&
-          '' === backup[index]) {
+          '' === backup[index].Denumire) {
         
         categorii.pop();
         backup.pop();
@@ -444,7 +461,8 @@ class SpatiiUpdater extends React.Component {
       /** The user clicked cancel on an existing item */
       else {
         
-        categorii[index].Denumire = backup[index];
+        categorii[index].Denumire = backup[index].Denumire;
+        categorii[index].Detalii = backup[index].Detalii;
 
         categorii[index].showWarning = false;
         categorii[index].showError = false;
