@@ -412,15 +412,17 @@ class Setari extends React.Component {
 
         case '--settings-cnp-form':
         case '--settings-edit-cnp': {
-          let className = this.state.editCnpClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueCnpClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          let className = (this.state.editCnpClass === this.state.iconClassNames.edit || '' === this.state.nextCnp) ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = (this.state.valueCnpClass === this.state.valueClassNames.edit || '' === this.state.nextCnp) ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
 
           if (this.state.editCnp) {
             this.update( 'cnp', this.state.nextCnp);
           }
 
+          let edit = !this.state.editCnp || ('' === this.state.nextCnp);
+
           this.setState({
-            editCnp: !this.state.editCnp,
+            editCnp: edit,
             editCnpClass: className,
             valueCnpClass: valueClassName,
 
@@ -460,9 +462,9 @@ class Setari extends React.Component {
 
         case '--settings-grad-form':
         case '--settings-edit-grad': {
-          let className = this.state.editGradClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
-
+          let className = this.state.editGradClass === this.state.iconClassNames.edit || '' === this.state.nextGrad ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueGradClass === this.state.valueClassNames.edit || '' === this.state.nextGrad  ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          
           if (this.state.editGrad) {
             this.submitOnMenuClose(e);
             //this.gradInput.current.select.blur();
@@ -511,15 +513,17 @@ class Setari extends React.Component {
 
         case '--settings-nume-form':
         case '--settings-edit-nume': {
-          let className = this.state.editNumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueNumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          let className = this.state.editNumeClass === this.state.iconClassNames.edit  || '' === this.state.nextNume ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueNumeClass === this.state.valueClassNames.edit || '' === this.state.nextNume  ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
           if (this.state.editNume) {
             this.update( 'nume', this.state.nextNume);
           }
 
+          let edit = !this.state.editNume  || '' === this.state.nextNume; 
+
           this.setState({
-            editNume: !this.state.editNume,
+            editNume: edit,
             editNumeClass: className,
             valueNumeClass: valueClassName,
 
@@ -558,15 +562,17 @@ class Setari extends React.Component {
 
         case '--settings-prenume-form':
         case '--settings-edit-prenume': {
-          let className = this.state.editPrenumeClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valuePrenumeClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          let className = this.state.editPrenumeClass === this.state.iconClassNames.edit || '' === this.state.nextPrenume ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valuePrenumeClass === this.state.valueClassNames.edit || '' === this.state.nextPrenume ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
           if (this.state.editPrenume) {
             this.update( 'prenume', this.state.nextPrenume);
           }
 
+          let edit = !this.state.editPrenume  || '' === this.state.nextPrenume;
+
           this.setState({
-            editPrenume: !this.state.editPrenume,
+            editPrenume: edit,
             editPrenumeClass: className,
             valuePrenumeClass: valueClassName,
 
@@ -605,15 +611,17 @@ class Setari extends React.Component {
 
         case '--settings-utilizator-form':
         case '--settings-edit-utilizator': {
-          let className = this.state.editUtilizatorClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueUtilizatorClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          let className = this.state.editUtilizatorClass === this.state.iconClassNames.edit  || '' === this.state.nextUtilizator ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueUtilizatorClass === this.state.valueClassNames.edit || '' === this.state.nextUtilizator ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           
           if (this.state.editUtilizator) {
             this.update( 'utilizator', this.state.nextUtilizator);
           }
 
+          let edit = !this.state.editUtilizator  || '' === this.state.nextUtilizator;
+
           this.setState({
-            editUtilizator: !this.state.editUtilizator,
+            editUtilizator: edit,
             editUtilizatorClass: className,
             valueUtilizatorClass: valueClassName,
 
@@ -652,8 +660,8 @@ class Setari extends React.Component {
 
         case '--settings-parola-form':
         case '--settings-edit-parola': {
-          let className = this.state.editParolaClass === this.state.iconClassNames.edit ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
-          let valueClassName = this.state.valueParolaClass === this.state.valueClassNames.edit ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
+          let className = this.state.editParolaClass === this.state.iconClassNames.edit || '' === this.state.nextParola ? this.state.iconClassNames.editing : this.state.iconClassNames.edit; 
+          let valueClassName = this.state.valueParolaClass === this.state.valueClassNames.edit || '' === this.state.nextParola ? this.state.valueClassNames.editing : this.state.valueClassNames.edit;
           let passwordVisible = false;
 
           if (className === this.state.iconClassNames.edit &&
@@ -665,8 +673,10 @@ class Setari extends React.Component {
             this.update( 'parola', this.state.nextParola);
           }
 
+          let edit = !this.state.editParola || '' === this.state.nextParola;
+
           this.setState({
-            editParola: !this.state.editParola,
+            editParola: edit,
             editParolaClass: className,
             valueParolaClass: valueClassName,
 
@@ -1388,7 +1398,6 @@ class Setari extends React.Component {
 
   componentDidUpdate (prevProps, prevState) {
     // Focus input elements when they are enabled
-    //console.log(this.state.editGrad, this.state.nextGrad)
     this.focusInput(prevState);
   }
 
