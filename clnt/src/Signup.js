@@ -603,7 +603,7 @@ class Signup extends React.Component {
             visibility={this.state.fetching}/>
         </form>
         <div className='Form-field Form-text centered-text'>
-              <div>Ai deja un cont? </div>
+              <div className='Form-inner-text'>Ai deja un cont? </div>
               <Tippy
                 content='Conectează-te'
                 placement='right'

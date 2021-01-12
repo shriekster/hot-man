@@ -183,7 +183,7 @@ class Login extends React.Component {
           </div>
         </form>
         <div className='Form-field Form-text centered-text'>
-          <div>Nu ai cont?</div>
+          <div className='Form-inner-text'>Nu ai cont?</div>
           <Tippy
             content='Creează cont'
             placement='right'
