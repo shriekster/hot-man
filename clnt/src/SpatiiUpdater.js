@@ -28,7 +28,7 @@ class SpatiiUpdater extends React.Component {
     this.state = {
       backup: [],
 
-      categoriiConfort: [],
+      categoriiSpatii: [],
 
       creating: false,
     };
@@ -92,7 +92,7 @@ class SpatiiUpdater extends React.Component {
 
       if (this.state.creating) {
 
-        let categorii = this.state.categoriiConfort;
+        let categorii = this.state.categoriiSpatii;
         let backup = this.state.backup;
 
         let newItem = {
@@ -140,7 +140,7 @@ class SpatiiUpdater extends React.Component {
 
         this.setState({
           backup: backup,
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
         });
       }
     });
@@ -148,7 +148,7 @@ class SpatiiUpdater extends React.Component {
 
   edit(index) {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
     let backup = this.state.backup;
 
     if (index >= 0 && index < categorii.length) {
@@ -188,7 +188,7 @@ class SpatiiUpdater extends React.Component {
 
       this.setState({
         backup: backup,
-        categoriiConfort: categorii,
+        categoriiSpatii: categorii,
 
         creating: true, /** Block the creation of a new item while editing */
       });
@@ -197,7 +197,7 @@ class SpatiiUpdater extends React.Component {
 
   input(index, newValue) {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
 
     if (index >= 0 && index < categorii.length ) {
 
@@ -209,7 +209,7 @@ class SpatiiUpdater extends React.Component {
     }
     
     this.setState({
-      categoriiConfort: categorii,
+      categoriiSpatii: categorii,
     });
   }
 
@@ -217,7 +217,7 @@ class SpatiiUpdater extends React.Component {
 
     let body;
     let backup = this.state.backup;
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
 
     if (index >= 0 && index < categorii.length) {
 
@@ -231,7 +231,7 @@ class SpatiiUpdater extends React.Component {
         categorii[index].isFetching = false;
 
         this.setState({
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
         });
       }
 
@@ -247,7 +247,7 @@ class SpatiiUpdater extends React.Component {
         categorii[index].isFetching = false;
 
         this.setState({
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
         })
       }
 
@@ -316,7 +316,7 @@ class SpatiiUpdater extends React.Component {
   
                 this.setState({
                   backup: sortedBackup,
-                  categoriiConfort: sorted,
+                  categoriiSpatii: sorted,
                   creating: false,
                 });
   
@@ -335,7 +335,7 @@ class SpatiiUpdater extends React.Component {
                 categorii[index].isFetching = false;
   
                 this.setState({
-                  categoriiConfort: categorii,
+                  categoriiSpatii: categorii,
                 });
   
                 break;
@@ -356,7 +356,7 @@ class SpatiiUpdater extends React.Component {
 
   delete(index) {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
     let backup = this.state.backup;
    
     let toDelete = '';
@@ -398,7 +398,7 @@ class SpatiiUpdater extends React.Component {
 
         this.setState({
           backup: backup,
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
 
           creating: false,
         })
@@ -407,7 +407,7 @@ class SpatiiUpdater extends React.Component {
 
       else {
 
-        let categorii = this.state.categoriiConfort;
+        let categorii = this.state.categoriiSpatii;
 
         categorii.forEach(item => {
           
@@ -420,7 +420,7 @@ class SpatiiUpdater extends React.Component {
         });
 
         this.setState({
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
           creating: false,
         });
       }
@@ -428,7 +428,7 @@ class SpatiiUpdater extends React.Component {
   }
 
   cancel(index) {
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
     let backup = this.state.backup;
 
     if (index >= 0 && index < categorii.length) {
@@ -457,7 +457,7 @@ class SpatiiUpdater extends React.Component {
 
     this.setState({
       backup: backup,
-      categoriiConfort: categorii,
+      categoriiSpatii: categorii,
 
       creating: false,
     });
@@ -479,27 +479,24 @@ class SpatiiUpdater extends React.Component {
       })
     };
 
-    fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+    fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
     .then(response => response.json())
     .then(categorii => {
 
       if ('error' === categorii.status) {
-        console.log('Eroare - categorii confort')
+        console.log('Eroare - categorii spatii')
       } 
       
       else 
       
       if ('valid' === categorii.status) {
 
-        let sorted = categorii.categoriiConfort.sort(function compare(a, b) {
-          return a.Denumire - b.Denumire;
-        });
-
-       let sortedBackup = [];
+        let cats = categorii.categoriiSpatii;
 
        let length = 0;
+       let backup = [];
 
-        sorted.forEach(item => {
+        cats.forEach(item => {
 
           item.index = length++;
 
@@ -510,13 +507,15 @@ class SpatiiUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
-          sortedBackup.push(item.Denumire);
+          let backupItem = Object.assign({}, item);
+
+          backup.push(backupItem);
 
         });
 
         this.setState({
-          backup: sortedBackup,
-          categoriiConfort: sorted,
+          backup: backup,
+          categoriiSpatii: cats,
         });
 
       } 
@@ -534,7 +533,7 @@ class SpatiiUpdater extends React.Component {
 
   render() {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
 
     const categories = categorii.map(
       (categorie) =>
@@ -544,6 +543,7 @@ class SpatiiUpdater extends React.Component {
 
         key={this.generateKey()}
         value={categorie.Denumire}
+        details={categorie.Detalii}
 
         add={this.add}
         edit={this.edit}
@@ -576,7 +576,7 @@ class SpatiiUpdater extends React.Component {
             <Tippy
               content={
                 <>
-                  Introdu denumirea categoriei de confort
+                  Introdu denumirea categoriei de spațiu
                 </>
               }
               allowHTML={true}
@@ -590,7 +590,7 @@ class SpatiiUpdater extends React.Component {
             <Tippy
               content={
                 <>
-                  Adaugă o categorie de confort
+                  Adaugă o categorie de spațiu
                 </>
               }
               allowHTML={true}

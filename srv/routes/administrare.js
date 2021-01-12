@@ -800,11 +800,11 @@ router.post('/:attribute', authorization, function(req, res) {
 
                 const selectConfort = db.prepare(`SELECT Denumire FROM CategoriiConfort`);
 
-                let conforts;
+                let cats;
 
                 try {
 
-                  conforts = selectConfort.all()
+                  cats = selectConfort.all()
 
                 } catch(err) {
 
@@ -820,7 +820,7 @@ router.post('/:attribute', authorization, function(req, res) {
                 } finally {
 
                   if (!error) {
-                    let categorii = Object.values(conforts);
+                    let categorii = Object.values(cats);
 
                     return res.json({
                       status: 'valid',
@@ -867,7 +867,88 @@ router.post('/:attribute', authorization, function(req, res) {
         }
 
         case 'spatii': {
-          let status = '';
+          let status = 'invalid';
+
+          if (req.body.task) {
+
+            switch (req.body.task) {
+
+              case 'create': {
+                if (req.body && (undefined !== req.body.value)) {
+
+                  status = createConfort(req.body.value);
+
+                  return res.json({
+                    status: status,
+                  });
+                }
+                break;
+              }
+
+              case 'read': {
+                let error;
+
+                const selectSpatii = db.prepare(`SELECT Denumire, Detalii FROM CategoriiSpatii`);
+
+                let cats;
+
+                try {
+
+                  cats = selectSpatii.all()
+
+                } catch(err) {
+
+                  if (err) {
+
+                    console.log(err);
+                    error = err;
+
+                    return res.json({
+                      status: 'error',
+                    });
+                  } 
+                } finally {
+
+                  if (!error) {
+                    let categorii = Object.values(cats);
+
+                    return res.json({
+                      status: 'valid',
+                      categoriiSpatii: categorii,
+                    });
+                  } 
+                }
+
+                break;
+              }
+
+              case 'update': {
+                if (req.body && undefined !== req.body.oldValue && undefined !== req.body.newValue) {
+                  status = updateConfort(req.body.oldValue, req.body.newValue);
+
+                  return res.json({
+                    status: status,
+                  });
+                }
+
+                break;
+              }
+
+              case 'delete': {
+                if (req.body && undefined !== req.body.value) {
+                  status = deleteConfort(req.body.value);
+
+                  return res.json({
+                    status: status,
+                  });
+                }
+
+                break;
+              }
+
+            }
+          }
+          break;
           break;
         }
 

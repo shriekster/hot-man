@@ -206,7 +206,7 @@ class CategorieSpatiu extends React.Component {
             className='--detalii-text'
             //onInput={this.onInput}
             //onKeyDown={this.onGenericKeyDown}
-            //value={this.props.value}
+            value={this.props.details}
             //onFocus={this.focus}
             //onBlur={this.blur}
             ref={this.detaliiTextArea}>
