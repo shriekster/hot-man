@@ -951,6 +951,21 @@ input[type='text'].-modal-password:focus  {
   border: 1px inset #009500;
 }
 
+.-modal-cancel-button {
+  background-color: transparent;
+  border: 1px outset salmon;
+  border-radius: 8px;
+  color: darkslategray;
+}
+
+.-modal-cancel-button:hover {
+  color: #D72C25;
+}
+
+.-modal-cancel-button:active {
+  border: 1px inset salmon;
+}
+
 .-inline {
   display: inline;
 }

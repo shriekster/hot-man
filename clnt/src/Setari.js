@@ -1070,6 +1070,48 @@ class Setari extends React.Component {
       backgroundClass: 'view-user-settings',
       showModal: false,
       modalPassword: '',
+
+      editCnp: false,
+      editGrad: false,
+      editNume: false,
+      editPrenume: false,
+      editUtilizator: false,
+      editParola: false,
+
+      editCnpClass: this.state.iconClassNames.edit,
+      editGradClass: this.state.iconClassNames.edit,
+      editNumeClass: this.state.iconClassNames.edit,
+      editPrenumeClass: this.state.iconClassNames.edit,
+      editUtilizatorClass: this.state.iconClassNames.edit,
+      editParolaClass: this.state.iconClassNames.edit,
+
+      valueCnpClass: this.state.valueClassNames.edit,
+      valueGradClass: this.state.valueClassNames.edit,
+      valueNumeClass: this.state.valueClassNames.edit,
+      valuePrenumeClass: this.state.valueClassNames.edit,
+      valueUtilizatorClass: this.state.valueClassNames.edit,
+      valueParolaClass: this.state.valueClassNames.edit,
+
+      nextCnp: this.props.user.loc,
+      nextGrad: this.props.user.grad,
+      nextNume: this.props.user.nume,
+      nextPrenume: this.props.user.prenume,
+      nextUtilizator: this.props.user.utilizator,
+      nextParola: '',
+
+      showCnpError: false,
+      showGradError: false,
+      showNumeError: false,
+      showPrenumeError: false,
+      showUtilizatorError: false,
+      showParolaError: false,
+
+      fetchingCnp: false,
+      fetchingGrad: false,
+      fetchingNume: false,
+      fetchingPrenume: false,
+      fetchingUtilizator: false,
+      fetchingParola: false,
     });
   }
 
@@ -1452,6 +1494,10 @@ class Setari extends React.Component {
               </Tippy>
               <button className='-modal-button'>
                 Continuă
+              </button>
+              <button className='-modal-cancel-button'
+                onClick={this.closeModal}>
+                Renunță
               </button>
             </form>
           </div>
