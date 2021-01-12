@@ -790,7 +790,14 @@ class Setari extends React.Component {
     let charCode = (e.which) ? e.which : e.keyCode;
 
     if (27 === charCode) {console.log(e.target)
-      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
+      if (this.state.showModal) {
+
+        this.closeModal();
+
+      } else {
+        this.onViewSettingsClick({target: {id: 'view-user-settings'}});
+      }
+      
     } 
 
     if (e && e.target.value.length > 64) {

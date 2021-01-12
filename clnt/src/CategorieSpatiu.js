@@ -85,19 +85,43 @@ class CategorieSpatiu extends React.Component {
   }
 
   onSaveMouseOver() {
-    this.setState({
-      editingHint: 'Salvează',
-      hintVisible: true,
-      hintOffsetY: -15,
-    });
+    if (this.props.isFresh) {
+
+      this.setState({
+        editingHint: 'Salvează',
+        hintVisible: true,
+        hintOffsetY: -4,
+      });
+
+    } else {
+
+      this.setState({
+        editingHint: 'Salvează',
+        hintVisible: true,
+        hintOffsetY: -15,
+
+      });
+    }
   }
 
   onCancelMouseOver() {
-    this.setState({
-      editingHint: 'Renunță',
-      hintVisible: true,
-      hintOffsetY: -15,
-    });
+    if (this.props.isFresh) {
+      
+      this.setState({
+        editingHint: 'Renunță',
+        hintVisible: true,
+        hintOffsetY: -4,
+      });
+
+    } else {
+
+      this.setState({
+        editingHint: 'Renunță',
+        hintVisible: true,
+        hintOffsetY: -15,
+      });
+
+    }
   }
 
   onDeleteMouseOver() {
@@ -138,7 +162,7 @@ class CategorieSpatiu extends React.Component {
           placement='right'
           arrow={false}
           theme='red-material-warning'
-          offset={[0, 140]}
+          offset={[0, 10]}
           visible={this.props.showWarning}>
           <Tippy
             content={
@@ -150,7 +174,7 @@ class CategorieSpatiu extends React.Component {
             placement='right'
             arrow={false}
             theme='red-material-warning'
-            offset={[0, 140]}
+            offset={[0, 10]}
             visible={this.props.showError}>
             <input disabled={!this.props.isEditing}
               type='text'
