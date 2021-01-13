@@ -109,6 +109,9 @@ class SpatiiUpdater extends React.Component {
           isFresh: true,
           isEditing: true,
 
+          inputIsFocused: true,
+          textareaIsFocused: false,
+
           isFetching: false,
         };
 
@@ -141,6 +144,8 @@ class SpatiiUpdater extends React.Component {
               item.isFresh = false;
               item.isEditing = false;
               item.isFetching = false;
+              item.inputIsFocused = false;
+              item.textareaIsFocused = false;
 
             });
 
@@ -276,6 +281,8 @@ class SpatiiUpdater extends React.Component {
         categorii[index].isFresh = false;
         categorii[index].isEditing = false;
         categorii[index].isFetching = false;
+        categorii[index].inputIsFocused = true;
+        categorii[index].textareaIsFocused = false;
 
         this.setState({
           categoriiSpatii: categorii,
@@ -332,6 +339,8 @@ class SpatiiUpdater extends React.Component {
                 categorii[index].isFresh = false;
                 categorii[index].isEditing = false;
                 categorii[index].isFetching = false;
+                categorii[index].inputIsFocused = true;
+                categorii[index].textareaIsFocused = false;
   
                 this.setState({
                   backup: backup,
@@ -471,6 +480,9 @@ class SpatiiUpdater extends React.Component {
         categorii[index].isFresh = false;
         categorii[index].isEditing = false;
         categorii[index].isFetching = false;
+
+        categorii[index].inputIsFocused = true;
+        categorii[index].textareaIsFocused = false;
       }
     }
     
@@ -498,6 +510,7 @@ class SpatiiUpdater extends React.Component {
         case 'input': {
 
           if (state) {
+            
             categorii[index].inputIsFocused = true;
             categorii[index].textareaIsFocused = false;
 
@@ -570,7 +583,7 @@ class SpatiiUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
-          item.inputIsFocused = false;
+          item.inputIsFocused = true;
           item.textareaIsFocused = false;
 
           let backupItem = {

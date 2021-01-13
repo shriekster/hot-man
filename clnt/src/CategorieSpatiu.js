@@ -18,10 +18,6 @@ class CategorieSpatiu extends React.Component {
 
     this.textFocus = this.textFocus.bind(this);
 
-    this.blur = this.blur.bind(this);
-
-    this.textBlur = this.textBlur.bind(this);
-
     this.submit = this.submit.bind(this);
 
     this.onIconMouseOut = this.onIconMouseOut.bind(this);
@@ -47,19 +43,9 @@ class CategorieSpatiu extends React.Component {
     let charCode = (e.which) ? e.which : e.keyCode;
 
     if (27 === charCode) {
-      this.cancel();
+      this.props.cancel(this.props.index);
     }
 
-    else
-
-    if (e && e.target.value.length > 15) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
     return true;
   }
 
@@ -92,20 +78,12 @@ class CategorieSpatiu extends React.Component {
     this.props.input(this.props.index, e.target.value, 'detalii');
   }
 
-  focus() {
+  focus(e) {
     this.props.focus(this.props.index, 'input', true);
   }
 
-  textFocus() {
+  textFocus(e) {
     this.props.focus(this.props.index, 'textarea', true);
-  }
-
-  blur(e) {
-    this.props.focus(this.props.index, 'input', false);
-  }
-
-  textBlur(e) {
-    this.props.focus(this.props.index, 'textarea', false);
   }
 
   submit(e) {
@@ -168,12 +146,11 @@ class CategorieSpatiu extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
+
     if (this.props.isEditing) {
       
       if (this.props.inputIsFocused) {
         this.input.current.focus();
-        console.log('INPUT FOCUS')
       }
 
       else
@@ -223,7 +200,9 @@ class CategorieSpatiu extends React.Component {
             theme='red-material-warning'
             offset={[0, 10]}
             visible={this.props.showError}>
-            <input disabled={!this.props.isEditing}
+            <input
+              maxLength={64}
+              disabled={!this.props.isEditing}
               type='text'
               autoComplete='off'
               autoCorrect='off'
@@ -233,8 +212,7 @@ class CategorieSpatiu extends React.Component {
               onKeyDown={this.onGenericKeyDown}
               value={this.props.value}
               //defaultValue={this.state.nextValue}
-              onFocus={this.focus}
-              onBlur={this.blur}
+              onClick={this.focus}
               ref={this.input}>
             </input>
           </Tippy>
@@ -245,17 +223,17 @@ class CategorieSpatiu extends React.Component {
           <span>
             Detalii
           </span>
-          <textarea disabled={!this.props.isEditing}
+          <textarea
+            maxLength={256}
+            disabled={!this.props.isEditing}
             className='--detalii-text'
             autoComplete='off'
-            autoCorrect='off'
             spellCheck={false}
             className='--detalii-text'
             onInput={this.onText}
             onKeyDown={this.onTextKeyDown}
             value={this.props.details}
-            onFocus={this.textFocus}
-            onBlur={this.textBlur}
+            onClick={this.textFocus}
             ref={this.textArea}>
           </textarea>
       </div>

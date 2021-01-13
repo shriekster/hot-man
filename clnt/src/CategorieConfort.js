@@ -110,6 +110,8 @@ class CategorieConfort extends React.Component {
   componentDidMount() {
     if (this.props.isEditing) {
       this.input.current.focus();
+      //this.input.selectionStart = this.props.caretPosition;
+      //this.input.selectionEnd = this.props.caretPosition;
     }
   }
 

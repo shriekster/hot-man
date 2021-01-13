@@ -510,6 +510,8 @@ class ConfortUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
+          item.caretPosition = item.Denumire.length - 1; //??
+
           sortedBackup.push(item.Denumire);
 
         });
@@ -558,6 +560,8 @@ class ConfortUpdater extends React.Component {
         isFresh={undefined === categorie.isFresh || false === categorie.isFresh ? false : true}
         isEditing={undefined === categorie.isEditing || false === categorie.isEditing ? false : true}
         isFetching={undefined === categorie.isFetching || false === categorie.isFetching ? false : true}
+
+        caretPosition={categorie.caretPosition}
       />
     );
 
