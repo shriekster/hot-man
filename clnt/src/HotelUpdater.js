@@ -1637,9 +1637,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingNume}/>
             </div>
             <div className='--settings-item'>
@@ -1687,9 +1685,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingJudet}/>
             </div>
             <div className='--settings-item'>
@@ -1729,9 +1725,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingLocalitate}/>
             </div>
             <div className='--settings-item'>
@@ -1771,9 +1765,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingStrada}/>
             </div>
             <div className='--settings-item'>
@@ -1813,9 +1805,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingNumar}/>
             </div>
             <div className='--settings-item'>
@@ -1855,9 +1845,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingCodPostal}/>
             </div>
             <div className='--settings-item'>
@@ -1897,9 +1885,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingTelefon}/>
             </div>
             <div className='--settings-item'>
@@ -1939,9 +1925,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingFax}/>
             </div>
             <div className='--settings-item'>
@@ -1981,9 +1965,7 @@ class HotelUpdater extends React.Component {
               </Tippy>
               <Spinner
                 className='--settings-loading'
-                width='50px'
-                height='50px'
-                status='altLoading'
+                status='loading'
                 visibility={this.state.fetchingEmail}/>
             </div>
           </div>

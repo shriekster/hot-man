@@ -458,7 +458,261 @@ function deleteConfort(value) {
   return 'invalid';
 }
 
-/** Spatii updaters */
+/** Spatii data manipulation - C R U D  */
+
+function createSpatiu(value) {
+  const create = db.prepare(`INSERT INTO CategoriiConfort (ID, Denumire)
+                          VALUES (?, ?)`);
+
+  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (value) {
+
+    const exists = check.get(value);
+
+    if (exists && exists.Denumire) {
+
+      return 'duplicate';
+    } 
+
+    else 
+
+    if (!isValidStreetNo(value)) {
+
+      return 'invalid';
+    }
+    
+    else {
+      let error;
+
+      try {
+
+        const info = create.run(null, value);
+
+      } catch (err) {
+
+        if (err) {
+
+          console.log(err);
+          error = err;
+        }
+
+      } finally {
+
+        return error ? 'error' : 'valid';
+      }
+    }
+  }
+}
+
+function updateSpatiu(oldValue, newValue) {
+  const update = db.prepare(`UPDATE CategoriiConfort 
+                            SET Denumire = ?
+                            WHERE Denumire = ?`);
+
+  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (oldValue && newValue) {
+
+    const exists = check.get(newValue);
+
+    if (exists && exists.Denumire) {
+
+      return 'duplicate';
+
+    } 
+
+    else 
+
+    if (!isValidStreetNo(newValue)) {
+
+      return 'invalid';
+
+    }
+    
+    else {
+
+      let error;
+
+      try {
+
+        const info = update.run(newValue, oldValue);
+
+      } catch (err) {
+
+        if (err) {
+
+          console.log(err);
+          error = err;
+        }
+
+      } finally {
+
+        return error ? 'error': 'valid';
+      }
+    }
+  }
+}
+
+function deleteSpatiu(value) {
+  const _delete = db.prepare(`DELETE FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (value) {
+    let error;
+
+    try {
+
+      const info = _delete.run(value);
+
+    } catch(err) {
+
+      error = err;
+      console.log(err);
+
+    } finally {
+
+      if (error) {
+
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+
+  return 'invalid';
+}
+
+/** Paturi data manipulation - C R U D  */
+
+function createPat(value) {
+  const create = db.prepare(`INSERT INTO CategoriiConfort (ID, Denumire)
+                          VALUES (?, ?)`);
+
+  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (value) {
+
+    const exists = check.get(value);
+
+    if (exists && exists.Denumire) {
+
+      return 'duplicate';
+    } 
+
+    else 
+
+    if (!isValidStreetNo(value)) {
+
+      return 'invalid';
+    }
+    
+    else {
+      let error;
+
+      try {
+
+        const info = create.run(null, value);
+
+      } catch (err) {
+
+        if (err) {
+
+          console.log(err);
+          error = err;
+        }
+
+      } finally {
+
+        return error ? 'error' : 'valid';
+      }
+    }
+  }
+}
+
+function updatePat(oldValue, newValue) {
+  const update = db.prepare(`UPDATE CategoriiConfort 
+                            SET Denumire = ?
+                            WHERE Denumire = ?`);
+
+  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (oldValue && newValue) {
+
+    const exists = check.get(newValue);
+
+    if (exists && exists.Denumire) {
+
+      return 'duplicate';
+
+    } 
+
+    else 
+
+    if (!isValidStreetNo(newValue)) {
+
+      return 'invalid';
+
+    }
+    
+    else {
+
+      let error;
+
+      try {
+
+        const info = update.run(newValue, oldValue);
+
+      } catch (err) {
+
+        if (err) {
+
+          console.log(err);
+          error = err;
+        }
+
+      } finally {
+
+        return error ? 'error': 'valid';
+      }
+    }
+  }
+}
+
+function deletePat(value) {
+  const _delete = db.prepare(`DELETE FROM CategoriiConfort
+                          WHERE Denumire = ?`);
+
+  if (value) {
+    let error;
+
+    try {
+
+      const info = _delete.run(value);
+
+    } catch(err) {
+
+      error = err;
+      console.log(err);
+
+    } finally {
+
+      if (error) {
+
+        return 'error';
+      }
+
+      return 'valid';
+    }
+  }
+
+  return 'invalid';
+}
 
 
 /** Routes */

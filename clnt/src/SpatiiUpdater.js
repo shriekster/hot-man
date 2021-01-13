@@ -97,7 +97,7 @@ class SpatiiUpdater extends React.Component {
 
         let newItem = {
 
-          index: this.state.backup.length, //??
+          index: categorii.length, //??
 
           Denumire: '',
           Detalii: '',
@@ -112,21 +112,14 @@ class SpatiiUpdater extends React.Component {
 
         let newBackupItem = {
 
-          index: this.state.backup.length, //??
+          index: backup.length, //??
 
           Denumire: '',
           Detalii: '',
-          showWarning: false,
-          showError: false,
-
-          isFresh: true,
-          isEditing: true,
-
-          isFetching: false,
         };
 
 
-        if (0 === categorii.length) {
+        if (0 === categorii.length && 0 === backup.length) {
 
           categorii.push(newItem);
           backup.push(newBackupItem);
@@ -255,7 +248,7 @@ class SpatiiUpdater extends React.Component {
       else 
       
       /** The input value is the same as before being edited */
-      if (categorii[index].Denumire === backup[index]) {
+      if (categorii[index].Denumire === backup[index].Denumire) {
 
         categorii[index].showWarning = false;
         categorii[index].showError = false;
@@ -268,15 +261,15 @@ class SpatiiUpdater extends React.Component {
         })
       }
 
-      /** A new, non-empty value is to be saved */
       else {
-
+        /** A new, non-empty value is to be saved */
         if (categorii[index].isFresh) {
 
           body = {
             token: this.props.token,
             task: 'create',
             value: categorii[index].Denumire.trim(),
+            details: categorii[index].Detalii.trim(),
           };
     
         } else {
@@ -284,8 +277,10 @@ class SpatiiUpdater extends React.Component {
           body = {
             token: this.props.token,
             task: 'update',
-            oldValue: backup[index],
+            oldValue: backup[index].Denumire,
             newValue: categorii[index].Denumire.trim(),
+            oldDetails: backup[index].Detalii,
+            newDetails: categorii[index].Detalii.trim(),
           };
         }
       
@@ -306,7 +301,8 @@ class SpatiiUpdater extends React.Component {
   
               case 'valid': {
   
-                backup[index] = categorii[index].Denumire.trim();
+                backup[index].Denumire = categorii[index].Denumire.trim();
+                backup[index].Detalii = categorii[index].Detalii.trim();
   
                 categorii[index].showWarning = false;
                 categorii[index].showError = false;
@@ -314,26 +310,9 @@ class SpatiiUpdater extends React.Component {
                 categorii[index].isEditing = false;
                 categorii[index].isFetching = false;
   
-                let sorted = categorii.sort(function compare(a, b) {
-                  return a.Denumire - b.Denumire;
-                });
-  
-                /** Rewrite the indexes so that they are also sorted */
-                let _index = 0;
-  
-                sorted.forEach(item => {
-  
-                  item.index = _index++;
-  
-                });
-  
-                let sortedBackup = backup.sort(function compare(a, b) {
-                  return a - b;
-                });
-  
                 this.setState({
-                  backup: sortedBackup,
-                  categoriiSpatii: sorted,
+                  backup: backup,
+                  categoriiSpatii: categorii,
                   creating: false,
                 });
   
@@ -546,8 +525,7 @@ class SpatiiUpdater extends React.Component {
     });
   }
 
-  componentDidUpdate (prevProps, prevState) {
-  }
+  componentDidUpdate (prevProps, prevState) {}
 
   render() {
 

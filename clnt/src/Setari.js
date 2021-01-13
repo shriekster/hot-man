@@ -1076,6 +1076,7 @@ class Setari extends React.Component {
     this.setState({
       backgroundClass: 'view-user-settings',
       showModal: false,
+      showModalError: false,
       modalPassword: '',
 
       editCnp: false,
@@ -1762,7 +1763,8 @@ class Setari extends React.Component {
                             (this.state.editParola ? 
                               ' --parola-is-visible' : 
                                 ' --parola-is-invisible')}
-                  onClick={this.togglePasswordVisibility}></i>
+                  onMouseOver={this.togglePasswordVisibility}
+                  onMouseOut={this.togglePasswordVisibility}></i>
                 <i id='--settings-edit-parola' 
                   className={this.state.editParolaClass}
                   onClick={this.handleSettingsSubmit}></i>
