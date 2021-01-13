@@ -42,14 +42,16 @@ class Spinner extends React.Component {
     }
 
     return (
-      <div className='-spinner-container'
-        style={{
+      <div 
+        className='-spinner-container'
+        style=
+        {{
           visibility: this.props.visibility ? 'visible' : 'hidden'
-        }}>
+      }}>
 
         <img 
         className={currentClass + ' ' + this.props.className} 
-        src={src}/>
+        src={src} />
         
       </div>
     );

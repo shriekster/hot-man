@@ -15,10 +15,6 @@ class Signup extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.onKeyDown = this.onKeyDown.bind(this);
-
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
     this.state = {
       loc: '',
       grad: '',
@@ -70,51 +66,11 @@ class Signup extends React.Component {
         {value: 'Col.', label: 'Colonel'},
         {value: 'Cdor.', label: 'Comandor'},
       ],
+
       fetching: false,
       showError: false,
       toLogin: false,
     };
-  }
-
-  // numeric input only
-  onKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-    
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-        !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    if (e.target.value.length > 13) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-        !(charCode >= 37 && charCode <= 40))  {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  // input max length: 64
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (e.target.value.length > 63) {
-      if(charCode !== 8 && charCode !== 9 && 
-         charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-         !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    return true;
   }
 
   /**
@@ -357,7 +313,7 @@ class Signup extends React.Component {
       <>
       {
       !this.state.toLogin &&
-      <div className='Form'>
+      <div className='Form-signup'>
         <form 
           onSubmit={this.handleSubmit}
           autoComplete='off'
@@ -406,15 +362,15 @@ class Signup extends React.Component {
                   visible={this.state.showLocWarning}>
                   <span className='legacy' tabIndex='0'>
                     <Input
-                    tabIndex='1'
-                    onKeyDown={this.onGenericKeyDown}
-                    className='fixed-height'
-                    type='text' 
-                    name='loc'
-                    id='loc'
-                    placeholder='Introdu locul nașterii'
-                    onInput={this.onInput}
-                    autoFocus={true}/>
+                      maxLength={64}
+                      tabIndex='1'
+                      className='fixed-height'
+                      type='text' 
+                      name='loc'
+                      id='loc'
+                      placeholder='Introdu locul nașterii'
+                      onInput={this.onInput}
+                      autoFocus={true}/>
                   </span>
                 </Tippy>
               </Tippy>
@@ -468,15 +424,15 @@ class Signup extends React.Component {
                 theme='red-material-warning'
                 visible={this.state.showNumeWarning}>
                 <span className='legacy' tabIndex='0'>
-                  <Input 
-                  tabIndex='3'
-                  onKeyDown={this.onGenericKeyDown}
-                  className='fixed-height'
-                  type='text' 
-                  name='nume'
-                  id='nume'
-                  placeholder='Introdu numele'
-                  onInput={this.onInput}/>
+                  <Input
+                    maxLength={64}
+                    tabIndex='3'
+                    className='fixed-height'
+                    type='text' 
+                    name='nume'
+                    id='nume'
+                    placeholder='Introdu numele'
+                    onInput={this.onInput}/>
                 </span>
               </Tippy>
             </Tippy>
@@ -511,15 +467,15 @@ class Signup extends React.Component {
                 theme='red-material-warning'
                 visible={this.state.showPrenumeWarning}>
                 <span className='legacy' tabIndex='0'>
-                  <Input 
-                  tabIndex='4'
-                  onKeyDown={this.onGenericKeyDown}
-                  className='fixed-height'
-                  type='text' 
-                  name='prenume'
-                  id='prenume'
-                  placeholder='Introdu prenumele'
-                  onInput={this.onInput}/>
+                  <Input
+                    maxLength={64}
+                    tabIndex='4'
+                    className='fixed-height'
+                    type='text' 
+                    name='prenume'
+                    id='prenume'
+                    placeholder='Introdu prenumele'
+                    onInput={this.onInput}/>
                 </span>
               </Tippy>
             </Tippy>
@@ -556,14 +512,14 @@ class Signup extends React.Component {
                 visible={this.state.showUserWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input
-                  tabIndex='5'
-                  onKeyDown={this.onGenericKeyDown}
-                  className='fixed-height'
-                  type='text' 
-                  name='user'
-                  id='user'
-                  placeholder='Alege un nume de utilizator'
-                  onInput={this.onInput}/>
+                    maxLength={64}
+                    tabIndex='5'
+                    className='fixed-height'
+                    type='text' 
+                    name='user'
+                    id='user'
+                    placeholder='Alege un nume de utilizator'
+                    onInput={this.onInput}/>
                 </span>
               </Tippy>
             </Tippy>
@@ -571,9 +527,9 @@ class Signup extends React.Component {
           </div>
           <div className='Form-field'>
             <PasswordInput
+              maxLength={64}
               tabIndex='6'
               onInput={this.onInput}
-              onKeyDown={this.onGenericKeyDown}
               visibility='visible' 
               asterisk={true}
               displayWarning={this.state.showPassWarning}
@@ -599,7 +555,7 @@ class Signup extends React.Component {
           </Tippy>
           </div>
           <Spinner 
-            status='altLoading'
+            status='loading'
             visibility={this.state.fetching}/>
         </form>
         <div className='Form-field Form-text centered-text'>

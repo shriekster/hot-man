@@ -10,7 +10,7 @@ class Login extends React.Component {
 
     this.onInput = this.onInput.bind(this);
 
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
+    //this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -46,21 +46,6 @@ class Login extends React.Component {
         break;
       }
     }
-  }
-
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (e.target.value.length > 63) {
-      if(charCode !== 8 && charCode !== 9 && 
-         charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-         !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    return true;
   }
 
   handleSubmit(e) {
@@ -138,8 +123,8 @@ class Login extends React.Component {
                 visible={this.state.showUserWarning}>
                 <span className='legacy' tabIndex='0'>
                   <Input
+                  maxLength={64}
                   tabIndex='1'
-                  onKeyDown={this.onGenericKeyDown}
                   className='fixed-height'
                   type='text' 
                   name='user'
@@ -153,8 +138,8 @@ class Login extends React.Component {
           </div>
           <div className='Form-field'>
             <PasswordInput
+              maxLength={64}
               tabIndex='2'
-              onKeyDown={this.onGenericKeyDown}
               onInput={this.onInput} 
               displayWarning={this.state.showPassWarning}
               displayError={false}

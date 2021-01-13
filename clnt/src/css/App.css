@@ -192,6 +192,21 @@ span.legacy {
   font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
 }
 
+.Form-signup {
+  color:  darkslategray; /*whitesmoke;*/
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 80vh;
+  width: 30vw;
+  margin: 5px 2vw;
+
+  font-size: max(16px, 1vw);
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+}
+
 
 .Form-field {
   /*padding: 10px 2px;*/

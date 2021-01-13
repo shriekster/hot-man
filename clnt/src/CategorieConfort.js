@@ -6,7 +6,7 @@ class CategorieConfort extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
 
     this.onInput = this.onInput.bind(this);
 
@@ -35,8 +35,8 @@ class CategorieConfort extends React.Component {
     };
   }
 
-  // input max length: 16
-  onGenericKeyDown(e) {
+  // Cancel editing when the Escape key is pressed
+  onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
     // Escape key was pressed
@@ -44,16 +44,6 @@ class CategorieConfort extends React.Component {
       this.props.cancel(this.props.index);
     }
 
-    else
-
-    if (e && e.target.value.length > 15) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
     return true;
   }
 
@@ -152,14 +142,16 @@ class CategorieConfort extends React.Component {
             theme='red-material-warning'
             offset={[0, 140]}
             visible={this.props.showError}>
-            <input disabled={!this.props.isEditing}
+            <input
+              maxLength={16}
+              disabled={!this.props.isEditing}
               type='text'
               autoComplete='off'
               autoCorrect='off'
               spellCheck={false}
               className='--confort-value -inline'
               onInput={this.onInput}
-              onKeyDown={this.onGenericKeyDown}
+              onKeyDown={this.onKeyDown}
               value={this.props.value}
               //defaultValue={this.state.nextValue}
               onFocus={this.focus}

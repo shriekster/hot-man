@@ -6,9 +6,7 @@ class CategorieSpatiu extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
-    this.onTextKeyDown = this.onTextKeyDown.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
 
     this.onInput = this.onInput.bind(this);
 
@@ -38,25 +36,15 @@ class CategorieSpatiu extends React.Component {
     };
   }
 
-  // input max length: 16
-  onGenericKeyDown(e) {
+  // Cancel editing when the Escape key is pressed
+  onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
+    // Escape was pressed 
     if (27 === charCode) {
       this.props.cancel(this.props.index);
     }
-
-    return true;
-  }
-
-  // input max length: 64
-  onTextKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (27 === charCode) {
-      this.cancel();
-    }
-
+    /*
     else
 
     if (e && e.target.value.length > 63) {
@@ -67,23 +55,25 @@ class CategorieSpatiu extends React.Component {
         return false;
       } 
     } 
+    */
+
     return true;
   }
 
-  onInput(e) {
-   this.props.input(this.props.index, e.target.value, 'denumire');
+  onInput(e) { 
+   this.props.input(this.props.index, 'denumire', e.target.value, e.target.selectionStart);
   }
 
   onText(e) {
-    this.props.input(this.props.index, e.target.value, 'detalii');
+    this.props.input(this.props.index, 'detalii', e.target.value, e.target.selectionStart);
   }
 
   focus(e) {
-    this.props.focus(this.props.index, 'input', true);
+    this.props.focus(this.props.index, 'input', true, e.target.selectionStart);
   }
 
   textFocus(e) {
-    this.props.focus(this.props.index, 'textarea', true);
+    this.props.focus(this.props.index, 'textarea', true, e.target.selectionStart);
   }
 
   submit(e) {
@@ -151,12 +141,16 @@ class CategorieSpatiu extends React.Component {
       
       if (this.props.inputIsFocused) {
         this.input.current.focus();
+        this.input.current.selectionStart = this.props.inputCaretPosition;
+        this.input.current.selectionEnd = this.props.inputCaretPosition;
       }
 
       else
 
       if (this.props.textareaIsFocused) {
         this.textArea.current.focus();
+        this.textArea.current.selectionStart = this.props.textareaCaretPosition;
+        this.textArea.current.selectionEnd = this.props.textareaCaretPosition;
       }
 
     }
@@ -209,9 +203,8 @@ class CategorieSpatiu extends React.Component {
               spellCheck={false}
               className='--denumire-text'
               onInput={this.onInput}
-              onKeyDown={this.onGenericKeyDown}
+              onKeyDown={this.onKeyDown}
               value={this.props.value}
-              //defaultValue={this.state.nextValue}
               onClick={this.focus}
               ref={this.input}>
             </input>
@@ -231,7 +224,7 @@ class CategorieSpatiu extends React.Component {
             spellCheck={false}
             className='--detalii-text'
             onInput={this.onText}
-            onKeyDown={this.onTextKeyDown}
+            onKeyDown={this.onKeyDown}
             value={this.props.details}
             onClick={this.textFocus}
             ref={this.textArea}>

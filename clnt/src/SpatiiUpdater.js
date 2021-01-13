@@ -111,6 +111,8 @@ class SpatiiUpdater extends React.Component {
 
           inputIsFocused: true,
           textareaIsFocused: false,
+          inputCaretPosition: 0,
+          textareaCaretPosition: 0,
 
           isFetching: false,
         };
@@ -144,9 +146,11 @@ class SpatiiUpdater extends React.Component {
               item.isFresh = false;
               item.isEditing = false;
               item.isFetching = false;
+
               item.inputIsFocused = false;
               item.textareaIsFocused = false;
-
+              item.inputCaretPosition = item.Denumire.length;
+              item.textareaCaretPosition = item.Detalii.length;
             });
 
             categorii.push(newItem);
@@ -212,7 +216,7 @@ class SpatiiUpdater extends React.Component {
     }
   }
 
-  input(index, newValue, type) {
+  input(index, type, newValue, caretPosition) {
 
     let categorii = this.state.categoriiSpatii;
 
@@ -223,6 +227,7 @@ class SpatiiUpdater extends React.Component {
         if (index >= 0 && index < categorii.length ) {
 
           categorii[index].Denumire = newValue;
+          categorii[index].inputCaretPosition = caretPosition;
     
           /** Hide the error or warning tippy */
           categorii[index].showWarning = false;
@@ -237,6 +242,7 @@ class SpatiiUpdater extends React.Component {
         if (index >= 0 && index < categorii.length ) {
 
           categorii[index].Detalii = newValue;
+          categorii[index].textareaCaretPosition = caretPosition;
         }
 
         break;
@@ -281,8 +287,11 @@ class SpatiiUpdater extends React.Component {
         categorii[index].isFresh = false;
         categorii[index].isEditing = false;
         categorii[index].isFetching = false;
+
         categorii[index].inputIsFocused = true;
         categorii[index].textareaIsFocused = false;
+        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
 
         this.setState({
           categoriiSpatii: categorii,
@@ -341,6 +350,8 @@ class SpatiiUpdater extends React.Component {
                 categorii[index].isFetching = false;
                 categorii[index].inputIsFocused = true;
                 categorii[index].textareaIsFocused = false;
+                categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+                categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
   
                 this.setState({
                   backup: backup,
@@ -483,6 +494,8 @@ class SpatiiUpdater extends React.Component {
 
         categorii[index].inputIsFocused = true;
         categorii[index].textareaIsFocused = false;
+        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
       }
     }
     
@@ -499,7 +512,7 @@ class SpatiiUpdater extends React.Component {
     return Math.floor(new Date().getTime() * Math.random());
   }
 
-  setFocusState(index, type, state) {
+  setFocusState(index, type, state, caretPosition) {
 
     let categorii = this.state.categoriiSpatii;
 
@@ -510,12 +523,18 @@ class SpatiiUpdater extends React.Component {
         case 'input': {
 
           if (state) {
-            
+
             categorii[index].inputIsFocused = true;
+            categorii[index].inputCaretPosition = caretPosition;
+
             categorii[index].textareaIsFocused = false;
+            categorii[index].textareaCaretPosition = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;
 
           } else {
+
             categorii[index].inputIsFocused = false;
+            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+
           }
 
           break;
@@ -526,10 +545,16 @@ class SpatiiUpdater extends React.Component {
           if (state) {
 
             categorii[index].inputIsFocused = false;
+            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+
             categorii[index].textareaIsFocused = true;
+            categorii[index].textareaCaretPosition = caretPosition;
 
           } else {
+
             categorii[index].textareaIsFocused = false;
+            categorii[index].textareaCaretPosition = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;
+            
           }
 
           break;
@@ -544,7 +569,7 @@ class SpatiiUpdater extends React.Component {
   }
 
   componentDidMount() {
-    /** 'descarc' categoriile de confort */
+    /** 'descarc' categoriile de spatii */
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -585,6 +610,8 @@ class SpatiiUpdater extends React.Component {
 
           item.inputIsFocused = true;
           item.textareaIsFocused = false;
+          item.inputCaretPosition = item.Denumire.length;
+          item.textareaCaretPosition = !item.Detalii ? 0 : item.Detalii.length;
 
           let backupItem = {
             Denumire: item.Denumire, 
@@ -636,6 +663,8 @@ class SpatiiUpdater extends React.Component {
         focus={this.setFocusState}
         inputIsFocused={categorie.inputIsFocused}
         textareaIsFocused={categorie.textareaIsFocused}
+        inputCaretPosition={categorie.inputCaretPosition}
+        textareaCaretPosition={categorie.textareaCaretPosition}
 
         showWarning={undefined === categorie.showWarning || false === categorie.showWarning ? false : true}
         showError={undefined === categorie.showError || false === categorie.showError ? false : true}
