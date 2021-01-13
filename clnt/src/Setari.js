@@ -13,8 +13,6 @@ class Setari extends React.Component {
 
     this.onKeyDown = this.onKeyDown.bind(this);
 
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
     this.onSelect = this.onSelect.bind(this);
 
     this.onViewSettingsClick = this.onViewSettingsClick.bind(this);
@@ -756,39 +754,11 @@ class Setari extends React.Component {
     }
   }
 
-  // numeric input only
+  // Close the modal the Escape key is pressed
   onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
-    if (27 === charCode) {
-      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
-    }
-    
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-        !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    if (e && e.target.value.length > 13) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-        !(charCode >= 37 && charCode <= 40))  {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  // input max length: 64
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
+    // Escape key was pressed
     if (27 === charCode) {console.log(e.target)
       if (this.state.showModal) {
 
@@ -798,15 +768,6 @@ class Setari extends React.Component {
         this.onViewSettingsClick({target: {id: 'view-user-settings'}});
       }
       
-    } 
-
-    if (e && e.target.value.length > 64) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
     } 
     return true;
   }
@@ -1488,13 +1449,15 @@ class Setari extends React.Component {
                 theme='red-material-warning'
                 offset={[0, 2]}
                 visible={this.state.showModalError}>
-                <input id='-modal-password'
+                <input
+                  maxLength={64}
+                  id='-modal-password'
                   className='-modal-password'
                   autoComplete='off'
                   autoCorrect='off'
                   spellCheck={false}
                   onInput={this.onValueInput}
-                  onKeyDown={this.onGenericKeyDown}
+                  onKeyDown={this.onKeyDown}
                   value={this.state.modalPassword}
                   type='password'
                   ref={this.modalInput}>
@@ -1533,14 +1496,16 @@ class Setari extends React.Component {
                   <span>
                     Locul nașterii
                   </span>
-                  <input id='--settings-cnp'
+                  <input
+                    maxLength={64}
+                    id='--settings-cnp'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valueCnpClass}
                     disabled={!this.state.editCnp}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextCnp}
                     ref={this.cnpInput}>
                   </input>
@@ -1586,7 +1551,7 @@ class Setari extends React.Component {
                       className='sel-container'
                       classNamePrefix='sel' 
                       options={this.state.grade} 
-                      onKeyDown={this.onGenericKeyDown}
+                      onKeyDown={this.onKeyDown}
                       ref={this.gradInput}
                       openMenuOnFocus={true}
                       closeMenuOnSelect={true}
@@ -1623,14 +1588,16 @@ class Setari extends React.Component {
                   <span>
                     Nume
                   </span>
-                  <input id='--settings-nume'
+                  <input
+                    maxLength={64}
+                    id='--settings-nume'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valueNumeClass}
                     disabled={!this.state.editNume}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextNume}
                     ref={this.numeInput}>
                   </input>
@@ -1663,14 +1630,16 @@ class Setari extends React.Component {
                   <span>
                     Prenume
                   </span>
-                  <input id='--settings-prenume'
+                  <input
+                    maxLength={64}
+                    id='--settings-prenume'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valuePrenumeClass}
                     disabled={!this.state.editPrenume}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextPrenume}
                     ref={this.prenumeInput}>
                   </input>
@@ -1703,14 +1672,16 @@ class Setari extends React.Component {
                   <span>
                     Utilizator
                   </span>
-                  <input id='--settings-utilizator'
+                  <input
+                    maxLength={64}
+                    id='--settings-utilizator'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valueUtilizatorClass}
                     disabled={!this.state.editUtilizator}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextUtilizator}
                     ref={this.utilizatorInput}>
                   </input>
@@ -1743,14 +1714,16 @@ class Setari extends React.Component {
                 <span>
                   Parolă
                 </span>
-                <input id='--settings-parola'
+                <input
+                  maxLength={64}
+                  id='--settings-parola'
                   autoComplete='off'
                   autoCorrect='off'
                   spellCheck={false}
                   className={this.state.valueParolaClass + ' --settings-parola'}
                   disabled={!this.state.editParola}
                   onInput={this.onValueInput}
-                  onKeyDown={this.onGenericKeyDown}
+                  onKeyDown={this.onKeyDown}
                   value={this.state.nextParola}
                   type={this.state.passwordVisible ? 'text' : 'password'}
                   ref={this.parolaInput}>

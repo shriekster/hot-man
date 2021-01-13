@@ -2309,3 +2309,72 @@ textarea.--detalii-text:focus {
 .-signed-up-btn:active {
   border: 1px inset #25AAA9;
 }
+
+
+/* Paturi */
+.--pat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  margin-bottom: 2vh;
+  width: 400px;
+  height: 100px;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  padding-left: 3px;
+  position: relative;
+}
+
+.--pat-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(37, 170, 169, 1);
+  border-radius: 4px;
+  align-items: flex-start;
+  width: 300px;
+  height: 100px;
+}
+
+.--pat-form span {
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  font-size: 18px;
+}
+
+.--pat-field {
+  width: 296px;
+  height: 40px;
+  margin: 1px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+input[type='text'].--pat-text {
+  outline: none !important;
+  border: none;
+  display: inline;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-size: 18px;
+  width: 157px;
+  height: 40px;
+  padding: 2px 2px 2px 4px;
+  background-color: #9fd9d9;
+  color: lightslategray;
+
+  border: 1px solid lightslategray;
+  border-radius: 4px;
+}
+
+input[type='text'].--pat-text:disabled {
+  border: none;
+  color: darkslategray;
+}
+
+input[type='text'].--pat-text:focus {
+  color: #009500;
+  border: 1px #009500 inset;
+  border-radius: 4px;
+}
+

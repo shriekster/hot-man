@@ -9,8 +9,6 @@ class SpatiiUpdater extends React.Component {
 
     this.onKeyDown = this.onKeyDown.bind(this);
 
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
     this.add = this.add.bind(this);
 
     this.edit = this.edit.bind(this);
@@ -62,25 +60,6 @@ class SpatiiUpdater extends React.Component {
       }
     }
 
-    return true;
-  }
-
-  // input max length: 64
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (27 === charCode) {console.log(e.target)
-      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
-    } 
-
-    if (e && e.target.value.length > 64) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
     return true;
   }
 

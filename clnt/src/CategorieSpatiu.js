@@ -222,7 +222,6 @@ class CategorieSpatiu extends React.Component {
             className='--detalii-text'
             autoComplete='off'
             spellCheck={false}
-            className='--detalii-text'
             onInput={this.onText}
             onKeyDown={this.onKeyDown}
             value={this.props.details}

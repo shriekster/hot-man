@@ -13,8 +13,6 @@ class HotelUpdater extends React.Component {
 
     this.onKeyDown = this.onKeyDown.bind(this);
 
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
     this.onSelect = this.onSelect.bind(this);
 
     this.onViewSettingsClick = this.onViewSettingsClick.bind(this);
@@ -27,12 +25,6 @@ class HotelUpdater extends React.Component {
     this.update = this.update.bind(this);
 
     this.state = {
-      /** The following 2 state data are redundant, because 
-       * they are provided by props and there are 2 methods
-       * provided in the same way which update the data
-       */
-      //token: this.props.token,
-      //hotel: this.props.hotel,
 
       fetchingNume: false,
       fetchingJudet: false,
@@ -1170,51 +1162,15 @@ class HotelUpdater extends React.Component {
     }
   }
 
-  // numeric input only
+  // Cancel editing when the Escape key is pressed
   onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
+    // Escape was pressed
     if (27 === charCode) {
       this.onViewSettingsClick({target: {id: 'view-user-settings'}})
     }
-    
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-        !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      }
-    }
 
-    if (e && e.target.value.length > 13) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-        !(charCode >= 37 && charCode <= 40))  {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  // input max length: 64
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (27 === charCode) {console.log(e.target)
-      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
-    } 
-
-    if (e && e.target.value.length > 64) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
     return true;
   }
 
@@ -1619,14 +1575,16 @@ class HotelUpdater extends React.Component {
                   <span>
                     Nume
                   </span>
-                  <input id='--settings-nume'
+                  <input
+                    maxLength={64}
+                    id='--settings-nume'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valueNumeClass}
                     disabled={!this.state.editNume}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextNume}
                     ref={this.numeInput}>
                   </input>
@@ -1707,14 +1665,16 @@ class HotelUpdater extends React.Component {
                   <span>
                     Localitate
                   </span>
-                  <input id='--settings-localitate'
+                  <input
+                    maxLength={64}
+                    id='--settings-localitate'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valueLocalitateClass}
                     disabled={!this.state.editLocalitate}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextLocalitate}
                     ref={this.localitateInput}>
                   </input>
@@ -1747,14 +1707,16 @@ class HotelUpdater extends React.Component {
                   <span>
                     Stradă
                   </span>
-                  <input id='--settings-strada'
+                  <input
+                    maxLength={64}
+                    id='--settings-strada'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valueStradaClass}
                     disabled={!this.state.editStrada}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextStrada}
                     ref={this.stradaInput}>
                   </input>
@@ -1787,7 +1749,9 @@ class HotelUpdater extends React.Component {
                   <span>
                     Număr
                   </span>
-                  <input id='--settings-numar'
+                  <input
+                    maxLength={10}
+                    id='--settings-numar'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
@@ -1827,7 +1791,9 @@ class HotelUpdater extends React.Component {
                   <span>
                     Cod poștal
                   </span>
-                  <input id='--settings-codPostal'
+                  <input
+                    maxLength={10}
+                    id='--settings-codPostal'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
@@ -1867,7 +1833,9 @@ class HotelUpdater extends React.Component {
                   <span>
                     Telefon
                   </span>
-                  <input id='--settings-telefon'
+                  <input
+                    maxLength={10}
+                    id='--settings-telefon'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
@@ -1907,7 +1875,9 @@ class HotelUpdater extends React.Component {
                   <span>
                     Fax
                   </span>
-                  <input id='--settings-fax'
+                  <input
+                    maxLength={10}
+                    id='--settings-fax'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
@@ -1947,14 +1917,16 @@ class HotelUpdater extends React.Component {
                   <span>
                     Email
                   </span>
-                  <input id='--settings-email'
+                  <input
+                    maxLength={64}
+                    id='--settings-email'
                     autoComplete='off'
                     autoCorrect='off'
                     spellCheck={false}
                     className={this.state.valueEmailClass}
                     disabled={!this.state.editEmail}
                     onInput={this.onValueInput}
-                    onKeyDown={this.onGenericKeyDown}
+                    onKeyDown={this.onKeyDown}
                     value={this.state.nextEmail}
                     ref={this.emailInput}>
                   </input>

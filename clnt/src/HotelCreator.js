@@ -12,10 +12,6 @@ class HotelCreator extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.onKeyDown = this.onKeyDown.bind(this);
-
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
     this.onSelect = this.onSelect.bind(this);
 
     this.state = {
@@ -171,46 +167,6 @@ class HotelCreator extends React.Component {
         }
       });
     }
-  }
-
-  // numeric input only
-  onKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-    
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-        !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    if (e && e.target.value.length > 9) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 &&
-        !(charCode >= 37 && charCode <= 40))  {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  // input max length: 64
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (e && e.target.value.length > 63) {
-      if(charCode !== 8 && charCode !== 9 && charCode !== 13 &&
-          charCode !== 17 && charCode !== 46 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
-    return true;
   }
 
   onSelect(e, optional) {
@@ -611,13 +567,14 @@ class HotelCreator extends React.Component {
                       <div className='--hotel-item'>
                         <div className='--hotel-input'>
                           <span>Nume<span className='bold red'> *</span></span>
-                            <input id='--settings-nume'
+                            <input
+                              maxLength={64}
+                              id='--settings-nume'
                               autoComplete='off'
                               autoCorrect='off'
                               spellCheck={false}
                               className='--settings-value --value-editing--adm -inline'
                               onInput={this.onValueInput}
-                              onKeyDown={this.onGenericKeyDown}
                               placeholder='Introdu numele'
                               autoFocus={true}>
                             </input>
@@ -692,13 +649,14 @@ class HotelCreator extends React.Component {
                       <div className='--hotel-item'>
                         <div className='--hotel-input'>
                           <span>Localitate<span className='bold red'> *</span></span>
-                          <input id='--settings-localitate'
+                          <input
+                            maxLength={64}
+                            id='--settings-localitate'
                             autoComplete='off'
                             autoCorrect='off'
                             spellCheck={false}
                             className='--settings-value --value-editing--adm -inline'
                             onInput={this.onValueInput}
-                            onKeyDown={this.onGenericKeyDown}
                             placeholder='Introdu localitatea'
                             ref={this.localitateInput}>
                           </input>
@@ -732,7 +690,9 @@ class HotelCreator extends React.Component {
                       <div className='--hotel-item'>
                         <div className='--hotel-input'>
                           <span>Stradă<span className='bold red'> *</span></span>
-                          <input id='--settings-strada'
+                          <input
+                            maxLength={64}
+                            id='--settings-strada'
                             autoComplete='off'
                             autoCorrect='off'
                             spellCheck={false}
@@ -771,13 +731,14 @@ class HotelCreator extends React.Component {
                     <div className='--hotel-item'>
                       <div className='--hotel-input'>
                         <span>Număr<span className='bold red'> *</span></span>
-                        <input id='--settings-numar'
+                        <input
+                          maxLength={10}
+                          id='--settings-numar'
                           autoComplete='off'
                           autoCorrect='off'
                           spellCheck={false}
                           className='--settings-value --value-editing--adm -inline'
                           onInput={this.onValueInput}
-                          onKeyDown={this.onKeyDown}
                           placeholder='Introdu numărul străzii'>
                         </input>
                       </div>
@@ -810,13 +771,14 @@ class HotelCreator extends React.Component {
                     <div className='--hotel-item'>
                       <div className='--hotel-input'>
                         <span>Telefon<span className='bold red'> *</span></span>
-                        <input id='--settings-telefon'
+                        <input
+                          maxLength={10}
+                          id='--settings-telefon'
                           autoComplete='off'
                           autoCorrect='off'
                           spellCheck={false}
                           className='--settings-value --value-editing--adm -inline'
                           onInput={this.onValueInput}
-                          onKeyDown={this.onKeyDown}
                           placeholder='Introdu numărul de telefon'>
                         </input>
                       </div>
@@ -862,13 +824,14 @@ class HotelCreator extends React.Component {
                         <span>
                           Cod poștal
                         </span>
-                        <input id='--settings-cod-postal'
+                        <input
+                          maxLength={10}
+                          id='--settings-cod-postal'
                           autoComplete='off'
                           autoCorrect='off'
                           spellCheck={false}
                           className='--settings-value --value-editing--adm -inline'
                           onInput={this.onValueInput}
-                          onKeyDown={this.onKeyDown}
                           placeholder='Introdu codul poștal'>
                         </input>
                       </div>
@@ -891,13 +854,14 @@ class HotelCreator extends React.Component {
                         <span>
                           Fax
                         </span>
-                        <input id='--settings-fax'
+                        <input
+                          maxLength={10}
+                          id='--settings-fax'
                           autoComplete='off'
                           autoCorrect='off'
                           spellCheck={false}
                           className='--settings-value --value-editing--adm -inline'
                           onInput={this.onValueInput}
-                          onKeyDown={this.onKeyDown}
                           placeholder='Introdu numărul de fax'>
                         </input>
                       </div>
@@ -920,13 +884,14 @@ class HotelCreator extends React.Component {
                       <span>
                         Email
                       </span>
-                      <input id='--settings-email'
+                      <input
+                        maxLength={64}
+                        id='--settings-email'
                         autoComplete='off'
                         autoCorrect='off'
                         spellCheck={false}
                         className='--settings-value --value-editing--adm -inline'
                         onInput={this.onValueInput}
-                        onKeyDown={this.onGenericKeyDown}
                         placeholder='Introdu adresa de email'>
                       </input>
                     </div>
@@ -953,9 +918,7 @@ class HotelCreator extends React.Component {
             </Tippy>
             <Spinner
               className='--hotel-loading'
-              width='50px'
-              height='50px'
-              status='altLoading'
+              status='loading'
               visibility={this.state.fetching}/>
           </div>
           </form>

@@ -153,7 +153,6 @@ class CategorieConfort extends React.Component {
               onInput={this.onInput}
               onKeyDown={this.onKeyDown}
               value={this.props.value}
-              //defaultValue={this.state.nextValue}
               onFocus={this.focus}
               onBlur={this.blur}
               ref={this.input}>

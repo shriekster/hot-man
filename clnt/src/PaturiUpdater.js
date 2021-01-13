@@ -9,8 +9,6 @@ class PaturiUpdater extends React.Component {
 
     this.onKeyDown = this.onKeyDown.bind(this);
 
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
     this.add = this.add.bind(this);
 
     this.edit = this.edit.bind(this);
@@ -25,10 +23,12 @@ class PaturiUpdater extends React.Component {
 
     this.generateKey = this.generateKey.bind(this);
 
+    this.setFocusState = this.setFocusState.bind(this);
+
     this.state = {
       backup: [],
 
-      categoriiConfort: [],
+      categoriiSpatii: [],
 
       creating: false,
     };
@@ -63,25 +63,6 @@ class PaturiUpdater extends React.Component {
     return true;
   }
 
-  // input max length: 64
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (27 === charCode) {console.log(e.target)
-      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
-    } 
-
-    if (e && e.target.value.length > 64) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
-    return true;
-  }
-
   add() {
 
     this.setState({
@@ -92,34 +73,48 @@ class PaturiUpdater extends React.Component {
 
       if (this.state.creating) {
 
-        let categorii = this.state.categoriiConfort;
+        let categorii = this.state.categoriiSpatii;
         let backup = this.state.backup;
 
         let newItem = {
 
-          index: this.state.backup.length, //??
+          index: categorii.length, //??
 
           Denumire: '',
+          Detalii: '',
           showWarning: false,
           showError: false,
 
           isFresh: true,
           isEditing: true,
 
+          inputIsFocused: true,
+          textareaIsFocused: false,
+          inputCaretPosition: 0,
+          textareaCaretPosition: 0,
+
           isFetching: false,
         };
 
+        let newBackupItem = {
 
-        if (0 === categorii.length) {
+          index: backup.length, //??
+
+          Denumire: '',
+          Detalii: '',
+        };
+
+
+        if (0 === categorii.length && 0 === backup.length) {
 
           categorii.push(newItem);
-          backup.push('');
+          backup.push(newBackupItem);
         }
 
         else {
 
           let last = categorii[categorii.length - 1].Denumire;
-          let backupLast = backup[backup.length - 1];
+          let backupLast = backup[backup.length - 1].Denumire;
 
           if (last && backupLast) {
             /** 'Reset' every other item's state when a new item is being added */
@@ -131,16 +126,20 @@ class PaturiUpdater extends React.Component {
               item.isEditing = false;
               item.isFetching = false;
 
+              item.inputIsFocused = false;
+              item.textareaIsFocused = false;
+              item.inputCaretPosition = item.Denumire.length;
+              item.textareaCaretPosition = item.Detalii.length;
             });
 
             categorii.push(newItem);
-            backup.push('');
+            backup.push(newBackupItem);
           }
         }
 
         this.setState({
           backup: backup,
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
         });
       }
     });
@@ -148,7 +147,7 @@ class PaturiUpdater extends React.Component {
 
   edit(index) {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
     let backup = this.state.backup;
 
     if (index >= 0 && index < categorii.length) {
@@ -174,7 +173,8 @@ class PaturiUpdater extends React.Component {
 
           } else {
 
-            categorii[i].Denumire = backup[i];
+            categorii[i].Denumire = backup[i].Denumire;
+            categorii[i].Detalii = backup[i].Detalii;
 
             categorii[i].showWarning = false;
             categorii[i].showError = false
@@ -188,28 +188,48 @@ class PaturiUpdater extends React.Component {
 
       this.setState({
         backup: backup,
-        categoriiConfort: categorii,
+        categoriiSpatii: categorii,
 
         creating: true, /** Block the creation of a new item while editing */
       });
     }
   }
 
-  input(index, newValue) {
+  input(index, type, newValue, caretPosition) {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
 
-    if (index >= 0 && index < categorii.length ) {
+    switch (type) {
 
-      categorii[index].Denumire = newValue;
+      case 'denumire': {
 
-      /** Hide the error or warning tippy */
-      categorii[index].showWarning = false;
-      categorii[index].showError = false;
+        if (index >= 0 && index < categorii.length ) {
+
+          categorii[index].Denumire = newValue;
+          categorii[index].inputCaretPosition = caretPosition;
+    
+          /** Hide the error or warning tippy */
+          categorii[index].showWarning = false;
+          categorii[index].showError = false;
+        }
+
+        break;
+      }
+
+      case 'detalii': {
+
+        if (index >= 0 && index < categorii.length ) {
+
+          categorii[index].Detalii = newValue;
+          categorii[index].textareaCaretPosition = caretPosition;
+        }
+
+        break;
+      }
     }
     
     this.setState({
-      categoriiConfort: categorii,
+      categoriiSpatii: categorii,
     });
   }
 
@@ -217,7 +237,7 @@ class PaturiUpdater extends React.Component {
 
     let body;
     let backup = this.state.backup;
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
 
     if (index >= 0 && index < categorii.length) {
 
@@ -231,14 +251,15 @@ class PaturiUpdater extends React.Component {
         categorii[index].isFetching = false;
 
         this.setState({
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
         });
       }
 
       else 
       
       /** The input value is the same as before being edited */
-      if (categorii[index].Denumire === backup[index]) {
+      if (categorii[index].Denumire === backup[index].Denumire &&
+          categorii[index].Detalii === backup[index].Detalii) {
 
         categorii[index].showWarning = false;
         categorii[index].showError = false;
@@ -246,29 +267,38 @@ class PaturiUpdater extends React.Component {
         categorii[index].isEditing = false;
         categorii[index].isFetching = false;
 
+        categorii[index].inputIsFocused = true;
+        categorii[index].textareaIsFocused = false;
+        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
+
         this.setState({
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
         })
       }
 
-      /** A new, non-empty value is to be saved */
       else {
-
+        /** A new, non-empty value is to be saved */
         if (categorii[index].isFresh) {
 
           body = {
             token: this.props.token,
             task: 'create',
             value: categorii[index].Denumire.trim(),
+            details: categorii[index].Detalii.trim(),
           };
     
         } else {
     
+          let newDetails = ('' === categorii[index].Detalii || undefined === categorii[index].Detalii) ? '' : categorii[index].Detalii.trim();
+
           body = {
             token: this.props.token,
             task: 'update',
-            oldValue: backup[index],
+            oldValue: backup[index].Denumire,
             newValue: categorii[index].Denumire.trim(),
+            oldDetails: backup[index].Detalii,
+            newDetails: newDetails,
           };
         }
       
@@ -279,7 +309,7 @@ class PaturiUpdater extends React.Component {
           body: JSON.stringify(body),
         };
     
-        fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+        fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
         .then(response => response.json())
         .then(updated => {
           
@@ -289,34 +319,22 @@ class PaturiUpdater extends React.Component {
   
               case 'valid': {
   
-                backup[index] = categorii[index].Denumire.trim();
+                backup[index].Denumire = categorii[index].Denumire.trim();
+                backup[index].Detalii = categorii[index].Detalii.trim();
   
                 categorii[index].showWarning = false;
                 categorii[index].showError = false;
                 categorii[index].isFresh = false;
                 categorii[index].isEditing = false;
                 categorii[index].isFetching = false;
-  
-                let sorted = categorii.sort(function compare(a, b) {
-                  return a.Denumire - b.Denumire;
-                });
-  
-                /** Rewrite the indexes so that they are also sorted */
-                let _index = 0;
-  
-                sorted.forEach(item => {
-  
-                  item.index = _index++;
-  
-                });
-  
-                let sortedBackup = backup.sort(function compare(a, b) {
-                  return a - b;
-                });
+                categorii[index].inputIsFocused = true;
+                categorii[index].textareaIsFocused = false;
+                categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+                categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
   
                 this.setState({
-                  backup: sortedBackup,
-                  categoriiConfort: sorted,
+                  backup: backup,
+                  categoriiSpatii: categorii,
                   creating: false,
                 });
   
@@ -335,7 +353,7 @@ class PaturiUpdater extends React.Component {
                 categorii[index].isFetching = false;
   
                 this.setState({
-                  categoriiConfort: categorii,
+                  categoriiSpatii: categorii,
                 });
   
                 break;
@@ -356,14 +374,14 @@ class PaturiUpdater extends React.Component {
 
   delete(index) {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
     let backup = this.state.backup;
    
     let toDelete = '';
 
     if (index >= 0 && index < categorii.length) {
 
-      toDelete = backup[index];
+      toDelete = backup[index].Denumire;
 
     }
 
@@ -378,7 +396,7 @@ class PaturiUpdater extends React.Component {
       }),
     };
 
-    fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+    fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
     .then(response => response.json())
     .then(updated => {
 
@@ -387,7 +405,7 @@ class PaturiUpdater extends React.Component {
         categorii.splice(index, 1);
         backup.splice(index, 1);
 
-        /** Rewrite the indexes so that they are also sorted */
+        /** Rewrite the indexes so that they are in 'order' */
         let _index = 0;
 
         categorii.forEach(item => {
@@ -398,7 +416,7 @@ class PaturiUpdater extends React.Component {
 
         this.setState({
           backup: backup,
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
 
           creating: false,
         })
@@ -407,7 +425,7 @@ class PaturiUpdater extends React.Component {
 
       else {
 
-        let categorii = this.state.categoriiConfort;
+        let categorii = this.state.categoriiSpatii;
 
         categorii.forEach(item => {
           
@@ -420,7 +438,7 @@ class PaturiUpdater extends React.Component {
         });
 
         this.setState({
-          categoriiConfort: categorii,
+          categoriiSpatii: categorii,
           creating: false,
         });
       }
@@ -428,14 +446,14 @@ class PaturiUpdater extends React.Component {
   }
 
   cancel(index) {
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
     let backup = this.state.backup;
 
     if (index >= 0 && index < categorii.length) {
       
       /** The user clicked cancel on a newly created item */
       if (categorii[index].isFresh &&
-          '' === backup[index]) {
+          '' === backup[index].Denumire) {
         
         categorii.pop();
         backup.pop();
@@ -444,20 +462,26 @@ class PaturiUpdater extends React.Component {
       /** The user clicked cancel on an existing item */
       else {
         
-        categorii[index].Denumire = backup[index];
+        categorii[index].Denumire = backup[index].Denumire;
+        categorii[index].Detalii = backup[index].Detalii;
 
         categorii[index].showWarning = false;
         categorii[index].showError = false;
         categorii[index].isFresh = false;
         categorii[index].isEditing = false;
         categorii[index].isFetching = false;
+
+        categorii[index].inputIsFocused = true;
+        categorii[index].textareaIsFocused = false;
+        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
       }
     }
     
 
     this.setState({
       backup: backup,
-      categoriiConfort: categorii,
+      categoriiSpatii: categorii,
 
       creating: false,
     });
@@ -467,8 +491,64 @@ class PaturiUpdater extends React.Component {
     return Math.floor(new Date().getTime() * Math.random());
   }
 
+  setFocusState(index, type, state, caretPosition) {
+
+    let categorii = this.state.categoriiSpatii;
+
+    if (index >= 0 && index <= categorii.length) {
+
+      switch (type) {
+
+        case 'input': {
+
+          if (state) {
+
+            categorii[index].inputIsFocused = true;
+            categorii[index].inputCaretPosition = caretPosition;
+
+            categorii[index].textareaIsFocused = false;
+            categorii[index].textareaCaretPosition = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;
+
+          } else {
+
+            categorii[index].inputIsFocused = false;
+            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+
+          }
+
+          break;
+        }
+
+        case 'textarea': {
+
+          if (state) {
+
+            categorii[index].inputIsFocused = false;
+            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+
+            categorii[index].textareaIsFocused = true;
+            categorii[index].textareaCaretPosition = caretPosition;
+
+          } else {
+
+            categorii[index].textareaIsFocused = false;
+            categorii[index].textareaCaretPosition = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;
+            
+          }
+
+          break;
+        }
+
+      }
+
+      this.setState({
+        categoriiSpatii: categorii,
+      });
+    }
+  }
+
   componentDidMount() {
-    /** 'descarc' categoriile de confort */
+    /** 'descarc' categoriile de spatii */
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -479,27 +559,24 @@ class PaturiUpdater extends React.Component {
       })
     };
 
-    fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+    fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
     .then(response => response.json())
     .then(categorii => {
 
       if ('error' === categorii.status) {
-        console.log('Eroare - categorii confort')
+        console.log('Eroare - categorii spatii')
       } 
       
       else 
       
       if ('valid' === categorii.status) {
 
-        let sorted = categorii.categoriiConfort.sort(function compare(a, b) {
-          return a.Denumire - b.Denumire;
-        });
-
-       let sortedBackup = [];
+        let cats = categorii.categoriiSpatii;
 
        let length = 0;
+       let backup = [];
 
-        sorted.forEach(item => {
+        cats.forEach( item => {
 
           item.index = length++;
 
@@ -510,13 +587,23 @@ class PaturiUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
-          sortedBackup.push(item.Denumire);
+          item.inputIsFocused = true;
+          item.textareaIsFocused = false;
+          item.inputCaretPosition = item.Denumire.length;
+          item.textareaCaretPosition = !item.Detalii ? 0 : item.Detalii.length;
+
+          let backupItem = {
+            Denumire: item.Denumire, 
+            Detalii: item.Detalii,
+          };
+
+          backup.push(backupItem);
 
         });
 
         this.setState({
-          backup: sortedBackup,
-          categoriiConfort: sorted,
+          backup: backup,
+          categoriiSpatii: cats,
         });
 
       } 
@@ -529,12 +616,11 @@ class PaturiUpdater extends React.Component {
     });
   }
 
-  componentDidUpdate (prevProps, prevState) {
-  }
+  componentDidUpdate (prevProps, prevState) {}
 
   render() {
 
-    let categorii = this.state.categoriiConfort;
+    let categorii = this.state.categoriiSpatii;
 
     const categories = categorii.map(
       (categorie) =>
@@ -544,6 +630,7 @@ class PaturiUpdater extends React.Component {
 
         key={this.generateKey()}
         value={categorie.Denumire}
+        details={categorie.Detalii}
 
         add={this.add}
         edit={this.edit}
@@ -551,6 +638,12 @@ class PaturiUpdater extends React.Component {
         save={this.save}
         cancel={this.cancel}
         delete={this.delete}
+
+        focus={this.setFocusState}
+        inputIsFocused={categorie.inputIsFocused}
+        textareaIsFocused={categorie.textareaIsFocused}
+        inputCaretPosition={categorie.inputCaretPosition}
+        textareaCaretPosition={categorie.textareaCaretPosition}
 
         showWarning={undefined === categorie.showWarning || false === categorie.showWarning ? false : true}
         showError={undefined === categorie.showError || false === categorie.showError ? false : true}
@@ -576,7 +669,7 @@ class PaturiUpdater extends React.Component {
             <Tippy
               content={
                 <>
-                  Introdu denumirea categoriei de confort
+                  Introdu denumirea categoriei de spațiu
                 </>
               }
               allowHTML={true}
@@ -590,7 +683,7 @@ class PaturiUpdater extends React.Component {
             <Tippy
               content={
                 <>
-                  Adaugă o categorie de confort
+                  Adaugă o categorie de spațiu
                 </>
               }
               allowHTML={true}
