@@ -39,8 +39,9 @@ class CategorieConfort extends React.Component {
   onGenericKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 
+    // Escape key was pressed
     if (27 === charCode) {
-      this.cancel();
+      this.props.cancel(this.props.index);
     }
 
     else
@@ -57,7 +58,7 @@ class CategorieConfort extends React.Component {
   }
 
   onInput(e) {
-   this.props.input(this.props.index, e.target.value);
+   this.props.input(this.props.index, e.target.value, e.target.selectionStart); //??
   }
 
   focus() {
@@ -110,8 +111,8 @@ class CategorieConfort extends React.Component {
   componentDidMount() {
     if (this.props.isEditing) {
       this.input.current.focus();
-      //this.input.selectionStart = this.props.caretPosition;
-      //this.input.selectionEnd = this.props.caretPosition;
+      this.input.current.selectionStart = this.props.caretPosition; //??
+      this.input.current.selectionEnd = this.props.caretPosition; //??
     }
   }
 

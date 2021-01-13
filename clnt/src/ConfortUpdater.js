@@ -7,10 +7,6 @@ class ConfortUpdater extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onKeyDown = this.onKeyDown.bind(this);
-
-    this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
-
     this.add = this.add.bind(this);
 
     this.edit = this.edit.bind(this);
@@ -32,54 +28,6 @@ class ConfortUpdater extends React.Component {
 
       creating: false,
     };
-  }
-
-  // numeric input only
-  onKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (27 === charCode) {
-      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
-    }
-    
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-        !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    if (e && e.target.value.length > 13) {
-      if(charCode !== 8 && charCode !== 9 && 
-        charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-        !(charCode >= 37 && charCode <= 40))  {
-        e.preventDefault();
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  // input max length: 64
-  onGenericKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (27 === charCode) {console.log(e.target)
-      this.onViewSettingsClick({target: {id: 'view-user-settings'}})
-    } 
-
-    if (e && e.target.value.length > 64) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
-    return true;
   }
 
   add() {
@@ -107,6 +55,8 @@ class ConfortUpdater extends React.Component {
           isEditing: true,
 
           isFetching: false,
+
+          caretPosition: 0,
         };
 
 
@@ -130,6 +80,8 @@ class ConfortUpdater extends React.Component {
               item.isFresh = false;
               item.isEditing = false;
               item.isFetching = false;
+
+              item.caretPosition = item.Denumire.length;
 
             });
 
@@ -195,13 +147,14 @@ class ConfortUpdater extends React.Component {
     }
   }
 
-  input(index, newValue) {
+  input(index, newValue, caretPosition) {
 
     let categorii = this.state.categoriiConfort;
 
     if (index >= 0 && index < categorii.length ) {
 
       categorii[index].Denumire = newValue;
+      categorii[index].caretPosition = caretPosition;//??
 
       /** Hide the error or warning tippy */
       categorii[index].showWarning = false;
@@ -245,6 +198,8 @@ class ConfortUpdater extends React.Component {
         categorii[index].isFresh = false;
         categorii[index].isEditing = false;
         categorii[index].isFetching = false;
+
+        categorii[index].caretPosition = categorii[index].Denumire.length;
 
         this.setState({
           categoriiConfort: categorii,
@@ -296,6 +251,8 @@ class ConfortUpdater extends React.Component {
                 categorii[index].isFresh = false;
                 categorii[index].isEditing = false;
                 categorii[index].isFetching = false;
+
+                categorii[index].caretPosition = categorii[index].Denumire.length;
   
                 let sorted = categorii.sort(function compare(a, b) {
                   return a.Denumire - b.Denumire;
@@ -451,6 +408,8 @@ class ConfortUpdater extends React.Component {
         categorii[index].isFresh = false;
         categorii[index].isEditing = false;
         categorii[index].isFetching = false;
+
+        categorii[index].caretPosition = categorii[index].Denumire.length;
       }
     }
     
@@ -510,7 +469,7 @@ class ConfortUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
-          item.caretPosition = item.Denumire.length - 1; //??
+          item.caretPosition = item.Denumire.length; //??
 
           sortedBackup.push(item.Denumire);
 
@@ -561,7 +520,7 @@ class ConfortUpdater extends React.Component {
         isEditing={undefined === categorie.isEditing || false === categorie.isEditing ? false : true}
         isFetching={undefined === categorie.isFetching || false === categorie.isFetching ? false : true}
 
-        caretPosition={categorie.caretPosition}
+        caretPosition={undefined === categorie.caretPosition || categorie.caretPosition < 0 ? 0 : categorie.caretPosition} //??
       />
     );
 
