@@ -575,12 +575,14 @@ class Signup extends React.Component {
       {
         this.state.toLogin &&
         <div className='Form'>
-          <div className='Form-field Form-text centered-text bold staticPulse'>
-              Contul tău a fost creat, 
-              <span className='blue'> {this.state.user}</span>!
-              <div onClick={() => this.props.onChange('Login')} className='Form-hint bold'>
-                Conectează-te
-              </div>
+          <div className='Form-field Form-text centered-text bold -signed-up-container'>
+            <div className='-signed-up-content'>
+              <i className='far fa-check-circle -signed-up-icon'></i>
+              <span>Contul tău a fost creat,<span className='blue'> {this.state.user}</span>!</span> 
+            </div>
+            <button onClick={() => this.props.onChange('Login')} className='Form-hint bold -signed-up-btn'>
+              Conectează-te
+            </button>
           </div>
         </div>
       }

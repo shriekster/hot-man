@@ -2263,3 +2263,49 @@ textarea.--detalii-text:focus {
   height: 80px;
   width: 80px;
 }
+
+.-signed-up-container {
+  border: 1px solid #25AAA9;
+  background-color: rgba(37, 170, 169, .25);
+  border-radius: 16px;
+  width: fit-content;
+  padding: 8px;
+  color: darkslategray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 150px;
+  cursor: default;
+}
+
+.-signed-up-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100px;
+}
+
+.-signed-up-icon {
+  font-size: 36px;
+}
+
+.-signed-up-btn {
+  border: 1px outset #25AAA9;
+  background-color: rgba(37, 170, 169, .8);
+  color: darkslategray;
+  border-radius: 8px;
+  width: fit-content;
+  padding: 4px;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.-signed-up-btn:hover {
+  color: darkgreen;
+}
+
+.-signed-up-btn:active {
+  border: 1px inset #25AAA9;
+}
