@@ -8,11 +8,19 @@ class CategorieSpatiu extends React.Component {
 
     this.onGenericKeyDown = this.onGenericKeyDown.bind(this);
 
+    this.onTextKeyDown = this.onTextKeyDown.bind(this);
+
     this.onInput = this.onInput.bind(this);
+
+    this.onText = this.onText.bind(this);
 
     this.focus = this.focus.bind(this);
 
+    this.textFocus = this.textFocus.bind(this);
+
     this.blur = this.blur.bind(this);
+
+    this.textBlur = this.textBlur.bind(this);
 
     this.submit = this.submit.bind(this);
 
@@ -25,11 +33,9 @@ class CategorieSpatiu extends React.Component {
     this.onDeleteMouseOver = this.onDeleteMouseOver.bind(this);
 
     this.input = React.createRef();
-    this.detaliiTextArea = React.createRef();
+    this.textArea = React.createRef();
 
     this.state = {
-      hasFocus: false,
-
       editingHint: '',
       hintVisible: false,
       hintOffsetY: 0,
@@ -57,20 +63,49 @@ class CategorieSpatiu extends React.Component {
     return true;
   }
 
+  // input max length: 64
+  onTextKeyDown(e) {
+    let charCode = (e.which) ? e.which : e.keyCode;
+
+    if (27 === charCode) {
+      this.cancel();
+    }
+
+    else
+
+    if (e && e.target.value.length > 63) {
+      if(charCode !== 8 && charCode !== 9 && 
+          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
+          !(charCode >= 37 && charCode <= 40)) {
+        e.preventDefault();
+        return false;
+      } 
+    } 
+    return true;
+  }
+
   onInput(e) {
-   this.props.input(this.props.index, e.target.value);
+   this.props.input(this.props.index, e.target.value, 'denumire');
+  }
+
+  onText(e) {
+    this.props.input(this.props.index, e.target.value, 'detalii');
   }
 
   focus() {
-    this.setState({
-      hasFocus: true,
-    });
+    this.props.focus(this.props.index, 'input', true);
+  }
+
+  textFocus() {
+    this.props.focus(this.props.index, 'textarea', true);
   }
 
   blur(e) {
-    this.setState({
-      hasFocus: false,
-    });
+    this.props.focus(this.props.index, 'input', false);
+  }
+
+  textBlur(e) {
+    this.props.focus(this.props.index, 'textarea', false);
   }
 
   submit(e) {
@@ -133,8 +168,20 @@ class CategorieSpatiu extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props)
     if (this.props.isEditing) {
-      this.input.current.focus();
+      
+      if (this.props.inputIsFocused) {
+        this.input.current.focus();
+        console.log('INPUT FOCUS')
+      }
+
+      else
+
+      if (this.props.textareaIsFocused) {
+        this.textArea.current.focus();
+      }
+
     }
   }
 
@@ -204,12 +251,12 @@ class CategorieSpatiu extends React.Component {
             autoCorrect='off'
             spellCheck={false}
             className='--detalii-text'
-            //onInput={this.onInput}
-            //onKeyDown={this.onGenericKeyDown}
+            onInput={this.onText}
+            onKeyDown={this.onTextKeyDown}
             value={this.props.details}
-            //onFocus={this.focus}
-            //onBlur={this.blur}
-            ref={this.detaliiTextArea}>
+            onFocus={this.textFocus}
+            onBlur={this.textBlur}
+            ref={this.textArea}>
           </textarea>
       </div>
       </form>

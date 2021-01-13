@@ -460,11 +460,12 @@ function deleteConfort(value) {
 
 /** Spatii data manipulation - C R U D  */
 
-function createSpatiu(value) {
-  const create = db.prepare(`INSERT INTO CategoriiConfort (ID, Denumire)
-                          VALUES (?, ?)`);
+function createSpatiu(value, details) {
 
-  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+  const create = db.prepare(`INSERT INTO CategoriiSpatii (ID, Denumire, Detalii)
+                          VALUES (?, ?, ?)`);
+
+  const check = db.prepare(`SELECT Denumire FROM CategoriiSpatii
                           WHERE Denumire = ?`);
 
   if (value) {
@@ -478,7 +479,7 @@ function createSpatiu(value) {
 
     else 
 
-    if (!isValidStreetNo(value)) {
+    if (!value) {
 
       return 'invalid';
     }
@@ -488,7 +489,7 @@ function createSpatiu(value) {
 
       try {
 
-        const info = create.run(null, value);
+        const info = create.run(null, value, details);
 
       } catch (err) {
 
@@ -506,27 +507,30 @@ function createSpatiu(value) {
   }
 }
 
-function updateSpatiu(oldValue, newValue) {
-  const update = db.prepare(`UPDATE CategoriiConfort 
-                            SET Denumire = ?
+function updateSpatiu(oldValue, newValue, oldDetails, newDetails) {
+
+  const update = db.prepare(`UPDATE CategoriiSpatii 
+                            SET Denumire = ?,
+                                Detalii = ?
                             WHERE Denumire = ?`);
 
-  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+  const check = db.prepare(`SELECT Denumire FROM CategoriiSpatii
                           WHERE Denumire = ?`);
 
   if (oldValue && newValue) {
 
     const exists = check.get(newValue);
 
+    /*
     if (exists && exists.Denumire) {
 
       return 'duplicate';
 
     } 
-
+    
     else 
-
-    if (!isValidStreetNo(newValue)) {
+    */
+    if (!newValue) {
 
       return 'invalid';
 
@@ -538,7 +542,7 @@ function updateSpatiu(oldValue, newValue) {
 
       try {
 
-        const info = update.run(newValue, oldValue);
+        const info = update.run(newValue, newDetails, oldValue);
 
       } catch (err) {
 
@@ -557,7 +561,8 @@ function updateSpatiu(oldValue, newValue) {
 }
 
 function deleteSpatiu(value) {
-  const _delete = db.prepare(`DELETE FROM CategoriiConfort
+
+  const _delete = db.prepare(`DELETE FROM CategoriiSpatii
                           WHERE Denumire = ?`);
 
   if (value) {
@@ -1130,7 +1135,9 @@ router.post('/:attribute', authorization, function(req, res) {
               case 'create': {
                 if (req.body && (undefined !== req.body.value)) {
 
-                  status = createConfort(req.body.value);
+                  let details = req.body.details;
+
+                  status = createSpatiu(req.body.value, details);
 
                   return res.json({
                     status: status,
@@ -1178,7 +1185,10 @@ router.post('/:attribute', authorization, function(req, res) {
 
               case 'update': {
                 if (req.body && undefined !== req.body.oldValue && undefined !== req.body.newValue) {
-                  status = updateConfort(req.body.oldValue, req.body.newValue);
+
+                  let newDetails = req.body.newDetails;
+
+                  status = updateSpatiu(req.body.oldValue, req.body.newValue, req.body.oldDetails, newDetails);
 
                   return res.json({
                     status: status,
@@ -1190,7 +1200,8 @@ router.post('/:attribute', authorization, function(req, res) {
 
               case 'delete': {
                 if (req.body && undefined !== req.body.value) {
-                  status = deleteConfort(req.body.value);
+
+                  status = deleteSpatiu(req.body.value);
 
                   return res.json({
                     status: status,

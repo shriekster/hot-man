@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import Loading from './Loading';
+import Spinner from './Spinner';
 
 import './css/App.css';
 /*Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com */
@@ -79,7 +79,12 @@ class App extends React.Component {
     return (
       <div className={className}>
         <Suspense 
-          fallback={<Loading status='loading'/>}>
+          fallback={
+            <Spinner
+              className='-spinner'
+              status='loading' 
+              visibility={true}/>
+          }>
           <Component 
             onChange={this.onChange}
             token={this.state.token}

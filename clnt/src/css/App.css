@@ -231,7 +231,7 @@ span.legacy {
 }
 
 .-user-icon-signup {
-  font-size: 44px;
+  font-size: 30px;
 }
 
 .Form-hint-login {
@@ -248,7 +248,7 @@ span.legacy {
 }
 
 .-user-icon-login {
-  font-size: 44px;
+  font-size: 30px;
 }
 
 .icon-eye {
@@ -2241,4 +2241,10 @@ textarea.--detalii-text:focus {
   width: 45px;
   display: flex;
   justify-content: space-between;
+}
+
+.-spinner {
+  margin-left: 10vw;
+  height: 80px;
+  width: 80px;
 }

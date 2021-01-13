@@ -25,6 +25,8 @@ class SpatiiUpdater extends React.Component {
 
     this.generateKey = this.generateKey.bind(this);
 
+    this.setFocusState = this.setFocusState.bind(this);
+
     this.state = {
       backup: [],
 
@@ -205,17 +207,35 @@ class SpatiiUpdater extends React.Component {
     }
   }
 
-  input(index, newValue) {
+  input(index, newValue, type) {
 
     let categorii = this.state.categoriiSpatii;
 
-    if (index >= 0 && index < categorii.length ) {
+    switch (type) {
 
-      categorii[index].Denumire = newValue;
+      case 'denumire': {
 
-      /** Hide the error or warning tippy */
-      categorii[index].showWarning = false;
-      categorii[index].showError = false;
+        if (index >= 0 && index < categorii.length ) {
+
+          categorii[index].Denumire = newValue;
+    
+          /** Hide the error or warning tippy */
+          categorii[index].showWarning = false;
+          categorii[index].showError = false;
+        }
+
+        break;
+      }
+
+      case 'detalii': {
+
+        if (index >= 0 && index < categorii.length ) {
+
+          categorii[index].Detalii = newValue;
+        }
+
+        break;
+      }
     }
     
     this.setState({
@@ -248,7 +268,8 @@ class SpatiiUpdater extends React.Component {
       else 
       
       /** The input value is the same as before being edited */
-      if (categorii[index].Denumire === backup[index].Denumire) {
+      if (categorii[index].Denumire === backup[index].Denumire &&
+          categorii[index].Detalii === backup[index].Detalii) {
 
         categorii[index].showWarning = false;
         categorii[index].showError = false;
@@ -274,13 +295,15 @@ class SpatiiUpdater extends React.Component {
     
         } else {
     
+          let newDetails = ('' === categorii[index].Detalii || undefined === categorii[index].Detalii) ? '' : categorii[index].Detalii.trim();
+
           body = {
             token: this.props.token,
             task: 'update',
             oldValue: backup[index].Denumire,
             newValue: categorii[index].Denumire.trim(),
             oldDetails: backup[index].Detalii,
-            newDetails: categorii[index].Detalii.trim(),
+            newDetails: newDetails,
           };
         }
       
@@ -291,7 +314,7 @@ class SpatiiUpdater extends React.Component {
           body: JSON.stringify(body),
         };
     
-        fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+        fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
         .then(response => response.json())
         .then(updated => {
           
@@ -359,7 +382,7 @@ class SpatiiUpdater extends React.Component {
 
     if (index >= 0 && index < categorii.length) {
 
-      toDelete = backup[index];
+      toDelete = backup[index].Denumire;
 
     }
 
@@ -374,7 +397,7 @@ class SpatiiUpdater extends React.Component {
       }),
     };
 
-    fetch('http://localhost:3001/main/administrare/confort', requestOptions)
+    fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
     .then(response => response.json())
     .then(updated => {
 
@@ -383,7 +406,7 @@ class SpatiiUpdater extends React.Component {
         categorii.splice(index, 1);
         backup.splice(index, 1);
 
-        /** Rewrite the indexes so that they are also sorted */
+        /** Rewrite the indexes so that they are in 'order' */
         let _index = 0;
 
         categorii.forEach(item => {
@@ -464,6 +487,49 @@ class SpatiiUpdater extends React.Component {
     return Math.floor(new Date().getTime() * Math.random());
   }
 
+  setFocusState(index, type, state) {
+
+    let categorii = this.state.categoriiSpatii;
+
+    if (index >= 0 && index <= categorii.length) {
+
+      switch (type) {
+
+        case 'input': {
+
+          if (state) {
+            categorii[index].inputIsFocused = true;
+            categorii[index].textareaIsFocused = false;
+
+          } else {
+            categorii[index].inputIsFocused = false;
+          }
+
+          break;
+        }
+
+        case 'textarea': {
+
+          if (state) {
+
+            categorii[index].inputIsFocused = false;
+            categorii[index].textareaIsFocused = true;
+
+          } else {
+            categorii[index].textareaIsFocused = false;
+          }
+
+          break;
+        }
+
+      }
+
+      this.setState({
+        categoriiSpatii: categorii,
+      });
+    }
+  }
+
   componentDidMount() {
     /** 'descarc' categoriile de confort */
     const requestOptions = {
@@ -493,7 +559,7 @@ class SpatiiUpdater extends React.Component {
        let length = 0;
        let backup = [];
 
-        cats.forEach(item => {
+        cats.forEach( item => {
 
           item.index = length++;
 
@@ -504,7 +570,13 @@ class SpatiiUpdater extends React.Component {
           item.isEditing = false;
           item.isFetching = false;
 
-          let backupItem = Object.assign({}, item);
+          item.inputIsFocused = false;
+          item.textareaIsFocused = false;
+
+          let backupItem = {
+            Denumire: item.Denumire, 
+            Detalii: item.Detalii,
+          };
 
           backup.push(backupItem);
 
@@ -547,6 +619,10 @@ class SpatiiUpdater extends React.Component {
         save={this.save}
         cancel={this.cancel}
         delete={this.delete}
+
+        focus={this.setFocusState}
+        inputIsFocused={categorie.inputIsFocused}
+        textareaIsFocused={categorie.textareaIsFocused}
 
         showWarning={undefined === categorie.showWarning || false === categorie.showWarning ? false : true}
         showError={undefined === categorie.showError || false === categorie.showError ? false : true}
