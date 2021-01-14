@@ -277,18 +277,18 @@ class PaturiUpdater extends React.Component {
             token: this.props.token,
             task: 'create',
             value: categorii[index].Denumire.trim(),
-            number: categorii[index].NumarLocuri.trim(),
+            number: categorii[index].NumarLocuri.toString().trim(),
           };
     
         } else {
-    
+          
           body = {
             token: this.props.token,
             task: 'update',
             oldValue: backup[index].Denumire,
             newValue: categorii[index].Denumire.trim(),
             oldNumber: backup[index].NumarLocuri,
-            newNumber: categorii[index].NumarLocuri.trim(),
+            newNumber: categorii[index].NumarLocuri.toString().trim(),
           };
         }
       
@@ -310,7 +310,7 @@ class PaturiUpdater extends React.Component {
               case 'valid': {
   
                 backup[index].Denumire = categorii[index].Denumire.trim();
-                backup[index].NumarLocuri = categorii[index].NumarLocuri.trim();
+                backup[index].NumarLocuri = categorii[index].NumarLocuri.toString().trim();
   
                 categorii[index].showNameWarning = false;
                 categorii[index].showNameError = false;

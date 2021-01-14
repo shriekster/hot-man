@@ -27,7 +27,7 @@ class CategoriePat extends React.Component {
     this.onDeleteMouseOver = this.onDeleteMouseOver.bind(this);
 
     this.input = React.createRef();
-    this.textArea = React.createRef();
+    this.inputN = React.createRef();
 
     this.state = {
       editingHint: '',
@@ -136,9 +136,9 @@ class CategoriePat extends React.Component {
       else
 
       if (this.props.textareaIsFocused) {
-        this.textArea.current.focus();
-        this.textArea.current.selectionStart = this.props.textareaCaretPosition;
-        this.textArea.current.selectionEnd = this.props.textareaCaretPosition;
+        this.inputN.current.focus();
+        this.inputN.current.selectionStart = this.props.textareaCaretPosition;
+        this.inputN.current.selectionEnd = this.props.textareaCaretPosition;
       }
 
     }
@@ -241,7 +241,7 @@ class CategoriePat extends React.Component {
                 onKeyDown={this.onKeyDown}
                 value={this.props.number}
                 onClick={this.textFocus}
-                ref={this.textArea}>
+                ref={this.inputN}>
               </input>
             </Tippy>
           </Tippy>
