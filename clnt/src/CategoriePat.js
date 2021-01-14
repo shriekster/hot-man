@@ -45,7 +45,7 @@ class CategoriePat extends React.Component {
       this.props.cancel(this.props.index);
     }
 
-    return true;
+    //return true;
   }
 
   onInput(e) { 
@@ -64,7 +64,7 @@ class CategoriePat extends React.Component {
     this.props.focus(this.props.index, 'textarea', true, e.target.selectionStart);
   }
 
-  submit(e) {
+  submit(e) {console.log('submit')
     e.preventDefault();
     this.props.save(this.props.index);
   }
@@ -152,7 +152,9 @@ class CategoriePat extends React.Component {
     <>
     <div className='--pat-item'>
       <div className='--spatiu-inner'>
-      <form className='--pat-form'
+      <form
+        id='--pat-form' 
+        className='--pat-form'
         onSubmit={this.submit}>
         <div className='--pat-field'>
           <span>
