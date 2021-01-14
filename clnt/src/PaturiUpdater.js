@@ -225,8 +225,12 @@ class PaturiUpdater extends React.Component {
       /** Empty input value(s) on saving */
       if (!categorii[index].Denumire || !categorii[index].NumarLocuri) {
 
-        let nameWarning = (!categorii[index.Denumire]);
-        let numberWarning = (!categorii[index].NumarLocuri);
+        let nameWarning = false;
+        let numberWarning = false;
+
+        if (!categorii[index].Denumire) nameWarning = true;
+
+        if(!categorii[index].NumarLocuri) numberWarning = true;
 
         categorii[index].showNameWarning = nameWarning;
         categorii[index].showNameError = false;

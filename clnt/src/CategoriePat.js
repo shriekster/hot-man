@@ -243,7 +243,7 @@ class CategoriePat extends React.Component {
               </input>
             </Tippy>
           </Tippy>
-      </div>
+        </div>
       </form>
       {
         this.props.isEditing  ?
