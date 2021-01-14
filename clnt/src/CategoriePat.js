@@ -168,7 +168,7 @@ class CategoriePat extends React.Component {
           placement='right'
           arrow={false}
           theme='red-material-warning'
-          offset={[0, 10]}
+          offset={[0, 140]}
           visible={this.props.showNameWarning}>
           <Tippy
             content={
@@ -180,7 +180,7 @@ class CategoriePat extends React.Component {
             placement='right'
             arrow={false}
             theme='red-material-warning'
-            offset={[0, 10]}
+            offset={[0, 140]}
             visible={this.props.showNameError}>
             <input
               maxLength={64}
@@ -214,7 +214,7 @@ class CategoriePat extends React.Component {
             placement='right'
             arrow={false}
             theme='red-material-warning'
-            offset={[0, 10]}
+            offset={[0, 140]}
             visible={this.props.showNumberWarning}>
             <Tippy
               content={
@@ -226,7 +226,7 @@ class CategoriePat extends React.Component {
               placement='right'
               arrow={false}
               theme='red-material-warning'
-              offset={[0, 10]}
+              offset={[0, 140]}
               visible={this.props.showNumberError}>
               <input
                 maxLength={10}
