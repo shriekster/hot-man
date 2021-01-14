@@ -45,7 +45,7 @@ class CategoriePat extends React.Component {
       this.props.cancel(this.props.index);
     }
 
-    //return true;
+    return true;
   }
 
   onInput(e) { 

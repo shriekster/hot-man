@@ -44,18 +44,6 @@ class CategorieSpatiu extends React.Component {
     if (27 === charCode) {
       this.props.cancel(this.props.index);
     }
-    /*
-    else
-
-    if (e && e.target.value.length > 63) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
-    */
 
     return true;
   }
