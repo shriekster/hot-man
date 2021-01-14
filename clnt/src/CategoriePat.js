@@ -44,18 +44,6 @@ class CategoriePat extends React.Component {
     if (27 === charCode) {
       this.props.cancel(this.props.index);
     }
-    /*
-    else
-
-    if (e && e.target.value.length > 63) {
-      if(charCode !== 8 && charCode !== 9 && 
-          charCode !== 17 && charCode !== 46 && charCode !== 13 && 
-          !(charCode >= 37 && charCode <= 40)) {
-        e.preventDefault();
-        return false;
-      } 
-    } 
-    */
 
     return true;
   }
@@ -65,7 +53,7 @@ class CategoriePat extends React.Component {
   }
 
   onText(e) {
-    this.props.input(this.props.index, 'detalii', e.target.value, e.target.selectionStart);
+    this.props.input(this.props.index, 'locuri', e.target.value, e.target.selectionStart);
   }
 
   focus(e) {
@@ -181,7 +169,7 @@ class CategoriePat extends React.Component {
           arrow={false}
           theme='red-material-warning'
           offset={[0, 10]}
-          visible={this.props.showWarning}>
+          visible={this.props.showNameWarning}>
           <Tippy
             content={
               <>
@@ -193,7 +181,7 @@ class CategoriePat extends React.Component {
             arrow={false}
             theme='red-material-warning'
             offset={[0, 10]}
-            visible={this.props.showError}>
+            visible={this.props.showNameError}>
             <input
               maxLength={64}
               disabled={!this.props.isEditing}
@@ -216,19 +204,45 @@ class CategoriePat extends React.Component {
           <span>
             Număr de locuri
           </span>
-          <input
-            maxLength={10}
-            disabled={!this.props.isEditing}
-            type='text'
-            className='--pat-text'
-            autoComplete='off'
-            spellCheck={false}
-            onInput={this.onText}
-            onKeyDown={this.onKeyDown}
-            value={this.props.details}
-            onClick={this.textFocus}
-            ref={this.textArea}>
-          </input>
+          <Tippy
+            content={
+              <>
+                <span><i className='fas fa-exclamation-circle'></i> Introdu numărul de locuri</span>
+              </>
+            }
+            allowHTML={true}
+            placement='right'
+            arrow={false}
+            theme='red-material-warning'
+            offset={[0, 10]}
+            visible={this.props.showNumberWarning}>
+            <Tippy
+              content={
+                <>
+                  <span><i className='fas fa-minus-circle'></i> Număr invalid</span>
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              offset={[0, 10]}
+              visible={this.props.showNumberError}>
+              <input
+                maxLength={10}
+                disabled={!this.props.isEditing}
+                type='text'
+                className='--pat-text'
+                autoComplete='off'
+                spellCheck={false}
+                onInput={this.onText}
+                onKeyDown={this.onKeyDown}
+                value={this.props.number}
+                onClick={this.textFocus}
+                ref={this.textArea}>
+              </input>
+            </Tippy>
+          </Tippy>
       </div>
       </form>
       {
@@ -278,7 +292,7 @@ class CategoriePat extends React.Component {
       </div>
       <Spinner
         status='loading'
-        visibility={true}/>
+        visibility={this.props.isFetching}/>
     </div>
 
     </>

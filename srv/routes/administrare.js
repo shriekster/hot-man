@@ -515,21 +515,21 @@ function updateSpatiu(oldValue, newValue, oldDetails, newDetails) {
                             WHERE Denumire = ?`);
 
   const check = db.prepare(`SELECT Denumire FROM CategoriiSpatii
-                          WHERE Denumire = ?`);
+                                WHERE Denumire = ?`);
 
   if (oldValue && newValue) {
 
     const exists = check.get(newValue);
 
-    /*
-    if (exists && exists.Denumire) {
+    
+    if (exists && exists.Denumire && oldValue !== newValue) {
 
       return 'duplicate';
 
     } 
     
     else 
-    */
+    
     if (!newValue) {
 
       return 'invalid';
@@ -593,14 +593,14 @@ function deleteSpatiu(value) {
 
 /** Paturi data manipulation - C R U D  */
 
-function createPat(value) {
-  const create = db.prepare(`INSERT INTO CategoriiConfort (ID, Denumire)
-                          VALUES (?, ?)`);
+function createPat(value, number) {
+  const create = db.prepare(`INSERT INTO CategoriiPaturi (ID, Denumire, NumarLocuri)
+                          VALUES (?, ?, ?)`);
 
-  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+  const check = db.prepare(`SELECT Denumire FROM CategoriiPaturi
                           WHERE Denumire = ?`);
 
-  if (value) {
+  if (value && number) {
 
     const exists = check.get(value);
 
@@ -611,7 +611,7 @@ function createPat(value) {
 
     else 
 
-    if (!isValidStreetNo(value)) {
+    if (!isValidStreetNo(number)) {
 
       return 'invalid';
     }
@@ -621,7 +621,7 @@ function createPat(value) {
 
       try {
 
-        const info = create.run(null, value);
+        const info = create.run(null, value, number);
 
       } catch (err) {
 
@@ -639,27 +639,30 @@ function createPat(value) {
   }
 }
 
-function updatePat(oldValue, newValue) {
-  const update = db.prepare(`UPDATE CategoriiConfort 
-                            SET Denumire = ?
+function updatePat(oldValue, newValue, oldNumber, newNumber) {
+
+  const update = db.prepare(`UPDATE CategoriiPaturi
+                            SET Denumire = ?,
+                                NumarLocuri = ?
                             WHERE Denumire = ?`);
 
-  const check = db.prepare(`SELECT Denumire FROM CategoriiConfort
+  const check = db.prepare(`SELECT Denumire FROM CategoriiPaturi
                           WHERE Denumire = ?`);
 
-  if (oldValue && newValue) {
+  if (oldValue && newValue && oldNumber && newNumber) {
 
     const exists = check.get(newValue);
 
-    if (exists && exists.Denumire) {
+    
+    if (exists && exists.Denumire && oldValue !== newValue) {
 
       return 'duplicate';
 
     } 
-
+    
     else 
-
-    if (!isValidStreetNo(newValue)) {
+    
+    if (!isValidStreetNo(newNumber)) {
 
       return 'invalid';
 
@@ -671,7 +674,7 @@ function updatePat(oldValue, newValue) {
 
       try {
 
-        const info = update.run(newValue, oldValue);
+        const info = update.run(newValue, newNumber, oldValue);
 
       } catch (err) {
 
@@ -690,7 +693,7 @@ function updatePat(oldValue, newValue) {
 }
 
 function deletePat(value) {
-  const _delete = db.prepare(`DELETE FROM CategoriiConfort
+  const _delete = db.prepare(`DELETE FROM CategoriiPaturi
                           WHERE Denumire = ?`);
 
   if (value) {
@@ -1121,7 +1124,90 @@ router.post('/:attribute', authorization, function(req, res) {
         }
 
         case 'paturi': {
-          let status = '';
+          let status = 'invalid';
+
+          if (req.body.task) {
+
+            switch (req.body.task) {
+
+              case 'create': {
+                if (req.body && req.body.value && req.body.number) {
+
+                  status = createPat(req.body.value, req.body.number);
+
+                  return res.json({
+                    status: status,
+                  });
+                }
+                break;
+              }
+
+              case 'read': {
+                let error;
+
+                const selectPaturi = db.prepare(`SELECT Denumire, NumarLocuri FROM CategoriiPaturi`);
+
+                let cats;
+
+                try {
+
+                  cats = selectPaturi.all()
+
+                } catch(err) {
+
+                  if (err) {
+
+                    console.log(err);
+                    error = err;
+
+                    return res.json({
+                      status: 'error',
+                    });
+                  } 
+                } finally {
+
+                  if (!error) {
+                    let categorii = Object.values(cats);
+
+                    return res.json({
+                      status: 'valid',
+                      categoriiPaturi: categorii,
+                    });
+                  } 
+                }
+
+                break;
+              }
+
+              case 'update': {
+                if (req.body && req.body.oldValue && req.body.newValue && req.body.oldNumber && req.body.newNumber) {
+
+                  status = updatePat(req.body.oldValue, req.body.newValue, req.body.oldNumber, req.body.newNumber);
+
+                  return res.json({
+                    status: status,
+                  });
+                }
+
+                break;
+              }
+
+              case 'delete': {
+                if (req.body && req.body.value) {
+
+                  status = deletePat(req.body.value);
+
+                  return res.json({
+                    status: status,
+                  });
+                }
+
+                break;
+              }
+
+            }
+          }
+          
           break;
         }
 
@@ -1213,7 +1299,7 @@ router.post('/:attribute', authorization, function(req, res) {
 
             }
           }
-          break;
+
           break;
         }
 
