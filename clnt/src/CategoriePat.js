@@ -45,6 +45,8 @@ class CategoriePat extends React.Component {
       this.props.cancel(this.props.index);
     }
 
+    if (13 === charCode) this.submit()
+
     return true;
   }
 
@@ -64,8 +66,8 @@ class CategoriePat extends React.Component {
     this.props.focus(this.props.index, 'textarea', true, e.target.selectionStart);
   }
 
-  submit(e) {console.log('submit')
-    e.preventDefault();
+  submit(e) {
+    //e.preventDefault();
     this.props.save(this.props.index);
   }
 
