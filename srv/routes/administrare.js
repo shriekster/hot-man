@@ -606,7 +606,14 @@ function createPat(value, number) {
 
     if (exists && exists.Denumire) {
 
-      return 'duplicate';
+      if (!isValidStreetNo(number)) {
+
+        return 'broken';
+
+      } else {
+
+        return 'duplicate';
+      }
     } 
 
     else 
@@ -656,7 +663,14 @@ function updatePat(oldValue, newValue, oldNumber, newNumber) {
     
     if (exists && exists.Denumire && oldValue !== newValue) {
 
-      return 'duplicate';
+      if (!isValidStreetNo(newNumber)) {
+
+        return 'broken';
+
+      } else {
+
+        return 'duplicate';
+      }
 
     } 
     

@@ -368,6 +368,23 @@ class PaturiUpdater extends React.Component {
   
                 break;
               }
+
+              case 'broken': {
+  
+                categorii[index].showNameWarning = false;
+                categorii[index].showNameError = true;
+                categorii[index].showNumberWarning = false;
+                categorii[index].showNumberError = true;
+
+                categorii[index].isEditing = true;
+                categorii[index].isFetching = false;
+  
+                this.setState({
+                  categoriiPaturi: categorii,
+                });
+  
+                break;
+              }
   
               case 'denied': {
                 this.props.onChange('Login');

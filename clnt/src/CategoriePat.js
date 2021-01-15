@@ -45,7 +45,12 @@ class CategoriePat extends React.Component {
       this.props.cancel(this.props.index);
     }
 
-    if (13 === charCode) this.submit()
+    // Enter was pressed
+    // Why? Because a form won't submit on enter when there are at least 
+    // 2 input fields
+    if (13 === charCode) {
+      this.props.save(this.props.index);
+    }
 
     return true;
   }
@@ -67,7 +72,7 @@ class CategoriePat extends React.Component {
   }
 
   submit(e) {
-    //e.preventDefault();
+    e.preventDefault();
     this.props.save(this.props.index);
   }
 
