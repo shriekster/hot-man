@@ -695,7 +695,10 @@ class PaturiUpdater extends React.Component {
 
     return (
       <div id='view-confort-categories' 
-          className='view-confort-categories'>
+        className='view-confort-categories'>
+        <div className='-categorii-title'>
+          Categoriile de paturi
+        </div>
           <div id='confort-categories' 
           className='confort-categories'>
             <div className='confort-categories-inside'>

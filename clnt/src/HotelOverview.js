@@ -82,6 +82,7 @@ class HotelOverview extends React.Component {
     switch(component) {
       case 'ConfortUpdater': {
         nextConfortMenuClass += ' --overview-active-menu ';
+        nextSpatiiIconClass = 'fas fa-door-open --overview-icon';
         break;
       }
 
@@ -99,11 +100,13 @@ class HotelOverview extends React.Component {
 
       case 'PaturiUpdater': {
         nextPaturiMenuClass += ' --overview-active-menu ';
+        nextSpatiiIconClass = 'fas fa-door-open --overview-icon';
         break;
       }
 
       case 'HotelUpdater': {
         nextHotelMenuClass += ' --overview-active-menu ';
+        nextSpatiiIconClass = 'fas fa-door-open --overview-icon';
         break;
       }
     }

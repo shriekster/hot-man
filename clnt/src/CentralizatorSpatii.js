@@ -1,5 +1,6 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
+import Spinner from './Spinner';
 
 
 class CentralizatorSpatii extends React.Component {
@@ -659,16 +660,19 @@ class CentralizatorSpatii extends React.Component {
 
     return (
       <div id='view-confort-categories' 
-          className='view-confort-categories'>
+        className='view-confort-categories'>
+        <div className='-categorii-title'>
+          Situația spațiilor de cazare
+        </div>
           <div id='confort-categories' 
           className='confort-categories'>
             <div className='-centralizator-spatii'>
               <Tippy
                 content={
                   <>
-                    <div className='-cen-txt'>Configurează</div>
-                    <div className='-cen-txt'>categoriile</div>
+                    <div className='-cen-txt'>Categoriile</div>
                     <div className='-cen-txt'>de spații</div>
+                    <div className='-cen-txt'>de cazare</div>
                   </>
                 }
                 allowHTML={true}
@@ -685,6 +689,10 @@ class CentralizatorSpatii extends React.Component {
               </Tippy>
             </div>
             <div className='confort-categories-inside'>
+              <Spinner 
+              status='searching'
+              className='--overview-component-spinner'
+              visibility={true}/>
               {/*categories*/}
             </div>
           </div>

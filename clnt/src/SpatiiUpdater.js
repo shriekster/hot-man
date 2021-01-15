@@ -659,14 +659,17 @@ class SpatiiUpdater extends React.Component {
     return (
       <div id='view-confort-categories' 
           className='view-confort-categories'>
+          <div className='-categorii-title'>
+            Categoriile de spații de cazare
+          </div>
           <div id='confort-categories' 
           className='confort-categories'>
             <div className='-centralizator-spatii'>
               <Tippy
                 content={
                   <>
-                    <div className='-cen-txt'>Configurează</div>
-                    <div className='-cen-txt'>spațiile</div>
+                    <div className='-cen-txt'>Situația</div>
+                    <div className='-cen-txt'>spațiilor</div>
                     <div className='-cen-txt'>de cazare</div>
                   </>
                 }
