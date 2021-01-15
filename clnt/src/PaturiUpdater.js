@@ -136,6 +136,7 @@ class PaturiUpdater extends React.Component {
 
           categorii[i].isFresh = false;
           categorii[i].isEditing = true;
+          categorii[i].inputIsFocused = true;
           categorii[i].isFetching = false;
           
         } else {
@@ -266,6 +267,7 @@ class PaturiUpdater extends React.Component {
 
         this.setState({
           categoriiPaturi: categorii,
+          creating: false,
         })
       }
 

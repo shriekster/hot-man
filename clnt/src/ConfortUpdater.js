@@ -203,6 +203,7 @@ class ConfortUpdater extends React.Component {
 
         this.setState({
           categoriiConfort: categorii,
+          creating: false,
         })
       }
 

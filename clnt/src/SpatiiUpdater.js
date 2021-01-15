@@ -161,6 +161,7 @@ class SpatiiUpdater extends React.Component {
           categorii[i].isFresh = false;
     
           categorii[i].isEditing = true;
+          categorii[i].inputIsFocused = true;
     
           categorii[i].isFetching = false;
           
@@ -274,6 +275,7 @@ class SpatiiUpdater extends React.Component {
 
         this.setState({
           categoriiSpatii: categorii,
+          creating: false,
         })
       }
 
