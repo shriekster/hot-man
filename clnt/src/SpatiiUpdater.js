@@ -661,6 +661,28 @@ class SpatiiUpdater extends React.Component {
           className='view-confort-categories'>
           <div id='confort-categories' 
           className='confort-categories'>
+            <div className='-centralizator-spatii'>
+              <Tippy
+                content={
+                  <>
+                    <div className='-cen-txt'>Configurează</div>
+                    <div className='-cen-txt'>spațiile</div>
+                    <div className='-cen-txt'>de cazare</div>
+                  </>
+                }
+                allowHTML={true}
+                placement='bottom'
+                arrow={true}
+                theme='material-centralizator-spatii'
+                hideOnClick={false}
+                offset={[0, 10]}>
+                <div className='-cen-sp-inner'
+                  onClick={() => this.props.changeMenu('CentralizatorSpatii')}>
+                  <i className='fas fa-house-user -centralizator-spatii-icon'></i>
+                  <i className='fas fa-pen -centralizator-spatii-icon-small'></i>
+                </div>
+              </Tippy>
+            </div>
             <div className='confort-categories-inside'>
               {categories}
             </div>
@@ -678,6 +700,7 @@ class SpatiiUpdater extends React.Component {
               placement='right'
               arrow={true}
               theme='material-confort-disabled'
+              hideOnClick={false}
               offset={[0, 20]}>
               <i className='fas fa-plus-square --add-icon --add-disabled'></i>
             </Tippy>
@@ -692,6 +715,7 @@ class SpatiiUpdater extends React.Component {
               placement='right'
               arrow={true}
               theme='material-confort-hints'
+              hideOnClick={false}
               offset={[0, 20]}>
               <i className='fas fa-plus-square --add-icon'
                 onClick={this.add}></i>

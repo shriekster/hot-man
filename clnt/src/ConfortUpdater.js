@@ -547,6 +547,7 @@ class ConfortUpdater extends React.Component {
               placement='right'
               arrow={true}
               theme='material-confort-disabled'
+              hideOnClick={false}
               offset={[0, 20]}>
               <i className='fas fa-plus-square --add-icon --add-disabled'></i>
             </Tippy>
@@ -561,6 +562,7 @@ class ConfortUpdater extends React.Component {
               placement='right'
               arrow={true}
               theme='material-confort-hints'
+              hideOnClick={false}
               offset={[0, 20]}>
               <i className='fas fa-plus-square --add-icon'
                 onClick={this.add}></i>

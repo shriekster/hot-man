@@ -3,10 +3,10 @@ import Tippy from '@tippyjs/react';
 import Select from 'react-select';
 import Spinner from './Spinner';
 
-import ConfortUpdater from './RaportZilnic';
-import SpatiiUpdater from './RaportZilnic';
-import PaturiUpdater from './RaportZilnic';
-import HotelUpdater from './RaportZilnic';
+const ConfortUpdater = React.lazy(() => import('./RaportZilnic'));
+const SpatiiUpdater = React.lazy(() => import('./RaportZilnic'));
+const PaturiUpdater = React.lazy(() => import('./RaportZilnic'));
+const HotelUpdater = React.lazy(() => import('./RaportZilnic'));
 
 
 class RapoarteOverview extends React.Component {
@@ -160,7 +160,8 @@ class RapoarteOverview extends React.Component {
               fallback=
               {
                 <Spinner 
-                status='altLoading'
+                status='loading'
+                className='--overview-component-spinner'
                 visibility={true}/>
               }>
               <Component 

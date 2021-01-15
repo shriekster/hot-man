@@ -1510,9 +1510,15 @@ button.--create-hotel-btn:hover {
   height: 100%;
   width: 100%;
 }
+
+.--overview-component-spinner {
+  position: absolute;
+  top: 50%;
+}
+
 .hotel-settings-update {
   height: 100%;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 /* Rapoarte */
@@ -1864,6 +1870,50 @@ table.--zilnic-table {
   direction: rtl;
   position: relative;
 }
+
+/* centralizator spatii de cazare */
+
+.-centralizator-spatii {
+  direction: ltr;
+  position: fixed;
+  top: 200px;
+  right: 200px;
+  height: 40px;
+  width: 70px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: color .2s linear;
+  color: darkslategray;
+}
+
+.-centralizator-spatii:hover {
+  color: #009500;
+}
+
+.-cen-sp-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  width: 70px;
+}
+
+.-centralizator-spatii-icon {
+  font-size: 36px;
+}
+
+.-centralizator-spatii-icon-small {
+  font-size: 14px;
+}
+
+.-cen-txt {
+  margin: 0 auto;
+  width: fit-content;
+}
+
+/**/
 
 .confort-categories-inside {
   direction: ltr;
