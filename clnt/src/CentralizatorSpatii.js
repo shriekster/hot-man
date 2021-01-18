@@ -1,20 +1,13 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
-import Spinner from './Spinner';
 
-
-import add from './images/add.svg'
-import addRange from './images/add-range.svg';
+import SpatiuCazare from './SpatiuCazare';
 
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onKeyDown = this.onKeyDown.bind(this);
-
     this.add = this.add.bind(this);
-
-    this.addRange = this.addRange.bind(this);
 
     this.edit = this.edit.bind(this);
 
@@ -33,21 +26,12 @@ class CentralizatorSpatii extends React.Component {
     this.state = {
       backup: [],
 
-      spatii: [],
+      categoriiPaturi: [],
+
+      addMultiple: false,
 
       creating: false,
     };
-  }
-
-  // numeric input only
-  onKeyDown(e) {
-    let charCode = (e.which) ? e.which : e.keyCode;
-
-    if (27 === charCode) {
-      this.onViewSettingsClick({ target: { id: 'view-user-settings' } })
-    }
-
-    return true;
   }
 
   add() {
@@ -60,25 +44,30 @@ class CentralizatorSpatii extends React.Component {
 
       if (this.state.creating) {
 
-        let spatii = this.state.spatii;
+        let categorii = this.state.categoriiPaturi;
         let backup = this.state.backup;
 
         let newItem = {
 
-          index: spatii.length, //??
+          index: categorii.length, //??
 
           Denumire: '',
-          Detalii: '',
-          showWarning: false,
-          showError: false,
+          NumarLocuri: '',
+          showNameWarning: false,
+          showNameError: false,
+          showNumberWarning: false,
+          showNumberError: false,
 
           isFresh: true,
           isEditing: true,
 
           inputIsFocused: true,
           textareaIsFocused: false,
+
           inputCaretPosition: 0,
+          inputCaretPositionEnd: 0,//??
           textareaCaretPosition: 0,
+          textareaCaretPositionEnd: 0,//??
 
           isFetching: false,
         };
@@ -88,91 +77,96 @@ class CentralizatorSpatii extends React.Component {
           index: backup.length, //??
 
           Denumire: '',
-          Detalii: '',
+          NumarLocuri: '',
         };
 
 
-        if (0 === spatii.length && 0 === backup.length) {
+        if (0 === categorii.length && 0 === backup.length) {
 
-          spatii.push(newItem);
+          categorii.push(newItem);
           backup.push(newBackupItem);
         }
 
         else {
 
-          let last = spatii[spatii.length - 1].Denumire;
+          let last = categorii[categorii.length - 1].Denumire;
           let backupLast = backup[backup.length - 1].Denumire;
 
           if (last && backupLast) {
             /** 'Reset' every other item's state when a new item is being added */
-            spatii.forEach(item => {
+            categorii.forEach( item => {
 
-              item.showWarning = false;
-              item.showError = false;
+              item.showNameWarning = false;
+              item.showNameError = false;
+              item.showNumberWarning = false;
+              item.showNumberError = false;
               item.isFresh = false;
               item.isEditing = false;
               item.isFetching = false;
 
               item.inputIsFocused = false;
               item.textareaIsFocused = false;
+
               item.inputCaretPosition = item.Denumire.length;
-              item.textareaCaretPosition = item.Detalii.length;
+              item.inputCaretPositionEnd = item.Denumire.length;//??
+              item.textareaCaretPosition = item.NumarLocuri.length;
+              item.textareaCaretPositionEnd = item.NumarLocuri.length;//??
             });
 
-            spatii.push(newItem);
+            categorii.push(newItem);
             backup.push(newBackupItem);
           }
         }
 
         this.setState({
           backup: backup,
-          spatii: spatii,
+          categoriiPaturi: categorii,
         });
       }
     });
   }
 
-  addRange() {
-
-  }
-
   edit(index) {
 
-    let spatii = this.state.spatii;
+    let categorii = this.state.categoriiPaturi;
     let backup = this.state.backup;
 
-    if (index >= 0 && index < spatii.length) {
+    if (index >= 0 && index < categorii.length) {
 
-      for (let i = 0; i < spatii.length; i++) {
+      for (let i = 0; i < categorii.length; i++) {
 
         if (index == i) {
 
-          spatii[i].showWarning = false;
-          spatii[i].showError = false
-          spatii[i].isFresh = false;
+          categorii[i].showNameWarning = false;
+          categorii[i].showNameError = false;
+          categorii[i].showNumberWarning = false;
+          categorii[i].showNumberError = false;
 
-          spatii[i].isEditing = true;
-          spatii[i].inputIsFocused = true;
-
-          spatii[i].isFetching = false;
-
+          categorii[i].isFresh = false;
+          categorii[i].isEditing = true;
+          categorii[i].inputIsFocused = true;
+          categorii[i].isFetching = false;
+          
         } else {
 
-          if (spatii[i].isFresh) {
+          if (categorii[i].isFresh) {
 
-            spatii.pop();
+            categorii.pop();
             backup.pop();
 
           } else {
 
-            spatii[i].Denumire = backup[i].Denumire;
-            spatii[i].Detalii = backup[i].Detalii;
+            categorii[i].Denumire = backup[i].Denumire;
+            categorii[i].NumarLocuri = backup[i].NumarLocuri;
 
-            spatii[i].showWarning = false;
-            spatii[i].showError = false
-            spatii[i].isFresh = false;
-            spatii[i].isEditing = false;
-            spatii[i].isFetching = false;
+            categorii[i].showNameWarning = false;
+            categorii[i].showNameError = false;
+            categorii[i].showNumberWarning = false;
+            categorii[i].showNumberError = false;
+
+            categorii[i].isFresh = false;
+            categorii[i].isEditing = false;
+            categorii[i].isFetching = false;
 
           }
         }
@@ -180,48 +174,54 @@ class CentralizatorSpatii extends React.Component {
 
       this.setState({
         backup: backup,
-        spatii: spatii,
+        categoriiPaturi: categorii,
 
         creating: true, /** Block the creation of a new item while editing */
       });
     }
   }
 
-  input(index, type, newValue, caretPosition) {
+  input(index, type, newValue, caretPosition, caretPositionEnd) {
 
-    let spatii = this.state.spatii;
+    let categorii = this.state.categoriiPaturi;
 
     switch (type) {
 
       case 'denumire': {
 
-        if (index >= 0 && index < spatii.length) {
+        if (index >= 0 && index < categorii.length ) {
 
-          spatii[index].Denumire = newValue;
-          spatii[index].inputCaretPosition = caretPosition;
-
+          categorii[index].Denumire = newValue;
+          categorii[index].inputCaretPosition = caretPosition;
+          categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
+    
           /** Hide the error or warning tippy */
-          spatii[index].showWarning = false;
-          spatii[index].showError = false;
+          categorii[index].showNameWarning = false;
+          categorii[index].showNameError = false;
         }
 
         break;
       }
 
-      case 'detalii': {
+      case 'locuri': {
 
-        if (index >= 0 && index < spatii.length) {
+        if (index >= 0 && index < categorii.length ) {
 
-          spatii[index].Detalii = newValue;
-          spatii[index].textareaCaretPosition = caretPosition;
+          categorii[index].NumarLocuri = newValue;
+          categorii[index].textareaCaretPosition = caretPosition;
+          categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
+
+          /** Hide the error or warning tippy */
+          categorii[index].showNumberWarning = false;
+          categorii[index].showNumberError = false;
         }
 
         break;
       }
     }
-
+    
     this.setState({
-      spatii: spatii,
+      categoriiPaturi: categorii,
     });
   }
 
@@ -229,150 +229,202 @@ class CentralizatorSpatii extends React.Component {
 
     let body;
     let backup = this.state.backup;
-    let spatii = this.state.spatii;
+    let categorii = this.state.categoriiPaturi;
 
-    if (index >= 0 && index < spatii.length) {
+    if (index >= 0 && index < categorii.length) {
 
-      /** Empty input value on saving */
-      if (!spatii[index].Denumire) {
+      /** Empty input value(s) on saving */
+      if (!categorii[index].Denumire || !categorii[index].NumarLocuri) {
 
-        spatii[index].showWarning = true;
+        let nameWarning = false;
+        let numberWarning = false;
 
-        spatii[index].showError = false;
+        if (!categorii[index].Denumire) nameWarning = true;
 
-        spatii[index].isFetching = false;
+        if(!categorii[index].NumarLocuri) numberWarning = true;
+
+        categorii[index].showNameWarning = nameWarning;
+        categorii[index].showNameError = false;
+
+        categorii[index].showNumberWarning = numberWarning;
+        categorii[index].showNumberError = false;
+
+        categorii[index].isFetching = false;
 
         this.setState({
-          spatii: spatii,
+          categoriiPaturi: categorii,
         });
       }
 
-      else
+      else 
+      
+      /** The input values are the same as before being edited */
+      if (categorii[index].Denumire === backup[index].Denumire &&
+          categorii[index].NumarLocuri === backup[index].NumarLocuri) {
 
-        /** The input value is the same as before being edited */
-        if (spatii[index].Denumire === backup[index].Denumire &&
-          spatii[index].Detalii === backup[index].Detalii) {
+        categorii[index].showNameWarning = false;
+        categorii[index].showNameError = false;
+        categorii[index].showNumberWarning = false;
+        categorii[index].showNumberError = false;
+        categorii[index].isFresh = false;
+        categorii[index].isEditing = false;
+        categorii[index].isFetching = false;
 
-          spatii[index].showWarning = false;
-          spatii[index].showError = false;
-          spatii[index].isFresh = false;
-          spatii[index].isEditing = false;
-          spatii[index].isFetching = false;
+        categorii[index].inputIsFocused = true;
+        categorii[index].textareaIsFocused = false;
 
-          spatii[index].inputIsFocused = true;
-          spatii[index].textareaIsFocused = false;
-          spatii[index].inputCaretPosition = spatii[index].Denumire.length;
-          spatii[index].textareaCaretPosition = spatii[index].Detalii.length;
+        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
+        categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+        categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
 
-          this.setState({
-            spatii: spatii,
-            creating: false,
-          })
-        }
+        this.setState({
+          categoriiPaturi: categorii,
+          creating: false,
+        })
+      }
 
-        else {
-          /** A new, non-empty value is to be saved */
-          if (spatii[index].isFresh) {
+      else {
+        /** A new, non-empty value is to be saved */
+        if (categorii[index].isFresh) {
 
-            body = {
-              token: this.props.token,
-              task: 'create',
-              value: spatii[index].Denumire.trim(),
-              details: spatii[index].Detalii.trim(),
-            };
-
-          } else {
-
-            let newDetails = ('' === spatii[index].Detalii || undefined === spatii[index].Detalii) ? '' : spatii[index].Detalii.trim();
-
-            body = {
-              token: this.props.token,
-              task: 'update',
-              oldValue: backup[index].Denumire,
-              newValue: spatii[index].Denumire.trim(),
-              oldDetails: backup[index].Detalii,
-              newDetails: newDetails,
-            };
-          }
-
-          const requestOptions = {
-            method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
+          body = {
+            token: this.props.token,
+            task: 'create',
+            value: categorii[index].Denumire.trim(),
+            number: categorii[index].NumarLocuri.toString().trim(),
           };
-
-          fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
-            .then(response => response.json())
-            .then(updated => {
-
-              if (updated && updated.status) {
-
-                switch (updated.status) {
-
-                  case 'valid': {
-
-                    backup[index].Denumire = spatii[index].Denumire.trim();
-                    backup[index].Detalii = spatii[index].Detalii.trim();
-
-                    spatii[index].showWarning = false;
-                    spatii[index].showError = false;
-                    spatii[index].isFresh = false;
-                    spatii[index].isEditing = false;
-                    spatii[index].isFetching = false;
-                    spatii[index].inputIsFocused = true;
-                    spatii[index].textareaIsFocused = false;
-                    spatii[index].inputCaretPosition = spatii[index].Denumire.length;
-                    spatii[index].textareaCaretPosition = spatii[index].Detalii.length;
-
-                    this.setState({
-                      backup: backup,
-                      spatii: spatii,
-                      creating: false,
-                    });
-
-                    break;
-                  }
-
-                  case 'error':
-                  case 'invalid':
-                  case 'duplicate': {
-
-                    spatii[index].showWarning = false;
-
-                    spatii[index].showError = true;
-                    spatii[index].isEditing = true;
-
-                    spatii[index].isFetching = false;
-
-                    this.setState({
-                      spatii: spatii,
-                    });
-
-                    break;
-                  }
-
-                  case 'denied': {
-                    this.props.onChange('Login');
-
-                    break;
-                  }
-                }
-              }
-            });
+    
+        } else {
+          
+          body = {
+            token: this.props.token,
+            task: 'update',
+            oldValue: backup[index].Denumire,
+            newValue: categorii[index].Denumire.trim(),
+            oldNumber: backup[index].NumarLocuri,
+            newNumber: categorii[index].NumarLocuri.toString().trim(),
+          };
         }
-    }
+      
+        const requestOptions = {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        };
+    
+        fetch('http://localhost:3001/main/administrare/paturi', requestOptions)
+        .then(response => response.json())
+        .then(updated => {
+          
+          if (updated && updated.status) {
+  
+            switch (updated.status) {
+  
+              case 'valid': {
+  
+                backup[index].Denumire = categorii[index].Denumire.trim();
+                backup[index].NumarLocuri = categorii[index].NumarLocuri.toString().trim();
+  
+                categorii[index].showNameWarning = false;
+                categorii[index].showNameError = false;
+                categorii[index].showNumberWarning = false;
+                categorii[index].showNumberError = false;
 
+                categorii[index].isFresh = false;
+                categorii[index].isEditing = false;
+                categorii[index].isFetching = false;
+                categorii[index].inputIsFocused = true;
+                categorii[index].textareaIsFocused = false;
+
+                categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+                categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
+                categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+                categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
+  
+                this.setState({
+                  backup: backup,
+                  categoriiPaturi: categorii,
+                  creating: false,
+                });
+  
+                break;
+              }
+  
+              case 'error':
+              case 'invalid': {
+
+                categorii[index].showNameWarning = false;
+                categorii[index].showNameError = false;
+                categorii[index].showNumberWarning = false;
+                categorii[index].showNumberError = true;
+
+                categorii[index].isEditing = true;
+                categorii[index].isFetching = false;
+  
+                this.setState({
+                  categoriiPaturi: categorii,
+                });
+  
+                break;
+              }
+
+              case 'duplicate': {
+  
+                categorii[index].showNameWarning = false;
+                categorii[index].showNameError = true;
+                categorii[index].showNumberWarning = false;
+                categorii[index].showNumberError = false;
+
+                categorii[index].isEditing = true;
+                categorii[index].isFetching = false;
+  
+                this.setState({
+                  categoriiPaturi: categorii,
+                });
+  
+                break;
+              }
+
+              case 'broken': {
+  
+                categorii[index].showNameWarning = false;
+                categorii[index].showNameError = true;
+                categorii[index].showNumberWarning = false;
+                categorii[index].showNumberError = true;
+
+                categorii[index].isEditing = true;
+                categorii[index].isFetching = false;
+  
+                this.setState({
+                  categoriiPaturi: categorii,
+                });
+  
+                break;
+              }
+  
+              case 'denied': {
+                this.props.onChange('Login');
+  
+                break;
+              }
+            }
+          }
+        });
+      }
+    }
+    
   }
 
   delete(index) {
 
-    let spatii = this.state.spatii;
+    let categorii = this.state.categoriiPaturi;
     let backup = this.state.backup;
-
+   
     let toDelete = '';
 
-    if (index >= 0 && index < spatii.length) {
+    if (index >= 0 && index < categorii.length) {
 
       toDelete = backup[index].Denumire;
 
@@ -389,92 +441,101 @@ class CentralizatorSpatii extends React.Component {
       }),
     };
 
-    fetch('http://localhost:3001/main/administrare/spatii', requestOptions)
-      .then(response => response.json())
-      .then(updated => {
+    fetch('http://localhost:3001/main/administrare/paturi', requestOptions)
+    .then(response => response.json())
+    .then(updated => {
 
-        if ('valid' === updated.status) {
+      if ('valid' === updated.status) {
+        
+        categorii.splice(index, 1);
+        backup.splice(index, 1);
 
-          spatii.splice(index, 1);
-          backup.splice(index, 1);
+        /** Rewrite the indexes so that they are in 'order' */
+        let _index = 0;
 
-          /** Rewrite the indexes so that they are in 'order' */
-          let _index = 0;
+        categorii.forEach(item => {
 
-          spatii.forEach(item => {
+          item.index = _index++;
 
-            item.index = _index++;
+        });
 
-          });
+        this.setState({
+          backup: backup,
+          categoriiPaturi: categorii,
 
-          this.setState({
-            backup: backup,
-            spatii: spatii,
+          creating: false,
+        })
+        
+      }
 
-            creating: false,
-          })
+      else {
 
-        }
+        let categorii = this.state.categoriiPaturi;
 
-        else {
+        categorii.forEach(item => {
+          
+          item.showNameWarning = false;
+          item.showNameError = false;
+          item.showNumberWarning = false;
+          item.showNumberError = false;
 
-          let spatii = this.state.spatii;
+          item.isFresh = false;
+          item.isEditing = false;
+          item.isFetching = false;
+          
+        });
 
-          spatii.forEach(item => {
-
-            item.showWarning = false;
-            item.showError = false;
-            item.isFresh = false;
-            item.isEditing = false;
-            item.isFetching = false;
-
-          });
-
-          this.setState({
-            spatii: spatii,
-            creating: false,
-          });
-        }
-      });
+        this.setState({
+          categoriiPaturi: categorii,
+          creating: false,
+        });
+      }
+    });
   }
 
   cancel(index) {
-    let spatii = this.state.spatii;
+    let categorii = this.state.categoriiPaturi;
     let backup = this.state.backup;
 
-    if (index >= 0 && index < spatii.length) {
-
+    if (index >= 0 && index < categorii.length) {
+      
       /** The user clicked cancel on a newly created item */
-      if (spatii[index].isFresh &&
-        '' === backup[index].Denumire) {
-
-        spatii.pop();
+      if (categorii[index].isFresh &&
+          '' === backup[index].Denumire) {
+        
+        categorii.pop();
         backup.pop();
       }
 
       /** The user clicked cancel on an existing item */
       else {
+        
+        categorii[index].Denumire = backup[index].Denumire;
+        categorii[index].NumarLocuri = backup[index].NumarLocuri;
 
-        spatii[index].Denumire = backup[index].Denumire;
-        spatii[index].Detalii = backup[index].Detalii;
+        categorii[index].showNameWarning = false;
+        categorii[index].showNameError = false;
+        categorii[index].showNumberWarning = false;
+        categorii[index].showNumberError = false;
 
-        spatii[index].showWarning = false;
-        spatii[index].showError = false;
-        spatii[index].isFresh = false;
-        spatii[index].isEditing = false;
-        spatii[index].isFetching = false;
+        categorii[index].isFresh = false;
+        categorii[index].isEditing = false;
+        categorii[index].isFetching = false;
 
-        spatii[index].inputIsFocused = true;
-        spatii[index].textareaIsFocused = false;
-        spatii[index].inputCaretPosition = spatii[index].Denumire.length;
-        spatii[index].textareaCaretPosition = spatii[index].Detalii.length;
+        categorii[index].inputIsFocused = true;
+        categorii[index].textareaIsFocused = false;
+
+        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
+        categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+        categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
       }
     }
-
+    
 
     this.setState({
       backup: backup,
-      spatii: spatii,
+      categoriiPaturi: categorii,
 
       creating: false,
     });
@@ -484,11 +545,11 @@ class CentralizatorSpatii extends React.Component {
     return Math.floor(new Date().getTime() * Math.random());
   }
 
-  setFocusState(index, type, state, caretPosition) {
+  setFocusState(index, type, state, caretPosition, caretPositionEnd) {
 
-    let spatii = this.state.spatii;
+    let categorii = this.state.categoriiPaturi;
 
-    if (index >= 0 && index <= spatii.length) {
+    if (index >= 0 && index <= categorii.length) {
 
       switch (type) {
 
@@ -496,16 +557,19 @@ class CentralizatorSpatii extends React.Component {
 
           if (state) {
 
-            spatii[index].inputIsFocused = true;
-            spatii[index].inputCaretPosition = caretPosition;
+            categorii[index].inputIsFocused = true;
+            categorii[index].inputCaretPosition = caretPosition;
+            categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
 
-            spatii[index].textareaIsFocused = false;
-            spatii[index].textareaCaretPosition = !spatii[index].Detalii ? 0 : spatii[index].Detalii.length;
+            categorii[index].textareaIsFocused = false;
+            categorii[index].textareaCaretPosition = !categorii[index].NumarLocuri ? 0 : categorii[index].NumarLocuri.length;
+            categorii[index].textareaCaretPositionEnd = !categorii[index].NumarLocuri ? 0 : categorii[index].NumarLocuri.length;//??
 
           } else {
 
-            spatii[index].inputIsFocused = false;
-            spatii[index].inputCaretPosition = spatii[index].Denumire.length;
+            categorii[index].inputIsFocused = false;
+            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
 
           }
 
@@ -516,17 +580,20 @@ class CentralizatorSpatii extends React.Component {
 
           if (state) {
 
-            spatii[index].inputIsFocused = false;
-            spatii[index].inputCaretPosition = spatii[index].Denumire.length;
+            categorii[index].inputIsFocused = false;
+            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
 
-            spatii[index].textareaIsFocused = true;
-            spatii[index].textareaCaretPosition = caretPosition;
+            categorii[index].textareaIsFocused = true;
+            categorii[index].textareaCaretPosition = caretPosition;
+            categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
 
           } else {
 
-            spatii[index].textareaIsFocused = false;
-            spatii[index].textareaCaretPosition = !spatii[index].Detalii ? 0 : spatii[index].Detalii.length;
-
+            categorii[index].textareaIsFocused = false;
+            categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+            categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
+            
           }
 
           break;
@@ -535,13 +602,13 @@ class CentralizatorSpatii extends React.Component {
       }
 
       this.setState({
-        spatii: spatii,
+        categoriiPaturi: categorii,
       });
     }
   }
 
   componentDidMount() {
-    /** 'descarc' spatiile de cazare */
+    /** 'descarc' categoriile de paturi */
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -552,80 +619,83 @@ class CentralizatorSpatii extends React.Component {
       })
     };
 
-    fetch('http://localhost:3001/main/administrare/central', requestOptions)
-      .then(response => response.json())
-      .then(spatii => {
+    fetch('http://localhost:3001/main/administrare/paturi', requestOptions)
+    .then(response => response.json())
+    .then(categorii => {
 
-        if ('error' === spatii.status) {
-          console.log('Eroare - spatii spatii')
-        }
+      if ('error' === categorii.status) {
+        console.log('Eroare - categorii spatii')
+      } 
+      
+      else 
+      
+      if ('valid' === categorii.status) {
 
-        else
+        let cats = categorii.categoriiPaturi;
 
-          if ('valid' === spatii.status) {
+        let length = 0;
+        let backup = [];
 
-            let cats;// = spatii.spatii;
+        cats.forEach( item => {
 
-            let length = 0;
-            let backup = [];
+          item.index = length++;
 
-            /*
-            cats.forEach(item => {
+          item.showNameWarning = false;
+          item.showNameError = false;
+          item.showNumberWarning = false;
+          item.showNumberError = false;
+    
+          item.isFresh = false;
+          item.isEditing = false;
+          item.isFetching = false;
 
-              item.index = length++;
+          item.inputIsFocused = true;
+          item.textareaIsFocused = false;
 
-              item.showWarning = false;
-              item.showError = false;
+          item.inputCaretPosition = item.Denumire.length;
+          item.inputCaretPositionEnd = item.Denumire.length;//??
+          item.textareaCaretPosition = item.NumarLocuri.length;
+          item.textareaCaretPositionEnd = item.NumarLocuri.length;//??
 
-              item.isFresh = false;
-              item.isEditing = false;
-              item.isFetching = false;
+          let backupItem = {
+            Denumire: item.Denumire, 
+            NumarLocuri: item.NumarLocuri,
+          };
 
-              item.inputIsFocused = true;
-              item.textareaIsFocused = false;
-              item.inputCaretPosition = item.Denumire.length;
-              item.textareaCaretPosition = !item.Detalii ? 0 : item.Detalii.length;
+          backup.push(backupItem);
 
-              let backupItem = {
-                Denumire: item.Denumire,
-                Detalii: item.Detalii,
-              };
+        });
 
-              backup.push(backupItem);
+        this.setState({
+          backup: backup,
+          categoriiPaturi: cats,
+        });
 
-            });
-            */
-            this.setState({
-              backup: backup,
-              spatii: cats,
-            });
+      } 
+      
+      else
 
-          }
-
-          else
-
-            if ('denied' === spatii.status) {
-              this.props.onChange('Login');
-            }
-      });
+      if ('denied' === categorii.status) {
+        this.props.onChange('Login');
+      }
+    });
   }
 
-  componentDidUpdate(prevProps, prevState) { }
+  componentDidUpdate (prevProps, prevState) {}
 
   render() {
 
-    let spatii = this.state.spatii;
+    let categorii = this.state.categoriiPaturi;
 
-    /*
-    const categories = spatii.map(
+    const categories = categorii.map(
       (categorie) =>
 
-      <CategorieSpatiu
+      <SpatiuCazare
         index={categorie.index}
 
         key={this.generateKey()}
         value={categorie.Denumire}
-        details={categorie.Detalii}
+        number={categorie.NumarLocuri}
 
         add={this.add}
         edit={this.edit}
@@ -637,118 +707,95 @@ class CentralizatorSpatii extends React.Component {
         focus={this.setFocusState}
         inputIsFocused={categorie.inputIsFocused}
         textareaIsFocused={categorie.textareaIsFocused}
-        inputCaretPosition={categorie.inputCaretPosition}
-        textareaCaretPosition={categorie.textareaCaretPosition}
 
-        showWarning={undefined === categorie.showWarning || false === categorie.showWarning ? false : true}
-        showError={undefined === categorie.showError || false === categorie.showError ? false : true}
+        inputCaretPosition={categorie.inputCaretPosition}
+        inputCaretPositionEnd={categorie.inputCaretPositionEnd}
+        textareaCaretPosition={categorie.textareaCaretPosition}
+        textareaCaretPositionEnd={categorie.textareaCaretPositionEnd}
+
+        showNameWarning={categorie.showNameWarning}
+        showNameError={categorie.showNameError}
+        showNumberWarning={categorie.showNumberWarning}
+        showNumberError={categorie.showNumberError}
 
         isFresh={undefined === categorie.isFresh || false === categorie.isFresh ? false : true}
         isEditing={undefined === categorie.isEditing || false === categorie.isEditing ? false : true}
         isFetching={undefined === categorie.isFetching || false === categorie.isFetching ? false : true}
       />
     );
-    */
 
     return (
-      <div id='view-confort-categories'
+      <div id='view-confort-categories' 
         className='view-confort-categories'>
-        <div className='-spatii-title'>
+        <div className='-categorii-title'>
           Situația spațiilor de cazare
-        </div>
-        <div id='confort-categories'
-          className='confort-categories'>
-          <div className='-centralizator-spatii'>
-            <Tippy
-              content={
-                <>
-                  <div className='-cen-txt'>Categoriile</div>
-                  <div className='-cen-txt'>de spații</div>
-                  <div className='-cen-txt'>de cazare</div>
-                </>
-              }
-              allowHTML={true}
-              placement='bottom'
-              arrow={true}
-              theme='material-centralizator-spatii'
-              hideOnClick={false}
-              offset={[0, 10]}>
-              <div className='-cen-sp-inner'
-                onClick={() => this.props.changeMenu('SpatiiUpdater')}>
-                <i className='fas fa-door-open -centralizator-spatii-icon'></i>
-                <i className='fas fa-pen -centralizator-spatii-icon-small'></i>
-              </div>
-            </Tippy>
-          </div>
-          <div className='confort-categories-inside'>
-            {/*<Spinner 
-              status='searching'
-              className='--overview-component-spinner'
-              visibility={true}/>*/}
-            {/*categories*/}
-          </div>
-        </div>
-        <div className='--confort-add'>
-          {
-            this.state.creating ?
+          <div className='--next'>
               <Tippy
                 content={
-                  <>
-                    Introdu informațiile referitoare la spațiul / spațiile de cazare
-                </>
+                  <div className='-cen-txt'>Categoriile de spații de cazare</div>
                 }
                 allowHTML={true}
                 placement='right'
                 arrow={true}
-                theme='material-confort-disabled'
+                theme='material-centralizator-spatii'
                 hideOnClick={false}
-                maxWidth={450}
-                offset={[0, 20]}>
-                <div className='-spatiu-add --not-allowed'>
-                  <img src={add}
-                    className='add-spatiu add-spatiu--disabled' />
-                  <img src={addRange}
-                    className='add-spatiu-range add-spatiu--disabled' />
-                </div>
+                offset={[0, 10]}>
+                <i className='fas fa-project-diagram --next-icon'
+                  onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
               </Tippy>
-              :
-              <div className='-spatiu-add'>
-                <Tippy
-                  content={
-                    <>
-                      Adaugă un spațiu de cazare
-                  </>
-                  }
-                  allowHTML={true}
-                  placement='right'
-                  arrow={true}
-                  theme='material-confort-hints'
-                  hideOnClick={false}
-                  offset={[0, 20]}>
-                  <img src={add}
-                    className='add-spatiu'
-                    onClick={this.add} />
-                </Tippy>
-                <Tippy
-                  content={
-                    <>
-                      Adaugă mai multe spații de cazare
-                  </>
-                  }
-                  allowHTML={true}
-                  placement='right'
-                  arrow={true}
-                  theme='material-confort-hints'
-                  hideOnClick={false}
-                  offset={[0, 20]}>
-                  <img src={addRange}
-                    className='add-spatiu-range'
-                    onClick={this.addRange} />
-                </Tippy>
-              </div>
-          }
+            </div>
         </div>
-      </div>
+          <div id='confort-categories' 
+          className='confort-categories'>
+            <div className='confort-categories-inside'>
+              {categories}
+            </div>
+          </div>
+          <div className='--confort-add'>
+          {
+            this.state.creating ?
+            <Tippy
+              content={
+                this.state.addMultiple ?
+                <>
+                  Introdu datele referitoare la spațiile de cazare
+                </>                    :
+                <>
+                  Introdu datele referitoare la spațiul de cazare
+                </>
+                
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={true}
+              theme='material-confort-disabled'
+              hideOnClick={false}
+              maxWidth={400}
+              offset={[0, 20]}>
+              <i className='fas fa-plus-square --add-icon --add-disabled'></i>
+            </Tippy>
+                              :
+            <Tippy
+              content={
+                <div className='add-rooms'>
+                  <div className='add-rooms-hint'><i className='fas fa-plus add-rooms-icon'></i><span> Adaugă un spațiu de cazare</span></div>
+                  <div className='add-rooms-hint'><i className='far fa-plus-square add-rooms-icon'></i><span> Adaugă mai multe spații de cazare</span></div>
+                </div>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={true}
+              theme='material-confort-hints'
+              hideOnClick={false}
+              interactive={true}
+              interactiveBorder={40}
+              offset={[0, 20]}>
+              <i className='fas fa-home --add-icon'
+                onClick={this.add}></i>
+            </Tippy>
+          }
+            </div>
+        </div>
     );
   }
 }

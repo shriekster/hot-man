@@ -684,31 +684,24 @@ class SpatiiUpdater extends React.Component {
           className='view-confort-categories'>
           <div className='-categorii-title'>
             Categoriile de spații de cazare
-          </div>
-          <div id='confort-categories' 
-          className='confort-categories'>
-            <div className='-centralizator-spatii'>
+            <div className='--next'>
               <Tippy
                 content={
-                  <>
-                    <div className='-cen-txt'>Situația</div>
-                    <div className='-cen-txt'>spațiilor</div>
-                    <div className='-cen-txt'>de cazare</div>
-                  </>
+                  <div className='-cen-txt'>Situația spațiilor de cazare</div>
                 }
                 allowHTML={true}
-                placement='bottom'
+                placement='right'
                 arrow={true}
                 theme='material-centralizator-spatii'
                 hideOnClick={false}
                 offset={[0, 10]}>
-                <div className='-cen-sp-inner'
-                  onClick={() => this.props.changeMenu('CentralizatorSpatii')}>
-                  <i className='fas fa-house-user -centralizator-spatii-icon'></i>
-                  <i className='fas fa-pen -centralizator-spatii-icon-small'></i>
-                </div>
+                <i className='fas fa-project-diagram --next-icon'
+                  onClick={() => this.props.changeMenu('CentralizatorSpatii')}></i>
               </Tippy>
             </div>
+          </div>
+          <div id='confort-categories' 
+          className='confort-categories'>
             <div className='confort-categories-inside'>
               {categories}
             </div>

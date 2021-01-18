@@ -795,7 +795,7 @@ function readSC() {
 
   try {
 
-    cats = selectSpatii.all()
+    cats = spatii.all()
 
   } catch(err) {
 
@@ -804,19 +804,63 @@ function readSC() {
       console.log(err);
       error = err;
 
-      return res.json({
+      return {
         status: 'error',
-      });
+        spatii: {},
+      };
     } 
   } finally {
 
     if (!error) {
-      let categorii = Object.values(cats);
 
-      return res.json({
-        status: 'valid',
-        categoriiSpatii: categorii,
+      let spaces = Object.values(cats);
+      let newSpaces = [];
+
+      for (let i = 0; i < spaces.length; i++) {
+
+      }
+
+      spaces.forEach( item => {
+
+        let newItem = {};
+
+        let numarPaturi = item.numarPaturi;
+        let tipPat = item.tipPat;
+
+        newItem = {
+          etaj: item.etaj,
+          numar: item.numar,
+          tipSpatiu: item.tipSpatiu,
+          paturi: [
+            {
+              numar: numarPaturi, 
+              tip: tipPat
+            }
+          ],
+        };
+        newSpaces.push(newItem);
       });
+      
+      for (let i = 0; i < newSpaces.length; i++) {
+
+        while (i + 1 < newSpaces.length && newSpaces[i].etaj === newSpaces[i + 1].etaj &&
+              newSpaces[i].numar === newSpaces[i + 1].numar &&
+              newSpaces[i].tipSpatiu === newSpaces[i + 1].tipSpatiu) {
+          
+          let pat = {
+            numar: newSpaces[i].paturi[0].numar,
+            tip: newSpaces[i].paturi[0].tip
+          };
+
+          newSpaces[i + 1].paturi.push(pat);
+          newSpaces.splice(i, 1);
+        }
+      }
+      
+      return {
+        status: 'valid',
+        spatii: newSpaces,
+      };
     } 
   }
 }
@@ -1429,7 +1473,7 @@ router.post('/:attribute', authorization, function(req, res) {
                 
                 const {status, spatii} = readSC();
 
-                res.json({
+                return res.json({
                   status: status,
                   spatii: spatii,
                 });

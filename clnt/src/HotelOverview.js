@@ -166,7 +166,7 @@ class HotelOverview extends React.Component {
   componentDidMount() {
     // fetch categorii confort, spatii, paturi?
   }
-
+ 
   render() {
     let Component = this.state.defaultComponent;
 
