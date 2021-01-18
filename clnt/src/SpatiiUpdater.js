@@ -91,7 +91,9 @@ class SpatiiUpdater extends React.Component {
           inputIsFocused: true,
           textareaIsFocused: false,
           inputCaretPosition: 0,
+          inputCaretPositionEnd: 0,//???
           textareaCaretPosition: 0,
+          textareaCaretPositionEnd: 0,//???
 
           isFetching: false,
         };
@@ -128,8 +130,11 @@ class SpatiiUpdater extends React.Component {
 
               item.inputIsFocused = false;
               item.textareaIsFocused = false;
+
               item.inputCaretPosition = item.Denumire.length;
+              item.inputCaretPositionEnd = item.Denumire.length;//??
               item.textareaCaretPosition = item.Detalii.length;
+              item.textareaCaretPositionEnd = item.Detalii.length;//??
             });
 
             categorii.push(newItem);
@@ -196,7 +201,7 @@ class SpatiiUpdater extends React.Component {
     }
   }
 
-  input(index, type, newValue, caretPosition) {
+  input(index, type, newValue, caretPosition, caretPositionEnd) {
 
     let categorii = this.state.categoriiSpatii;
 
@@ -208,6 +213,7 @@ class SpatiiUpdater extends React.Component {
 
           categorii[index].Denumire = newValue;
           categorii[index].inputCaretPosition = caretPosition;
+          categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
     
           /** Hide the error or warning tippy */
           categorii[index].showWarning = false;
@@ -223,6 +229,7 @@ class SpatiiUpdater extends React.Component {
 
           categorii[index].Detalii = newValue;
           categorii[index].textareaCaretPosition = caretPosition;
+          categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
         }
 
         break;
@@ -271,7 +278,9 @@ class SpatiiUpdater extends React.Component {
         categorii[index].inputIsFocused = true;
         categorii[index].textareaIsFocused = false;
         categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
         categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
+        categorii[index].textareaCaretPositionEnd = categorii[index].Detalii.length;//??
 
         this.setState({
           categoriiSpatii: categorii,
@@ -332,7 +341,9 @@ class SpatiiUpdater extends React.Component {
                 categorii[index].inputIsFocused = true;
                 categorii[index].textareaIsFocused = false;
                 categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+                categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
                 categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
+                categorii[index].textareaCaretPositionEnd = categorii[index].Detalii.length;//??
   
                 this.setState({
                   backup: backup,
@@ -476,7 +487,9 @@ class SpatiiUpdater extends React.Component {
         categorii[index].inputIsFocused = true;
         categorii[index].textareaIsFocused = false;
         categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
         categorii[index].textareaCaretPosition = categorii[index].Detalii.length;
+        categorii[index].textareaCaretPositionEnd = categorii[index].Detalii.length;//??
       }
     }
     
@@ -493,7 +506,7 @@ class SpatiiUpdater extends React.Component {
     return Math.floor(new Date().getTime() * Math.random());
   }
 
-  setFocusState(index, type, state, caretPosition) {
+  setFocusState(index, type, state, caretPosition, caretPositionEnd) {
 
     let categorii = this.state.categoriiSpatii;
 
@@ -507,14 +520,17 @@ class SpatiiUpdater extends React.Component {
 
             categorii[index].inputIsFocused = true;
             categorii[index].inputCaretPosition = caretPosition;
+            categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
 
             categorii[index].textareaIsFocused = false;
             categorii[index].textareaCaretPosition = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;
+            categorii[index].textareaCaretPositionEnd = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;//??
 
           } else {
 
             categorii[index].inputIsFocused = false;
             categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
 
           }
 
@@ -527,14 +543,17 @@ class SpatiiUpdater extends React.Component {
 
             categorii[index].inputIsFocused = false;
             categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
 
             categorii[index].textareaIsFocused = true;
             categorii[index].textareaCaretPosition = caretPosition;
+            categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
 
           } else {
 
             categorii[index].textareaIsFocused = false;
             categorii[index].textareaCaretPosition = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;
+            categorii[index].textareaCaretPositionEnd = !categorii[index].Detalii ? 0 : categorii[index].Detalii.length;//??
             
           }
 
@@ -592,7 +611,9 @@ class SpatiiUpdater extends React.Component {
           item.inputIsFocused = true;
           item.textareaIsFocused = false;
           item.inputCaretPosition = item.Denumire.length;
+          item.inputCaretPositionEnd = item.Denumire.length;//??
           item.textareaCaretPosition = !item.Detalii ? 0 : item.Detalii.length;
+          item.textareaCaretPositionEnd = !item.Detalii ? 0 : item.Detalii.length;//??
 
           let backupItem = {
             Denumire: item.Denumire, 
@@ -645,7 +666,9 @@ class SpatiiUpdater extends React.Component {
         inputIsFocused={categorie.inputIsFocused}
         textareaIsFocused={categorie.textareaIsFocused}
         inputCaretPosition={categorie.inputCaretPosition}
+        inputCaretPositionEnd={categorie.inputCaretPositionEnd}
         textareaCaretPosition={categorie.textareaCaretPosition}
+        textareaCaretPositionEnd={categorie.textareaCaretPositionEnd}
 
         showWarning={undefined === categorie.showWarning || false === categorie.showWarning ? false : true}
         showError={undefined === categorie.showError || false === categorie.showError ? false : true}

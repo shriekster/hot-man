@@ -49,19 +49,19 @@ class CategorieSpatiu extends React.Component {
   }
 
   onInput(e) { 
-   this.props.input(this.props.index, 'denumire', e.target.value, e.target.selectionStart);
+   this.props.input(this.props.index, 'denumire', e.target.value, e.target.selectionStart, e.target.selectionEnd);
   }
 
   onText(e) {
-    this.props.input(this.props.index, 'detalii', e.target.value, e.target.selectionStart);
+    this.props.input(this.props.index, 'detalii', e.target.value, e.target.selectionStart, e.target.selectionEnd);
   }
 
   focus(e) {
-    this.props.focus(this.props.index, 'input', true, e.target.selectionStart);
+    this.props.focus(this.props.index, 'input', true, e.target.selectionStart, e.target.selectionEnd);
   }
 
   textFocus(e) {
-    this.props.focus(this.props.index, 'textarea', true, e.target.selectionStart);
+    this.props.focus(this.props.index, 'textarea', true, e.target.selectionStart, e.target.selectionEnd);
   }
 
   submit(e) {
@@ -130,7 +130,7 @@ class CategorieSpatiu extends React.Component {
       if (this.props.inputIsFocused) {
         this.input.current.focus();
         this.input.current.selectionStart = this.props.inputCaretPosition;
-        this.input.current.selectionEnd = this.props.inputCaretPosition;
+        this.input.current.selectionEnd = this.props.inputCaretPositionEnd;//??
       }
 
       else
@@ -138,7 +138,7 @@ class CategorieSpatiu extends React.Component {
       if (this.props.textareaIsFocused) {
         this.textArea.current.focus();
         this.textArea.current.selectionStart = this.props.textareaCaretPosition;
-        this.textArea.current.selectionEnd = this.props.textareaCaretPosition;
+        this.textArea.current.selectionEnd = this.props.textareaCaretPositionEnd;//??
       }
 
     }
