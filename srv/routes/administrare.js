@@ -92,6 +92,34 @@ function isValidEmail (email) {
   return valid;
 }
 
+/** Pentru centralizatorul spatiilor de cazare */
+
+/** number >= 1 */
+function isValidRoomNumber(number) {
+  let valid = false;
+  let regex = /^[1-9]{1}[0-9]*$/;
+  let test = regex.exec(number);
+
+  if (test && undefined !== test) {
+    valid = (test[0] === test.input);
+  }
+
+  return valid;
+}
+
+/** number >= 0 */
+function isValidFloorNumber(number) {
+  let valid = false;
+  let regex = /(0{1}|[1-9]{1}[0-9]*)/;
+  let test = regex.exec(number);
+
+  if (test && undefined !== test) {
+    valid = (test[0] === test.input);
+  }
+
+  return valid;
+}
+
 
 /** Updaters */
 
@@ -736,6 +764,79 @@ function deletePat(value) {
   return 'invalid';
 }
 
+/** Situatia spatiilor de cazare - C R U D */
+
+function createSCSingle() {
+
+}
+
+function createSCRange() {
+
+}
+
+function readSC() {
+  let error;
+
+  const spatii = db.prepare(
+  ` SELECT 
+      Spatii.Etaj AS etaj, 
+      Spatii.Numar AS numar,
+      CategoriiSpatii.Denumire AS tipSpatiu,
+      PaturiSpatii.NumarPaturi AS numarPaturi,
+      CategoriiPaturi.Denumire AS tipPat
+    FROM Spatii
+    JOIN CategoriiSpatii ON Spatii.CategorieSpatiuID=CategoriiSpatii.ID
+    JOIN PaturiSpatii ON Spatii.ID=PaturiSpatii.SpatiuID
+    JOIN CategoriiPaturi ON CategoriiPaturi.ID=PaturiSpatii.CategoriePatID
+    ORDER BY Spatii.Etaj, Spatii.Numar ASC, CategoriiPaturi.Denumire DESC`
+  );
+
+  let cats;
+
+  try {
+
+    cats = selectSpatii.all()
+
+  } catch(err) {
+
+    if (err) {
+
+      console.log(err);
+      error = err;
+
+      return res.json({
+        status: 'error',
+      });
+    } 
+  } finally {
+
+    if (!error) {
+      let categorii = Object.values(cats);
+
+      return res.json({
+        status: 'valid',
+        categoriiSpatii: categorii,
+      });
+    } 
+  }
+}
+
+function updateSCSingle() {
+
+}
+
+function updateSCRange() {
+
+}
+
+function deleteSCSingle() {
+
+}
+
+function deleteSCRange() {
+
+}
+
 
 /** Routes */
 
@@ -1037,7 +1138,7 @@ router.post('/', authorization, function(req, res) {
   }
 });
 
-/* POST - confort, paturi, spatii */
+/* POST - confort, paturi, spatii, centralizator (situatia spatiilor de cazare) */
 router.post('/:attribute', authorization, function(req, res) {
   res.set({
     'Allow': 'POST',
@@ -1317,6 +1418,30 @@ router.post('/:attribute', authorization, function(req, res) {
           break;
         }
 
+        /** Situatia spatiilor de cazare */
+        case 'central': {
+
+          if (req.body.task) {
+
+            switch (req.body.task) {
+
+              case 'read': {
+                
+                const {status, spatii} = readSC();
+
+                res.json({
+                  status: status,
+                  spatii: spatii,
+                });
+
+                break;
+              }
+
+            }
+
+          }
+          break;
+        }
       }
     }
   }

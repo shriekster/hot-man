@@ -2441,3 +2441,124 @@ input[type='text'].--pat-text:focus {
   border-radius: 4px;
 }
 
+
+/* Spatii - centralizator */
+.-spatiu-add {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: fit-content;
+  height: 100px;
+  margin-top: 8px;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  cursor: pointer;
+}
+
+.add-spatiu {
+  width: 36px;
+  height: 36px;
+}
+
+.add-spatiu-range {
+  width: 48px;
+  height: 48px;
+}
+
+.add-spatiu--disabled,
+.add-spatiu--disabled:hover,
+.add-spatiu--disabled:focus {
+  /* slategray*/
+  filter: invert(51%) sepia(7%) saturate(970%) hue-rotate(169deg) brightness(96%) contrast(90%) !important; 
+  cursor: not-allowed !important;
+}
+
+.--not-allowed,
+.--not-allowed:hover,
+.--not-allowed:focus {
+  cursor: not-allowed !important;
+}
+
+.add-spatiu,
+.add-spatiu-range {
+  /* darkslategray */
+  filter: invert(27%) sepia(26%) saturate(565%) hue-rotate(131deg) brightness(92%) contrast(91%);
+  transition: filter .2s linear;
+}
+
+.add-spatiu:hover,
+.add-spatiu:focus,
+.add-spatiu-range:hover, 
+.add-spatiu-range:focus {
+  /* #009500 */
+  filter: invert(30%) sepia(100%) saturate(1373%) hue-rotate(94deg) brightness(98%) contrast(105%);
+  cursor: pointer;
+}
+
+/* Centralizator - fiecare 'element' */
+.--cent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  margin-bottom: 2vh;
+  width: 400px;
+  height: 100px;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  /*padding-left: 3px;*/
+  position: relative;
+}
+
+.--cent-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(37, 170, 169, 1);
+  border-radius: 4px;
+  align-items: flex-start;
+  width: 300px;
+  height: 100px;
+}
+
+.--cent-form span {
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  font-size: 18px;
+  margin-left: 2px;
+}
+
+.--cent-field {
+  width: 296px;
+  height: 40px;
+  margin: 1px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+input[type='text'].--cent-text {
+  outline: none !important;
+  border: none;
+  display: inline;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-size: 18px;
+  width: 157px;
+  height: 40px;
+  padding: 2px 2px 2px 4px;
+  background-color: #9fd9d9;
+  color: lightslategray;
+
+  border: 1px solid lightslategray;
+  border-radius: 4px;
+}
+
+input[type='text'].--cent-text:disabled {
+  border: none;
+  color: darkslategray;
+}
+
+input[type='text'].--cent-text:focus {
+  color: #009500;
+  border: 1px #009500 inset;
+  border-radius: 4px;
+}
