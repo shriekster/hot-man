@@ -61,8 +61,11 @@ class PaturiUpdater extends React.Component {
 
           inputIsFocused: true,
           textareaIsFocused: false,
+
           inputCaretPosition: 0,
+          inputCaretPositionEnd: 0,//??
           textareaCaretPosition: 0,
+          textareaCaretPositionEnd: 0,//??
 
           isFetching: false,
         };
@@ -101,8 +104,11 @@ class PaturiUpdater extends React.Component {
 
               item.inputIsFocused = false;
               item.textareaIsFocused = false;
+
               item.inputCaretPosition = item.Denumire.length;
+              item.inputCaretPositionEnd = item.Denumire.length;//??
               item.textareaCaretPosition = item.NumarLocuri.length;
+              item.textareaCaretPositionEnd = item.NumarLocuri.length;//??
             });
 
             categorii.push(newItem);
@@ -173,7 +179,7 @@ class PaturiUpdater extends React.Component {
     }
   }
 
-  input(index, type, newValue, caretPosition) {
+  input(index, type, newValue, caretPosition, caretPositionEnd) {
 
     let categorii = this.state.categoriiPaturi;
 
@@ -185,6 +191,7 @@ class PaturiUpdater extends React.Component {
 
           categorii[index].Denumire = newValue;
           categorii[index].inputCaretPosition = caretPosition;
+          categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
     
           /** Hide the error or warning tippy */
           categorii[index].showNameWarning = false;
@@ -200,6 +207,7 @@ class PaturiUpdater extends React.Component {
 
           categorii[index].NumarLocuri = newValue;
           categorii[index].textareaCaretPosition = caretPosition;
+          categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
 
           /** Hide the error or warning tippy */
           categorii[index].showNumberWarning = false;
@@ -262,8 +270,11 @@ class PaturiUpdater extends React.Component {
 
         categorii[index].inputIsFocused = true;
         categorii[index].textareaIsFocused = false;
+
         categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
         categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+        categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
 
         this.setState({
           categoriiPaturi: categorii,
@@ -324,8 +335,11 @@ class PaturiUpdater extends React.Component {
                 categorii[index].isFetching = false;
                 categorii[index].inputIsFocused = true;
                 categorii[index].textareaIsFocused = false;
+
                 categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+                categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
                 categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+                categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
   
                 this.setState({
                   backup: backup,
@@ -508,8 +522,11 @@ class PaturiUpdater extends React.Component {
 
         categorii[index].inputIsFocused = true;
         categorii[index].textareaIsFocused = false;
+
         categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
         categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+        categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
       }
     }
     
@@ -526,7 +543,7 @@ class PaturiUpdater extends React.Component {
     return Math.floor(new Date().getTime() * Math.random());
   }
 
-  setFocusState(index, type, state, caretPosition) {
+  setFocusState(index, type, state, caretPosition, caretPositionEnd) {
 
     let categorii = this.state.categoriiPaturi;
 
@@ -540,14 +557,17 @@ class PaturiUpdater extends React.Component {
 
             categorii[index].inputIsFocused = true;
             categorii[index].inputCaretPosition = caretPosition;
+            categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
 
             categorii[index].textareaIsFocused = false;
             categorii[index].textareaCaretPosition = !categorii[index].NumarLocuri ? 0 : categorii[index].NumarLocuri.length;
+            categorii[index].textareaCaretPositionEnd = !categorii[index].NumarLocuri ? 0 : categorii[index].NumarLocuri.length;//??
 
           } else {
 
             categorii[index].inputIsFocused = false;
             categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
 
           }
 
@@ -560,14 +580,17 @@ class PaturiUpdater extends React.Component {
 
             categorii[index].inputIsFocused = false;
             categorii[index].inputCaretPosition = categorii[index].Denumire.length;
+            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
 
             categorii[index].textareaIsFocused = true;
             categorii[index].textareaCaretPosition = caretPosition;
+            categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
 
           } else {
 
             categorii[index].textareaIsFocused = false;
             categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
+            categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
             
           }
 
@@ -626,8 +649,11 @@ class PaturiUpdater extends React.Component {
 
           item.inputIsFocused = true;
           item.textareaIsFocused = false;
+
           item.inputCaretPosition = item.Denumire.length;
+          item.inputCaretPositionEnd = item.Denumire.length;//??
           item.textareaCaretPosition = item.NumarLocuri.length;
+          item.textareaCaretPositionEnd = item.NumarLocuri.length;//??
 
           let backupItem = {
             Denumire: item.Denumire, 
@@ -679,8 +705,11 @@ class PaturiUpdater extends React.Component {
         focus={this.setFocusState}
         inputIsFocused={categorie.inputIsFocused}
         textareaIsFocused={categorie.textareaIsFocused}
+
         inputCaretPosition={categorie.inputCaretPosition}
+        inputCaretPositionEnd={categorie.inputCaretPositionEnd}
         textareaCaretPosition={categorie.textareaCaretPosition}
+        textareaCaretPositionEnd={categorie.textareaCaretPositionEnd}
 
         showNameWarning={categorie.showNameWarning}
         showNameError={categorie.showNameError}
