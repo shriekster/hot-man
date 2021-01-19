@@ -131,24 +131,21 @@ class SpatiuCazare extends React.Component {
   }
 
   componentDidMount() {
-
-    if (this.props.isEditing) {
       
-      if (this.props.inputIsFocused) {
-        this.input.current.focus();
-        this.input.current.selectionStart = this.props.inputCaretPosition;
-        this.input.current.selectionEnd = this.props.inputCaretPositionEnd;//??
-      }
-
-      else
-
-      if (this.props.textareaIsFocused) {
-        this.inputN.current.focus();
-        this.inputN.current.selectionStart = this.props.textareaCaretPosition;
-        this.inputN.current.selectionEnd = this.props.textareaCaretPositionEnd;//??
-      }
-
+    if (this.props.inputIsFocused) {
+      this.input.current.focus();
+      this.input.current.selectionStart = this.props.inputCaretPosition;
+      this.input.current.selectionEnd = this.props.inputCaretPositionEnd;//??
     }
+
+    else
+
+    if (this.props.textareaIsFocused) {
+      this.inputN.current.focus();
+      this.inputN.current.selectionStart = this.props.textareaCaretPosition;
+      this.inputN.current.selectionEnd = this.props.textareaCaretPositionEnd;//??
+    }
+
   }
 
   componentDidUpdate (prevProps, prevState) {  
@@ -159,6 +156,18 @@ class SpatiuCazare extends React.Component {
     <>
     <div className='--pat-item'>
       <div className='--spatiu-inner'>
+      {
+        this.props.isChecked      ?
+        <div className='--icons-editing'>
+          <i className='far fa-check-square -check-icon'
+            onClick={() => { this.props.toggleChecked(this.props.index) }}></i>
+        </div>
+                                  :
+        <div className='--icons-editing'>
+          <i className='far fa-square -check-icon'
+            onClick={() => { this.props.toggleChecked(this.props.index) }}></i>
+        </div>
+      }
       <form
         id='--pat-form' 
         className='--pat-form'
@@ -193,7 +202,6 @@ class SpatiuCazare extends React.Component {
             visible={this.props.showNameError}>
             <input
               maxLength={64}
-              disabled={!this.props.isEditing}
               type='text'
               autoComplete='off'
               autoCorrect='off'
@@ -201,7 +209,7 @@ class SpatiuCazare extends React.Component {
               className='--pat-text'
               onInput={this.onInput}
               onKeyDown={this.onKeyDown}
-              value={this.props.value}
+              value={this.props.etaj}
               onClick={this.focus}
               ref={this.input}>
             </input>
@@ -239,14 +247,13 @@ class SpatiuCazare extends React.Component {
               visible={this.props.showNumberError}>
               <input
                 maxLength={10}
-                disabled={!this.props.isEditing}
                 type='text'
                 className='--pat-text'
                 autoComplete='off'
                 spellCheck={false}
                 onInput={this.onText}
                 onKeyDown={this.onKeyDown}
-                value={this.props.number}
+                value={this.props.numar}
                 onClick={this.textFocus}
                 ref={this.inputN}>
               </input>
@@ -254,50 +261,7 @@ class SpatiuCazare extends React.Component {
           </Tippy>
         </div>
       </form>
-      {
-        this.props.isEditing  ?
-        <Tippy
-            content={
-              <div className='--editing-hint'>
-                <i className='fas fa-caret-left --hint-caret' ></i>
-                <span> {this.state.editingHint}</span>
-              </div>
-            }
-            allowHTML={true}
-            placement='right'
-            arrow={false}
-            theme='material-confort'
-            offset={[this.state.hintOffsetY, 5]}
-            visible={this.state.hintVisible}>
-          <div className='--icons-editing'>
-            <div className='--save-and-cancel'>
-              <i className='fas fa-save -save-icon'
-                onMouseOver={this.onSaveMouseOver}
-                onMouseOut={this.onIconMouseOut}
-                onClick={() => {this.props.save(this.props.index)}}></i>
-              <i className='fas fa-window-close -cancel-icon'
-                onMouseOver={this.onCancelMouseOver}
-                onMouseOut={this.onIconMouseOut}
-                onClick={() => this.props.cancel(this.props.index)}></i>
-            </div>
-            {
-              !this.props.isFresh &&
-              <div className='--delete'>
-                <i className='fas fa-trash-alt -delete-icon'
-                  onMouseOver={this.onDeleteMouseOver}
-                  onMouseOut={this.onIconMouseOut}
-                  onClick={() => this.props.delete(this.props.index)}></i>
-              </div>
-            }
 
-          </div>
-        </Tippy>
-                            :
-        <div className='--icons-editing'>
-          <i className='fas fa-edit -edit-icon'
-            onClick={() => { this.props.edit(this.props.index) }}></i>
-        </div>
-      }
       </div>
       <Spinner
         status='loading'

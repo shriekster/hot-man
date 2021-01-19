@@ -1888,7 +1888,17 @@ table.--zilnic-table {
   color: darkslategray;
 }
 
-.--next:hover {
+.-check-all {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  cursor: pointer;
+  transition: color .2s linear;
+  color: darkslategray;
+}
+
+.--next:hover,
+.-check-all:hover {
   color: #009500;
 }
 
@@ -2464,3 +2474,20 @@ input[type='text'].--pat-text:focus {
 }
 
 
+.-check-icon  {
+  font-size: 36px;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.-check-icon:hover {
+  color: #009500;
+}
+
+.-spatii-title {
+  margin-top: 15px;
+  margin-left: 37px;
+  width: 350px;
+  position: relative;
+  margin-bottom: 30px;
+}
