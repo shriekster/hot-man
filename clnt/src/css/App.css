@@ -1881,8 +1881,8 @@ table.--zilnic-table {
 
 .--next {
   position: absolute;
-  right: 10px;
-  top: 0px;
+  right: 60px;
+  top: 8px;
   cursor: pointer;
   transition: color .2s linear;
   color: darkslategray;
@@ -2489,7 +2489,7 @@ input[type='text'].--pat-text:focus {
   margin-left: 37px;
   width: 350px;
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
 .--cazare-item {
@@ -2541,4 +2541,14 @@ input[type='text'].--pat-text:focus {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.--cazare-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  margin-top: 8px;
+  position: relative;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
 }

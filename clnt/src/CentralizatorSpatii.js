@@ -880,7 +880,7 @@ class CentralizatorSpatii extends React.Component {
               {spaces}
             </div>
           </div>
-          <div className='--confort-add'>
+          <div className='--cazare-add'>
           {
             this.state.creating ?
             <Tippy
