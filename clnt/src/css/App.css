@@ -2491,3 +2491,54 @@ input[type='text'].--pat-text:focus {
   position: relative;
   margin-bottom: 30px;
 }
+
+.--cazare-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  margin-bottom: 2vh;
+  width: 400px;
+  height: 300px;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  /*padding-left: 3px;*/
+  position: relative;
+}
+
+.--cazare-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 4px;
+  width: 100%;
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  padding-left: 3px;
+}
+
+.--cazare-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(37, 170, 169, 1);
+  border-radius: 4px;
+  align-items: flex-start;
+  width: 75%;
+  height: 100%;
+  margin: 10px;
+}
+
+.--cazare-form span {
+  font-family: 'Source Sans Pro Regular', Verdana, sans-serif ;
+  font-size: 18px;
+  margin-left: 2px;
+}
+
+.--cazare-field {
+  width: calc(100% - 2px);
+  height: 40px;
+  margin: 1px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -25,6 +25,8 @@ class CentralizatorSpatii extends React.Component {
 
     this.toggleChecked = this.toggleChecked.bind(this);
 
+    this.handleMasterCheckboxClick = this.handleMasterCheckboxClick.bind(this);
+
     this.state = {
       backup: [],
 
@@ -35,6 +37,21 @@ class CentralizatorSpatii extends React.Component {
       checkLevel: 0,
 
       creating: false,
+
+      checkBoxData: [ /** checkLevel: { 0: none, 1: some, 2: all } */
+        {
+          hint: 'Bifează tot',
+          icon: 'far fa-square -check-icon',
+        },
+        {
+          hint: 'Bifează tot',
+          icon: 'far fa-minus-square -check-icon',
+        },
+        {
+          hint: 'Debifează tot',
+          icon: 'far fa-check-square -check-icon',
+        }
+      ],
     };
   }
 
@@ -613,14 +630,79 @@ class CentralizatorSpatii extends React.Component {
 
   toggleChecked(index) {
     let spatii = this.state.spatii;
+    let checkLevel = this.state.checkLevel;
 
     if (index >= 0 && index < spatii.length) {
-      spatii[index].isChecked = !spatii[index].isChecked;
+
+      /** Toggle item check state (@index) */
+      spatii[index].isChecked = !(spatii[index].isChecked);
+
+      /** Update the parent component's check state */
+      const itemIsChecked = (value) => { return value.isChecked; };
+  
+      if (spatii.every(itemIsChecked) && checkLevel !== 2) {
+        console.log('ALL')
+        checkLevel = 2;
+      }
+  
+      else 
+  
+      if (spatii.some(itemIsChecked) && checkLevel !== 1) {
+        console.log('SOME')
+        checkLevel = 1;
+      }
+  
+      else 
+  
+      if (!spatii.some(itemIsChecked) && checkLevel !== 0) {
+        console.log('NONE')
+        checkLevel = 0;
+      }
 
       this.setState({
+        checkLevel: checkLevel,
         spatii: spatii,
       })
     }
+  }
+
+  handleMasterCheckboxClick() {
+
+    let checkLevel = this.state.checkLevel;
+    let spatii = this.state.spatii;
+    
+    switch (checkLevel) {
+
+      /** none or some are checked */
+      case 0:
+      case 1: {
+        
+        checkLevel = 2;
+
+        spatii.forEach(item => {
+          item.isChecked = true;
+        });
+
+        break;
+      }
+
+      /** all are checked */
+      case 2: {
+
+        checkLevel = 0;
+
+        spatii.forEach(item => {
+          item.isChecked = false;
+        });
+
+        break;
+      }
+    }
+
+    this.setState({
+      spatii: spatii,
+      checkLevel: checkLevel,
+    })
   }
 
   componentDidMount() {
@@ -648,6 +730,7 @@ class CentralizatorSpatii extends React.Component {
       if ('valid' === res.status) {
 
         let cats = res.spatii;
+        console.log(cats);
 
         let length = 0;
         let backup = [];
@@ -702,31 +785,6 @@ class CentralizatorSpatii extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    let spatii = this.state.spatii;
-
-    const itemIsChecked = (value) => value.isChecked;
-
-    if (spatii.every(itemIsChecked) && this.state.checkLevel !== 2) {
-      this.setState({
-        checkLevel: 2,
-      })
-    }
-
-    else 
-
-    if (spatii.some(itemIsChecked) && this.state.checkLevel !== 1) {
-      this.setState({
-        checkLevel: 1,
-      })
-    }
-
-    else 
-
-    if (!spatii.some(itemIsChecked) && this.state.checkLevel !== 0) {
-      this.setState({
-        checkLevel: 0,
-      })
-    }
   }
 
   render() {
@@ -797,66 +855,23 @@ class CentralizatorSpatii extends React.Component {
               </Tippy>
           </div>
           <div className='-check-all'>
-            {
-              this.state.checkLevel === 0 &&
             <Tippy
-              content={
-                <div className='-cen-txt'>
-                  <>
-                    Bifează tot
-                  </>
-                </div>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-centralizator-spatii'
-              hideOnClick={false}
-              offset={[0, 22]}>
-              <i className='far fa-square -check-icon'
-                onClick={() => {}}></i>
-            </Tippy>
-            }
-            {
-              this.state.checkLevel === 1 &&
-            <Tippy
-              content={
-                <div className='-cen-txt'>
-                  <>
-                    Bifează tot
-                  </>
-                </div>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-centralizator-spatii'
-              hideOnClick={false}
-              offset={[0, 22]}>
-              <i className='far fa-minus-square -check-icon'
-                onClick={() => {}}></i>
-            </Tippy>
-            }
-            {
-              this.state.checkLevel === 2 &&
-            <Tippy
-              content={
-                <div className='-cen-txt'>
-                  <>
-                    Debifează tot
-                  </>
-                </div>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-centralizator-spatii'
-              hideOnClick={false}
-              offset={[0, 22]}>
-              <i className='far fa-check-square -check-icon'
-                onClick={() => {}}></i>
-            </Tippy>
-            }
+                content={
+                  <div className='-cen-txt'>
+                    <>
+                      {this.state.checkBoxData[this.state.checkLevel].hint}
+                    </>
+                  </div>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={true}
+                theme='material-centralizator-spatii'
+                hideOnClick={false}
+                offset={[0, 22]}>
+                <i className={this.state.checkBoxData[this.state.checkLevel].icon}
+                  onClick={this.handleMasterCheckboxClick}></i>
+              </Tippy>
           </div>
         </div>
           <div id='confort-categories' 

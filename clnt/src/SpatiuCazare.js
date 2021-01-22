@@ -131,7 +131,7 @@ class SpatiuCazare extends React.Component {
   }
 
   componentDidMount() {
-      
+    /*
     if (this.props.inputIsFocused) {
       this.input.current.focus();
       this.input.current.selectionStart = this.props.inputCaretPosition;
@@ -145,7 +145,7 @@ class SpatiuCazare extends React.Component {
       this.inputN.current.selectionStart = this.props.textareaCaretPosition;
       this.inputN.current.selectionEnd = this.props.textareaCaretPositionEnd;//??
     }
-
+    */
   }
 
   componentDidUpdate (prevProps, prevState) {  
@@ -154,77 +154,33 @@ class SpatiuCazare extends React.Component {
   render() {
     return (
     <>
-    <div className='--pat-item'>
-      <div className='--spatiu-inner'>
-      {
-        this.props.isChecked      ?
-        <div className='--icons-editing'>
-          <i className='far fa-check-square -check-icon'
-            onClick={() => { this.props.toggleChecked(this.props.index) }}></i>
-        </div>
-                                  :
-        <div className='--icons-editing'>
-          <i className='far fa-square -check-icon'
-            onClick={() => { this.props.toggleChecked(this.props.index) }}></i>
-        </div>
-      }
-      <form
-        id='--pat-form' 
-        className='--pat-form'
-        onSubmit={this.submit}>
-        <div className='--pat-field'>
-          <span>
-            Denumire
-          </span>
-          <Tippy
-          content={
-            <>
-              <span><i className='fas fa-exclamation-circle'></i> Introdu denumirea categoriei</span>
-            </>
-          }
-          allowHTML={true}
-          placement='right'
-          arrow={false}
-          theme='red-material-warning'
-          offset={[0, 140]}
-          visible={this.props.showNameWarning}>
-          <Tippy
-            content={
-              <>
-                <span><i className='fas fa-minus-circle'></i> Denumire invalidă</span>
-              </>
-            }
-            allowHTML={true}
-            placement='right'
-            arrow={false}
-            theme='red-material-warning'
-            offset={[0, 140]}
-            visible={this.props.showNameError}>
-            <input
-              maxLength={64}
-              type='text'
-              autoComplete='off'
-              autoCorrect='off'
-              spellCheck={false}
-              className='--pat-text'
-              onInput={this.onInput}
-              onKeyDown={this.onKeyDown}
-              value={this.props.etaj}
-              onClick={this.focus}
-              ref={this.input}>
-            </input>
-          </Tippy>
-        </Tippy>
-        </div>
+    <div className='--cazare-item'>
+      <div className='--cazare-inner'>
+        {
+          this.props.isChecked      ?
+          <div className='--icons-editing'>
+            <i className='far fa-check-square -check-icon'
+              onClick={() => { this.props.toggleChecked(this.props.index) }}></i>
+          </div>
+                                    :
+          <div className='--icons-editing'>
+            <i className='far fa-square -check-icon'
+              onClick={() => { this.props.toggleChecked(this.props.index) }}></i>
+          </div>
+        }
+        <form
+          id='--cazare-form' 
+          className='--cazare-form'
+          onSubmit={this.submit}>
 
-        <div className='--pat-field'>
-          <span>
-            Număr de locuri
-          </span>
-          <Tippy
+          <div className='--cazare-field'>
+            <span>
+              Etaj
+            </span>
+            <Tippy
             content={
               <>
-                <span><i className='fas fa-exclamation-circle'></i> Introdu numărul de locuri</span>
+                <span><i className='fas fa-exclamation-circle'></i> Introdu numărul etajului</span>
               </>
             }
             allowHTML={true}
@@ -232,11 +188,11 @@ class SpatiuCazare extends React.Component {
             arrow={false}
             theme='red-material-warning'
             offset={[0, 140]}
-            visible={this.props.showNumberWarning}>
+            visible={this.props.showNameWarning}>
             <Tippy
               content={
                 <>
-                  <span><i className='fas fa-minus-circle'></i> Număr invalid</span>
+                  <span><i className='fas fa-minus-circle'></i> Etaj invalid</span>
                 </>
               }
               allowHTML={true}
@@ -244,24 +200,118 @@ class SpatiuCazare extends React.Component {
               arrow={false}
               theme='red-material-warning'
               offset={[0, 140]}
-              visible={this.props.showNumberError}>
+              visible={this.props.showNameError}>
               <input
-                maxLength={10}
+                maxLength={64}
                 type='text'
-                className='--pat-text'
                 autoComplete='off'
+                autoCorrect='off'
                 spellCheck={false}
-                onInput={this.onText}
+                className='--pat-text'
+                onInput={this.onInput}
                 onKeyDown={this.onKeyDown}
-                value={this.props.numar}
-                onClick={this.textFocus}
-                ref={this.inputN}>
+                value={this.props.etaj}
+                onClick={this.focus}
+                ref={this.input}>
               </input>
             </Tippy>
           </Tippy>
-        </div>
-      </form>
+          </div>
 
+          <div className='--cazare-field'>
+            <span>
+              Număr
+            </span>
+            <Tippy
+              content={
+                <>
+                  <span><i className='fas fa-exclamation-circle'></i> Introdu numărul spațiului de cazare</span>
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              offset={[0, 140]}
+              visible={this.props.showNumberWarning}>
+              <Tippy
+                content={
+                  <>
+                    <span><i className='fas fa-minus-circle'></i> Număr invalid</span>
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 140]}
+                visible={this.props.showNumberError}>
+                <input
+                  maxLength={10}
+                  type='text'
+                  className='--pat-text'
+                  autoComplete='off'
+                  spellCheck={false}
+                  onInput={this.onText}
+                  onKeyDown={this.onKeyDown}
+                  value={this.props.numar}
+                  onClick={this.textFocus}
+                  ref={this.inputN}>
+                </input>
+              </Tippy>
+            </Tippy>
+          </div>
+        
+          <div className='--cazare-field'>
+            <span>
+              Tip spațiu
+            </span>
+            <Tippy
+              content={
+                <>
+                  <span><i className='fas fa-exclamation-circle'></i> Introdu tipul spațiului de cazare</span>
+                </>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={false}
+              theme='red-material-warning'
+              offset={[0, 140]}
+              visible={this.props.showNumberWarning}>
+              <Tippy
+                content={
+                  <>
+                    <span><i className='fas fa-minus-circle'></i> Tip spațiu invalid</span>
+                  </>
+                }
+                allowHTML={true}
+                placement='right'
+                arrow={false}
+                theme='red-material-warning'
+                offset={[0, 140]}
+                visible={this.props.showNumberError}>
+                <input
+                  maxLength={10}
+                  type='text'
+                  className='--pat-text'
+                  autoComplete='off'
+                  spellCheck={false}
+                  onInput={this.onText}
+                  onKeyDown={this.onKeyDown}
+                  value={this.props.tip}
+                  onClick={this.textFocus}
+                  ref={this.inputN}>
+                </input>
+              </Tippy>
+            </Tippy>
+          </div>
+        
+          {/** Paturi */}
+          <div className='--cazare-field'>
+            <span>Paturi</span>
+          </div>
+        
+        </form>
       </div>
       <Spinner
         status='loading'
