@@ -2642,7 +2642,6 @@ input[type='text'].-cell:focus {
   /*background-color: #009300;*/
   background-image: linear-gradient(rgba(79, 183, 183, .9), rgba(0, 147, 0, .7), rgba(79, 183, 183, .9));
 }
-
 .-rows {
   direction: ltr;
   width: 100%;
