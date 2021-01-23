@@ -2659,7 +2659,7 @@ input[type='text'].-cell:focus {
   padding-left: 2px;
   
   position: absolute;
-  right: 0;
+  right: -400px;
   top: 50px;
 }
 
