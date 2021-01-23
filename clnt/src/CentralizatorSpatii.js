@@ -883,47 +883,47 @@ class CentralizatorSpatii extends React.Component {
                     onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
                 </Tippy>
             </div>
-            <div className='-check-all'>
-              <Tippy
-                  content={
-                    <div className='-cen-txt'>
-                      <>
-                        {this.state.checkBoxData[this.state.checkLevel].hint}
-                      </>
-                    </div>
-                  }
-                  allowHTML={true}
-                  placement='right'
-                  arrow={true}
-                  theme='material-centralizator-spatii'
-                  hideOnClick={false}
-                  offset={[0, 10]}>
-                  <i className={this.state.checkBoxData[this.state.checkLevel].icon}
-                    onClick={this.toggleMasterChecked}></i>
-                </Tippy>
-            </div>
           </div>
-          <div className='-floor-select-container'>
-            <span>Etaj: </span>
-            <Select
-              id='-floor-select'
-              isDisabled={false}
-              defaultValue={0}
-              //onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
-              //onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
-              maxMenuHeight={100}
-              placeholder='Selectează...'
-              noOptionsMessage={(msg) => 'Nu există'}
-              className='floor-sel-container'
-              classNamePrefix='floor-sel' 
-              options={this.state.floors} 
-              onKeyDown={this.onKeyDown}
-              ref={this.gradInput}
-              openMenuOnFocus={true}
-              closeMenuOnSelect={true}
-              blurInputOnSelect={true}
-              //onMenuClose={this.submitOnMenuClose}
-              inputId='-floor-select-input'/> 
+        </div>
+        <div className='-theader -check-all'>
+          <Tippy
+              content={
+                <div className='-cen-txt'>
+                  <>
+                    {this.state.checkBoxData[this.state.checkLevel].hint}
+                  </>
+                </div>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={true}
+              theme='material-centralizator-spatii'
+              hideOnClick={false}
+              offset={[0, 10]}>
+              <i className={this.state.checkBoxData[this.state.checkLevel].icon}
+                onClick={this.toggleMasterChecked}></i>
+            </Tippy>
+            <div className='-floor-select-container'>
+              <span>Etaj: </span>
+              <Select
+                id='-floor-select'
+                isDisabled={false}
+                defaultValue={0}
+                //onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
+                //onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
+                maxMenuHeight={100}
+                placeholder='Selectează...'
+                noOptionsMessage={(msg) => 'Nu există'}
+                className='floor-sel-container'
+                classNamePrefix='floor-sel' 
+                options={this.state.floors} 
+                onKeyDown={this.onKeyDown}
+                ref={this.gradInput}
+                openMenuOnFocus={true}
+                closeMenuOnSelect={true}
+                blurInputOnSelect={true}
+                //onMenuClose={this.submitOnMenuClose}
+                inputId='-floor-select-input'/> 
           </div>
         </div>
         <div id='-scroller' 

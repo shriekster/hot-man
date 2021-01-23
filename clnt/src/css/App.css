@@ -2452,12 +2452,21 @@ input[type='text'].--pat-text:focus {
 }
 
 .-check-all {
-  position: absolute;
+  /*position: absolute;
   left: 0;
-  top: 58px;
+  top: 58px;*/
   cursor: pointer;
   transition: color .2s linear;
   color: darkslategray;
+}
+
+.-theader {
+  align-items: center;
+  justify-content: space-evenly;
+  width: 700px;
+  height: 46px;
+  margin-left: 37px;
+  position: relative;
 }
 
 .--next:hover,
@@ -2557,6 +2566,7 @@ input[type='text'].--pat-text:focus {
 .centralizator-menu {
   margin-top: 15px;
   margin-left: 37px;
+  margin-bottom: 30px;
   width: 350px;
   position: relative;
 }
@@ -2573,6 +2583,13 @@ input[type='text'].--pat-text:focus {
   height: 44px;
   margin-left: 37px;
 }
+
+.-row:nth-child(odd) {
+  background: rgba(37, 170, 169, .2);
+  border: 1px solid #25AAA9;
+  border-radius: 4px;
+}
+
 
 input[type='text'].-cell {
   outline: none !important;
@@ -2614,12 +2631,10 @@ input[type='text'].-cell:focus {
   overflow-y: auto;
   height: 100%;
   width: 700px;
-  margin-top: 25px;
   unicode-bidi: bidi-override;
   direction: rtl;
   position: relative;
   border-top: 1px solid black;
-  margin-top: 80px;
 }
 
 .-scroller::-webkit-scrollbar-track {
@@ -2642,6 +2657,7 @@ input[type='text'].-cell:focus {
   /*background-color: #009300;*/
   background-image: linear-gradient(rgba(79, 183, 183, .9), rgba(0, 147, 0, .7), rgba(79, 183, 183, .9));
 }
+
 .-rows {
   direction: ltr;
   width: 100%;
@@ -2658,8 +2674,8 @@ input[type='text'].-cell:focus {
   padding-left: 2px;
   
   position: absolute;
-  right: -400px;
-  top: 50px;
+  right: -60px;
+  top: 0;
 }
 
 /* floor selector */
