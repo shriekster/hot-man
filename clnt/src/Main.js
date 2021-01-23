@@ -152,9 +152,11 @@ class Main extends React.Component {
   }
 
   onSettingsEnter() {
-    this.setState({
-      userSettingsClass: '--opened'
-    });
+    if (this.state.userSettingsClass === '') {
+      this.setState({
+        userSettingsClass: '--opened'
+      });
+    }
   }
 
   onSettingsLeave() {
@@ -227,6 +229,25 @@ class Main extends React.Component {
     /** 2: exista solicitari a caror data incepe de maine? */
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.state.showUserSettings && this.state.userSettingsClass !== '' &&
+        prevState.showUserSettings) {
+      this.setState({
+        userSettingsClass: ''
+      });
+    }
+
+    else 
+
+    if (this.state.showUserSettings && this.state.userSettingsClass === '' &&
+        !prevState.showUserSettings) {
+      this.setState({
+        userSettingsClass: '--opened'
+      });
+    }
+
+  }
+
 
   render() {
     let Component = this.state.defaultComponent;
@@ -286,10 +307,10 @@ class Main extends React.Component {
           onClick={() => {if (this.state.showUserSettings) this.closeUserSettings()}}>
           <div className='user-settings'>
             <span id='--settings-arrow'>
-            {true === this.state.showUserSettings ?
+            {/*true === this.state.showUserSettings ?
             <i className={'fas fa-caret-right user-settings--arrow' + ' ' + this.state.userSettingsClass}></i> :
             <i className={'fas fa-caret-left user-settings--arrow' + ' ' + this.state.userSettingsClass}></i>
-            }
+            */}
             </span>
             <Tippy
             content={
@@ -335,12 +356,19 @@ class Main extends React.Component {
             arrow={false}
             theme='blue-material-thin'
             interactive={true}
-            offset={[0, 4]}
+            offset={[0, 0]}
             visible={this.state.showUserSettings}>
               <span id='user-icon' className='user-icon'>
+                <span id='--settings-arrow'>
+                  {true === this.state.showUserSettings ?
+                  <i className={'fas fa-caret-right user-settings--arrow' + ' ' + this.state.userSettingsClass}></i> :
+                  <i className={'fas fa-caret-left user-settings--arrow' + ' ' + this.state.userSettingsClass}></i>
+                  }
+                </span>
                 <i className='fas fa-user-circle --uicon' 
                   onClick={this.toggleUserSettings}
-                  onMouseEnter={this.onSettingsEnter}
+                  //onMouseEnter={this.onSettingsEnter}
+                  onMouseOver={this.onSettingsEnter}
                   onMouseLeave={this.onSettingsLeave}></i>
               </span>
             </Tippy>

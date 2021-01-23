@@ -1,5 +1,8 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
+import Select from 'react-select';
+
+import Spinner from './Spinner';
 
 import SpatiuCazare from './SpatiuCazare';
 
@@ -25,30 +28,32 @@ class CentralizatorSpatii extends React.Component {
 
     this.toggleChecked = this.toggleChecked.bind(this);
 
-    this.handleMasterCheckboxClick = this.handleMasterCheckboxClick.bind(this);
+    this.toggleMasterChecked = this.toggleMasterChecked.bind(this);
 
     this.state = {
+
       backup: [],
+      current: [],
 
-      spatii: [],
+      floors: [],
 
-      addMultiple: false,
+      addRange: false,
 
       checkLevel: 0,
 
       creating: false,
 
-      checkBoxData: [ /** checkLevel: { 0: none, 1: some, 2: all } */
+      checkBoxData: [ /** checkLevel: { 0: none checked, 1: some checked, 2: all checked } */
         {
-          hint: 'Bifează tot',
+          hint: 'Selectează tot',
           icon: 'far fa-square -check-icon',
         },
         {
-          hint: 'Bifează tot',
+          hint: 'Selectează tot',
           icon: 'far fa-minus-square -check-icon',
         },
         {
-          hint: 'Debifează tot',
+          hint: 'Deselectează tot',
           icon: 'far fa-check-square -check-icon',
         }
       ],
@@ -65,7 +70,7 @@ class CentralizatorSpatii extends React.Component {
 
       if (this.state.creating) {
 
-        let categorii = this.state.spatii;
+        let categorii = this.state.current;
         let backup = this.state.backup;
 
         let newItem = {
@@ -141,7 +146,7 @@ class CentralizatorSpatii extends React.Component {
 
         this.setState({
           backup: backup,
-          spatii: categorii,
+          current: categorii,
         });
       }
     });
@@ -149,7 +154,7 @@ class CentralizatorSpatii extends React.Component {
 
   edit(index) {
 
-    let categorii = this.state.spatii;
+    let categorii = this.state.current;
     let backup = this.state.backup;
 
     if (index >= 0 && index < categorii.length) {
@@ -195,7 +200,7 @@ class CentralizatorSpatii extends React.Component {
 
       this.setState({
         backup: backup,
-        spatii: categorii,
+        current: categorii,
 
         creating: true, /** Block the creation of a new item while editing */
       });
@@ -204,7 +209,7 @@ class CentralizatorSpatii extends React.Component {
 
   input(index, type, newValue, caretPosition, caretPositionEnd) {
 
-    let categorii = this.state.spatii;
+    let categorii = this.state.current;
 
     switch (type) {
 
@@ -242,7 +247,7 @@ class CentralizatorSpatii extends React.Component {
     }
     
     this.setState({
-      spatii: categorii,
+      current: categorii,
     });
   }
 
@@ -250,7 +255,7 @@ class CentralizatorSpatii extends React.Component {
 
     let body;
     let backup = this.state.backup;
-    let categorii = this.state.spatii;
+    let categorii = this.state.current;
 
     if (index >= 0 && index < categorii.length) {
 
@@ -273,7 +278,7 @@ class CentralizatorSpatii extends React.Component {
         categorii[index].isFetching = false;
 
         this.setState({
-          spatii: categorii,
+          current: categorii,
         });
       }
 
@@ -300,7 +305,7 @@ class CentralizatorSpatii extends React.Component {
         categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
 
         this.setState({
-          spatii: categorii,
+          current: categorii,
           creating: false,
         })
       }
@@ -366,7 +371,7 @@ class CentralizatorSpatii extends React.Component {
   
                 this.setState({
                   backup: backup,
-                  spatii: categorii,
+                  current: categorii,
                   creating: false,
                 });
   
@@ -385,7 +390,7 @@ class CentralizatorSpatii extends React.Component {
                 categorii[index].isFetching = false;
   
                 this.setState({
-                  spatii: categorii,
+                  current: categorii,
                 });
   
                 break;
@@ -402,7 +407,7 @@ class CentralizatorSpatii extends React.Component {
                 categorii[index].isFetching = false;
   
                 this.setState({
-                  spatii: categorii,
+                  current: categorii,
                 });
   
                 break;
@@ -419,7 +424,7 @@ class CentralizatorSpatii extends React.Component {
                 categorii[index].isFetching = false;
   
                 this.setState({
-                  spatii: categorii,
+                  current: categorii,
                 });
   
                 break;
@@ -440,7 +445,7 @@ class CentralizatorSpatii extends React.Component {
 
   delete(index) {
 
-    let categorii = this.state.spatii;
+    let categorii = this.state.current;
     let backup = this.state.backup;
    
     let toDelete = '';
@@ -482,7 +487,7 @@ class CentralizatorSpatii extends React.Component {
 
         this.setState({
           backup: backup,
-          spatii: categorii,
+          current: categorii,
 
           creating: false,
         })
@@ -491,7 +496,7 @@ class CentralizatorSpatii extends React.Component {
 
       else {
 
-        let categorii = this.state.spatii;
+        let categorii = this.state.current;
 
         categorii.forEach(item => {
           
@@ -507,7 +512,7 @@ class CentralizatorSpatii extends React.Component {
         });
 
         this.setState({
-          spatii: categorii,
+          current: categorii,
           creating: false,
         });
       }
@@ -515,7 +520,7 @@ class CentralizatorSpatii extends React.Component {
   }
 
   cancel(index) {
-    let categorii = this.state.spatii;
+    let categorii = this.state.current;
     let backup = this.state.backup;
 
     if (index >= 0 && index < categorii.length) {
@@ -556,7 +561,7 @@ class CentralizatorSpatii extends React.Component {
 
     this.setState({
       backup: backup,
-      spatii: categorii,
+      current: categorii,
 
       creating: false,
     });
@@ -568,7 +573,7 @@ class CentralizatorSpatii extends React.Component {
 
   setFocusState(index, type, state, caretPosition, caretPositionEnd) {
 
-    let categorii = this.state.spatii;
+    let categorii = this.state.current;
 
     if (index >= 0 && index <= categorii.length) {
 
@@ -623,53 +628,50 @@ class CentralizatorSpatii extends React.Component {
       }
 
       this.setState({
-        spatii: categorii,
+        current: categorii,
       });
     }
   }
 
   toggleChecked(index) {
-    let spatii = this.state.spatii;
+    let current = this.state.current;
     let checkLevel = this.state.checkLevel;
 
-    if (index >= 0 && index < spatii.length) {
+    if (index >= 0 && index < current.length) {
 
       /** Toggle item check state (@index) */
-      spatii[index].isChecked = !(spatii[index].isChecked);
+      current[index].isChecked = !(current[index].isChecked);
 
       /** Update the parent component's check state */
       const itemIsChecked = (value) => { return value.isChecked; };
   
-      if (spatii.every(itemIsChecked) && checkLevel !== 2) {
-        console.log('ALL')
+      if (current.every(itemIsChecked) && checkLevel !== 2) {
         checkLevel = 2;
       }
   
       else 
   
-      if (spatii.some(itemIsChecked) && checkLevel !== 1) {
-        console.log('SOME')
+      if (current.some(itemIsChecked) && checkLevel !== 1) {
         checkLevel = 1;
       }
   
       else 
   
-      if (!spatii.some(itemIsChecked) && checkLevel !== 0) {
-        console.log('NONE')
+      if (!current.some(itemIsChecked) && checkLevel !== 0) {
         checkLevel = 0;
       }
 
       this.setState({
         checkLevel: checkLevel,
-        spatii: spatii,
+        current: current,
       })
     }
   }
 
-  handleMasterCheckboxClick() {
+  toggleMasterChecked() {
 
     let checkLevel = this.state.checkLevel;
-    let spatii = this.state.spatii;
+    let current = this.state.current;
     
     switch (checkLevel) {
 
@@ -679,7 +681,7 @@ class CentralizatorSpatii extends React.Component {
         
         checkLevel = 2;
 
-        spatii.forEach(item => {
+        current.forEach(item => {
           item.isChecked = true;
         });
 
@@ -691,7 +693,7 @@ class CentralizatorSpatii extends React.Component {
 
         checkLevel = 0;
 
-        spatii.forEach(item => {
+        current.forEach(item => {
           item.isChecked = false;
         });
 
@@ -700,13 +702,13 @@ class CentralizatorSpatii extends React.Component {
     }
 
     this.setState({
-      spatii: spatii,
+      current: current,
       checkLevel: checkLevel,
     })
   }
 
   componentDidMount() {
-    /** 'descarc' categoriile de paturi */
+    /** 'descarc' info -> spatiile de cazare */
     const requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -729,13 +731,14 @@ class CentralizatorSpatii extends React.Component {
       
       if ('valid' === res.status) {
 
-        let cats = res.spatii;
-        console.log(cats);
+        let items = res.spatii;
 
         let length = 0;
         let backup = [];
 
-        cats.forEach( item => {
+        let _floors = [];
+
+        items.forEach( item => {
 
           item.index = length++;
 
@@ -761,17 +764,28 @@ class CentralizatorSpatii extends React.Component {
           let backupItem = {
             etaj: item.etaj, 
             numar: item.numar,
-            tip: item.tipSpatiu,
+            tipSpatiu: item.tipSpatiu,
             paturi: Object.assign({}, item.paturi)
           };
 
           backup.push(backupItem);
 
+          //!!
+          _floors.push(item.etaj);
+
+        });
+
+        let floorsArray = _floors.filter((value, index, self) => self.indexOf(value) === index);
+        let floorsOptions = [];
+
+        floorsArray.forEach(item => {
+          floorsOptions.push( { value: item, label: 0 === item ? 'Parter' : item } );
         });
 
         this.setState({
           backup: backup,
-          spatii: cats,
+          current: items,
+          floors: floorsOptions,
         });
 
       } 
@@ -789,141 +803,135 @@ class CentralizatorSpatii extends React.Component {
 
   render() {
 
-    let spatii = this.state.spatii;
+    let current = this.state.current;
 
-    const spaces = spatii.map(
-      (spatiu) =>
+    const items = current.map(
+      
+      (item) =>
 
-      <SpatiuCazare
-        key={this.generateKey()}
-        index={spatiu.index}
-
-        etaj={spatiu.etaj}
-        numar={spatiu.numar}
-        tip={spatiu.tipSpatiu}
-        paturi={spatiu.paturi}
-
-        add={this.add}
-        edit={this.edit}
-        input={this.input}
-        save={this.save}
-        cancel={this.cancel}
-        delete={this.delete}
-
-        focus={this.setFocusState}
-        inputIsFocused={spatiu.inputIsFocused}
-        textareaIsFocused={spatiu.textareaIsFocused}
-
-        toggleChecked={this.toggleChecked}
-
-        /*
-        inputCaretPosition={spatiu.inputCaretPosition}
-        inputCaretPositionEnd={spatiu.inputCaretPositionEnd}
-        textareaCaretPosition={spatiu.textareaCaretPosition}
-        textareaCaretPositionEnd={spatiu.textareaCaretPositionEnd}
-        */
-
-        showNameWarning={spatiu.showNameWarning}
-        showNameError={spatiu.showNameError}
-        showNumberWarning={spatiu.showNumberWarning}
-        showNumberError={spatiu.showNumberError}
-
-        isFresh={undefined === spatiu.isFresh || false === spatiu.isFresh ? false : true}
-        isChecked={undefined === spatiu.isChecked || false === spatiu.isChecked ? false : true}
-        isFetching={undefined === spatiu.isFetching || false === spatiu.isFetching ? false : true}
-      />
+      // isFresh, isChecked, isFetching
+      <div className='-row'
+        data-index={item.index} 
+        data-floor={item.etaj}
+        onInput={(event) => {console.log(event.currentTarget.dataset.index)}}
+        key={item.index}>
+        {
+          item.isChecked  ?
+          <i className='far fa-check-square -check-icon'
+            onClick={() => { this.toggleChecked(item.index) }}></i>
+                          :
+          <i className='far fa-square -check-icon'
+            onClick={() => { this.toggleChecked(item.index) }}></i>
+        }
+        <input data-type='roomNumber'
+          maxLength={64}
+          type='text'
+          className='-cell'
+          autoComplete='off'
+          autoCorrect='off'
+          spellCheck={false}
+          onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+          //onKeyDown={this.onKeyDown}
+          value={item.numar}>
+        </input>
+        <input data-type='bedTypes'
+          maxLength={64}
+          type='text'
+          className='-cell'
+          autoComplete='off'
+          autoCorrect='off'
+          spellCheck={false}
+          onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+          //onKeyDown={this.onKeyDown}
+          value={item.paturi}>
+        </input>
+        <input data-type='roomType'
+          maxLength={64}
+          type='text'
+          className='-cell'
+          autoComplete='off'
+          autoCorrect='off'
+          spellCheck={false}
+          onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+          //onKeyDown={this.onKeyDown}
+          value={item.tipSpatiu}>
+        </input>
+        <Spinner
+        status='loading'
+        visibility={true}/>
+      </div>
     );
 
     return (
-      <div id='view-confort-categories' 
+      <div id='centralizator-spatii' 
         className='view-confort-categories'>
-        <div className='-spatii-title'>
-          Situația spațiilor de cazare
-          <div className='--next'>
+        <div className='centralizator-menu'>
+          <div id='-title'>
+            <span>Situația spațiilor de cazare</span>
+            <div className='--next'>
+                <Tippy
+                  content={
+                    <div className='-cen-txt'>Mergi la <span className='-underlined'>categoriile de spații de cazare</span></div>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={true}
+                  theme='material-centralizator-spatii'
+                  hideOnClick={false}
+                  offset={[0, 10]}>
+                  <i className='fas fa-toggle-on --next-icon'
+                    onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
+                </Tippy>
+            </div>
+            <div className='-check-all'>
               <Tippy
-                content={
-                  <div className='-cen-txt'>Categoriile de spații de cazare</div>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={true}
-                theme='material-centralizator-spatii'
-                hideOnClick={false}
-                offset={[0, 10]}>
-                <i className='fas fa-project-diagram --next-icon'
-                  onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
-              </Tippy>
+                  content={
+                    <div className='-cen-txt'>
+                      <>
+                        {this.state.checkBoxData[this.state.checkLevel].hint}
+                      </>
+                    </div>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={true}
+                  theme='material-centralizator-spatii'
+                  hideOnClick={false}
+                  offset={[0, 10]}>
+                  <i className={this.state.checkBoxData[this.state.checkLevel].icon}
+                    onClick={this.toggleMasterChecked}></i>
+                </Tippy>
+            </div>
           </div>
-          <div className='-check-all'>
-            <Tippy
-                content={
-                  <div className='-cen-txt'>
-                    <>
-                      {this.state.checkBoxData[this.state.checkLevel].hint}
-                    </>
-                  </div>
-                }
-                allowHTML={true}
-                placement='right'
-                arrow={true}
-                theme='material-centralizator-spatii'
-                hideOnClick={false}
-                offset={[0, 22]}>
-                <i className={this.state.checkBoxData[this.state.checkLevel].icon}
-                  onClick={this.handleMasterCheckboxClick}></i>
-              </Tippy>
+          <div className='-floor-select-container'>
+            <span>Etaj: </span>
+            <Select
+              id='-floor-select'
+              isDisabled={false}
+              defaultValue={0}
+              //onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
+              //onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
+              maxMenuHeight={100}
+              placeholder='Selectează...'
+              noOptionsMessage={(msg) => 'Nu există'}
+              className='floor-sel-container'
+              classNamePrefix='floor-sel' 
+              options={this.state.floors} 
+              onKeyDown={this.onKeyDown}
+              ref={this.gradInput}
+              openMenuOnFocus={true}
+              closeMenuOnSelect={true}
+              blurInputOnSelect={true}
+              //onMenuClose={this.submitOnMenuClose}
+              inputId='-floor-select-input'/> 
           </div>
         </div>
-          <div id='confort-categories' 
-          className='confort-categories'>
-            <div className='confort-categories-inside'>
-              {spaces}
-            </div>
+        <div id='-scroller' 
+          className='-scroller'>
+          <div className='-rows'>
+            {items}
           </div>
-          <div className='--cazare-add'>
-          {
-            this.state.creating ?
-            <Tippy
-              content={
-                this.state.addMultiple ?
-                <>
-                  Introdu datele referitoare la spațiile de cazare
-                </>                    :
-                <>
-                  Introdu datele referitoare la spațiul de cazare
-                </>
-                
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-confort-disabled'
-              hideOnClick={false}
-              maxWidth={400}
-              offset={[0, 20]}>
-              <i className='fas fa-home --add-icon --add-disabled'></i>
-            </Tippy>
-                              :
-            <Tippy
-              content={
-                <div className='add-rooms'>
-                  <div className='add-rooms-hint'><i className='fas fa-plus add-rooms-icon'></i><span> Adaugă un spațiu de cazare</span></div>
-                  <div className='add-rooms-hint'><i className='far fa-plus-square add-rooms-icon'></i><span> Adaugă mai multe spații de cazare</span></div>
-                </div>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-confort-hints'
-              hideOnClick={false}
-              interactive={true}
-              interactiveBorder={40}
-              offset={[0, 20]}>
-              <i className='fas fa-home --add-icon'
-                onClick={this.add}></i>
-            </Tippy>
-          }
-            </div>
+        </div>
         </div>
     );
   }

@@ -687,7 +687,7 @@ class SpatiiUpdater extends React.Component {
             <div className='--next'>
               <Tippy
                 content={
-                  <div className='-cen-txt'>Situația spațiilor de cazare</div>
+                  <div className='-cen-txt'>Mergi la <span className='-underlined'>situația spațiilor de cazare</span></div>
                 }
                 allowHTML={true}
                 placement='right'
@@ -695,7 +695,7 @@ class SpatiiUpdater extends React.Component {
                 theme='material-centralizator-spatii'
                 hideOnClick={false}
                 offset={[0, 10]}>
-                <i className='fas fa-project-diagram --next-icon'
+                <i className='fas fa-toggle-off --next-icon'
                   onClick={() => this.props.changeMenu('CentralizatorSpatii')}></i>
               </Tippy>
             </div>
