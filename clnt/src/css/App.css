@@ -2454,7 +2454,7 @@ input[type='text'].--pat-text:focus {
 .-check-all {
   position: absolute;
   left: 0;
-  top: 84px;
+  top: 58px;
   cursor: pointer;
   transition: color .2s linear;
   color: darkslategray;
@@ -2646,7 +2646,6 @@ input[type='text'].-cell:focus {
 .-rows {
   direction: ltr;
   width: 100%;
-
 }
 
 .-floor-select-container {
@@ -2654,11 +2653,14 @@ input[type='text'].-cell:focus {
   align-items: center;
   justify-content: space-between;
   width: 200px;
-  height: 46px;
+  height: 40px;
   border: 1px solid #25AAA9;
   border-radius: 4px;
-  padding: 2px;
-  margin: 2px 0;
+  padding-left: 2px;
+  
+  position: absolute;
+  right: 0;
+  top: 50px;
 }
 
 /* floor selector */
