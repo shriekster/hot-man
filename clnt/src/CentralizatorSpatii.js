@@ -31,6 +31,8 @@ class CentralizatorSpatii extends React.Component {
 
     this.displayBeds = this.displayBeds.bind(this);
 
+    this.toggleExpanded = this.toggleExpanded.bind(this);
+
     this.state = {
 
       backup: [],
@@ -46,15 +48,12 @@ class CentralizatorSpatii extends React.Component {
 
       checkBoxData: [ /** checkLevel: { 0: none checked, 1: some checked, 2: all checked } */
         {
-          hint: 'Selectează tot',
           icon: 'far fa-square -check-icon',
         },
         {
-          hint: 'Selectează tot',
           icon: 'far fa-minus-square -check-icon-partial',
         },
         {
-          hint: 'Deselectează tot',
           icon: 'far fa-check-square -check-icon',
         }
       ],
@@ -715,12 +714,25 @@ class CentralizatorSpatii extends React.Component {
     <ul className='-bed-types-list'>
       {
         item.paturi.map( bed => 
-          <li>{`${bed.numar} paturi ${bed.tip}`}</li>
+          <li key={this.generateKey()}>{`${bed.numar} paturi ${bed.tip}`}</li>
         )
       }
     </ul>;
 
     return beds;
+  }
+
+  toggleExpanded(index) {
+    let current = this.state.current;
+
+    if (index >= 0 && index < current.length) {
+
+      current[index].isExpanded = !current[index].isExpanded;
+
+      this.setState({
+        current: current,
+      });
+    }
   }
 
   componentDidMount() {
@@ -766,16 +778,7 @@ class CentralizatorSpatii extends React.Component {
           item.isFresh = false;
           item.isChecked = false; //!!!!
           item.isFetching = false;
-
-          item.inputIsFocused = true;
-          item.textareaIsFocused = false;
-
-          /*
-          item.inputCaretPosition = item.Denumire.length;
-          item.inputCaretPositionEnd = item.Denumire.length;//??
-          item.textareaCaretPosition = item.NumarLocuri.length;
-          item.textareaCaretPositionEnd = item.NumarLocuri.length;//??
-          */
+          item.isExpanded = false;
 
           let backupItem = {
             etaj: item.etaj, 
@@ -827,10 +830,11 @@ class CentralizatorSpatii extends React.Component {
 
       // isFresh, isChecked, isFetching
       <div className='-row'
+        style={{height: item.isExpanded ? (item.paturi.length + 1) * 45 + 'px' : '45px'}}
         data-index={item.index} 
         data-floor={item.etaj}
         onInput={(event) => {console.log(event.currentTarget.dataset.index)}}
-        key={item.index}>
+        key={item.numar}>
         {
           item.isChecked  ?
           <i className='far fa-check-square -check-icon'
@@ -839,41 +843,59 @@ class CentralizatorSpatii extends React.Component {
           <i className='far fa-square -check-icon'
             onClick={() => { this.toggleChecked(item.index) }}></i>
         }
-        <div className='-row-content'>
-          <input data-type='roomNumber'
-            maxLength={64}
-            type='text'
-            className='-cell'
-            autoComplete='off'
-            autoCorrect='off'
-            spellCheck={false}
-            onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-            //onKeyDown={this.onKeyDown}
-            value={item.numar}>
-          </input>
-          <div data-type='bedTypes'
-            className='-bed-types'
-            onClick={(event) => {console.log(event.currentTarget.dataset.type)}}
-            //onKeyDown={this.onKeyDown}
-            >
-          {
-            this.displayBeds(item.index)
-          }
+        <div className='-row-content'
+          style={{height: item.isExpanded ? (item.paturi.length + 1) * 45 + 'px'  : '45px'}}>
+          <div className='-row-main-content'>
+            <div className='-row-expander'>
+              <i className={item.isExpanded ? 'fas fa-angle-down -expand-icon' : 'fas fa-angle-up -expand-icon'}
+                onClick={() => { this.toggleExpanded(item.index) }}></i>
+            </div>
+            <input data-type='floorNumber'
+              disabled
+              maxLength={64}
+              type='text'
+              className='-cell'
+              autoComplete='off'
+              autoCorrect='off'
+              spellCheck={false}
+              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+              //onKeyDown={this.onKeyDown}
+              value={item.etaj}>
+            </input>
+            <input data-type='roomNumber'
+              disabled
+              maxLength={64}
+              type='text'
+              className='-cell'
+              autoComplete='off'
+              autoCorrect='off'
+              spellCheck={false}
+              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+              //onKeyDown={this.onKeyDown}
+              value={item.numar}>
+            </input>
+            <input data-type='roomType'
+              disabled
+              maxLength={64}
+              type='text'
+              className='-cell'
+              autoComplete='off'
+              autoCorrect='off'
+              spellCheck={false}
+              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+              //onKeyDown={this.onKeyDown}
+              value={item.tipSpatiu}>
+            </input>
+            <Spinner
+            status='loading'
+            visibility={true}/>
           </div>
-          <input data-type='roomType'
-            maxLength={64}
-            type='text'
-            className='-cell'
-            autoComplete='off'
-            autoCorrect='off'
-            spellCheck={false}
-            onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-            //onKeyDown={this.onKeyDown}
-            value={item.tipSpatiu}>
-          </input>
-          <Spinner
-          status='loading'
-          visibility={true}/>
+          <div className='-row-extra-content'
+            style={{height: item.isExpanded ? item.paturi.length * 45 + 'px' : '0'}}>
+            {
+              this.displayBeds(item.index)
+            }
+          </div>
         </div>
       </div>
     );
@@ -902,45 +924,20 @@ class CentralizatorSpatii extends React.Component {
           </div>
         </div>
         <div className='-theader'>
-          <Tippy
-              content={
-                <div className='-cen-txt'>
-                  <>
-                    {this.state.checkBoxData[this.state.checkLevel].hint}
-                  </>
-                </div>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-centralizator-spatii'
-              hideOnClick={false}
-              offset={[0, 10]}>
-              <i className={this.state.checkBoxData[this.state.checkLevel].icon}
-                onClick={this.toggleMasterChecked}></i>
-            </Tippy>
-            <div className='-floor-select-container'>
-              <span>Etaj: </span>
-              <Select
-                id='-floor-select'
-                isDisabled={false}
-                defaultValue={0}
-                //onInputChange={(inputValue, action) => this.onSelect(null, {id: 'grad', value: inputValue, action: action.action})}
-                //onChange={(inputValue,action) => this.onSelect(null, {id: 'grad', value: inputValue.value, action: action.action})}
-                maxMenuHeight={100}
-                placeholder='Selectează...'
-                noOptionsMessage={(msg) => 'Nu există'}
-                className='floor-sel-container'
-                classNamePrefix='floor-sel' 
-                options={this.state.floors} 
-                onKeyDown={this.onKeyDown}
-                ref={this.gradInput}
-                openMenuOnFocus={true}
-                closeMenuOnSelect={true}
-                blurInputOnSelect={true}
-                //onMenuClose={this.submitOnMenuClose}
-                inputId='-floor-select-input'/> 
+            <i className={this.state.checkBoxData[this.state.checkLevel].icon}
+              onClick={this.toggleMasterChecked}></i>
+          <div className='-row-expander'>
+            <i className='fas fa-angle-down -expand-icon' style={{visibility: 'hidden'}}></i>
           </div>
+            <div className='-th-col'>
+              Etaj
+            </div>
+            <div className='-th-col'>
+              Număr
+            </div>
+            <div className='-th-col'>
+              Tip
+            </div>
         </div>
         <div id='-scroller' 
           className='-scroller'>

@@ -788,7 +788,7 @@ function readSC() {
     JOIN CategoriiSpatii ON Spatii.CategorieSpatiuID=CategoriiSpatii.ID
     JOIN PaturiSpatii ON Spatii.ID=PaturiSpatii.SpatiuID
     JOIN CategoriiPaturi ON CategoriiPaturi.ID=PaturiSpatii.CategoriePatID
-    ORDER BY Spatii.Etaj, Spatii.Numar ASC, CategoriiPaturi.Denumire DESC`
+    ORDER BY Spatii.Etaj ASC, Spatii.Numar ASC, CategoriiPaturi.Denumire DESC`
   );
 
   let cats;
