@@ -4,7 +4,6 @@ import Select from 'react-select';
 
 import Spinner from './Spinner';
 
-import SpatiuCazare from './SpatiuCazare';
 
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
@@ -30,6 +29,8 @@ class CentralizatorSpatii extends React.Component {
 
     this.toggleMasterChecked = this.toggleMasterChecked.bind(this);
 
+    this.displayBeds = this.displayBeds.bind(this);
+
     this.state = {
 
       backup: [],
@@ -50,7 +51,7 @@ class CentralizatorSpatii extends React.Component {
         },
         {
           hint: 'Selectează tot',
-          icon: 'far fa-minus-square -check-icon',
+          icon: 'far fa-minus-square -check-icon-partial',
         },
         {
           hint: 'Deselectează tot',
@@ -707,6 +708,21 @@ class CentralizatorSpatii extends React.Component {
     })
   }
 
+  displayBeds(index) {
+    
+    let item = this.state.current[index];
+    let beds = 
+    <ul className='-bed-types-list'>
+      {
+        item.paturi.map( bed => 
+          <li>{`${bed.numar} paturi ${bed.tip}`}</li>
+        )
+      }
+    </ul>;
+
+    return beds;
+  }
+
   componentDidMount() {
     /** 'descarc' info -> spatiile de cazare */
     const requestOptions = {
@@ -823,42 +839,42 @@ class CentralizatorSpatii extends React.Component {
           <i className='far fa-square -check-icon'
             onClick={() => { this.toggleChecked(item.index) }}></i>
         }
-        <input data-type='roomNumber'
-          maxLength={64}
-          type='text'
-          className='-cell'
-          autoComplete='off'
-          autoCorrect='off'
-          spellCheck={false}
-          onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-          //onKeyDown={this.onKeyDown}
-          value={item.numar}>
-        </input>
-        <input data-type='bedTypes'
-          maxLength={64}
-          type='text'
-          className='-cell'
-          autoComplete='off'
-          autoCorrect='off'
-          spellCheck={false}
-          onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-          //onKeyDown={this.onKeyDown}
-          value={item.paturi}>
-        </input>
-        <input data-type='roomType'
-          maxLength={64}
-          type='text'
-          className='-cell'
-          autoComplete='off'
-          autoCorrect='off'
-          spellCheck={false}
-          onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-          //onKeyDown={this.onKeyDown}
-          value={item.tipSpatiu}>
-        </input>
-        <Spinner
-        status='loading'
-        visibility={true}/>
+        <div className='-row-content'>
+          <input data-type='roomNumber'
+            maxLength={64}
+            type='text'
+            className='-cell'
+            autoComplete='off'
+            autoCorrect='off'
+            spellCheck={false}
+            onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+            //onKeyDown={this.onKeyDown}
+            value={item.numar}>
+          </input>
+          <div data-type='bedTypes'
+            className='-bed-types'
+            onClick={(event) => {console.log(event.currentTarget.dataset.type)}}
+            //onKeyDown={this.onKeyDown}
+            >
+          {
+            this.displayBeds(item.index)
+          }
+          </div>
+          <input data-type='roomType'
+            maxLength={64}
+            type='text'
+            className='-cell'
+            autoComplete='off'
+            autoCorrect='off'
+            spellCheck={false}
+            onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+            //onKeyDown={this.onKeyDown}
+            value={item.tipSpatiu}>
+          </input>
+          <Spinner
+          status='loading'
+          visibility={true}/>
+        </div>
       </div>
     );
 
@@ -885,7 +901,7 @@ class CentralizatorSpatii extends React.Component {
             </div>
           </div>
         </div>
-        <div className='-theader -check-all'>
+        <div className='-theader'>
           <Tippy
               content={
                 <div className='-cen-txt'>
