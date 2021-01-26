@@ -51,10 +51,10 @@ class CentralizatorSpatii extends React.Component {
           icon: 'far fa-square -check-icon',
         },
         {
-          icon: 'far fa-minus-square -check-icon-partial',
+          icon: 'fas fa-minus-square -check-icon-partial',
         },
         {
-          icon: 'far fa-check-square -check-icon',
+          icon: 'fas fa-check-square -check-icon--checked',
         }
       ],
     };
@@ -835,23 +835,31 @@ class CentralizatorSpatii extends React.Component {
         data-floor={item.etaj}
         onInput={(event) => {console.log(event.currentTarget.dataset.index)}}
         key={item.numar}>
-        {
+        {/*
           item.isChecked  ?
-          <i className='far fa-check-square -check-icon'
+          <i className='fas fa-check-square -check-icon--checked'
             onClick={() => { this.toggleChecked(item.index) }}></i>
                           :
           <i className='far fa-square -check-icon'
             onClick={() => { this.toggleChecked(item.index) }}></i>
-        }
+        */}
         <div className='-row-content'
           style={{height: item.isExpanded ? (item.paturi.length + 1) * 45 + 'px'  : '45px'}}>
           <div className='-row-main-content'>
+            {
+              item.isChecked  ?
+              <i className='fas fa-check-square -check-icon--checked'
+                onClick={() => { this.toggleChecked(item.index) }}></i>
+                              :
+              <i className='far fa-square -check-icon'
+                onClick={() => { this.toggleChecked(item.index) }}></i>
+            }
             <div className='-row-expander'>
               <i className={item.isExpanded ? 'fas fa-angle-down -expand-icon' : 'fas fa-angle-up -expand-icon'}
                 onClick={() => { this.toggleExpanded(item.index) }}></i>
             </div>
             <input data-type='floorNumber'
-              disabled
+              disabled={false}
               maxLength={64}
               type='text'
               className='-cell'
@@ -863,7 +871,7 @@ class CentralizatorSpatii extends React.Component {
               value={item.etaj}>
             </input>
             <input data-type='roomNumber'
-              disabled
+              disabled={false}
               maxLength={64}
               type='text'
               className='-cell'
@@ -875,7 +883,7 @@ class CentralizatorSpatii extends React.Component {
               value={item.numar}>
             </input>
             <input data-type='roomType'
-              disabled
+              disabled={false}
               maxLength={64}
               type='text'
               className='-cell'
