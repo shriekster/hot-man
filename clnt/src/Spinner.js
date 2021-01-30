@@ -50,7 +50,7 @@ class Spinner extends React.Component {
       }}>
 
         <img 
-        className={currentClass + ' ' + this.props.className} 
+        className={currentClass + ' ' + (this.props.className || '')} 
         src={src} />
         
       </div>

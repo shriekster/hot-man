@@ -1688,7 +1688,7 @@ table.--zilnic-table {
 
 /* Forgot */
 
-.Form, .Form-forgot, .--zoom-in {
+.Form, .Form-forgot, .Form-login, .Form-signup, .--zoom-in {
   transition: transform .3s;
   animation: fadeInZoom .3s linear;
 }
@@ -2472,11 +2472,85 @@ input[type='text'].--pat-text:focus {
   opacity: .6;
 }
 
+.-tmenu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 860px;
+  height: 50px;
+  margin-left: 37px;
+  border-bottom: 1px solid #25AAA9;
+  /*
+  position: relative;
+ 
+  border-radius: 4px;
+  */
+}
+
+.-tmenu-selected {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 200px;
+  min-width: fit-content;
+  height: 46px;
+  padding-left: 10px;
+}
+
+.-tmenu-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 660px;
+  height: 46px;
+}
+
+.-tbutton-add,
+.-tbutton-add-range,
+.-tbutton-save,
+.-tbutton-del {
+  font-size: 24px;
+  transition: color .2s linear;
+}
+
+.-tbutton-add-range {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 45px;
+  position: relative;
+}
+
+.-trange {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 2px;
+}
+
+.-tbutton-add:hover,
+.-tbutton-add-range:hover,
+.-tbutton-save:hover  {
+  color: #009500;
+  cursor: pointer;
+}
+
+.-tbutton-del:hover {
+  color: #D72C25;
+  cursor: pointer;
+}
+
 .-theader {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  width: calc(100% - 40px);
+  width: 860px;
   height: 50px;
   margin-left: 37px;
   border-bottom: 1px solid #25AAA9;
@@ -2491,10 +2565,11 @@ input[type='text'].--pat-text:focus {
   font-family: 'Source Sans Pro Bold', Verdana, sans-serif ;
   font-size: 20px;
   text-align: center;
-  min-width: fit-content;
-  width: 20%;
+  min-width: 50px;
+  width: 29%;
   height: 40px;
   padding: 2px 2px 2px 4px;
+  margin: 2px 4px;
 }
 
 .--next:hover,
@@ -2655,8 +2730,61 @@ input[type='text'].--pat-text:focus {
 }
 
 .-row-extra-content {
-  height: fit-content;
+  width: 100%;
   transition: height .2s ease-in;
+}
+
+.-row-beds {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.-row-beds-title {
+  width: 50%;
+  height: 45px;
+  font-size: 20px;
+  min-width: fit-content;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  padding: 0 30px;
+}
+
+.-row-beds--add {
+  font-size: 20px;
+  transition: color .2s linear;
+}
+
+.-row-beds--add:hover {
+  color: #009500;
+  cursor: pointer;
+}
+
+.-row-beds-content {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.-row-beds-tr {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #25AAA9;
+}
+
+.-row-beds-td {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .-row-expander {
@@ -2665,9 +2793,7 @@ input[type='text'].--pat-text:focus {
 
 .-expand-icon {
   font-size: 24px;
-  /*
-  margin: 0 4px;
-  */
+  margin: 0 2px;
   transition: color .2s linear;
 }
 
@@ -2676,23 +2802,14 @@ input[type='text'].--pat-text:focus {
   color: #009500;
 } 
 
-.-bed-types {
-  min-width: fit-content;
-  width: 20%;
-}
-
-.-bed-types-list {
-  text-align: center;
-}
-
 input[type='text'].-cell {
   outline: none !important;
   border: none;
   display: inline;
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif !important;
   font-size: 20px;
-  min-width: fit-content;
-  width: 20%;
+  min-width: 50px;
+  width: 29%;
   height: 32px;
   padding: 2px 2px 2px 4px;
   background-color: #9fd9d9;
@@ -2725,7 +2842,7 @@ input[type='text'].-cell:focus {
   scroll-behavior: smooth;
   overflow-y: auto;
   height: 100%;
-  width: 100%;
+  width: 900px;
   unicode-bidi: bidi-override;
   direction: rtl;
   position: relative;
@@ -2755,6 +2872,8 @@ input[type='text'].-cell:focus {
 .-rows {
   direction: ltr;
   width: 100%;
+  position: absolute;
+  width: 900px;
 }
 
 .-floor-select-container {

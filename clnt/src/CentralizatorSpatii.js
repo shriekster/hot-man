@@ -38,11 +38,10 @@ class CentralizatorSpatii extends React.Component {
       backup: [],
       current: [],
 
-      floors: [],
-
       addRange: false,
 
       checkLevel: 0,
+      checkedRows: 0,
 
       creating: false,
 
@@ -636,11 +635,18 @@ class CentralizatorSpatii extends React.Component {
   toggleChecked(index) {
     let current = this.state.current;
     let checkLevel = this.state.checkLevel;
+    let checkedRows = this.state.checkedRows;
 
     if (index >= 0 && index < current.length) {
 
       /** Toggle item check state (@index) */
       current[index].isChecked = !(current[index].isChecked);
+
+      if (current[index].isChecked) {
+        checkedRows++;
+      } else {
+        checkedRows--;
+      }
 
       /** Update the parent component's check state */
       const itemIsChecked = (value) => { return value.isChecked; };
@@ -664,6 +670,7 @@ class CentralizatorSpatii extends React.Component {
       this.setState({
         checkLevel: checkLevel,
         current: current,
+        checkedRows: checkedRows,
       })
     }
   }
@@ -672,6 +679,7 @@ class CentralizatorSpatii extends React.Component {
 
     let checkLevel = this.state.checkLevel;
     let current = this.state.current;
+    let checkedRows = this.state.checkedRows;
     
     switch (checkLevel) {
 
@@ -680,6 +688,7 @@ class CentralizatorSpatii extends React.Component {
       case 1: {
         
         checkLevel = 2;
+        checkedRows = current.length;
 
         current.forEach(item => {
           item.isChecked = true;
@@ -692,6 +701,7 @@ class CentralizatorSpatii extends React.Component {
       case 2: {
 
         checkLevel = 0;
+        checkedRows = 0;
 
         current.forEach(item => {
           item.isChecked = false;
@@ -704,6 +714,7 @@ class CentralizatorSpatii extends React.Component {
     this.setState({
       current: current,
       checkLevel: checkLevel,
+      checkedRows: checkedRows,
     })
   }
 
@@ -711,14 +722,35 @@ class CentralizatorSpatii extends React.Component {
     
     let item = this.state.current[index];
     let beds = 
-    <ul className='-bed-types-list'>
-      {
-        item.paturi.map( bed => 
-          <li key={this.generateKey()}>{`${bed.numar} paturi ${bed.tip}`}</li>
-        )
-      }
-    </ul>;
-
+    <div className='-row-beds'>
+      <div className='-row-beds-title'>
+        <Tippy
+              content={
+                <div>Adaugă pat</div>
+              }
+              allowHTML={true}
+              placement='right'
+              arrow={true}
+              theme='material-confort-hints'
+              hideOnClick={false}
+              offset={[0, 10]}>
+          <i className='fas fa-plus -row-beds--add'></i>
+        </Tippy>
+        <div>Paturi</div>
+        </div>
+      <div className='-row-beds-content'>
+        {
+          item.paturi.map( bed => 
+            <div key={this.generateKey()}
+              className='-row-beds-tr'>
+              <div className='-row-beds-td'>{bed.numar}</div>
+              <div className='-row-beds-td bold'>x</div>
+              <div className='-row-beds-td'>{bed.tip}</div>
+            </div>
+          )
+        }
+      </div>
+    </div>;
     return beds;
   }
 
@@ -764,8 +796,6 @@ class CentralizatorSpatii extends React.Component {
         let length = 0;
         let backup = [];
 
-        let _floors = [];
-
         items.forEach( item => {
 
           item.index = length++;
@@ -789,24 +819,12 @@ class CentralizatorSpatii extends React.Component {
 
           backup.push(backupItem);
 
-          //!!
-          _floors.push(item.etaj);
-
-        });
-
-        let floorsArray = _floors.filter((value, index, self) => self.indexOf(value) === index);
-        let floorsOptions = [];
-
-        floorsArray.forEach(item => {
-          floorsOptions.push( { value: item, label: 0 === item ? 'Parter' : item } );
         });
 
         this.setState({
           backup: backup,
           current: items,
-          floors: floorsOptions,
         });
-
       } 
       
       else
@@ -835,14 +853,6 @@ class CentralizatorSpatii extends React.Component {
         data-floor={item.etaj}
         onInput={(event) => {console.log(event.currentTarget.dataset.index)}}
         key={item.numar}>
-        {/*
-          item.isChecked  ?
-          <i className='fas fa-check-square -check-icon--checked'
-            onClick={() => { this.toggleChecked(item.index) }}></i>
-                          :
-          <i className='far fa-square -check-icon'
-            onClick={() => { this.toggleChecked(item.index) }}></i>
-        */}
         <div className='-row-content'
           style={{height: item.isExpanded ? (item.paturi.length + 1) * 45 + 'px'  : '45px'}}>
           <div className='-row-main-content'>
@@ -929,6 +939,72 @@ class CentralizatorSpatii extends React.Component {
                     onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
                 </Tippy>
             </div>
+          </div>
+        </div>
+        <div className='-tmenu'>
+          <div className='-tmenu-selected'>
+          {
+            (this.state.checkedRows > 0) &&
+            <>
+            <span>{this.state.checkedRows} {this.state.checkedRows > 1 ? 'selectate' : 'selectat'}</span>
+            </>
+          }
+          </div>
+          <div className='-tmenu-buttons'>
+            <Tippy
+              content={
+                <div>Adaugă</div>
+              }
+              allowHTML={true}
+              placement='top'
+              arrow={true}
+              theme='material-confort-hints'
+              hideOnClick={false}
+              offset={[0, 10]}>
+              <i className='fas fa-plus -tbutton-add'></i>
+            </Tippy>
+            <Tippy
+              content={
+                <div>Adaugă interval</div>
+              }
+              allowHTML={true}
+              placement='top'
+              arrow={true}
+              theme='material-confort-hints'
+              hideOnClick={false}
+              offset={[0, 2]}>
+              <div className='-tbutton-add-range'>
+                <i className='fas fa-plus'></i>
+                <div className='-trange'>
+                  <i className='fas fa-caret-left'></i>
+                  <i className='fas fa-caret-right'></i>
+                </div>
+              </div>
+            </Tippy>
+            <Tippy
+              content={
+                <div>Salvează</div>
+              }
+              allowHTML={true}
+              placement='top'
+              arrow={true}
+              theme='material-confort-hints'
+              hideOnClick={false}
+              offset={[0, 10]}>
+              <i className='fas fa-save -tbutton-save'></i>
+            </Tippy>
+            <Tippy
+              content={
+                <div>Șterge</div>
+              }
+              allowHTML={true}
+              placement='top'
+              arrow={true}
+              theme='material-confort-disabled'
+              hideOnClick={false}
+              offset={[0, 10]}>
+              <i className='fas fa-trash-alt -tbutton-del'></i>
+            </Tippy>
           </div>
         </div>
         <div className='-theader'>
