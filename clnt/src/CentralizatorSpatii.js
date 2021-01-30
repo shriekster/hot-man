@@ -734,7 +734,7 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-          <i className='fas fa-plus -row-beds--add'></i>
+          <i className='fas fa-plus -row-beds-add'></i>
         </Tippy>
         <div>Paturi</div>
         </div>

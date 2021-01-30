@@ -2753,12 +2753,12 @@ input[type='text'].--pat-text:focus {
   padding: 0 30px;
 }
 
-.-row-beds--add {
-  font-size: 20px;
+.-row-beds-add {
   transition: color .2s linear;
+  font-size: 20px;
 }
 
-.-row-beds--add:hover {
+.-row-beds-add:hover {
   color: #009500;
   cursor: pointer;
 }
