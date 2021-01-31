@@ -759,12 +759,13 @@ class CentralizatorSpatii extends React.Component {
               //onKeyDown={this.onKeyDown}
               value={bed.numar}></input>
               <div className='-row-beds-td bold'>x</div>
-              
-              <select className='-row-bed-types'>
-                {
-                  this.displayBedTypes()
-                }
-              </select>
+              <div className='select'>
+                <select className='-row-bed-types'>
+                  {
+                    this.displayBedTypes()
+                  }
+                </select>
+              </div>
             </div>
           )
         }

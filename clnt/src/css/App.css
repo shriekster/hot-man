@@ -2787,10 +2787,39 @@ input[type='text'].--pat-text:focus {
   justify-content: center;
 }
 
+.select {
+  width: 30%;
+  min-width: 15ch;
+  max-width: 30ch;
+  border: 1px solid var(--select-border);
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #fff;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+  position: relative;
+}
+
+.select::after {
+  content: '';
+  width: 0.8em;
+  height: 0.5em;
+  background-color: darkslategray;
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+}
+
+select.-row-bed-types, .select::after {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+}
+
 select.-row-bed-types {
   -webkit-appearance: none;
   outline: none;
-  width: 30%;
+  width: 100%;
   height: 32px;
 
   font-family: 'Source Sans Pro Regular', Verdana, sans-serif;
@@ -2817,16 +2846,7 @@ select.-row-bed-types::after {
   box-sizing: border-box;
 }
 
-select.-row-bed-types::after {
-  content: '';
-  width: 0.8em;
-  height: 0.5em;
-  background-color: darkslategray;
-  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-  position: absolute;
-  right: 2px;
-  top: 2px;
-}
+
 
 .-row-expander {
   /**/
