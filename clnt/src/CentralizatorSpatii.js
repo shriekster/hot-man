@@ -31,12 +31,16 @@ class CentralizatorSpatii extends React.Component {
 
     this.displayBeds = this.displayBeds.bind(this);
 
+    this.displayBedTypes = this.displayBedTypes.bind(this);
+
     this.toggleExpanded = this.toggleExpanded.bind(this);
 
     this.state = {
 
       backup: [],
       current: [],
+
+      bedTypes: [],
 
       addRange: false,
 
@@ -743,15 +747,47 @@ class CentralizatorSpatii extends React.Component {
           item.paturi.map( bed => 
             <div key={this.generateKey()}
               className='-row-beds-tr'>
-              <div className='-row-beds-td'>{bed.numar}</div>
+              <input data-type='bedCount'
+              disabled={false}
+              maxLength={64}
+              type='text'
+              className='-cell'
+              autoComplete='off'
+              autoCorrect='off'
+              spellCheck={false}
+              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+              //onKeyDown={this.onKeyDown}
+              value={bed.numar}></input>
               <div className='-row-beds-td bold'>x</div>
-              <div className='-row-beds-td'>{bed.tip}</div>
+              
+              <select className='-row-bed-types'>
+                {
+                  this.displayBedTypes()
+                }
+              </select>
             </div>
           )
         }
       </div>
     </div>;
     return beds;
+  }
+
+  displayBedTypes() {
+    let bedTypes = this.state.bedTypes;
+
+    let bedsUI =
+      <>
+      {
+        bedTypes.map (type => 
+        <option
+          key={this.generateKey()}
+          value={type.Denumire}>{type.Denumire}</option>
+        )
+      }
+      </>;
+
+    return bedsUI;
   }
 
   toggleExpanded(index) {
@@ -791,6 +827,7 @@ class CentralizatorSpatii extends React.Component {
       
       if ('valid' === res.status) {
 
+        let beds = res.paturi;
         let items = res.spatii;
 
         let length = 0;
@@ -822,6 +859,7 @@ class CentralizatorSpatii extends React.Component {
         });
 
         this.setState({
+          bedTypes: beds,
           backup: backup,
           current: items,
         });

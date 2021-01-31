@@ -791,11 +791,14 @@ function readSC() {
     ORDER BY Spatii.Etaj ASC, Spatii.Numar ASC, CategoriiPaturi.Denumire DESC`
   );
 
-  let cats;
+  const selectPaturi = db.prepare(`SELECT Denumire, NumarLocuri FROM CategoriiPaturi`);
+
+  let beds, cats;
 
   try {
 
-    cats = spatii.all()
+    cats = spatii.all();
+    beds = selectPaturi.all();
 
   } catch(err) {
 
@@ -807,6 +810,7 @@ function readSC() {
       return {
         status: 'error',
         spatii: {},
+        paturi: {},
       };
     } 
   } finally {
@@ -814,11 +818,9 @@ function readSC() {
     if (!error) {
 
       let spaces = Object.values(cats);
+      let paturi = Object.values(beds);
+
       let newSpaces = [];
-
-      for (let i = 0; i < spaces.length; i++) {
-
-      }
 
       spaces.forEach( item => {
 
@@ -860,6 +862,7 @@ function readSC() {
       return {
         status: 'valid',
         spatii: newSpaces,
+        paturi: paturi,
       };
     } 
   }
@@ -1471,11 +1474,12 @@ router.post('/:attribute', authorization, function(req, res) {
 
               case 'read': {
                 
-                const {status, spatii} = readSC();
+                const {status, spatii, paturi} = readSC();
 
                 return res.json({
                   status: status,
                   spatii: spatii,
+                  paturi: paturi
                 });
 
                 break;
