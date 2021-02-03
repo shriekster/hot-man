@@ -752,7 +752,7 @@ class CentralizatorSpatii extends React.Component {
               maxLength={64}
               type='text'
               className='-cell'
-              autoComplete='off'
+              autoComplete='off' 
               autoCorrect='off'
               spellCheck={false}
               onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
