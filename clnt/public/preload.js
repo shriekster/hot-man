@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const options = {
     type: 'info',
-    buttons: [],
+    buttons: ['OK'],
     defaultId: 1,
     title: 'Hotelitary',
     message: '\u00a9 MApN - U.M. 01616\n\u2714 Hotelitary v1.0.0-alpha.1\n\u2762 Aplicația este în faza de testare alpha. \u2762\n\u260E 0769 388 493 - lt. Moldoveanu Dan',
@@ -28,7 +28,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		submenu: [
 			{
 				label: 'Despre',
-				click: () => dialog.showMessageBox(null, options)
+        click: () => dialog.showMessageBox(null, options),
+        role: 'about'
 			},
 			{
 				label: 'Instrumente pentru dezvoltatori',

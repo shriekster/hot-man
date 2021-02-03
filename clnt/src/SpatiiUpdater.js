@@ -695,7 +695,7 @@ class SpatiiUpdater extends React.Component {
                 theme='material-centralizator-spatii'
                 hideOnClick={false}
                 offset={[0, 10]}>
-                <i className='fas fa-th --next-icon'
+                <i className='fas fa-th-list --next-icon'
                   onClick={() => this.props.changeMenu('CentralizatorSpatii')}></i>
               </Tippy>
             </div>

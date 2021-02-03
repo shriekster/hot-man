@@ -2445,7 +2445,7 @@ input[type='text'].--pat-text:focus {
 .--next {
   position: absolute;
   right: 60px;
-  top: -5px;
+  top: 0px;
   cursor: pointer;
   transition: color .2s linear;
   color: darkslategray;
@@ -2470,6 +2470,15 @@ input[type='text'].--pat-text:focus {
 
 .-check-icon-partial:hover {
   opacity: .6;
+}
+
+.-rows-adding {
+  direction: ltr;
+  width: 860px;
+  height: 100%;
+  position: absolute;
+  left: 37px;
+  border: 1px solid #2f4f4f;
 }
 
 .-tmenu {
@@ -2527,8 +2536,6 @@ input[type='text'].-cell-search {
   padding: 2px 2px 2px 36px;
   background-color: #9fd9d9;
   color: lightslategray;
-  text-align: center;
-
   border: 1px solid lightslategray;
   border-radius: 4px;
 }
@@ -2544,10 +2551,15 @@ input[type='text'].-cell-search:disabled {
   color: darkslategray;
 }
 
+input[type='text'].-cell-search:hover {
+  cursor: pointer;
+}
+
 input[type='text'].-cell-search:focus {
   color: #009500;
   border: 1px #009500 inset;
   border-radius: 4px;
+  cursor: text;
 }
 
 input[type='text'].-cell-search:focus + .-tmenu-search-icon {
@@ -2635,7 +2647,7 @@ input[type='text'].-cell-search:focus + .-tmenu-search-icon {
 }
 
 .--next-icon {
-  font-size: 32px;
+  font-size: 24px;
 }
 
 .-cen-txt {
@@ -2739,7 +2751,7 @@ input[type='text'].-cell-search:focus + .-tmenu-search-icon {
 .centralizator-menu {
   margin-top: 15px;
   margin-left: 37px;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
   width: 350px;
   position: relative;
 }
@@ -3019,7 +3031,6 @@ input[type='text'].-cell:focus {
 
 .-rows {
   direction: ltr;
-  width: 100%;
   position: absolute;
   width: 900px;
 }

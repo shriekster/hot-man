@@ -1,10 +1,11 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
-import Select from 'react-select';
+/** react-window - React components for efficiently rendering large lists and tabular data */
+import { FixedSizeList, VariableSizeList} from 'react-window';
 
 import Spinner from './Spinner';
 
-//////////////////////////////////////////////////////////////////////////////////
+
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
@@ -941,7 +942,7 @@ class CentralizatorSpatii extends React.Component {
                   theme='material-centralizator-spatii'
                   hideOnClick={false}
                   offset={[0, 10]}>
-                  <i className='fas fa-th-list --next-icon'
+                  <i className='fas fa-th --next-icon'
                     onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
                 </Tippy>
             </div>
@@ -1059,13 +1060,21 @@ class CentralizatorSpatii extends React.Component {
         {
           this.state.adding && !this.state.addingRange &&
 
-          <div>ADDING
+          <div id='-scroller' 
+            className='-scroller'>
+            <div className='-rows-adding'>
+              ADDING
+            </div>
           </div>
         }
         {
           !this.state.adding && this.state.addingRange &&
           
-          <div>ADDING RANGE
+          <div id='-scroller' 
+            className='-scroller'>
+            <div className='-rows-adding'>
+              ADDING RANGE
+            </div>
           </div>
         }
         </div>
