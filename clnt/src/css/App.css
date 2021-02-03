@@ -1857,10 +1857,10 @@ table.--zilnic-table {
 
 .-submenu {
   margin-top: 15px;
-  margin-left: 37px;
   margin-bottom: 40px;
-  width: calc(100% - 40px);
+  width: 24.9%;
   height: 24px;
+  margin-left: 24.9%;
   font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
   font-size: 18px;
   display: flex;

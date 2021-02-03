@@ -94,7 +94,7 @@ class HotelOverview extends React.Component {
 
       case 'SpatiiUpdater': {
         nextSpatiiMenuClass += ' --overview-active-menu ';
-        nextSpatiiIconClass = 'fas fa-door-open --overview-icon';
+        nextSpatiiIconClass = 'fas fa-house-user --overview-icon';
         break;
       }
 
@@ -180,7 +180,7 @@ class HotelOverview extends React.Component {
           </div>
           <div className={'--overview-room-types --overview-posr ' + this.state.spatiiMenuClass}
             onClick={() => this.changeView('SpatiiUpdater')}>
-            <span className='--icon-wrapper'><i className={this.state.spatiiIconClass}></i></span><span className='--overview-posd'> Spații</span>
+            <span className='--icon-wrapper'><i className='fas fa-house-user --overview-icon'></i></span><span className='--overview-posd'> Spații</span>
           </div>
           <div className={'--overview-bed-types --overview-posr ' + this.state.paturiMenuClass}
             onClick={() => this.changeView('PaturiUpdater')}>
