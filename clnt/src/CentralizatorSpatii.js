@@ -11,6 +11,8 @@ class CentralizatorSpatii extends React.Component {
 
     this.add = this.add.bind(this);
 
+    this.addBed = this.addBed.bind(this);
+
     this.edit = this.edit.bind(this);
 
     this.input = this.input.bind(this);
@@ -20,6 +22,8 @@ class CentralizatorSpatii extends React.Component {
     this.cancel = this.cancel.bind(this);
 
     this.delete = this.delete.bind(this);
+
+    this.deleteBed = this.deleteBed.bind(this);
 
     this.generateKey = this.generateKey.bind(this);
 
@@ -153,6 +157,10 @@ class CentralizatorSpatii extends React.Component {
         });
       }
     });
+  }
+
+  addBed() {
+
   }
 
   edit(index) {
@@ -522,6 +530,10 @@ class CentralizatorSpatii extends React.Component {
     });
   }
 
+  deleteBed() {
+
+  }
+
   cancel(index) {
     let categorii = this.state.current;
     let backup = this.state.backup;
@@ -730,7 +742,7 @@ class CentralizatorSpatii extends React.Component {
       <div className='-row-beds-title'>
         <Tippy
               content={
-                <div>Adaugă pat</div>
+                <div>Adaugă tip de pat</div>
               }
               allowHTML={true}
               placement='right'
@@ -738,7 +750,8 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-          <i className='fas fa-plus -row-beds-add'></i>
+          <i className='fas fa-plus -row-beds-add'
+            onClick={this.addBed}></i>
         </Tippy>
         <div>Paturi</div>
         </div>
@@ -777,7 +790,8 @@ class CentralizatorSpatii extends React.Component {
                   theme='material-confort-disabled'
                   hideOnClick={false}
                   offset={[0, 10]}>
-                  <i className='fas fa-trash-alt -row-bed-delete'></i>
+                  <i className='fas fa-trash-alt -row-bed-delete'
+                    onClick={this.deleteBed}></i>
                 </Tippy>
               </div>
             </div>
