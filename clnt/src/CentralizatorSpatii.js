@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 import Spinner from './Spinner';
 
-
+//////////////////////////////////////////////////////////////////////////////////
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
