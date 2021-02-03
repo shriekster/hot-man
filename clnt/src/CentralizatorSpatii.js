@@ -751,7 +751,7 @@ class CentralizatorSpatii extends React.Component {
               disabled={false}
               maxLength={64}
               type='text'
-              className='-cell'
+              className='-cell' 
               autoComplete='off' 
               autoCorrect='off'
               spellCheck={false}
