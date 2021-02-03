@@ -11,6 +11,8 @@ class CentralizatorSpatii extends React.Component {
 
     this.add = this.add.bind(this);
 
+    this.addRange = this.addRange.bind(this);
+
     this.addBed = this.addBed.bind(this);
 
     this.edit = this.edit.bind(this);
@@ -46,12 +48,14 @@ class CentralizatorSpatii extends React.Component {
 
       bedTypes: [],
 
-      addRange: false,
+      adding: false,
+      addingRange: false,
+      
 
       checkLevel: 0,
       checkedRows: 0,
 
-      creating: false,
+      
 
       checkBoxData: [ /** checkLevel: { 0: none checked, 1: some checked, 2: all checked } */
         {
@@ -71,92 +75,27 @@ class CentralizatorSpatii extends React.Component {
 
     this.setState({
 
-      creating: true,
+      adding: true,
+      addingRange: false,
 
     }, () => {
 
-      if (this.state.creating) {
 
-        let categorii = this.state.current;
-        let backup = this.state.backup;
-
-        let newItem = {
-
-          index: categorii.length, //??
-
-          Denumire: '',
-          NumarLocuri: '',
-          showNameWarning: false,
-          showNameError: false,
-          showNumberWarning: false,
-          showNumberError: false,
-
-          isFresh: true,
-          isChecked: true,
-
-          inputIsFocused: true,
-          textareaIsFocused: false,
-
-          inputCaretPosition: 0,
-          inputCaretPositionEnd: 0,//??
-          textareaCaretPosition: 0,
-          textareaCaretPositionEnd: 0,//??
-
-          isFetching: false,
-        };
-
-        let newBackupItem = {
-
-          index: backup.length, //??
-
-          Denumire: '',
-          NumarLocuri: '',
-        };
-
-
-        if (0 === categorii.length && 0 === backup.length) {
-
-          categorii.push(newItem);
-          backup.push(newBackupItem);
-        }
-
-        else {
-
-          let last = categorii[categorii.length - 1].Denumire;
-          let backupLast = backup[backup.length - 1].Denumire;
-
-          if (last && backupLast) {
-            /** 'Reset' every other item's state when a new item is being added */
-            categorii.forEach( item => {
-
-              item.showNameWarning = false;
-              item.showNameError = false;
-              item.showNumberWarning = false;
-              item.showNumberError = false;
-              item.isFresh = false;
-              item.isChecked = false;
-              item.isFetching = false;
-
-              item.inputIsFocused = false;
-              item.textareaIsFocused = false;
-
-              item.inputCaretPosition = item.Denumire.length;
-              item.inputCaretPositionEnd = item.Denumire.length;//??
-              item.textareaCaretPosition = item.NumarLocuri.length;
-              item.textareaCaretPositionEnd = item.NumarLocuri.length;//??
-            });
-
-            categorii.push(newItem);
-            backup.push(newBackupItem);
-          }
-        }
-
-        this.setState({
-          backup: backup,
-          current: categorii,
-        });
-      }
     });
+  }
+
+  addRange() {
+
+    this.setState({
+
+      adding: false,
+      addingRange: true,
+
+    }, () => {
+
+
+    });
+
   }
 
   addBed() {
@@ -1002,7 +941,7 @@ class CentralizatorSpatii extends React.Component {
                   theme='material-centralizator-spatii'
                   hideOnClick={false}
                   offset={[0, 10]}>
-                  <i className='fas fa-toggle-on --next-icon'
+                  <i className='fas fa-th-list --next-icon'
                     onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
                 </Tippy>
             </div>
@@ -1017,6 +956,21 @@ class CentralizatorSpatii extends React.Component {
             </>
           }
           </div>
+          <div className='-tmenu-search'>
+            <input data-type='roomSearch'
+              disabled={false}
+              maxLength={64}
+              type='text'
+              className='-cell-search'
+              autoComplete='off'
+              autoCorrect='off'
+              spellCheck={false}
+              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+              //onKeyDown={this.onKeyDown}
+              placeholder='Caută spațiu de cazare...'>
+            </input>
+            <i className='fas fa-search -tmenu-search-icon'></i>
+          </div>
           <div className='-tmenu-buttons'>
             <Tippy
               content={
@@ -1028,7 +982,8 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className='fas fa-plus -tbutton-add'></i>
+              <i className='fas fa-plus -tbutton-add'
+                onClick={this.add}></i>
             </Tippy>
             <Tippy
               content={
@@ -1040,7 +995,8 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 2]}>
-              <div className='-tbutton-add-range'>
+              <div className='-tbutton-add-range'
+                onClick={this.addRange}>
                 <i className='fas fa-plus'></i>
                 <div className='-trange'>
                   <i className='fas fa-caret-left'></i>
@@ -1090,12 +1046,28 @@ class CentralizatorSpatii extends React.Component {
               Tip
             </div>
         </div>
-        <div id='-scroller' 
-          className='-scroller'>
-          <div className='-rows'>
-            {items}
+        {
+          !this.state.adding && !this.state.addingRange &&
+
+          <div id='-scroller' 
+            className='-scroller'>
+            <div className='-rows'>
+              {items}
+            </div>
           </div>
-        </div>
+        }
+        {
+          this.state.adding && !this.state.addingRange &&
+
+          <div>ADDING
+          </div>
+        }
+        {
+          !this.state.adding && this.state.addingRange &&
+          
+          <div>ADDING RANGE
+          </div>
+        }
         </div>
     );
   }

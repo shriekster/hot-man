@@ -16,7 +16,7 @@ class Spinner extends React.Component {
         done: '-spinner-done'
       },
 
-      currentClass: 'pulse loading' //misleading
+      //currentClass: 'pulse loading' //misleading
     };
   }
 
@@ -27,8 +27,8 @@ class Spinner extends React.Component {
 
 
   render() {
-    let status = this.props.status;
-    let currentClass = this.state.classNames[status];
+    let status = this.props.status; // 'loading', 'searching' or 'done'
+    let currentClass = this.state.classNames[status]; // classNames associated with each status ('status' prop)
     let src;
 
     if (currentClass === '-spinner-loading') {
