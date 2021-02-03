@@ -1855,6 +1855,46 @@ table.--zilnic-table {
   position: relative;
 }
 
+.-submenu {
+  margin-top: 15px;
+  margin-left: 37px;
+  margin-bottom: 40px;
+  width: calc(100% - 40px);
+  height: 24px;
+  font-family: 'Source Sans Pro Bold', Verdana, sans-serif;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.-submenu-item,
+.-submenu-item-active {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transition: color .2s linear;
+}
+
+.submenu-item {
+  color: darkslategray;
+}
+
+.-submenu-item-active {
+  color: #009500;
+}
+
+.-submenu-item:hover,
+.-submenu-item-active:hover {
+  color: #009500BB;
+  cursor: pointer;
+}
+
+.-submenu-icon {
+  font-size: 22px;
+  margin: 4px;
+}
+
 /* Categorii Confort */
 .view-confort-categories {
   font-size: 18px;
@@ -2644,10 +2684,6 @@ input[type='text'].-cell-search:focus + .-tmenu-search-icon {
 .--next:hover,
 .-check-all:hover {
   color: #009500;
-}
-
-.--next-icon {
-  font-size: 24px;
 }
 
 .-cen-txt {

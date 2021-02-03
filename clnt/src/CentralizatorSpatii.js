@@ -928,24 +928,15 @@ class CentralizatorSpatii extends React.Component {
     return (
       <div id='centralizator-spatii' 
         className='view-confort-categories'>
-        <div className='centralizator-menu'>
-          <div id='-title'>
-            <span>Situația spațiilor de cazare</span>
-            <div className='--next'>
-                <Tippy
-                  content={
-                    <div className='-cen-txt'>Mergi la <span className='-underlined'>categoriile de spații de cazare</span></div>
-                  }
-                  allowHTML={true}
-                  placement='right'
-                  arrow={true}
-                  theme='material-centralizator-spatii'
-                  hideOnClick={false}
-                  offset={[0, 10]}>
-                  <i className='fas fa-th --next-icon'
-                    onClick={() => this.props.changeMenu('SpatiiUpdater')}></i>
-                </Tippy>
-            </div>
+        <div className='-submenu'>
+          <div className='-submenu-item'
+            onClick={() => this.props.changeMenu('SpatiiUpdater')}>
+            <i className='fas fa-th-list -submenu-icon'></i>
+            <span>Categorii</span>
+          </div>
+          <div className='-submenu-item-active'>
+            <i className='fas fa-th -submenu-icon'></i>
+            <span>Centralizator</span>
           </div>
         </div>
         <div className='-tmenu'>
