@@ -758,13 +758,27 @@ class CentralizatorSpatii extends React.Component {
               onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
               //onKeyDown={this.onKeyDown}
               value={bed.numar}></input>
-              <div className='-row-beds-td bold'>x</div>
+              <div className='-row-beds-td-x bold'>x</div>
               <div className='select'>
                 <select className='-row-bed-types'>
                   {
                     this.displayBedTypes()
                   }
                 </select>
+              </div>
+              <div className='-row-beds-td-delete'>
+                <Tippy
+                  content={
+                    <div>Șterge tipul de pat</div>
+                  }
+                  allowHTML={true}
+                  placement='right'
+                  arrow={true}
+                  theme='material-confort-disabled'
+                  hideOnClick={false}
+                  offset={[0, 10]}>
+                  <i className='fas fa-trash-alt -row-bed-delete'></i>
+                </Tippy>
               </div>
             </div>
           )
