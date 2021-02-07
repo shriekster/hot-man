@@ -778,27 +778,38 @@ function readSC() {
   let error;
 
   const spatii = db.prepare(
-  ` SELECT 
+  `SELECT 
       Spatii.Etaj AS etaj, 
       Spatii.Numar AS numar,
       CategoriiSpatii.Denumire AS tipSpatiu,
+      CategoriiConfort.Denumire AS tipConfort,
       PaturiSpatii.NumarPaturi AS numarPaturi,
       CategoriiPaturi.Denumire AS tipPat
     FROM Spatii
     JOIN CategoriiSpatii ON Spatii.CategorieSpatiuID=CategoriiSpatii.ID
+    JOIN CategoriiConfort ON Spatii.CategorieConfortID=CategoriiConfort.ID
     JOIN PaturiSpatii ON Spatii.ID=PaturiSpatii.SpatiuID
     JOIN CategoriiPaturi ON CategoriiPaturi.ID=PaturiSpatii.CategoriePatID
     ORDER BY Spatii.Etaj ASC, Spatii.Numar ASC, CategoriiPaturi.Denumire DESC`
   );
 
-  const selectPaturi = db.prepare(`SELECT Denumire, NumarLocuri FROM CategoriiPaturi`);
+  const selectPaturi = db.prepare(`SELECT Denumire, NumarLocuri FROM CategoriiPaturi
+                                   ORDER BY CategoriiPaturi.Denumire DESC`);
 
-  let beds, cats;
+  const selectConfort = db.prepare(`SELECT Denumire from CategoriiConfort
+                                    ORDER BY CategoriiConfort.Denumire ASC`);
+
+  const selectCatSpatii = db.prepare(`SELECT Denumire from CategoriiSpatii
+                                      ORDER BY CategoriiSpatii.Denumire ASC`);
+
+  let beds, cats, confs, rooms;
 
   try {
 
     cats = spatii.all();
     beds = selectPaturi.all();
+    confs = selectConfort.all();
+    rooms = selectCatSpatii.all();
 
   } catch(err) {
 
@@ -810,7 +821,9 @@ function readSC() {
       return {
         status: 'error',
         spatii: {},
+        categorii: {},
         paturi: {},
+        confort: {},
       };
     } 
   } finally {
@@ -819,6 +832,8 @@ function readSC() {
 
       let spaces = Object.values(cats);
       let paturi = Object.values(beds);
+      let confort = Object.values(confs);
+      let categ = Object.values(rooms);
 
       let newSpaces = [];
 
@@ -833,6 +848,7 @@ function readSC() {
           etaj: item.etaj,
           numar: item.numar,
           tipSpatiu: item.tipSpatiu,
+          tipConfort: item.tipConfort,
           paturi: [
             {
               numar: numarPaturi, 
@@ -862,7 +878,9 @@ function readSC() {
       return {
         status: 'valid',
         spatii: newSpaces,
+        categorii: categ,
         paturi: paturi,
+        confort: confort,
       };
     } 
   }
@@ -1474,12 +1492,14 @@ router.post('/:attribute', authorization, function(req, res) {
 
               case 'read': {
                 
-                const {status, spatii, paturi} = readSC();
+                const {status, spatii, categorii, paturi, confort} = readSC();
 
                 return res.json({
                   status: status,
                   spatii: spatii,
-                  paturi: paturi
+                  categorii: categorii,
+                  paturi: paturi,
+                  confort: confort
                 });
 
                 break;

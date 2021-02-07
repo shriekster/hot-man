@@ -684,12 +684,12 @@ class SpatiiUpdater extends React.Component {
           className='view-confort-categories'>
         <div className='-submenu'>
           <div className='-submenu-item-active'>
-            <i className='fas fa-th-list -submenu-icon'></i>
+            <i className='fas fa-list -submenu-icon'></i>
             <span>Categorii</span>
           </div>
           <div className='-submenu-item'
             onClick={() => this.props.changeMenu('CentralizatorSpatii')}>
-            <i className='fas fa-th -submenu-icon'></i>
+            <i className='fas fa-table -submenu-icon'></i>
             <span>Centralizator</span>
           </div>
         </div>
