@@ -87,6 +87,8 @@ class CentralizatorSpatii extends React.Component {
       this.search = element;
     }
 
+    this.listParent = React.createRef();
+
     this.list = React.createRef();
 
     this.focusSearch = this.focusSearch.bind(this);
@@ -1096,14 +1098,15 @@ class CentralizatorSpatii extends React.Component {
         {
           !this.state.adding && !this.state.addingRange &&
 
-          <div id='-scroller' 
+          <div ref={this.listParent} 
+          id='-scroller' 
             className='-scroller'>
             {/*<div className='-rows'>*/}
               {/*items*/}
               <List
                 ref={this.list}
                 width={900}
-                height={450}
+                height={vh(55)}
                 itemData={
                   {
                     items: this.state.current,
