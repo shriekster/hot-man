@@ -1,7 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 /** react-window - React components for efficiently rendering large lists and tabular data */
-import { VariableSizeList as List} from 'react-window';
+import { FixedSizeList as List} from 'react-window';
 
 import Spinner from './Spinner';
 
@@ -23,6 +23,8 @@ class CentralizatorSpatii extends React.Component {
     this.edit = this.edit.bind(this);
 
     this.input = this.input.bind(this);
+
+    this.searchRoom = this.searchRoom.bind(this);
 
     this.save = this.save.bind(this);
 
@@ -182,48 +184,35 @@ class CentralizatorSpatii extends React.Component {
     }
   }
 
-  input(index, type, newValue, caretPosition, caretPositionEnd) {
+  input(e, index) {
 
     let categorii = this.state.current;
 
-    switch (type) {
+    console.log(index, e.currentTarget.value);
 
-      case 'denumire': {
+  }
 
-        if (index >= 0 && index < categorii.length ) {
-
-          categorii[index].Denumire = newValue;
-          categorii[index].inputCaretPosition = caretPosition;
-          categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
+  searchRoom(e) {
+    let items = this.list.current.props.itemData.items;
+    let value = e.target.value;
     
-          /** Hide the error or warning tippy */
-          categorii[index].showNameWarning = false;
-          categorii[index].showNameError = false;
-        }
+    const regex = /^\d+$/;
+    const isRoom = candidate => regex.test(candidate);
 
-        break;
+    let result = [];
+    
+    if (isRoom(value)) {
+    
+      result = items.filter(item => item.numar === Number(value));
+
+      if (1 === result.length) {
+
+        this.list.current.scrollToItem(result[0].index, 'start');
+      
       }
 
-      case 'locuri': {
-
-        if (index >= 0 && index < categorii.length ) {
-
-          categorii[index].NumarLocuri = newValue;
-          categorii[index].textareaCaretPosition = caretPosition;
-          categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
-
-          /** Hide the error or warning tippy */
-          categorii[index].showNumberWarning = false;
-          categorii[index].showNumberError = false;
-        }
-
-        break;
-      }
     }
-    
-    this.setState({
-      current: categorii,
-    });
+        
   }
 
   save(index) {
@@ -789,10 +778,13 @@ class CentralizatorSpatii extends React.Component {
     if (index >= 0 && index < current.length) {
 
       current[index].isExpanded = !current[index].isExpanded;
-      console.log(this.list.current)
+
       if (this.list.current) {
-        console.log('Reset after index:', index)
+
+        //console.log('Reset after index:', index)
         this.list.current.resetAfterIndex(index);
+        console.log('Reset after index:', index)
+      
       }
 
       this.setState({
@@ -1067,7 +1059,7 @@ class CentralizatorSpatii extends React.Component {
               autoComplete='off'
               autoCorrect='off'
               spellCheck={false}
-              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+              onInput={this.searchRoom}
               //onKeyDown={this.onKeyDown}
               placeholder='Caută spațiu de cazare...'
               ref={this.setSearchRef}>
@@ -1114,7 +1106,8 @@ class CentralizatorSpatii extends React.Component {
                     roomTypes: this.state.roomTypes,
                     confortTypes: this.state.confortTypes,
                     toggleChecked: this.toggleChecked,
-                    toggleExpanded: this.toggleExpanded
+                    toggleExpanded: this.toggleExpanded,
+                    input: this.input,
                   }
                 }
                 itemKey={this.generateKey}
@@ -1122,7 +1115,8 @@ class CentralizatorSpatii extends React.Component {
                 itemCount={current.length}
                 className='-rows'
                 
-                onItemsRendered={console.log('Items rendered')}>
+                //onItemsRendered={console.log('Items rendered')}
+                >
                 {ItemRenderer}
               </List>
             {/*</div>*/}
@@ -1160,6 +1154,10 @@ export default CentralizatorSpatii;
 class ItemRenderer extends React.PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      
+    };
     
     this.generateKey = this.generateKey.bind(this);
 
@@ -1176,6 +1174,8 @@ class ItemRenderer extends React.PureComponent {
     this.displayBeds = this.displayBeds.bind(this);
 
     this.displayBedTypes = this.displayBedTypes.bind(this);
+
+    this.input = this.input.bind(this);
   }
 
   generateKey() {
@@ -1323,17 +1323,19 @@ class ItemRenderer extends React.PureComponent {
     return bedsUI;
   }
   
+  input(e) {
+    this.props.data.input(e, this.props.index);
+  }
+
   render () {
+    //console.log('render', Date.now())
     let item = this.props.data.items[this.props.index];
-    //console.log('Height:', this.getItemHeight(item), item.index, this.props.index)
+    console.log('Height:', this.getItemHeight(item), item.index, this.props.index)
     //console.log('Props:', this.props)
 
     return (
       <div className='-row'
       style={{height: this.getItemHeight(item) + 'px'}}
-      data-index={item.index} 
-      data-floor={item.etaj}
-      onInput={(event) => {console.log(event.currentTarget.dataset.index)}}
       key={item.numar}>
       <div className='-row-content'
         style={{height: this.getItemHeight(item) + 'px'}}>
@@ -1358,7 +1360,7 @@ class ItemRenderer extends React.PureComponent {
             autoComplete='off'
             autoCorrect='off'
             spellCheck={false}
-            onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
+            onInput={this.input}
             //onKeyDown={this.onKeyDown}
             value={item.etaj}>
           </input>
