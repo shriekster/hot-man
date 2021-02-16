@@ -2,7 +2,7 @@ import React from 'react';
 import Tippy from '@tippyjs/react';
 /** react-window - React components for efficiently rendering large lists and tabular data */
 import { FixedSizeList as List} from 'react-window';
-
+import Spatiu from './Spatiu';
 import Spinner from './Spinner';
 
 function vh(v) {
@@ -14,7 +14,7 @@ class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
 
-    this.add = this.add.bind(this);
+    this.add = this.add.bind(this); 
 
     this.addRange = this.addRange.bind(this);
 
@@ -45,8 +45,6 @@ class CentralizatorSpatii extends React.Component {
     this.displayBeds = this.displayBeds.bind(this);
 
     this.displayBedTypes = this.displayBedTypes.bind(this);
-
-    this.toggleExpanded = this.toggleExpanded.bind(this);
 
     this.state = {
 
@@ -772,27 +770,6 @@ class CentralizatorSpatii extends React.Component {
     return bedsUI;
   }
 
-  toggleExpanded(index) {
-    let current = this.state.current;
-
-    if (index >= 0 && index < current.length) {
-
-      current[index].isExpanded = !current[index].isExpanded;
-
-      if (this.list.current) {
-
-        //console.log('Reset after index:', index)
-        this.list.current.resetAfterIndex(index);
-        console.log('Reset after index:', index)
-      
-      }
-
-      this.setState({
-        current: current,
-      });
-    }
-  }
-
   focusSearch() {
     this.search.focus();
   }
@@ -880,94 +857,12 @@ class CentralizatorSpatii extends React.Component {
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
-  }
-
   componentDidUpdate (prevProps, prevState) {
   }
 
   render() {
     //console.log('CentralizatorSpatii rendered')
     let current = this.state.current;
-
-    /*
-    const items = current.map(
-      
-      (item) =>
-
-      // isFresh, isChecked, isFetching
-      <div className='-row'
-        style={{height: this.getItemHeight(item.index) + 'px'}}
-        data-index={item.index} 
-        data-floor={item.etaj}
-        onInput={(event) => {console.log(event.currentTarget.dataset.index)}}
-        key={item.numar}>
-        <div className='-row-content'
-          style={{height: this.getItemHeight(item.index) + 'px'}}>
-          <div className='-row-main-content'>
-            {
-              item.isChecked  ?
-              <i className='fas fa-check-square -check-icon--checked'
-                onClick={() => { this.toggleChecked(item.index) }}></i>
-                              :
-              <i className='far fa-square -check-icon'
-                onClick={() => { this.toggleChecked(item.index) }}></i>
-            }
-            <div className='-row-expander'>
-              <i className={item.isExpanded ? 'fas fa-angle-down -expand-icon' : 'fas fa-angle-up -expand-icon'}
-                onClick={() => { this.toggleExpanded(item.index) }}></i>
-            </div>
-            <input data-type='floorNumber'
-              disabled={false}
-              maxLength={64}
-              type='text'
-              className='-cell'
-              autoComplete='off'
-              autoCorrect='off'
-              spellCheck={false}
-              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-              //onKeyDown={this.onKeyDown}
-              value={item.etaj}>
-            </input>
-            <input data-type='roomNumber'
-              disabled={false}
-              maxLength={64}
-              type='text'
-              className='-cell'
-              autoComplete='off'
-              autoCorrect='off'
-              spellCheck={false}
-              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-              //onKeyDown={this.onKeyDown}
-              value={item.numar}>
-            </input>
-            <input data-type='roomType'
-              disabled={false}
-              maxLength={64}
-              type='text'
-              className='-cell'
-              autoComplete='off'
-              autoCorrect='off'
-              spellCheck={false}
-              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-              //onKeyDown={this.onKeyDown}
-              value={item.tipSpatiu}>
-            </input>
-            <Spinner
-            status='loading'
-            visibility={true}/>
-          </div>
-          <div className='-row-extra-content'
-            style={{height: item.isExpanded ? item.paturi.length * 45 + 'px' : '0'}}>
-            {
-              this.displayBeds(item.index)
-            }
-          </div>
-        </div>
-      </div>
-    );
-    */
 
     return (
       <div id='centralizator-spatii' 
@@ -1027,7 +922,7 @@ class CentralizatorSpatii extends React.Component {
             </Tippy>
             <Tippy
               content={
-                <div>Salvează</div>
+                <div>Editează</div>
               }
               allowHTML={true}
               placement='top'
@@ -1035,7 +930,7 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className='fas fa-save -tbutton-save'></i>
+              <i className='fas fa-edit -tbutton-save'></i>
             </Tippy>
             <Tippy
               content={
@@ -1071,9 +966,6 @@ class CentralizatorSpatii extends React.Component {
         <div className='-theader'>
             <i className={this.state.checkBoxData[this.state.checkLevel].icon}
               onClick={this.toggleMasterChecked}></i>
-          <div className='-row-expander'>
-            <i className='fas fa-angle-down -expand-icon' style={{visibility: 'hidden'}}></i>
-          </div>
             <div className='-th-col'>
               Etaj
             </div>
@@ -1106,18 +998,15 @@ class CentralizatorSpatii extends React.Component {
                     roomTypes: this.state.roomTypes,
                     confortTypes: this.state.confortTypes,
                     toggleChecked: this.toggleChecked,
-                    toggleExpanded: this.toggleExpanded,
                     input: this.input,
                   }
                 }
                 itemKey={this.generateKey}
-                itemSize={this.getItemHeight}
+                itemSize={45}
                 itemCount={current.length}
                 className='-rows'
-                
-                //onItemsRendered={console.log('Items rendered')}
                 >
-                {ItemRenderer}
+                {Spatiu}
               </List>
             {/*</div>*/}
           </div>
@@ -1151,255 +1040,4 @@ export default CentralizatorSpatii;
 
 
 
-class ItemRenderer extends React.PureComponent {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      
-    };
-    
-    this.generateKey = this.generateKey.bind(this);
-
-    this.getItemHeight = this.getItemHeight.bind(this);
-
-    this.toggleChecked = this.toggleChecked.bind(this);
-
-    this.toggleExpanded = this.toggleExpanded.bind(this);
-
-    this.displayRoomTypes = this.displayRoomTypes.bind(this);
-
-    this.displayConfortTypes = this.displayConfortTypes.bind(this);
-
-    this.displayBeds = this.displayBeds.bind(this);
-
-    this.displayBedTypes = this.displayBedTypes.bind(this);
-
-    this.input = this.input.bind(this);
-  }
-
-  generateKey() {
-    return Math.floor(new Date().getTime() * Math.random());
-  }
-
-  getItemHeight(item) {
-        
-    return item.isExpanded ? (item.paturi.length + 2) * 45 : 45;
-    
-  }
-
-  toggleChecked() {
-    this.props.data.toggleChecked(this.props.index);
-  }
-
-  toggleExpanded() {
-    this.props.data.toggleExpanded(this.props.index);
-  }
-
-  displayRoomTypes(room) {
-    let roomTypes = this.props.data.roomTypes;
-
-    let roomsUI =
-    <>
-    {
-      roomTypes.map (type => 
-      <option
-        key={this.generateKey()}
-        value={type.Denumire}
-        selected={room === type.Denumire}>
-          {type.Denumire}
-      </option>
-      )
-    }
-    </>;
-
-  return roomsUI;
-  }
-
-  displayConfortTypes(confort) {
-    let confortTypes = this.props.data.confortTypes;
-
-    let confortUI =
-    <>
-    {
-      confortTypes.map (type => 
-      <option
-        key={this.generateKey()}
-        value={type.Denumire}
-        selected={confort === type.Denumire}>
-          {type.Denumire}
-      </option>
-      )
-    }
-    </>;
-
-  return confortUI;
-  }
-
-  displayBeds(item) {
-    
-    let beds = 
-    <div className='-row-beds'>
-      <div className='-row-beds-title'>
-        <div>Paturi</div>
-        <Tippy
-              content={
-                <div>Adaugă tip de pat</div>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-confort-hints'
-              hideOnClick={false}
-              offset={[0, 10]}>
-          <i className='fas fa-plus -row-beds-add'
-            onClick={this.addBed}></i>
-        </Tippy>
-      </div>
-      <div className='-row-beds-content'>
-        {
-          item.paturi.map( bed => 
-            <div key={this.generateKey()}
-              className='-row-beds-tr'>
-              <input data-type='bedCount'
-              disabled={false}
-              maxLength={64}
-              type='text'
-              className='-cell' 
-              autoComplete='off' 
-              autoCorrect='off'
-              spellCheck={false}
-              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-              //onKeyDown={this.onKeyDown}
-              value={bed.numar}></input>
-              <div className='-row-beds-td-x bold'>x</div>
-              <div className='select'>
-                <select className='-row-bed-types'>
-                  {
-                    this.displayBedTypes(bed)
-                  }
-                </select>
-              </div>
-              <div className='-row-beds-td-delete'>
-                <Tippy
-                  content={
-                    <div>Șterge tipul de pat</div>
-                  }
-                  allowHTML={true}
-                  placement='right'
-                  arrow={true}
-                  theme='material-confort-disabled'
-                  hideOnClick={false}
-                  offset={[0, 10]}>
-                  <i className='fas fa-trash-alt -row-bed-delete'
-                    onClick={this.deleteBed}></i>
-                </Tippy>
-              </div>
-            </div>
-          )
-        }
-      </div>
-    </div>;
-    return beds;
-  }
-
-  displayBedTypes(bed) {
-    let bedTypes = this.props.data.bedTypes;
-
-    let bedsUI =
-      <>
-      {
-        bedTypes.map (type => 
-        <option
-          key={this.generateKey()}
-          value={type.Denumire}
-          selected={bed.tip === type.Denumire}>
-            {type.Denumire}
-        </option>
-        )
-      }
-      </>;
-
-    return bedsUI;
-  }
-  
-  input(e) {
-    this.props.data.input(e, this.props.index);
-  }
-
-  render () {
-    //console.log('render', Date.now())
-    let item = this.props.data.items[this.props.index];
-    console.log('Height:', this.getItemHeight(item), item.index, this.props.index)
-    //console.log('Props:', this.props)
-
-    return (
-      <div className='-row'
-      style={{height: this.getItemHeight(item) + 'px'}}
-      key={item.numar}>
-      <div className='-row-content'
-        style={{height: this.getItemHeight(item) + 'px'}}>
-        <div className='-row-main-content'>
-          {
-            item.isChecked  ?
-            <i className='fas fa-check-square -check-icon--checked'
-              onClick={() => { this.toggleChecked(item.index) }}></i>
-                            :
-            <i className='far fa-square -check-icon'
-              onClick={() => { this.toggleChecked(item.index) }}></i>
-          }
-          <div className='-row-expander'>
-            <i className={item.isExpanded ? 'fas fa-angle-down -expand-icon' : 'fas fa-angle-up -expand-icon'}
-              onClick={() => { this.toggleExpanded(item.index) }}></i>
-          </div>
-          <input data-type='floorNumber'
-            disabled={false}
-            maxLength={64}
-            type='text'
-            className='-cell'
-            autoComplete='off'
-            autoCorrect='off'
-            spellCheck={false}
-            onInput={this.input}
-            //onKeyDown={this.onKeyDown}
-            value={item.etaj}>
-          </input>
-          <input data-type='roomNumber'
-            disabled={false}
-            maxLength={64}
-            type='text'
-            className='-cell'
-            autoComplete='off'
-            autoCorrect='off'
-            spellCheck={false}
-            onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-            //onKeyDown={this.onKeyDown}
-            value={item.numar}>
-          </input>
-          <div data-type='roomType' className='-select'>
-            <select className='-row-select'>
-              {this.displayRoomTypes(item.tipSpatiu)}
-            </select>
-          </div>
-          <div data-type='confortType' className='-select'>
-            <select className='-row-select'>
-              {this.displayConfortTypes(item.tipConfort)}
-            </select>
-          </div>
-          <Spinner
-          status='loading'
-          visibility={true}/>
-        </div>
-        <div className='-row-extra-content'
-          style={{height: item.isExpanded ? (item.paturi.length + 1) * 45 + 'px' : '0'}}>
-          {
-            this.displayBeds(item)
-          }
-        </div>
-      </div>
-    </div>
-    );
-
-  }
-
-}
