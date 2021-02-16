@@ -57,7 +57,15 @@ class CentralizatorSpatii extends React.Component {
 
       adding: false,
       addingRange: false,
-      
+      editing: false,
+      searching: false,
+
+      searchText: '',
+
+      canAdd: false,
+      canAddRange: false,
+      canEdit: false,
+      canDelete: false,
 
       checkLevel: 0,
       checkedRows: 0,
@@ -81,17 +89,15 @@ class CentralizatorSpatii extends React.Component {
       ],
     };
 
-    this.search = undefined;
-
-    this.setSearchRef = (element) => {
-      this.search = element;
-    }
+    this.search = React.createRef();
 
     this.listParent = React.createRef();
 
     this.list = React.createRef();
 
     this.focusSearch = this.focusSearch.bind(this);
+
+    this.cancelSearch = this.cancelSearch.bind(this);
 
     this.getItemHeight = this.getItemHeight.bind(this);
   }
@@ -191,26 +197,53 @@ class CentralizatorSpatii extends React.Component {
   }
 
   searchRoom(e) {
-    let items = this.list.current.props.itemData.items;
-    let value = e.target.value;
-    
-    const regex = /^\d+$/;
-    const isRoom = candidate => regex.test(candidate);
 
-    let result = [];
-    
-    if (isRoom(value)) {
-    
-      result = items.filter(item => item.numar === Number(value));
+    this.setState({
+      searching: true,
+      searchText: e.target.value,
+    },
+      () => {
 
-      if (1 === result.length) {
-
-        this.list.current.scrollToItem(result[0].index, 'start');
-      
-      }
-
-    }
+        let items = this.list.current.props.itemData.items;
+        let value = this.state.searchText;
         
+        const regex = /^\d+$/;
+        const isRoom = candidate => regex.test(candidate);
+
+        let result = [];
+        
+        if (isRoom(value)) {
+        
+          result = items.filter(item => item.numar === Number(value));
+
+          if (1 === result.length) {
+
+            this.list.current.scrollToItem(result[0].index, 'start');
+          
+          }
+
+        }
+
+      }
+    );
+
+  }
+
+  cancelSearch() {
+
+    this.setState({
+      searching: false,
+      searchText: '',
+    },
+      () => {
+
+        if (this.search.current) {
+          this.search.current.focus();
+        }
+        
+      }
+    );
+
   }
 
   save(index) {
@@ -955,12 +988,19 @@ class CentralizatorSpatii extends React.Component {
               autoCorrect='off'
               spellCheck={false}
               onInput={this.searchRoom}
-              //onKeyDown={this.onKeyDown}
               placeholder='Caută spațiu de cazare...'
-              ref={this.setSearchRef}>
+              ref={this.search}
+              value={this.state.searchText}>
             </input>
             <i className='fas fa-search -tmenu-search-icon'
               onClick={this.focusSearch}></i>
+            {
+              this.state.searching &&
+              this.state.searchText &&
+
+              <i className='far fa-times-circle -tmenu-cancel-search-icon'
+                onClick={this.cancelSearch}></i>
+            }
           </div>
         </div>
         <div className='-theader'>
