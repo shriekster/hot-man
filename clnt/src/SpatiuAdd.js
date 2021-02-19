@@ -138,7 +138,7 @@ class SpatiuAdd extends React.PureComponent {
         </div>
 
         <div className='-space-add-beds'>
-
+          <div className='-space-add-beds-title'>Paturi</div>
         </div>
 
         <div className='-space-add-buttons-container'>

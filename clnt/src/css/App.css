@@ -3297,3 +3297,13 @@ select.-space-add-select:focus {
 .-space-add-beds {
 
 }
+
+.-space-add-beds-title {
+  width: 100%;
+  height: 40px;
+  font-family: 'Source Sans Pro Bold';
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
