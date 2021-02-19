@@ -62,18 +62,8 @@ class CentralizatorSpatii extends React.Component {
 
       searchText: '',
 
-      canAdd: false,
-      canAddRange: false,
-      canEdit: false,
-      canDelete: false,
-
       checkLevel: 0,
       checkedRows: 0,
-
-      add: true,
-      addRange: true,
-      save: true,
-      delete: true,
       
 
       checkBoxData: [ /** checkLevel: { 0: none checked, 1: some checked, 2: all checked } */
@@ -92,8 +82,9 @@ class CentralizatorSpatii extends React.Component {
     this.search = React.createRef();
 
     this.listParent = React.createRef();
-
     this.list = React.createRef();
+
+    this.tippyForAdd = React.createRef();
 
     this.focusSearch = this.focusSearch.bind(this);
 
@@ -104,28 +95,36 @@ class CentralizatorSpatii extends React.Component {
 
   add() {
 
-    this.setState({
+    if (!this.state.adding && !this.state.addingRange && !this.state.editing) {
 
-      adding: true,
-      addingRange: false,
+      this.setState({
 
-    }, () => {
+        adding: true,
+        searchText: '',
+        searching: false,
+        checkLevel: 0,
+        checkedRows: 0
 
+      });
 
-    });
+    }
   }
 
   addRange() {
 
-    this.setState({
+    if (!this.state.adding && !this.state.addingRange && !this.state.editing) {
 
-      adding: false,
-      addingRange: true,
+      this.setState({
 
-    }, () => {
+        addingRange: true,
+        searchText: '',
+        searching: false,
+        checkLevel: 0,
+        checkedRows: 0
 
+      });
 
-    });
+    }
 
   }
 
@@ -677,45 +676,49 @@ class CentralizatorSpatii extends React.Component {
 
   toggleMasterChecked() {
 
-    let checkLevel = this.state.checkLevel;
-    let current = this.state.current;
-    let checkedRows = this.state.checkedRows;
-    
-    switch (checkLevel) {
+    if (!this.state.adding && !this.state.addingRange && !this.state.editing) {
 
-      /** none or some are checked */
-      case 0:
-      case 1: {
-        
-        checkLevel = 2;
-        checkedRows = current.length;
+      let checkLevel = this.state.checkLevel;
+      let current = this.state.current;
+      let checkedRows = this.state.checkedRows;
+      
+      switch (checkLevel) {
 
-        current.forEach(item => {
-          item.isChecked = true;
-        });
+        /** none or some are checked */
+        case 0:
+        case 1: {
+          
+          checkLevel = 2;
+          checkedRows = current.length;
 
-        break;
+          current.forEach(item => {
+            item.isChecked = true;
+          });
+
+          break;
+        }
+
+        /** all are checked */
+        case 2: {
+
+          checkLevel = 0;
+          checkedRows = 0;
+
+          current.forEach(item => {
+            item.isChecked = false;
+          });
+
+          break;
+        }
       }
 
-      /** all are checked */
-      case 2: {
+      this.setState({
+        current: current,
+        checkLevel: checkLevel,
+        checkedRows: checkedRows,
+      });
 
-        checkLevel = 0;
-        checkedRows = 0;
-
-        current.forEach(item => {
-          item.isChecked = false;
-        });
-
-        break;
-      }
     }
-
-    this.setState({
-      current: current,
-      checkLevel: checkLevel,
-      checkedRows: checkedRows,
-    })
   }
 
   displayBeds(index) {
@@ -804,7 +807,7 @@ class CentralizatorSpatii extends React.Component {
   }
 
   focusSearch() {
-    this.search.focus();
+    this.search.current.focus();
   }
 
   getItemHeight(index) {
@@ -922,6 +925,7 @@ class CentralizatorSpatii extends React.Component {
           </div>
           <div className='-tmenu-buttons'>
             <Tippy
+              disabled={this.state.adding || this.state.addingRange || this.state.editing}
               content={
                 <div>Adaugă</div>
               }
@@ -931,10 +935,12 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className='fas fa-plus -tbutton-add'
+              <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-plus -tbutton-add--disabled' 
+                                                                                                : 'fas fa-plus -tbutton-add'}
                 onClick={this.add}></i>
             </Tippy>
             <Tippy
+              disabled={this.state.adding || this.state.addingRange || this.state.editing}
               content={
                 <div>Adaugă interval</div>
               }
@@ -944,7 +950,8 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 2]}>
-              <div className='-tbutton-add-range'
+              <div className={(this.state.adding || this.state.addingRange || this.state.editing) ? '-tbutton-add-range--disabled'
+                                                                                                  : '-tbutton-add-range'}
                 onClick={this.addRange}>
                 <i className='fas fa-plus'></i>
                 <div className='-trange'>
@@ -954,6 +961,7 @@ class CentralizatorSpatii extends React.Component {
               </div>
             </Tippy>
             <Tippy
+              disabled={this.state.adding || this.state.addingRange || this.state.editing}
               content={
                 <div>Editează</div>
               }
@@ -963,9 +971,11 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className='fas fa-edit -tbutton-save'></i>
+              <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-edit -tbutton-edit--disabled'
+                                                                                                : 'fas fa-edit -tbutton-edit'}></i>
             </Tippy>
             <Tippy
+              disabled={this.state.adding || this.state.addingRange || this.state.editing}
               content={
                 <div>Șterge</div>
               }
@@ -975,12 +985,13 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-disabled'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className='fas fa-trash-alt -tbutton-del'></i>
+              <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-trash-alt -tbutton-delete--disabled' 
+                                                                                                : 'fas fa-trash-alt -tbutton-delete'}></i>
             </Tippy>
           </div>
           <div className='-tmenu-search'>
             <input data-type='roomSearch'
-              disabled={false}
+              disabled={(this.state.adding || this.state.addingRange || this.state.editing)}
               maxLength={64}
               type='text'
               className='-cell-search'
@@ -992,7 +1003,8 @@ class CentralizatorSpatii extends React.Component {
               ref={this.search}
               value={this.state.searchText}>
             </input>
-            <i className='fas fa-search -tmenu-search-icon'
+            <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-search -tmenu-search-icon--disabled' 
+                                                                                              : 'fas fa-search -tmenu-search-icon'}
               onClick={this.focusSearch}></i>
             {
               this.state.searching &&
@@ -1004,7 +1016,8 @@ class CentralizatorSpatii extends React.Component {
           </div>
         </div>
         <div className='-theader'>
-            <i className={this.state.checkBoxData[this.state.checkLevel].icon}
+            <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'far fa-square -check-icon--disabled'
+                                                                                              : this.state.checkBoxData[this.state.checkLevel].icon}
               onClick={this.toggleMasterChecked}></i>
             <div className='-th-col'>
               Etaj

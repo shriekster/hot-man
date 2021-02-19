@@ -2564,6 +2564,15 @@ input[type='text'].--pat-text:focus {
   transition: color .2s linear;
 }
 
+.-tmenu-search-icon--disabled {
+  font-size: 24px;
+  color: lightslategray;
+  position: absolute;
+  left: 12px;
+  top: 11px;
+  transition: color .2s linear;
+}
+
 .-tmenu-cancel-search-icon {
   font-size: 24px;
   color: darkslategray;
@@ -2609,6 +2618,10 @@ input[type='text'].-cell-search:disabled {
   color: lightslategray;
 }
 
+input[type='text'].-cell-search:disabled:hover {
+  cursor: default;
+}
+
 input[type='text'].-cell-search:hover {
   cursor: pointer;
 }
@@ -2634,13 +2647,22 @@ input[type='text'].-cell-search:focus + .-tmenu-search-icon {
 
 .-tbutton-add,
 .-tbutton-add-range,
-.-tbutton-save,
-.-tbutton-del {
+.-tbutton-edit,
+.-tbutton-delete {
   font-size: 24px;
   transition: color .2s linear;
 }
 
-.-tbutton-add-range {
+.-tbutton-add--disabled,
+.-tbutton-add-range--disabled,
+.-tbutton-edit--disabled,
+.-tbutton-delete--disabled {
+  font-size: 24px;
+  color: lightslategray;
+}
+
+.-tbutton-add-range,
+.-tbutton-add-range--disabled {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2663,12 +2685,12 @@ input[type='text'].-cell-search:focus + .-tmenu-search-icon {
 
 .-tbutton-add:hover,
 .-tbutton-add-range:hover,
-.-tbutton-save:hover  {
+.-tbutton-edit:hover  {
   color: #009500;
   cursor: pointer;
 }
 
-.-tbutton-del:hover {
+.-tbutton-delete:hover {
   color: #D72C25;
   cursor: pointer;
 }
@@ -2715,6 +2737,13 @@ input[type='text'].-cell-search:focus + .-tmenu-search-icon {
 .-check-icon {
   font-size: 24px;
   cursor: pointer;
+  transition: color .2s linear;
+  margin: 4px;
+}
+
+.-check-icon--disabled {
+  font-size: 24px;
+  color: lightslategray;
   transition: color .2s linear;
   margin: 4px;
 }
