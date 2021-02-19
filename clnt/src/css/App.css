@@ -3304,6 +3304,7 @@ select.-space-add-select:focus {
   font-family: 'Source Sans Pro Bold';
   font-size: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  margin-left: 29px;
 }
