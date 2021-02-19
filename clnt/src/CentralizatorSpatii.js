@@ -3,7 +3,7 @@ import Tippy from '@tippyjs/react';
 /** react-window - React components for efficiently rendering large lists and tabular data */
 import { FixedSizeList as List} from 'react-window';
 import Spatiu from './Spatiu';
-import Spinner from './Spinner';
+import SpatiuAdd from './SpatiuAdd';
 
 function vh(v) {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -14,42 +14,41 @@ class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
 
+    // Methods
     this.add = this.add.bind(this); 
-
-    this.addRange = this.addRange.bind(this);
-
-    this.addBed = this.addBed.bind(this);
-
-    this.edit = this.edit.bind(this);
-
-    this.input = this.input.bind(this);
-
-    this.searchRoom = this.searchRoom.bind(this);
 
     this.save = this.save.bind(this);
 
     this.cancel = this.cancel.bind(this);
 
+    this.addRange = this.addRange.bind(this);
+
+    this.saveRange = this.saveRange.bind(this);
+
+    this.cancelRange = this.cancelRange.bind(this);
+
+    this.edit = this.edit.bind(this);
+
+    this.cancelEdit = this.cancelEdit.bind(this);
+
     this.delete = this.delete.bind(this);
 
-    this.deleteBed = this.deleteBed.bind(this);
+    this.searchRoom = this.searchRoom.bind(this);
+
+    this.focusSearch = this.focusSearch.bind(this);
+
+    this.cancelSearch = this.cancelSearch.bind(this);
 
     this.generateKey = this.generateKey.bind(this);
-
-    this.setFocusState = this.setFocusState.bind(this);
 
     this.toggleChecked = this.toggleChecked.bind(this);
 
     this.toggleMasterChecked = this.toggleMasterChecked.bind(this);
 
-    this.displayBeds = this.displayBeds.bind(this);
-
-    this.displayBedTypes = this.displayBedTypes.bind(this);
-
+    // State
     this.state = {
 
-      backup: [],
-      current: [],
+      items: [],
 
       roomTypes: [],
       confortTypes: [],
@@ -79,18 +78,12 @@ class CentralizatorSpatii extends React.Component {
       ],
     };
 
+    // Refs
     this.search = React.createRef();
 
     this.listParent = React.createRef();
     this.list = React.createRef();
 
-    this.tippyForAdd = React.createRef();
-
-    this.focusSearch = this.focusSearch.bind(this);
-
-    this.cancelSearch = this.cancelSearch.bind(this);
-
-    this.getItemHeight = this.getItemHeight.bind(this);
   }
 
   add() {
@@ -108,6 +101,25 @@ class CentralizatorSpatii extends React.Component {
       });
 
     }
+
+  }
+
+  save() {
+
+  }
+
+  cancel() {
+
+    if (this.state.adding) {
+
+      this.setState({
+
+        adding: false,
+
+      });
+
+    }
+
   }
 
   addRange() {
@@ -128,70 +140,43 @@ class CentralizatorSpatii extends React.Component {
 
   }
 
-  addBed() {
+  saveRange() {
 
   }
 
-  edit(index) {
+  cancelRange() {
 
-    let categorii = this.state.current;
-    let backup = this.state.backup;
-
-    if (index >= 0 && index < categorii.length) {
-
-      for (let i = 0; i < categorii.length; i++) {
-
-        if (index == i) {
-
-          categorii[i].showNameWarning = false;
-          categorii[i].showNameError = false;
-          categorii[i].showNumberWarning = false;
-          categorii[i].showNumberError = false;
-
-          categorii[i].isFresh = false;
-          categorii[i].isChecked = true;
-          categorii[i].inputIsFocused = true;
-          categorii[i].isFetching = false;
-          
-        } else {
-
-          if (categorii[i].isFresh) {
-
-            categorii.pop();
-            backup.pop();
-
-          } else {
-
-            categorii[i].Denumire = backup[i].Denumire;
-            categorii[i].NumarLocuri = backup[i].NumarLocuri;
-
-            categorii[i].showNameWarning = false;
-            categorii[i].showNameError = false;
-            categorii[i].showNumberWarning = false;
-            categorii[i].showNumberError = false;
-
-            categorii[i].isFresh = false;
-            categorii[i].isChecked = false;
-            categorii[i].isFetching = false;
-
-          }
-        }
-      }
+    if (this.state.addingRange) {
 
       this.setState({
-        backup: backup,
-        current: categorii,
 
-        creating: true, /** Block the creation of a new item while editing */
+        addingRange: false,
+
       });
+
     }
+
   }
 
-  input(e, index) {
+  edit() {
 
-    let categorii = this.state.current;
+    if (!this.state.adding && !this.state.addingRange && !this.state.editing && this.state.checkedRows === 1) {
 
-    console.log(index, e.currentTarget.value);
+      this.setState({
+
+        editing: true,
+        searchText: '',
+        searching: false,
+        checkLevel: 0,
+        checkedRows: 0
+
+      });
+
+    }
+
+  }
+
+  cancelEdit() {
 
   }
 
@@ -210,16 +195,44 @@ class CentralizatorSpatii extends React.Component {
         const isRoom = candidate => regex.test(candidate);
 
         let result = [];
-        
+
+        items.forEach (item => {
+
+          item.isSearchResult = false;
+
+        });
+    
         if (isRoom(value)) {
         
           result = items.filter(item => item.numar === Number(value));
 
           if (1 === result.length) {
 
-            this.list.current.scrollToItem(result[0].index, 'start');
-          
+            let index = result[0].index;
+
+            items[index].isSearchResult = true;
+            
+            this.setState({
+
+              items: items,
+
+            },
+              () => {
+
+                this.list.current.scrollToItem(index, 'start');
+
+              }
+            );
+
           }
+
+        } else {
+
+          this.setState({
+
+            items: items,
+
+          });
 
         }
 
@@ -230,9 +243,14 @@ class CentralizatorSpatii extends React.Component {
 
   cancelSearch() {
 
+    let items = this.state.items;
+
+    items.forEach( item => { item.isSearchResult = false });
+
     this.setState({
       searching: false,
       searchText: '',
+      items: items,
     },
       () => {
 
@@ -245,394 +263,17 @@ class CentralizatorSpatii extends React.Component {
 
   }
 
-  save(index) {
+  delete() {
 
-    let body;
-    let backup = this.state.backup;
-    let categorii = this.state.current;
-
-    if (index >= 0 && index < categorii.length) {
-
-      /** Empty input value(s) on saving */
-      if (!categorii[index].Denumire || !categorii[index].NumarLocuri) {
-
-        let nameWarning = false;
-        let numberWarning = false;
-
-        if (!categorii[index].Denumire) nameWarning = true;
-
-        if(!categorii[index].NumarLocuri) numberWarning = true;
-
-        categorii[index].showNameWarning = nameWarning;
-        categorii[index].showNameError = false;
-
-        categorii[index].showNumberWarning = numberWarning;
-        categorii[index].showNumberError = false;
-
-        categorii[index].isFetching = false;
-
-        this.setState({
-          current: categorii,
-        });
-      }
-
-      else 
-      
-      /** The input values are the same as before being edited */
-      if (categorii[index].Denumire === backup[index].Denumire &&
-          categorii[index].NumarLocuri === backup[index].NumarLocuri) {
-
-        categorii[index].showNameWarning = false;
-        categorii[index].showNameError = false;
-        categorii[index].showNumberWarning = false;
-        categorii[index].showNumberError = false;
-        categorii[index].isFresh = false;
-        categorii[index].isChecked = false;
-        categorii[index].isFetching = false;
-
-        categorii[index].inputIsFocused = true;
-        categorii[index].textareaIsFocused = false;
-
-        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
-        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
-        categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
-        categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
-
-        this.setState({
-          current: categorii,
-          creating: false,
-        })
-      }
-
-      else {
-        /** A new, non-empty value is to be saved */
-        if (categorii[index].isFresh) {
-
-          body = {
-            token: this.props.token,
-            task: 'create',
-            value: categorii[index].Denumire.trim(),
-            number: categorii[index].NumarLocuri.toString().trim(),
-          };
-    
-        } else {
-          
-          body = {
-            token: this.props.token,
-            task: 'update',
-            oldValue: backup[index].Denumire,
-            newValue: categorii[index].Denumire.trim(),
-            oldNumber: backup[index].NumarLocuri,
-            newNumber: categorii[index].NumarLocuri.toString().trim(),
-          };
-        }
-      
-        const requestOptions = {
-          method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        };
-    
-        fetch('http://localhost:3001/main/administrare/paturi', requestOptions)
-        .then(response => response.json())
-        .then(updated => {
-          
-          if (updated && updated.status) {
-  
-            switch (updated.status) {
-  
-              case 'valid': {
-  
-                backup[index].Denumire = categorii[index].Denumire.trim();
-                backup[index].NumarLocuri = categorii[index].NumarLocuri.toString().trim();
-  
-                categorii[index].showNameWarning = false;
-                categorii[index].showNameError = false;
-                categorii[index].showNumberWarning = false;
-                categorii[index].showNumberError = false;
-
-                categorii[index].isFresh = false;
-                categorii[index].isChecked = false;
-                categorii[index].isFetching = false;
-                categorii[index].inputIsFocused = true;
-                categorii[index].textareaIsFocused = false;
-
-                categorii[index].inputCaretPosition = categorii[index].Denumire.length;
-                categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
-                categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
-                categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
-  
-                this.setState({
-                  backup: backup,
-                  current: categorii,
-                  creating: false,
-                });
-  
-                break;
-              }
-  
-              case 'error':
-              case 'invalid': {
-
-                categorii[index].showNameWarning = false;
-                categorii[index].showNameError = false;
-                categorii[index].showNumberWarning = false;
-                categorii[index].showNumberError = true;
-
-                categorii[index].isChecked = true;
-                categorii[index].isFetching = false;
-  
-                this.setState({
-                  current: categorii,
-                });
-  
-                break;
-              }
-
-              case 'duplicate': {
-  
-                categorii[index].showNameWarning = false;
-                categorii[index].showNameError = true;
-                categorii[index].showNumberWarning = false;
-                categorii[index].showNumberError = false;
-
-                categorii[index].isChecked = true;
-                categorii[index].isFetching = false;
-  
-                this.setState({
-                  current: categorii,
-                });
-  
-                break;
-              }
-
-              case 'broken': {
-  
-                categorii[index].showNameWarning = false;
-                categorii[index].showNameError = true;
-                categorii[index].showNumberWarning = false;
-                categorii[index].showNumberError = true;
-
-                categorii[index].isChecked = true;
-                categorii[index].isFetching = false;
-  
-                this.setState({
-                  current: categorii,
-                });
-  
-                break;
-              }
-  
-              case 'denied': {
-                this.props.onChange('Login');
-  
-                break;
-              }
-            }
-          }
-        });
-      }
-    }
-    
-  }
-
-  delete(index) {
-
-    let categorii = this.state.current;
-    let backup = this.state.backup;
-   
-    let toDelete = '';
-
-    if (index >= 0 && index < categorii.length) {
-
-      toDelete = backup[index].Denumire;
-
-    }
-
-    const requestOptions = {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: this.props.token,
-        task: 'delete',
-        value: toDelete,
-      }),
-    };
-
-    fetch('http://localhost:3001/main/administrare/paturi', requestOptions)
-    .then(response => response.json())
-    .then(updated => {
-
-      if ('valid' === updated.status) {
-        
-        categorii.splice(index, 1);
-        backup.splice(index, 1);
-
-        /** Rewrite the indexes so that they are in 'order' */
-        let _index = 0;
-
-        categorii.forEach(item => {
-
-          item.index = _index++;
-
-        });
-
-        this.setState({
-          backup: backup,
-          current: categorii,
-
-          creating: false,
-        })
-        
-      }
-
-      else {
-
-        let categorii = this.state.current;
-
-        categorii.forEach(item => {
-          
-          item.showNameWarning = false;
-          item.showNameError = false;
-          item.showNumberWarning = false;
-          item.showNumberError = false;
-
-          item.isFresh = false;
-          item.isChecked = false;
-          item.isFetching = false;
-          
-        });
-
-        this.setState({
-          current: categorii,
-          creating: false,
-        });
-      }
-    });
-  }
-
-  deleteBed() {
-
-  }
-
-  cancel(index) {
-    let categorii = this.state.current;
-    let backup = this.state.backup;
-
-    if (index >= 0 && index < categorii.length) {
-      
-      /** The user clicked cancel on a newly created item */
-      if (categorii[index].isFresh &&
-          '' === backup[index].Denumire) {
-        
-        categorii.pop();
-        backup.pop();
-      }
-
-      /** The user clicked cancel on an existing item */
-      else {
-        
-        categorii[index].Denumire = backup[index].Denumire;
-        categorii[index].NumarLocuri = backup[index].NumarLocuri;
-
-        categorii[index].showNameWarning = false;
-        categorii[index].showNameError = false;
-        categorii[index].showNumberWarning = false;
-        categorii[index].showNumberError = false;
-
-        categorii[index].isFresh = false;
-        categorii[index].isChecked = false;
-        categorii[index].isFetching = false;
-
-        categorii[index].inputIsFocused = true;
-        categorii[index].textareaIsFocused = false;
-
-        categorii[index].inputCaretPosition = categorii[index].Denumire.length;
-        categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
-        categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
-        categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
-      }
-    }
-    
-
-    this.setState({
-      backup: backup,
-      current: categorii,
-
-      creating: false,
-    });
   }
 
   generateKey() {
     return Math.floor(new Date().getTime() * Math.random());
   }
 
-  setFocusState(index, type, state, caretPosition, caretPositionEnd) {
-
-    let categorii = this.state.current;
-
-    if (index >= 0 && index <= categorii.length) {
-
-      switch (type) {
-
-        case 'input': {
-
-          if (state) {
-
-            categorii[index].inputIsFocused = true;
-            categorii[index].inputCaretPosition = caretPosition;
-            categorii[index].inputCaretPositionEnd = caretPositionEnd;//??
-
-            categorii[index].textareaIsFocused = false;
-            categorii[index].textareaCaretPosition = !categorii[index].NumarLocuri ? 0 : categorii[index].NumarLocuri.length;
-            categorii[index].textareaCaretPositionEnd = !categorii[index].NumarLocuri ? 0 : categorii[index].NumarLocuri.length;//??
-
-          } else {
-
-            categorii[index].inputIsFocused = false;
-            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
-            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
-
-          }
-
-          break;
-        }
-
-        case 'textarea': {
-
-          if (state) {
-
-            categorii[index].inputIsFocused = false;
-            categorii[index].inputCaretPosition = categorii[index].Denumire.length;
-            categorii[index].inputCaretPositionEnd = categorii[index].Denumire.length;//??
-
-            categorii[index].textareaIsFocused = true;
-            categorii[index].textareaCaretPosition = caretPosition;
-            categorii[index].textareaCaretPositionEnd = caretPositionEnd;//??
-
-          } else {
-
-            categorii[index].textareaIsFocused = false;
-            categorii[index].textareaCaretPosition = categorii[index].NumarLocuri.length;
-            categorii[index].textareaCaretPositionEnd = categorii[index].NumarLocuri.length;//??
-            
-          }
-
-          break;
-        }
-
-      }
-
-      this.setState({
-        current: categorii,
-      });
-    }
-  }
-
   toggleChecked(index) {
-    let current = this.state.current;
+
+    let current = this.state.items;
     let checkLevel = this.state.checkLevel;
     let checkedRows = this.state.checkedRows;
 
@@ -679,7 +320,7 @@ class CentralizatorSpatii extends React.Component {
     if (!this.state.adding && !this.state.addingRange && !this.state.editing) {
 
       let checkLevel = this.state.checkLevel;
-      let current = this.state.current;
+      let current = this.state.items;
       let checkedRows = this.state.checkedRows;
       
       switch (checkLevel) {
@@ -721,102 +362,8 @@ class CentralizatorSpatii extends React.Component {
     }
   }
 
-  displayBeds(index) {
-    
-    let item = this.state.current[index];
-    let beds = 
-    <div className='-row-beds'>
-      <div className='-row-beds-title'>
-        <Tippy
-              content={
-                <div>Adaugă tip de pat</div>
-              }
-              allowHTML={true}
-              placement='right'
-              arrow={true}
-              theme='material-confort-hints'
-              hideOnClick={false}
-              offset={[0, 10]}>
-          <i className='fas fa-plus -row-beds-add'
-            onClick={this.addBed}></i>
-        </Tippy>
-        <div>Paturi</div>
-        </div>
-      <div className='-row-beds-content'>
-        {
-          item.paturi.map( bed => 
-            <div key={this.generateKey()}
-              className='-row-beds-tr'>
-              <input data-type='bedCount'
-              disabled={false}
-              maxLength={64}
-              type='text'
-              className='-cell' 
-              autoComplete='off' 
-              autoCorrect='off'
-              spellCheck={false}
-              onInput={(event) => {console.log(event.currentTarget.dataset.type)}}
-              //onKeyDown={this.onKeyDown}
-              value={bed.numar}></input>
-              <div className='-row-beds-td-x bold'>x</div>
-              <div className='select'>
-                <select className='-row-bed-types'>
-                  {
-                    this.displayBedTypes()
-                  }
-                </select>
-              </div>
-              <div className='-row-beds-td-delete'>
-                <Tippy
-                  content={
-                    <div>Șterge tipul de pat</div>
-                  }
-                  allowHTML={true}
-                  placement='right'
-                  arrow={true}
-                  theme='material-confort-disabled'
-                  hideOnClick={false}
-                  offset={[0, 10]}>
-                  <i className='fas fa-trash-alt -row-bed-delete'
-                    onClick={this.deleteBed}></i>
-                </Tippy>
-              </div>
-            </div>
-          )
-        }
-      </div>
-    </div>;
-    return beds;
-  }
-
-  displayBedTypes() {
-    let bedTypes = this.state.bedTypes;
-
-    let bedsUI =
-      <>
-      {
-        bedTypes.map (type => 
-        <option
-          key={this.generateKey()}
-          value={type.Denumire}>{type.Denumire}</option>
-        )
-      }
-      </>;
-
-    return bedsUI;
-  }
-
   focusSearch() {
     this.search.current.focus();
-  }
-
-  getItemHeight(index) {
-    
-    if (index >= 0 && index < this.state.current.length) {
-      
-      let item = this.state.current[index];
-      return item.isExpanded ? (item.paturi.length + 1) * 45 : 45;
-    }
   }
 
   componentDidMount() {
@@ -849,30 +396,13 @@ class CentralizatorSpatii extends React.Component {
         let items = res.spatii;
 
         let length = 0;
-        let backup = [];
 
         items.forEach( item => {
 
           item.index = length++;
-
-          item.showNameWarning = false;
-          item.showNameError = false;
-          item.showNumberWarning = false;
-          item.showNumberError = false;
     
-          item.isFresh = false;
-          item.isChecked = false; //!!!!
-          item.isFetching = false;
-          item.isExpanded = false;
-
-          let backupItem = {
-            etaj: item.etaj, 
-            numar: item.numar,
-            tipSpatiu: item.tipSpatiu,
-            paturi: Object.assign({}, item.paturi)
-          };
-
-          backup.push(backupItem);
+          item.isChecked = false;
+          item.isSearchResult = false;
 
         });
 
@@ -880,8 +410,7 @@ class CentralizatorSpatii extends React.Component {
           roomTypes: rooms,
           confortTypes: confs,
           bedTypes: beds,
-          backup: backup,
-          current: items,
+          items: items,
         });
       } 
       
@@ -897,8 +426,6 @@ class CentralizatorSpatii extends React.Component {
   }
 
   render() {
-    //console.log('CentralizatorSpatii rendered')
-    let current = this.state.current;
 
     return (
       <div id='centralizator-spatii' 
@@ -925,7 +452,7 @@ class CentralizatorSpatii extends React.Component {
           </div>
           <div className='-tmenu-buttons'>
             <Tippy
-              disabled={this.state.adding || this.state.addingRange || this.state.editing}
+              disabled={this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows}
               content={
                 <div>Adaugă</div>
               }
@@ -935,12 +462,13 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-plus -tbutton-add--disabled' 
+              <i className={(this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows) 
+                                                                                                ? 'fas fa-plus -tbutton-add--disabled' 
                                                                                                 : 'fas fa-plus -tbutton-add'}
                 onClick={this.add}></i>
             </Tippy>
             <Tippy
-              disabled={this.state.adding || this.state.addingRange || this.state.editing}
+              disabled={this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows}
               content={
                 <div>Adaugă interval</div>
               }
@@ -950,7 +478,8 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 2]}>
-              <div className={(this.state.adding || this.state.addingRange || this.state.editing) ? '-tbutton-add-range--disabled'
+              <div className={(this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows) 
+                                                                                                  ? '-tbutton-add-range--disabled'
                                                                                                   : '-tbutton-add-range'}
                 onClick={this.addRange}>
                 <i className='fas fa-plus'></i>
@@ -961,7 +490,7 @@ class CentralizatorSpatii extends React.Component {
               </div>
             </Tippy>
             <Tippy
-              disabled={this.state.adding || this.state.addingRange || this.state.editing}
+              disabled={this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows !== 1}
               content={
                 <div>Editează</div>
               }
@@ -971,11 +500,13 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-hints'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-edit -tbutton-edit--disabled'
-                                                                                                : 'fas fa-edit -tbutton-edit'}></i>
+              <i className={(this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows !== 1) 
+                                                                                                ? 'fas fa-edit -tbutton-edit--disabled'
+                                                                                                : 'fas fa-edit -tbutton-edit'}
+                onClick={this.edit}></i>
             </Tippy>
             <Tippy
-              disabled={this.state.adding || this.state.addingRange || this.state.editing}
+              disabled={this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows < 1}
               content={
                 <div>Șterge</div>
               }
@@ -985,8 +516,10 @@ class CentralizatorSpatii extends React.Component {
               theme='material-confort-disabled'
               hideOnClick={false}
               offset={[0, 10]}>
-              <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-trash-alt -tbutton-delete--disabled' 
-                                                                                                : 'fas fa-trash-alt -tbutton-delete'}></i>
+              <i className={(this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows < 1) 
+                                                                                                ? 'fas fa-trash-alt -tbutton-delete--disabled' 
+                                                                                                : 'fas fa-trash-alt -tbutton-delete'}
+                onClick={this.delete}></i>
             </Tippy>
           </div>
           <div className='-tmenu-search'>
@@ -1033,7 +566,7 @@ class CentralizatorSpatii extends React.Component {
             </div>
         </div>
         {
-          !this.state.adding && !this.state.addingRange &&
+          !this.state.adding && !this.state.addingRange && !this.state.editing &&
 
           <div ref={this.listParent} 
           id='-scroller' 
@@ -1046,7 +579,7 @@ class CentralizatorSpatii extends React.Component {
                 height={vh(55)}
                 itemData={
                   {
-                    items: this.state.current,
+                    items: this.state.items,
                     bedTypes: this.state.bedTypes,
                     roomTypes: this.state.roomTypes,
                     confortTypes: this.state.confortTypes,
@@ -1056,7 +589,7 @@ class CentralizatorSpatii extends React.Component {
                 }
                 itemKey={this.generateKey}
                 itemSize={45}
-                itemCount={current.length}
+                itemCount={this.state.items.length}
                 className='-rows'
                 >
                 {Spatiu}
@@ -1065,22 +598,37 @@ class CentralizatorSpatii extends React.Component {
           </div>
         }
         {
-          this.state.adding && !this.state.addingRange &&
+          this.state.adding && !this.state.addingRange && !this.state.editing &&
 
           <div id='-scroller' 
             className='-scroller'>
             <div className='-rows-adding'>
-              ADDING
+              <SpatiuAdd
+                save={this.save}
+                cancel={this.cancel}
+                roomTypes={this.state.roomTypes}
+                confortTypes={this.state.confortTypes}
+                bedTypes={this.state.bedTypes}/>
             </div>
           </div>
         }
         {
-          !this.state.adding && this.state.addingRange &&
+          !this.state.adding && this.state.addingRange && !this.state.editing &&
           
           <div id='-scroller' 
             className='-scroller'>
             <div className='-rows-adding'>
               ADDING RANGE
+            </div>
+          </div>
+        }
+        {
+          !this.state.adding && !this.state.addingRange && this.state.editing &&
+          
+          <div id='-scroller' 
+            className='-scroller'>
+            <div className='-rows-adding'>
+              EDITING
             </div>
           </div>
         }

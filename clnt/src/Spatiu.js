@@ -42,7 +42,10 @@ class Spatiu extends React.PureComponent {
             {item.etaj}
           </div>
           <div data-type='roomNumber' className='-row-cell'>
-            {item.numar}
+            <span
+              style={{backgroundColor: item.isSearchResult ? 'greenyellow' : '#9FD9D9'}}>
+              {item.numar}
+            </span>
           </div>
           <div data-type='roomType' className='-row-cell'>
             {item.tipSpatiu}
