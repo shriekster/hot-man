@@ -97,19 +97,18 @@ class SpatiuAdd extends React.PureComponent {
 
           <div className='-space-add-select-container'>
             <select className='-space-add-select'
+              value={this.state.tip}
               data-type='tip'
               onInput={this.input}>
               <option style={{color: 'lightslategray'}}
                 value='0'
-                key={this.generateKey()}
-                selected={'0' === this.state.tip}>
+                key={this.generateKey()}>
                 ---
               </option>
               {this.props.roomTypes.map (room => 
                 <option
                   key={this.generateKey()}
-                  value={room.Denumire}
-                  selected={room.Denumire === this.state.tip}>
+                  value={room.Denumire}>
                   {room.Denumire}
                 </option>
               )}
@@ -118,19 +117,18 @@ class SpatiuAdd extends React.PureComponent {
 
           <div className='-space-add-select-container'>
             <select className='-space-add-select'
+              value={this.state.confort}
               data-type='confort'
               onInput={this.input}>
               <option style={{color: 'lightslategray'}}
                 value='0'
-                key={this.generateKey()}
-                selected={'0' === this.state.confort}>
+                key={this.generateKey()}>
                 ---
               </option>
               {this.props.confortTypes.map (conf => 
                 <option
                   key={this.generateKey()}
-                  value={conf.Denumire}
-                  selected={conf.Denumire === this.state.confort}>
+                  value={conf.Denumire}>
                   {conf.Denumire}
                 </option>
               )}
