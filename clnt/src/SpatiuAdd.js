@@ -76,7 +76,7 @@ class SpatiuAdd extends React.PureComponent {
 
     return (
       
-      <>
+      <div className='spatiu-add'>
         <div className='-space-add'>
 
           <div style={{width: '29px'}}></div>
@@ -152,7 +152,7 @@ class SpatiuAdd extends React.PureComponent {
             Renunță
           </button>
         </div>
-      </>
+      </div>
 
     );
 

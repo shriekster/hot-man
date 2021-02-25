@@ -6,9 +6,10 @@ import { FixedSizeList as List} from 'react-window';
 import Spatiu from './Spatiu';
 import SpatiuAdd from './SpatiuAdd';
 
-function vh(v) {
+/** CSS calc(<vh>vh - <op>px) */
+function myCalc(vh, px) {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-  return (v * h) / 100;
+  return (vh * h) / 100 - px;
 }
  
 class CentralizatorSpatii extends React.Component {
@@ -582,7 +583,7 @@ class CentralizatorSpatii extends React.Component {
 
           <List
             ref={this.list}
-            height={vh(54)}
+            height={myCalc(76, 179)}
             overscanCount={1}
             itemData={
               {
