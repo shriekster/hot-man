@@ -1,6 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
-/** react-window - React components for efficiently rendering large lists and tabular data */
+/** react-window - React components for 
+ * efficiently rendering large lists and tabular data */
 import { FixedSizeList as List} from 'react-window';
 import Spatiu from './Spatiu';
 import SpatiuAdd from './SpatiuAdd';
@@ -9,7 +10,7 @@ function vh(v) {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   return (v * h) / 100;
 }
-
+ 
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
@@ -219,7 +220,7 @@ class CentralizatorSpatii extends React.Component {
             },
               () => {
 
-                this.list.current.scrollToItem(index, 'smart');
+                this.list.current.scrollToItem(index, 'start');
 
               }
             );
@@ -522,31 +523,42 @@ class CentralizatorSpatii extends React.Component {
                 onClick={this.delete}></i>
             </Tippy>
           </div>
-          <div className='-tmenu-search'>
-            <input data-type='roomSearch'
-              disabled={(this.state.adding || this.state.addingRange || this.state.editing)}
-              maxLength={64}
-              type='text'
-              className='-cell-search'
-              autoComplete='off'
-              autoCorrect='off'
-              spellCheck={false}
-              onInput={this.searchRoom}
-              placeholder='Caută spațiu de cazare...'
-              ref={this.search}
-              value={this.state.searchText}>
-            </input>
-            <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-search -tmenu-search-icon--disabled' 
-                                                                                              : 'fas fa-search -tmenu-search-icon'}
-              onClick={this.focusSearch}></i>
-            {
-              this.state.searching &&
-              this.state.searchText &&
+            <Tippy
+              disabled={this.state.adding || this.state.addingRange || this.state.editing}
+              content={
+                <div>Caută spațiu de cazare</div>
+              }
+              allowHTML={true}
+              placement='top'
+              arrow={true}
+              theme='material-confort-hints'
+              hideOnClick={false}
+              offset={[0, 10]}>
+            <div className='-tmenu-search'>
+              <input data-type='roomSearch'
+                disabled={(this.state.adding || this.state.addingRange || this.state.editing)}
+                maxLength={64}
+                type='text'
+                className='-cell-search'
+                autoComplete='off'
+                autoCorrect='off'
+                spellCheck={false}
+                onInput={this.searchRoom}
+                ref={this.search}
+                value={this.state.searchText}>
+              </input>
+              <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'fas fa-search -tmenu-search-icon--disabled' 
+                                                                                                : 'fas fa-search -tmenu-search-icon'}
+                onClick={this.focusSearch}></i>
+              {
+                this.state.searching &&
+                this.state.searchText &&
 
-              <i className='far fa-times-circle -tmenu-cancel-search-icon'
-                onClick={this.cancelSearch}></i>
-            }
-          </div>
+                <i className='far fa-times-circle -tmenu-cancel-search-icon'
+                  onClick={this.cancelSearch}></i>
+              }
+            </div>
+          </Tippy>
         </div>
         <div className='-theader'>
             <i className={(this.state.adding || this.state.addingRange || this.state.editing) ? 'far fa-square -check-icon--disabled'
@@ -568,63 +580,55 @@ class CentralizatorSpatii extends React.Component {
         {
           !this.state.adding && !this.state.addingRange && !this.state.editing &&
 
-
-            <List
-              ref={this.list}
-              height={vh(54)}
-              itemData={
-                {
-                  items: this.state.items,
-                  bedTypes: this.state.bedTypes,
-                  roomTypes: this.state.roomTypes,
-                  confortTypes: this.state.confortTypes,
-                  toggleChecked: this.toggleChecked,
-                  input: this.input,
-                }
+          <List
+            ref={this.list}
+            height={vh(54)}
+            overscanCount={1}
+            itemData={
+              {
+                items: this.state.items,
+                bedTypes: this.state.bedTypes,
+                roomTypes: this.state.roomTypes,
+                confortTypes: this.state.confortTypes,
+                toggleChecked: this.toggleChecked,
+                input: this.input,
               }
-              itemKey={this.generateKey}
-              itemSize={45}
-              itemCount={this.state.items.length}
-              className='-rows'
-              >
-              {Spatiu}
-            </List>
+            }
+            itemKey={this.generateKey}
+            itemSize={45}
+            itemCount={this.state.items.length}
+            className='-rows'
+            >
+            {Spatiu}
+          </List>
 
         }
         {
           this.state.adding && !this.state.addingRange && !this.state.editing &&
 
-          <div id='-spaces' 
-            className='-spaces'>
-            <div className='-rows-adding'>
-              <SpatiuAdd
-                save={this.save}
-                cancel={this.cancel}
-                roomTypes={this.state.roomTypes}
-                confortTypes={this.state.confortTypes}
-                bedTypes={this.state.bedTypes}/>
-            </div>
-          </div>
+          <SpatiuAdd
+            save={this.save}
+            cancel={this.cancel}
+            roomTypes={this.state.roomTypes}
+            confortTypes={this.state.confortTypes}
+            bedTypes={this.state.bedTypes}/>
+
         }
         {
           !this.state.adding && this.state.addingRange && !this.state.editing &&
-          
-          <div id='-spaces' 
-            className='-spaces'>
-            <div className='-rows-adding'>
-              ADDING RANGE
-            </div>
+
+          <div className='-rows-adding'>
+            ADDING RANGE
           </div>
+
         }
         {
           !this.state.adding && !this.state.addingRange && this.state.editing &&
           
-          <div id='-spaces' 
-            className='-spaces'>
-            <div className='-rows-adding'>
-              EDITING
-            </div>
+          <div className='-rows-adding'>
+            EDITING
           </div>
+
         }
         </div>
     );

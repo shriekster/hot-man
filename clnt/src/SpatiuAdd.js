@@ -1,7 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 import Spinner from './Spinner';
-
+ 
 class SpatiuAdd extends React.PureComponent {
   constructor(props) {
     super(props);

@@ -754,7 +754,7 @@ class Setari extends React.Component {
     }
   }
 
-  // Close the modal the Escape key is pressed
+  // Close the modal when the Escape key is pressed
   onKeyDown(e) {
     let charCode = (e.which) ? e.which : e.keyCode;
 

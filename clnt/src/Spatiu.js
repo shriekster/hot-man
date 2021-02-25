@@ -1,7 +1,7 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 import Spinner from './Spinner';
- 
+  
 class Spatiu extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -28,7 +28,8 @@ class Spatiu extends React.PureComponent {
 
     return (
       <div className='-row'
-        key={item.numar}>
+      key={item.numar}
+      style={this.props.style}>
         <div className='-row-content'>
           {
             item.isChecked  ?
@@ -43,7 +44,7 @@ class Spatiu extends React.PureComponent {
           </div>
           <div data-type='roomNumber' className='-row-cell'>
             <span
-              style={{backgroundColor: item.isSearchResult ? 'greenyellow' : '#9FD9D9'}}>
+              style={{backgroundColor: item.isSearchResult ? 'yellow' : '#9FD9D9'}}>
               {item.numar}
             </span>
           </div>
