@@ -29,7 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			{
 				label: 'Despre',
         click: () => dialog.showMessageBox(null, options),
-        role: 'about'
+        role: 'help'
 			},
 			{
 				label: 'Instrumente pentru dezvoltatori',

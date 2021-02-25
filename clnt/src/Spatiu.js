@@ -85,7 +85,7 @@ class Spatiu extends React.PureComponent {
     );
 
   }
-
+ 
 }
 
 export default Spatiu;

@@ -16,7 +16,7 @@ class SpatiuAdd extends React.PureComponent {
       beds: [],
 
     };
-  
+   
     this.generateKey = this.generateKey.bind(this);
 
     this.input = this.input.bind(this);
@@ -79,6 +79,7 @@ class SpatiuAdd extends React.PureComponent {
       <>
         <div className='-space-add'>
 
+          <div style={{width: '29px'}}></div>
           <input className='-space-add-input'
             data-type='etaj'
             type='text'

@@ -81,7 +81,7 @@ class CentralizatorSpatii extends React.Component {
     // Refs
     this.search = React.createRef();
 
-    this.listParent = React.createRef();
+    //this.listParent = React.createRef();
     this.list = React.createRef();
 
   }
@@ -219,7 +219,7 @@ class CentralizatorSpatii extends React.Component {
             },
               () => {
 
-                this.list.current.scrollToItem(index, 'start');
+                this.list.current.scrollToItem(index, 'smart');
 
               }
             );
@@ -568,40 +568,34 @@ class CentralizatorSpatii extends React.Component {
         {
           !this.state.adding && !this.state.addingRange && !this.state.editing &&
 
-          <div ref={this.listParent} 
-          id='-scroller' 
-            className='-scroller'>
-            {/*<div className='-rows'>*/}
-              {/*items*/}
-              <List
-                ref={this.list}
-                width={900}
-                height={vh(55)}
-                itemData={
-                  {
-                    items: this.state.items,
-                    bedTypes: this.state.bedTypes,
-                    roomTypes: this.state.roomTypes,
-                    confortTypes: this.state.confortTypes,
-                    toggleChecked: this.toggleChecked,
-                    input: this.input,
-                  }
+
+            <List
+              ref={this.list}
+              height={vh(54)}
+              itemData={
+                {
+                  items: this.state.items,
+                  bedTypes: this.state.bedTypes,
+                  roomTypes: this.state.roomTypes,
+                  confortTypes: this.state.confortTypes,
+                  toggleChecked: this.toggleChecked,
+                  input: this.input,
                 }
-                itemKey={this.generateKey}
-                itemSize={45}
-                itemCount={this.state.items.length}
-                className='-rows'
-                >
-                {Spatiu}
-              </List>
-            {/*</div>*/}
-          </div>
+              }
+              itemKey={this.generateKey}
+              itemSize={45}
+              itemCount={this.state.items.length}
+              className='-rows'
+              >
+              {Spatiu}
+            </List>
+
         }
         {
           this.state.adding && !this.state.addingRange && !this.state.editing &&
 
-          <div id='-scroller' 
-            className='-scroller'>
+          <div id='-spaces' 
+            className='-spaces'>
             <div className='-rows-adding'>
               <SpatiuAdd
                 save={this.save}
@@ -615,8 +609,8 @@ class CentralizatorSpatii extends React.Component {
         {
           !this.state.adding && this.state.addingRange && !this.state.editing &&
           
-          <div id='-scroller' 
-            className='-scroller'>
+          <div id='-spaces' 
+            className='-spaces'>
             <div className='-rows-adding'>
               ADDING RANGE
             </div>
@@ -625,8 +619,8 @@ class CentralizatorSpatii extends React.Component {
         {
           !this.state.adding && !this.state.addingRange && this.state.editing &&
           
-          <div id='-scroller' 
-            className='-scroller'>
+          <div id='-spaces' 
+            className='-spaces'>
             <div className='-rows-adding'>
               EDITING
             </div>
