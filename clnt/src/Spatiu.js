@@ -9,7 +9,7 @@ class Spatiu extends React.PureComponent {
     this.state = {
       loading: false,
     };
-  
+
     this.generateKey = this.generateKey.bind(this);
 
     this.toggleChecked = this.toggleChecked.bind(this);

@@ -11,7 +11,7 @@
   font-weight: normal;
   font-style: normal;
 }
-
+ 
 * {
   box-sizing: border-box;
 } 
@@ -639,6 +639,10 @@ div[class^='select-'] {
 
 .--uicon {
   font-size: 2.5rem;
+}
+
+.--uicon:hover {
+  cursor: pointer;
 }
 
 
@@ -3120,12 +3124,7 @@ div[class^='floor-sel-'] > * {
 
 .-rows-adding {
   direction: ltr;
-  /*width: 860px;*/
   height: 100%;
-  /*
-  position: absolute;
-  left: 37px;
-  */
   overflow-y: overlay;
   overflow-x: hidden;
   padding-bottom: 82px;
@@ -3135,7 +3134,6 @@ div[class^='floor-sel-'] > * {
   -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
   border-radius: 5px;
-  /*background-color: rgba(79, 183, 183, .9);*/
   background-color: transparent;
 }
 
@@ -3149,8 +3147,6 @@ div[class^='floor-sel-'] > * {
   border-radius: 4px;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  /*background-color: #009300;*/
-  /*background-image: linear-gradient(rgba(79, 183, 183, .9), rgba(0, 147, 0, .7), rgba(79, 183, 183, .9));*/
   background: rgba(79, 183, 183, .9);
 }
 
@@ -3178,6 +3174,11 @@ input[type='text'].-space-add-input {
   height: 32px;
   padding: 0;
   text-align: center;
+}
+
+input[type='text'].-space-add-input::placeholder {
+  color: lightslategray;
+  font-family: 'Source Sans Pro Regular' !important;
 }
 
 input[type='text'].-space-add-input:focus {
@@ -3246,18 +3247,110 @@ select.-space-add-select:focus {
 }
 
 .-space-add-beds {
+  width: 80%;
   height: calc(100% - 80px);
 }
 
 .-space-add-beds-title {
   width: 100%;
   height: 40px;
-  font-family: 'Source Sans Pro Bold';
   font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.--add-beds-icon {
+  color: darkslategray;
+  transition: color .2s linear;
+  font-size: 24px;
+  position: relative;
+  width: 40px;
+  height: 34px;
+}
+
+.--add-beds-icon--disabled {
+  color: lightslategray;
+  font-size: 24px;
+  position: relative;
+  width: 40px;
+  height: 34px;
+}
+
+.--add-beds-icon:hover {
+  color: #009500;
+  cursor: pointer;
+}
+
+.--add-beds-icon-bed {
+
+}
+
+.--add-beds-icon-plus {
+  font-size: 18px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  -webkit-text-stroke: 1px #9FD9D9;
+}
+
+.-space-add-beds-content {
+  width: 100%;
+  height: calc(100% - 80px);
+  direction: ltr;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.-space-add-beds-content::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.-space-add-beds-content::-webkit-scrollbar {
+  width: 8px;
+  background-color: #9fd9d9;
+  position: absolute;
+}
+
+.-space-add-beds-content::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background: rgba(79, 183, 183, .9);
+}
+
+.--bed-data {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-left: 29px;
+  width: 90%;
+  height: 40px;
+}
+
+.--bed-cell {
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+}
+
+.--remove-bed-icon {
+  font-size: 24px;
+  color: darkslategray;
+  transition: color .2s linear;
+}
+
+.--remove-bed-icon:hover {
+  color: #D72C25;
+  cursor: pointer;
 }
 
 .-space-add-buttons-container {
@@ -3269,33 +3362,31 @@ select.-space-add-select:focus {
 }
 
 .-space-add-save {
-  background-color: transparent;
-  border: 1px outset #009500;
-  border-radius: 8px;
   color: darkslategray;
-  width: 100px;
+  font-size: 24px;
+  transition: color .2s linear;
 }
 
 .-space-add-save:hover {
-  color: #009300;
+  color: #009500;
+  cursor: pointer;
 }
 
 .-space-add-save:active {
-  border: 1px inset #009500;
+  color: #00950088;
 }
 
-.-space-add-cancel{
-  background-color: transparent;
-  border: 1px outset salmon;
-  border-radius: 8px;
+.-space-add-cancel {
   color: darkslategray;
-  width: 100px;
+  font-size: 24px;
+  transition: color .2s linear;
 }
 
 .-space-add-cancel:hover {
   color: #D72C25;
+  cursor: pointer;
 }
 
 .-space-add-cancel:active {
-  border: 1px inset salmon;
+  color: salmon;
 }

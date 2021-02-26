@@ -11,7 +11,7 @@ function myCalc(vh, px) {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   return (vh * h) / 100 - px;
 }
- 
+
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
@@ -592,7 +592,6 @@ class CentralizatorSpatii extends React.Component {
                 roomTypes: this.state.roomTypes,
                 confortTypes: this.state.confortTypes,
                 toggleChecked: this.toggleChecked,
-                input: this.input,
               }
             }
             itemKey={this.generateKey}
