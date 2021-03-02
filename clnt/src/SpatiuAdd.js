@@ -1,11 +1,13 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
 import Spinner from './Spinner';
+
+import Bed from './Bed';
  
 class SpatiuAdd extends React.Component {
   constructor(props) {
     super(props);
-
+ 
     this.state = {
       
       loading: false,
@@ -85,7 +87,10 @@ class SpatiuAdd extends React.Component {
          */
         const isIncomplete = (bed) => 
           (bed.numar === '' || bed.tip === '0');
-        let cannotAdd = beds.some(isIncomplete);
+
+        let cannotAdd = beds.some(isIncomplete) ||
+          // the types of added beds are the existing bed categories
+          beds.length >= this.props.bedTypes.length;
 
         if (!cannotAdd) {
 
@@ -117,7 +122,10 @@ class SpatiuAdd extends React.Component {
          */
         const isIncomplete = (bed) => 
           (bed.numar === '' || bed.tip === '0');
-        let cannotAdd = beds.some(isIncomplete);
+
+        let cannotAdd = beds.some(isIncomplete) ||
+          // the types of added beds are the existing bed categories
+          beds.length >= this.props.bedTypes.length;
 
         if (!cannotAdd) {
 
@@ -158,17 +166,47 @@ class SpatiuAdd extends React.Component {
         tip: '0',
       });
 
-      this.setState({
+      this.setState((state, props) => ({
         addingBed: true,
         beds: beds,
+      }));
+
+    }
+
+  }
+
+  removeBed(index) {
+    let beds = this.state.beds;
+
+    if (index >= 0 && index < beds.length) {
+
+      beds.splice(index, 1);
+
+      // Reorder indexes
+      for (let i = 0; i < beds.length; i++) {
+
+        beds[i].index = i;
+      }
+
+      this.setState({
+
+        addingBed: false,
+        beds: beds,
+
       });
 
     }
 
   }
 
-  removeBed() {
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.state.beds, nextState.beds)
+    if (this.state.beds.length === nextState.beds.length &&
+        this.state.beds.length > 0) {
+      return false;
+    }
 
+    return true;
   }
 
   render () {
@@ -324,7 +362,8 @@ class SpatiuAdd extends React.Component {
                       theme='material-confort-disabled'
                       hideOnClick={false}
                       offset={[0, 10]}>
-                      <i className='fas fa-trash-alt --remove-bed-icon'></i>
+                      <i className='fas fa-trash-alt --remove-bed-icon'
+                        onClick={() => this.removeBed(bed.index)}></i>
                     </Tippy>
                   </div>
                 </div>
