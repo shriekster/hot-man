@@ -11,7 +11,7 @@ function myCalc(vh, px) {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   return (vh * h) / 100 - px;
 }
- 
+  
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +41,7 @@ class CentralizatorSpatii extends React.Component {
 
     this.cancelSearch = this.cancelSearch.bind(this);
 
-    this.generateKey = this.generateKey.bind(this);
+    this.itemKey = this.itemKey.bind(this);
 
     this.toggleChecked = this.toggleChecked.bind(this);
 
@@ -269,8 +269,10 @@ class CentralizatorSpatii extends React.Component {
 
   }
 
-  generateKey() {
-    return Math.floor(new Date().getTime() * Math.random());
+  itemKey(index, data) {
+    
+    return 's' + index;
+    
   }
 
   toggleChecked(index) {
@@ -584,7 +586,6 @@ class CentralizatorSpatii extends React.Component {
           <List
             ref={this.list}
             height={myCalc(76, 179)}
-            overscanCount={1}
             itemData={
               {
                 items: this.state.items,
@@ -594,7 +595,7 @@ class CentralizatorSpatii extends React.Component {
                 toggleChecked: this.toggleChecked,
               }
             }
-            itemKey={this.generateKey}
+            itemKey={this.itemKey}
             itemSize={45}
             itemCount={this.state.items.length}
             className='-rows'

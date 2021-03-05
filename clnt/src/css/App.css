@@ -3163,9 +3163,11 @@ div[class^='floor-sel-'] > * {
   height: 40px;
 }
 
-input[type='text'].-space-add-input {
+input[type='text'].-space-add-input,
+input[type='number'].-space-add-input {
   background-color: transparent;
   color: darkslategray;
+  outline: none;
   font-family: 'Source Sans Pro Regular' !important;
   font-size: 20px;
   border: 1px solid lightslategray;
@@ -3176,14 +3178,24 @@ input[type='text'].-space-add-input {
   text-align: center;
 }
 
-input[type='text'].-space-add-input::placeholder {
+input[type='text'].-space-add-input::placeholder,
+input[type='number'].-space-add-input::placeholder {
   color: lightslategray;
   font-family: 'Source Sans Pro Regular' !important;
 }
 
-input[type='text'].-space-add-input:focus {
+input[type='text'].-space-add-input:focus,
+input[type='number'].-space-add-input:focus {
   border: 1px inset #009500;
   color: #009500;
+}
+
+.--lightslategray {
+  color: lightslategray !important;
+}
+
+.--darkslategray {
+  color: darkslategray !important;
 }
 
 .-space-add-select-container {
@@ -3374,6 +3386,11 @@ select.-space-add-select:focus {
 
 .-space-add-save:active {
   color: #00950088;
+}
+
+.-space-add-save--disabled {
+  color: lightslategray;
+  font-size: 24px;
 }
 
 .-space-add-cancel {

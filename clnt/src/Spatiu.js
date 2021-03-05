@@ -1,26 +1,9 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
-import Spinner from './Spinner';
   
 class Spatiu extends React.PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      loading: false,
-    };
-
-    this.generateKey = this.generateKey.bind(this);
-
-    this.toggleChecked = this.toggleChecked.bind(this);
-  }
-
-  generateKey() {
-    return Math.floor(new Date().getTime() * Math.random());
-  }
-
-  toggleChecked() {
-    this.props.data.toggleChecked(this.props.index);
   }
 
   render () {
@@ -28,16 +11,17 @@ class Spatiu extends React.PureComponent {
 
     return (
       <div className='-row'
-      key={item.numar}
       style={this.props.style}>
         <div className='-row-content'>
           {
             item.isChecked  ?
             <i className='fas fa-check-square -check-icon--checked'
-              onClick={() => { this.toggleChecked(item.index) }}></i>
+              onClick={() => { 
+                this.props.data.toggleChecked(item.index) }}></i>
                             :
             <i className='far fa-square -check-icon'
-              onClick={() => { this.toggleChecked(item.index) }}></i>
+              onClick={() => { 
+                this.props.data.toggleChecked(item.index) }}></i>
           }
           <div data-type='floorNumber' className='-row-cell'>
             {item.etaj}
@@ -64,7 +48,7 @@ class Spatiu extends React.PureComponent {
                 {
                   item.paturi.map( pat => 
                     <li 
-                      key={this.generateKey()}
+                      key={`${pat.numar}x${pat.tip}`}
                       className='-bcell-bed'>
                       {pat.numar} x {pat.tip}
                     </li>

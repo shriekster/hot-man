@@ -2,8 +2,11 @@ import React from 'react';
 import Tippy from '@tippyjs/react';
 import Spinner from './Spinner';
 
+import AddBedButton from './AddBedButton';
 import Bed from './Bed';
- 
+import SpatiuButtons from './SpatiuButtons';
+
+  
 class SpatiuAdd extends React.Component {
   constructor(props) {
     super(props);
@@ -12,6 +15,7 @@ class SpatiuAdd extends React.Component {
       
       loading: false,
       addingBed: false,
+      canSubmit: false,
 
       etaj: '',
       numar: '',
@@ -20,19 +24,21 @@ class SpatiuAdd extends React.Component {
       beds: [],
 
     };
-  
-    this.generateKey = this.generateKey.bind(this);
 
     this.input = this.input.bind(this);
 
     this.addBed = this.addBed.bind(this);
 
+    this.updateBed = this.updateBed.bind(this)
+
     this.removeBed = this.removeBed.bind(this);
 
-  }
+    this.updateButtons = this.updateButtons.bind(this);
 
-  generateKey() {
-    return Math.floor(new Date().getTime() * Math.random());
+    // Refs
+    this.addBed = React.createRef();
+    this.save = React.createRef();
+
   }
 
   input(e) {
@@ -43,7 +49,8 @@ class SpatiuAdd extends React.Component {
 
         this.setState({
           etaj: e.target.value
-        });
+        },
+        this.updateButtons);
 
         break;
       }
@@ -52,7 +59,8 @@ class SpatiuAdd extends React.Component {
 
         this.setState({
           numar: e.target.value
-        });
+        },
+        this.updateButtons);
 
         break;
       }
@@ -62,7 +70,8 @@ class SpatiuAdd extends React.Component {
 
         this.setState({
           tip: e.target.value
-        });
+        },
+        this.updateButtons);
 
         break;
       }
@@ -71,77 +80,8 @@ class SpatiuAdd extends React.Component {
 
         this.setState({
           confort: e.target.value
-        });
-
-        break;
-      }
-
-      case 'numarPaturi': {
-
-        let beds = this.state.beds;
-        beds[e.target.dataset.index].numar = e.target.value;
-
-        /** Check the state of the beds;
-         * if any bed has incomplete data,
-         * the user cannot add another bed
-         */
-        const isIncomplete = (bed) => 
-          (bed.numar === '' || bed.tip === '0');
-
-        let cannotAdd = beds.some(isIncomplete) ||
-          // the types of added beds are the existing bed categories
-          beds.length >= this.props.bedTypes.length;
-
-        if (!cannotAdd) {
-
-          this.setState({
-            addingBed: false,
-            beds: beds,
-          });
-
-        } else {
-
-          this.setState({
-            addingBed: true,
-            beds: beds,
-          });
-
-        }
-        
-        break;
-      }
-
-      case 'tipPat': {
-
-        let beds = this.state.beds;
-        beds[e.target.dataset.index].tip = e.target.value;
-
-        /** Check the state of the beds;
-         * if any bed has incomplete data,
-         * the user cannot add another bed
-         */
-        const isIncomplete = (bed) => 
-          (bed.numar === '' || bed.tip === '0');
-
-        let cannotAdd = beds.some(isIncomplete) ||
-          // the types of added beds are the existing bed categories
-          beds.length >= this.props.bedTypes.length;
-
-        if (!cannotAdd) {
-
-          this.setState({
-            addingBed: false,
-            beds: beds,
-          });
-
-        } else {
-
-          this.setState({
-            addingBed: true,
-            beds: beds,
-          });
-
-        }
+        },
+        this.updateButtons);
 
         break;
       }
@@ -158,25 +98,56 @@ class SpatiuAdd extends React.Component {
            this.state.tip === '0' ||
            this.state.confort === '0'))) {
 
-      let beds = this.state.beds;
+      let beds = [];
 
-      beds.push({
-        index: beds.length,
-        numar: '',
-        tip: '0',
+      beds.push(...this.state.beds,
+        {
+          index: beds.length,
+          count: '',
+          type: '0',
       });
 
       this.setState((state, props) => ({
+        
         addingBed: true,
         beds: beds,
-      }));
+
+      }),
+      this.updateButtons);
 
     }
 
   }
 
+  updateBed(index, count = '', type = '0') {
+
+    if (index >= 0 && index < this.state.beds.length) {
+
+      let beds = [];
+      beds.push(...this.state.beds);
+      
+      let bed = {
+        index: index,
+        count: count,
+        type: type
+      };
+
+      beds[index] = bed;
+
+      this.setState((state, props) => ({
+
+        beds: beds,
+
+      }),
+      this.updateButtons);
+
+    }
+  }
+
   removeBed(index) {
-    let beds = this.state.beds;
+    let beds = [];
+    console.log(index)
+    beds.push(...this.state.beds);
 
     if (index >= 0 && index < beds.length) {
 
@@ -188,21 +159,61 @@ class SpatiuAdd extends React.Component {
         beds[i].index = i;
       }
 
-      this.setState({
+      this.setState((state, props) => ({
 
         addingBed: false,
         beds: beds,
 
-      });
+      }),
+      this.updateButtons);
 
     }
 
   }
 
+  updateButtons() {
+    /** Check the state of the beds;
+   * if any bed has incomplete data,
+   * the user cannot add another bed
+   */
+    let beds = this.state.beds;
+
+    const isIncomplete = (bed) => 
+    (bed.count === '' || bed.type === '0');
+  
+    let cannotAdd = beds.length && (
+      beds.some(isIncomplete) ||
+      // the types of added beds are the existing bed categories
+      beds.length >= this.props.bedTypes.length);
+    
+    let cannotSave = cannotAdd  ||
+      this.state.etaj === ''    ||
+      this.state.numar === ''   ||
+      this.state.tip === '0'    ||
+      this.state.confort === '0';
+    
+    if (this.addBed.current) {
+
+      this.addBed.current.updateState(cannotAdd);
+
+    }
+
+    if (this.save.current) {
+
+      this.save.current.updateState(cannotSave);
+
+    }
+  
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.state.beds, nextState.beds)
-    if (this.state.beds.length === nextState.beds.length &&
-        this.state.beds.length > 0) {
+    
+    if (this.state.etaj === nextState.etaj &&
+        this.state.numar === nextState.numar &&
+        this.state.tip === nextState.tip &&
+        this.state.confort === nextState.confort &&
+        this.state.beds.length &&
+        this.state.beds.length === nextState.beds.length) {
       return false;
     }
 
@@ -219,8 +230,9 @@ class SpatiuAdd extends React.Component {
           <div style={{width: '29px'}}></div>
           <input className='-space-add-input'
             data-type='etaj'
-            type='text'
-            maxLength={16}
+            type='number'
+            min={0}
+            max={100}
             onInput={this.input}
             value={this.state.etaj}>
           </input>
@@ -234,18 +246,22 @@ class SpatiuAdd extends React.Component {
           </input>
 
           <div className='-space-add-select-container'>
-            <select className='-space-add-select'
+            <select className={
+                this.state.tip ==='0' ? '-space-add-select --lightslategray'
+                                      : '-space-add-select'}
               value={this.state.tip}
               data-type='tip'
               onInput={this.input}>
-              <option style={{color: 'lightslategray'}}
+              <option
+                className='--lightslategray'
                 value='0'
-                key={this.generateKey()}>
+                key={'r0'}>
                 ---
               </option>
               {this.props.roomTypes.map (room => 
                 <option
-                  key={this.generateKey()}
+                  className='--darkslategray'
+                  key={'r' + room.Denumire}
                   value={room.Denumire}>
                   {room.Denumire}
                 </option>
@@ -254,20 +270,24 @@ class SpatiuAdd extends React.Component {
           </div>
 
           <div className='-space-add-select-container'>
-            <select className='-space-add-select'
+            <select className={
+                this.state.confort ==='0' ? '-space-add-select --lightslategray'
+                                      : '-space-add-select'}
               value={this.state.confort}
               data-type='confort'
               onInput={this.input}>
-              <option style={{color: 'lightslategray'}}
+              <option
+                className='--lightslategray'
                 value='0'
-                key={this.generateKey()}>
+                key={'c0'}>
                 ---
               </option>
-              {this.props.confortTypes.map (conf => 
+              {this.props.confortTypes.map (confort => 
                 <option
-                  key={this.generateKey()}
-                  value={conf.Denumire}>
-                  {conf.Denumire}
+                  className='--darkslategray'
+                  key={confort.Denumire}
+                  value={confort.Denumire}>
+                  {confort.Denumire}
                 </option>
               )}
             </select>
@@ -276,133 +296,29 @@ class SpatiuAdd extends React.Component {
         </div>
 
         <div className='-space-add-beds'>
-          <div className='-space-add-beds-title'>
-          <Tippy
-            disabled={this.state.addingBed ||
-              (!this.state.etaj ||
-               !this.state.numar ||
-               this.state.tip === '0' ||
-               this.state.confort === '0')}
-            content={
-              <div>Adaugă pat</div>
-            }
-            allowHTML={true}
-            placement='right'
-            arrow={true}
-            theme='material-confort-hints'
-            hideOnClick={false}
-            offset={[0, 20]}>
-              <div className={
-                this.state.addingBed ||
-                (!this.state.etaj ||
-                 !this.state.numar ||
-                 this.state.tip === '0' ||
-                 this.state.confort === '0')
-                  ? '--add-beds-icon--disabled' 
-                  :'--add-beds-icon'}
-                onClick={this.addBed}>
-                <i className='fas fa-bed --add-beds-icon-bed'></i>
-                <i className='fas fa-plus --add-beds-icon-plus'></i>
-              </div>
-            </Tippy>
-          </div>
+
+          <AddBedButton
+            ref={this.addBed}/>
+
           <div className='-space-add-beds-content'>
             {
               this.state.beds.map( bed => 
 
-                <div className='--bed-data'
-                  key={this.generateKey()}>
-
-                  <div style={{width: '29px'}}></div>
-                  <input className='-space-add-input'
-                    style={{width: '30%'}}
-                    data-type='numarPaturi'
-                    data-index={`${bed.index}`}
-                    type='text'
-                    placeholder='numărul de paturi'
-                    maxLength={16}
-                    onInput={this.input}
-                    value={bed.numar}>
-                  </input>
-                  
-                  <div className='--bed-cell'>x</div>
-        
-                  <div className='-space-add-select-container'
-                    style={{width: '30%'}}>
-                    <select className='-space-add-select'
-                      style={{color: bed.tip === '0'
-                                    ? 'lightslategray'
-                                    : 'darkslategray'}}
-                      value={bed.tip}
-                      data-type='tipPat'
-                      data-index={`${bed.index}`}
-                      onInput={this.input}>
-                      <option style={{color: 'lightslategray'}}
-                        value='0'
-                        key={this.generateKey()}>
-                        [tipul de pat]
-                      </option>
-                      {this.props.bedTypes.map (type => 
-                        <option
-                          key={this.generateKey()}
-                          value={type.Denumire}>
-                          {type.Denumire}
-                        </option>
-                      )}
-                    </select>
-                  </div>
-                  <div className='--bed-cell'>
-                    <Tippy
-                      content={
-                        <div>Șterge pat</div>
-                      }
-                      allowHTML={true}
-                      placement='right'
-                      arrow={true}
-                      theme='material-confort-disabled'
-                      hideOnClick={false}
-                      offset={[0, 10]}>
-                      <i className='fas fa-trash-alt --remove-bed-icon'
-                        onClick={() => this.removeBed(bed.index)}></i>
-                    </Tippy>
-                  </div>
-                </div>
-
+                <Bed 
+                  key={'b' + bed.index}
+                  index={bed.index}
+                  bedTypes={this.props.bedTypes}
+                  updateBed={this.updateBed}
+                  removeBed={this.removeBed}/>
               )
             }
           </div>
         </div>
 
-        <div className='-space-add-buttons-container'>
-        <Tippy
-          content={
-            <div>Salvează</div>
-          }
-          allowHTML={true}
-          placement='top'
-          arrow={true}
-          theme='material-confort-hints'
-          hideOnClick={false}
-          offset={[0, 10]}>
-            <i className='fas fa-save -space-add-save'
-              onClick={this.props.save}>
-            </i>
-          </Tippy>
-          <Tippy
-            content={
-              <div>Renunţă</div>
-            }
-            allowHTML={true}
-            placement='top'
-            arrow={true}
-            theme='material-confort-disabled'
-            hideOnClick={false}
-            offset={[0, 10]}>
-            <i className='fas fa-window-close -space-add-cancel'
-              onClick={this.props.cancel}>
-            </i>
-          </Tippy>
-        </div>
+        <SpatiuButtons
+          ref={this.save}
+          save={this.props.save}
+          cancel={this.props.cancel} />
       </div>
 
     );
