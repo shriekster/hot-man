@@ -14,7 +14,7 @@ class SpatiuButtons extends React.Component {
     this.updateState = this.updateState.bind(this);
 
   }
-
+ 
   updateState(disabled) {
 
     this.setState((state, props) => ({
@@ -47,7 +47,7 @@ class SpatiuButtons extends React.Component {
                 </i>
                                         :
                 <i className='fas fa-save -space-add-save'
-                  onClick={this.props.save}>
+                  onClick={() => {this.props.save(this.props.operationType)}}>
                 </i>
             }
           </Tippy>

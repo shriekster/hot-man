@@ -1490,6 +1490,16 @@ router.post('/:attribute', authorization, function(req, res) {
 
             switch (req.body.task) {
 
+              case 'create': {
+
+                break;
+              }
+
+              case 'createRange': {
+
+                break;
+              }
+
               case 'read': {
                 
                 const {status, spatii, categorii, paturi, confort} = readSC();
@@ -1501,6 +1511,21 @@ router.post('/:attribute', authorization, function(req, res) {
                   paturi: paturi,
                   confort: confort
                 });
+
+                break;
+              }
+
+              case 'update': {
+
+                break;
+              }
+
+              case 'delete': {
+
+                break;
+              }
+
+              case 'deleteRange': {
 
                 break;
               }

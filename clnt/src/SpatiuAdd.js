@@ -35,9 +35,11 @@ class SpatiuAdd extends React.Component {
 
     this.updateButtons = this.updateButtons.bind(this);
 
+    this.save = this.save.bind(this);
+
     // Refs
-    this.addBed = React.createRef();
-    this.save = React.createRef();
+    this._add_bed_ref = React.createRef();
+    this._save_ref = React.createRef();
 
   }
 
@@ -92,30 +94,22 @@ class SpatiuAdd extends React.Component {
 
   addBed() {
 
-    if (!(this.state.addingBed ||
-          (!this.state.etaj ||
-           !this.state.numar ||
-           this.state.tip === '0' ||
-           this.state.confort === '0'))) {
+    let beds = [];
 
-      let beds = [];
+    beds.push(...this.state.beds,
+      {
+        index: this.state.beds.length,
+        count: '',
+        type: '0',
+    });
 
-      beds.push(...this.state.beds,
-        {
-          index: beds.length,
-          count: '',
-          type: '0',
-      });
+    this.setState((state, props) => ({
+      
+      addingBed: true,
+      beds: beds,
 
-      this.setState((state, props) => ({
-        
-        addingBed: true,
-        beds: beds,
-
-      }),
-      this.updateButtons);
-
-    }
+    }),
+    this.updateButtons);
 
   }
 
@@ -145,8 +139,9 @@ class SpatiuAdd extends React.Component {
   }
 
   removeBed(index) {
+
     let beds = [];
-    console.log(index)
+
     beds.push(...this.state.beds);
 
     if (index >= 0 && index < beds.length) {
@@ -181,38 +176,61 @@ class SpatiuAdd extends React.Component {
     const isIncomplete = (bed) => 
     (bed.count === '' || bed.type === '0');
   
-    let cannotAdd = beds.length && (
-      beds.some(isIncomplete) ||
+    let cannotAdd = 
+      this.state.etaj === ''        ||
+      this.state.numar === ''       ||
+      this.state.tip === '0'        ||
+      this.state.confort === '0'    ||
+      beds.some(isIncomplete)       ||
       // the types of added beds are the existing bed categories
-      beds.length >= this.props.bedTypes.length);
-    
-    let cannotSave = cannotAdd  ||
-      this.state.etaj === ''    ||
-      this.state.numar === ''   ||
-      this.state.tip === '0'    ||
-      this.state.confort === '0';
-    
-    if (this.addBed.current) {
+      beds.length >= this.props.bedTypes.length;
+ 
 
-      this.addBed.current.updateState(cannotAdd);
+    
+    let cannotSave = 
+      this.state.etaj === ''        ||
+      this.state.numar === ''       ||
+      this.state.tip === '0'        ||
+      this.state.confort === '0'    ||
+      beds.some(isIncomplete)       ||
+      !beds.length;
+    
+    if (this._add_bed_ref.current) {
+
+      this._add_bed_ref.current.updateState(cannotAdd);
 
     }
 
-    if (this.save.current) {
+    if (this._save_ref.current) {
 
-      this.save.current.updateState(cannotSave);
+      this._save_ref.current.updateState(cannotSave);
 
     }
   
   }
 
+  save(operationType) {
+
+    let paturi = []; paturi.push(...this.state.beds);
+
+    let space = {
+      etaj: this.state.etaj,
+      numar: this.state.numar,
+      tip: this.state.tip,
+      confort: this.state.confort,
+      paturi: paturi,
+    }
+
+    this.props.save(operationType, space)
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     
-    if (this.state.etaj === nextState.etaj &&
-        this.state.numar === nextState.numar &&
-        this.state.tip === nextState.tip &&
-        this.state.confort === nextState.confort &&
-        this.state.beds.length &&
+    if (this.state.etaj === nextState.etaj        &&
+        this.state.numar === nextState.numar      &&
+        this.state.tip === nextState.tip          &&
+        this.state.confort === nextState.confort  &&
+        this.state.beds.length > 0                &&
         this.state.beds.length === nextState.beds.length) {
       return false;
     }
@@ -298,26 +316,29 @@ class SpatiuAdd extends React.Component {
         <div className='-space-add-beds'>
 
           <AddBedButton
-            ref={this.addBed}/>
+            ref={this._add_bed_ref}
+            addBed={this.addBed} />
 
           <div className='-space-add-beds-content'>
             {
-              this.state.beds.map( bed => 
+              this.state.beds.map ( 
+                bed => 
 
                 <Bed 
                   key={'b' + bed.index}
                   index={bed.index}
                   bedTypes={this.props.bedTypes}
                   updateBed={this.updateBed}
-                  removeBed={this.removeBed}/>
+                  removeBed={this.removeBed} />
               )
             }
           </div>
         </div>
 
         <SpatiuButtons
-          ref={this.save}
-          save={this.props.save}
+          ref={this._save_ref}
+          save={this.save}
+          operationType='create'
           cancel={this.props.cancel} />
       </div>
 

@@ -106,8 +106,49 @@ class CentralizatorSpatii extends React.Component {
 
   }
 
-  save() {
+  save(operationType, item) {
 
+    const requestOptions = {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: this.props.token,
+        task: operationType,  // 'create' OR 'update'
+        item: item,
+      })
+    };
+
+    fetch('http://localhost:3001/main/administrare/central', requestOptions)
+    .then(response => response.json())
+    .then(res => {
+
+      if ('error' === res.status) {
+        console.log('Eroare - centralizator spatii - adaugare sau actualizare (!)')
+      } 
+      
+      else
+      
+      if ('valid' === res.status) {
+
+
+
+      }
+
+      else 
+
+      if ('invalid' === res.status) {
+
+        
+
+      } 
+      
+      else
+
+      if ('denied' === res.status) {
+        this.props.onChange('Login');
+      }
+    });
   }
 
   cancel() {

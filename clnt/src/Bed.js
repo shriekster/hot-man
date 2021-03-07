@@ -8,10 +8,10 @@ class Bed extends React.Component {
     this.state = {
       
       count: '',
-      type: '0'
+      type: '0',
 
     };
-
+ 
     this.input = this.input.bind(this);
 
   }
