@@ -4,7 +4,7 @@
   font-weight: normal;
   font-style: normal;
 }
-  
+   
 @font-face {
   font-family: 'Source Sans Pro Bold';
   src: url('../webfonts/SourceSansPro-Bold.ttf');
@@ -3312,10 +3312,6 @@ select.-space-add-select:focus {
   direction: ltr;
   overflow-x: hidden;
   overflow-y: overlay;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
 }
 
 .-space-add-beds-content::-webkit-scrollbar-track {
@@ -3371,6 +3367,22 @@ select.-space-add-select:focus {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  position: relative;
+}
+
+.-space-loading {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: -40px;
+}
+
+.-space-error {
+  position: absolute;
+  top: -40px;
+  font-size: 24px;
+  color: #D72C25;
+  animation: fadeIn .2s linear;
 }
 
 .-space-add-save {

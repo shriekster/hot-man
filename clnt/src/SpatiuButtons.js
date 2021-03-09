@@ -1,5 +1,6 @@
 import React from 'react';
 import Tippy from '@tippyjs/react';
+import Spinner from './Spinner';
   
 class SpatiuButtons extends React.Component {
   constructor(props) {
@@ -8,18 +9,31 @@ class SpatiuButtons extends React.Component {
     this.state = {
       
       saveDisabled: true,
+      status: '',
 
     };
 
     this.updateState = this.updateState.bind(this);
+    
+    this.updateStatus = this.updateStatus.bind(this);
 
   }
- 
+  
   updateState(disabled) {
 
     this.setState((state, props) => ({
 
       saveDisabled: disabled,
+
+    }));
+
+  }
+
+  updateStatus(status) {
+
+    this.setState((state, props) => ({
+
+      status: status,
 
     }));
 
@@ -30,6 +44,7 @@ class SpatiuButtons extends React.Component {
     return (
       
         <div className='-space-add-buttons-container'>
+          
           <Tippy
             disabled={this.state.saveDisabled}
             content={
@@ -51,6 +66,21 @@ class SpatiuButtons extends React.Component {
                 </i>
             }
           </Tippy>
+
+          {
+            this.state.status === 'loading' &&
+
+            <Spinner className='-space-loading'
+              status='loading'
+              visibility={true}/>
+          }
+
+          {
+            this.state.status === 'error' &&
+            
+            <i className='fas fa-exclamation-circle -space-error'></i>
+          }
+
           <Tippy
             content={
               <div>Renunţă</div>

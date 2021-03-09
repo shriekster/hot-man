@@ -11,7 +11,7 @@ class Bed extends React.Component {
       type: '0',
 
     };
- 
+  
     this.input = this.input.bind(this);
 
   }

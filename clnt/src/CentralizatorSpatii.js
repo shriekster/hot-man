@@ -11,7 +11,7 @@ function myCalc(vh, px) {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   return (vh * h) / 100 - px;
 }
-  
+   
 class CentralizatorSpatii extends React.Component {
   constructor(props) {
     super(props);
@@ -125,23 +125,17 @@ class CentralizatorSpatii extends React.Component {
 
       if ('error' === res.status) {
         console.log('Eroare - centralizator spatii - adaugare sau actualizare (!)')
+        
+        return 'error';
       } 
       
       else
       
       if ('valid' === res.status) {
 
-
+        return 'valid';
 
       }
-
-      else 
-
-      if ('invalid' === res.status) {
-
-        
-
-      } 
       
       else
 

@@ -35,11 +35,13 @@ class SpatiuAdd extends React.Component {
 
     this.updateButtons = this.updateButtons.bind(this);
 
+    this.updateStatus = this.updateStatus.bind(this);
+
     this.save = this.save.bind(this);
 
     // Refs
     this._add_bed_ref = React.createRef();
-    this._save_ref = React.createRef();
+    this._buttons_ref = React.createRef();
 
   }
 
@@ -201,12 +203,22 @@ class SpatiuAdd extends React.Component {
 
     }
 
-    if (this._save_ref.current) {
+    if (this._buttons_ref.current) {
 
-      this._save_ref.current.updateState(cannotSave);
+      this._buttons_ref.current.updateState(cannotSave);
 
     }
   
+  }
+
+  updateStatus(status) {
+
+    if (this._buttons_ref.current) {
+
+      this._buttons_ref.current.updateStatus(status);
+
+    }
+
   }
 
   save(operationType) {
@@ -221,7 +233,20 @@ class SpatiuAdd extends React.Component {
       paturi: paturi,
     }
 
-    this.props.save(operationType, space)
+    this.updateStatus('loading');
+
+    const status = this.props.save(operationType, space);
+
+    if ('error' === status) {
+      // update status
+    }
+
+    else
+
+    if ('valid' === status) {
+      // render Centralizator Spatii
+    }
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -243,6 +268,7 @@ class SpatiuAdd extends React.Component {
     return (
       
       <div className='spatiu-add'>
+
         <div className='-space-add'>
 
           <div style={{width: '29px'}}></div>
@@ -336,7 +362,7 @@ class SpatiuAdd extends React.Component {
         </div>
 
         <SpatiuButtons
-          ref={this._save_ref}
+          ref={this._buttons_ref}
           save={this.save}
           operationType='create'
           cancel={this.props.cancel} />

@@ -766,8 +766,65 @@ function deletePat(value) {
 
 /** Situatia spatiilor de cazare - C R U D */
 
-function createSCSingle() {
+function createSCSingle (item) {
 
+  let error;
+
+  const selectCategorieSpatiuID = 
+    db.prepare(`SELECT ID FROM CategoriiSpatii
+                WHERE Denumire = ?`);
+
+  const selectCategorieConfortID = 
+    db.prepare(`SELECT ID FROM CategoriiConfort
+                WHERE Denumire = ?`);
+
+  const selectCategoriiPaturi = 
+    db.prepare(`SELECT ID, Denumire FROM CategoriiPaturi`);
+
+  const insertSpatiu = 
+    db.prepare(`INSERT INTO Spatii(Numar, CategorieSpatiuID, Etaj, CategorieConfortID)
+                VALUES(?, ?, ?, ?)`);
+
+  const insertPaturi = 
+    db.prepare(`INSERT INTO PaturiSpatii(SpatiuID, CategoriePatID, NumarPaturi)
+                VALUES(?, ?, ?)`);
+
+  try {
+
+    const categorieSpatiuID = 
+      selectCategorieSpatiuID.get(item.tip);
+    
+    const categorieConfortID = 
+      selectCategorieConfortID.get(item.confort);
+
+    const categoriiPaturi = 
+      selectCategoriiPaturi.all();
+    
+    insertSpatiu.run(
+      item.numar, 
+      categorieSpatiuID.ID, 
+      item.etaj,
+      categorieConfortID.ID);
+
+  } catch(err) {
+
+    if (err) {
+
+      console.log(err);
+      error = err;
+
+      return 'error';
+    }
+
+  } finally {
+
+    if (!error) {
+
+      return 'valid';
+
+    } 
+
+  }
 }
 
 function createSCRange() {
@@ -1491,6 +1548,17 @@ router.post('/:attribute', authorization, function(req, res) {
             switch (req.body.task) {
 
               case 'create': {
+
+                if (req.body.item) {
+
+                  const status = createSCSingle(req.body.item);
+
+                  return res.json ({
+                    status: status,
+                  });
+
+                }
+
 
                 break;
               }
