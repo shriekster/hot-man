@@ -6,7 +6,7 @@ import AddBedButton from './AddBedButton';
 import Bed from './Bed';
 import SpatiuButtons from './SpatiuButtons';
 
-  
+
 class SpatiuAdd extends React.Component {
   constructor(props) {
     super(props);
@@ -206,6 +206,7 @@ class SpatiuAdd extends React.Component {
     if (this._buttons_ref.current) {
 
       this._buttons_ref.current.updateState(cannotSave);
+      this._buttons_ref.current.updateStatus('');
 
     }
   
@@ -215,7 +216,15 @@ class SpatiuAdd extends React.Component {
 
     if (this._buttons_ref.current) {
 
-      this._buttons_ref.current.updateStatus(status);
+      if ('valid' === status) {
+
+        setTimeout(this.props.cancel, 20);
+        
+      } else {
+
+        this._buttons_ref.current.updateStatus(status);
+
+      }
 
     }
 
@@ -235,17 +244,7 @@ class SpatiuAdd extends React.Component {
 
     this.updateStatus('loading');
 
-    const status = this.props.save(operationType, space);
-
-    if ('error' === status) {
-      // update status
-    }
-
-    else
-
-    if ('valid' === status) {
-      // render Centralizator Spatii
-    }
+    this.props.save(operationType, space);
 
   }
 
@@ -283,8 +282,9 @@ class SpatiuAdd extends React.Component {
 
           <input className='-space-add-input'
             data-type='numar'
-            type='text'
-            maxLength={16}
+            type='number'
+            min={0}
+            max={10000}
             onInput={this.input}
             value={this.state.numar}>
           </input>

@@ -4,7 +4,7 @@
   font-weight: normal;
   font-style: normal;
 }
-   
+
 @font-face {
   font-family: 'Source Sans Pro Bold';
   src: url('../webfonts/SourceSansPro-Bold.ttf');
@@ -2655,6 +2655,33 @@ input[type='text'].-cell-search:focus + .-tmenu-search-icon {
   transition: color .2s linear;
 }
 
+.-tbutton-cannot-delete {
+  position: relative;
+  width: fit-content;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.---delete {
+  font-size: 24px;
+  color: #2f4f4fAA;
+}
+
+.---cannot {
+  position: absolute;
+  top: -1px;
+  left: -2px;
+  font-size: 26px;
+  color: #D72C25BB;
+  transition: color .2s linear;
+}
+
+.-tbutton-cannot-delete:hover > .---cannot {
+  color: #D72C25;
+}
+
 .-tbutton-add--disabled,
 .-tbutton-add-range--disabled,
 .-tbutton-edit--disabled,
@@ -3164,6 +3191,7 @@ div[class^='floor-sel-'] > * {
 }
 
 input[type='text'].-space-add-input,
+input[type='number'].-space-add-range-input,
 input[type='number'].-space-add-input {
   background-color: transparent;
   color: darkslategray;
@@ -3178,13 +3206,20 @@ input[type='number'].-space-add-input {
   text-align: center;
 }
 
+input[type='number'].-space-add-range-input {
+  width: 10.5%;
+  margin: 0 .5%;
+}
+
 input[type='text'].-space-add-input::placeholder,
+input[type='number'].-space-add-range-input::placeholder,
 input[type='number'].-space-add-input::placeholder {
   color: lightslategray;
   font-family: 'Source Sans Pro Regular' !important;
 }
 
 input[type='text'].-space-add-input:focus,
+input[type='text'].-space-add-range-input:focus,
 input[type='number'].-space-add-input:focus {
   border: 1px inset #009500;
   color: #009500;
@@ -3364,10 +3399,13 @@ select.-space-add-select:focus {
 .-space-add-buttons-container {
   width: 80%;
   height: 40px;
+  position: relative;
+}
+
+.-space-save-cancel {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  position: relative;
 }
 
 .-space-loading {
@@ -3380,9 +3418,16 @@ select.-space-add-select:focus {
 .-space-error {
   position: absolute;
   top: -40px;
-  font-size: 24px;
+  width: 100%;
+  text-align: center;
   color: #D72C25;
   animation: fadeIn .2s linear;
+  font-family: 'Source Sans Pro Bold';
+  font-size: 18px;
+}
+
+.-space-error-icon {
+  font-size: 20px;
 }
 
 .-space-add-save {

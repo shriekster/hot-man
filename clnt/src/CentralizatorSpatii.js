@@ -5,6 +5,7 @@ import Tippy from '@tippyjs/react';
 import { FixedSizeList as List} from 'react-window';
 import Spatiu from './Spatiu';
 import SpatiuAdd from './SpatiuAdd';
+import SpatiuAddRange from './SpatiuAddRange';
 
 /** CSS calc(<vh>vh - <op>px) */
 function myCalc(vh, px) {
@@ -17,6 +18,8 @@ class CentralizatorSpatii extends React.Component {
     super(props);
 
     // Methods
+    this.getItems = this.getItems.bind(this);
+
     this.add = this.add.bind(this); 
 
     this.save = this.save.bind(this);
@@ -61,6 +64,8 @@ class CentralizatorSpatii extends React.Component {
       editing: false,
       searching: false,
 
+      cannotDelete: false,
+
       searchText: '',
 
       checkLevel: 0,
@@ -82,9 +87,67 @@ class CentralizatorSpatii extends React.Component {
 
     // Refs
     this.search = React.createRef();
-
-    //this.listParent = React.createRef();
     this.list = React.createRef();
+
+    this.addRef = React.createRef();
+    this.addRangeRef = React.createRef();
+
+  }
+
+  getItems() {
+        
+    const requestOptions = {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: this.props.token,
+        task: 'read',
+      })
+    };
+
+    fetch('http://localhost:3001/main/administrare/central', requestOptions)
+    .then(response => response.json())
+    .then(res => {
+
+      if ('error' === res.status) {
+        console.log('Eroare - categorii spatii')
+      } 
+      
+      else 
+      
+      if ('valid' === res.status) {
+
+        let rooms = res.categorii;
+        let confs = res.confort;
+        let beds = res.paturi;
+        let items = res.spatii;
+
+        let length = 0;
+
+        items.forEach( item => {
+
+          item.index = length++;
+    
+          item.isChecked = false;
+          item.isSearchResult = false;
+
+        });
+
+        this.setState({
+          roomTypes: rooms,
+          confortTypes: confs,
+          bedTypes: beds,
+          items: items,
+        });
+      } 
+      
+      else
+
+      if ('denied' === res.status) {
+        this.props.onChange('Login');
+      }
+    });
 
   }
 
@@ -92,15 +155,16 @@ class CentralizatorSpatii extends React.Component {
 
     if (!this.state.adding && !this.state.addingRange && !this.state.editing) {
 
-      this.setState({
+      this.setState((state, props) => ({
 
         adding: true,
         searchText: '',
         searching: false,
         checkLevel: 0,
-        checkedRows: 0
+        checkedRows: 0,
+        cannotDelete: false,
 
-      });
+      }));
 
     }
 
@@ -126,14 +190,36 @@ class CentralizatorSpatii extends React.Component {
       if ('error' === res.status) {
         console.log('Eroare - centralizator spatii - adaugare sau actualizare (!)')
         
-        return 'error';
+        if (this.addRef.current) {
+
+          this.addRef.current.updateStatus('error');
+
+        }
+      }
+
+      else 
+
+      if ('duplicate' === res.status) {
+
+        if (this.addRef.current) {
+
+          this.addRef.current.updateStatus('duplicate');
+
+        }
+
       } 
       
       else
       
       if ('valid' === res.status) {
+        
+        this.getItems();
 
-        return 'valid';
+        if (this.addRef.current) {
+
+          this.addRef.current.updateStatus('valid');
+
+        }
 
       }
       
@@ -163,22 +249,92 @@ class CentralizatorSpatii extends React.Component {
 
     if (!this.state.adding && !this.state.addingRange && !this.state.editing) {
 
-      this.setState({
+      this.setState((state, props) => ({
 
         addingRange: true,
         searchText: '',
         searching: false,
         checkLevel: 0,
-        checkedRows: 0
+        checkedRows: 0,
+        cannotDelete: false,
 
-      });
+      }));
 
     }
 
   }
 
-  saveRange() {
+  saveRange(itemRange) {
 
+    const requestOptions = {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: this.props.token,
+        task: 'createRange',
+        itemRange: itemRange,
+      })
+    };
+
+    fetch('http://localhost:3001/main/administrare/central', requestOptions)
+    .then(response => response.json())
+    .then(res => {
+
+      if ('error' === res.status) {
+        console.log('Eroare - centralizator spatii - adaugare sau actualizare (!)')
+        
+        if (this.addRangeRef.current) {
+
+          this.addRangeRef.current.updateStatus('error');
+
+        }
+      }
+
+      else 
+
+      if ('rangeError' === res.status) {
+
+        if (this.addRangeRef.current) {
+
+          this.addRangeRef.current.updateStatus('rangeError');
+
+        }
+
+      } 
+
+      else 
+
+      if ('duplicate' === res.status) {
+
+        if (this.addRangeRef.current) {
+
+          this.addRangeRef.current.updateStatus('duplicate');
+
+        }
+
+      } 
+      
+      else
+      
+      if ('valid' === res.status) {
+        
+        this.getItems();
+
+        if (this.addRangeRef.current) {
+
+          this.addRangeRef.current.updateStatus('valid');
+
+        }
+
+      }
+      
+      else
+
+      if ('denied' === res.status) {
+        this.props.onChange('Login');
+      }
+    });
   }
 
   cancelRange() {
@@ -199,15 +355,16 @@ class CentralizatorSpatii extends React.Component {
 
     if (!this.state.adding && !this.state.addingRange && !this.state.editing && this.state.checkedRows === 1) {
 
-      this.setState({
+      this.setState((state, props) => ({
 
         editing: true,
         searchText: '',
         searching: false,
         checkLevel: 0,
-        checkedRows: 0
+        checkedRows: 0,
+        cannotDelete: false,
 
-      });
+      }));
 
     }
 
@@ -302,6 +459,55 @@ class CentralizatorSpatii extends React.Component {
 
   delete() {
 
+    let items = this.state.items.filter((item) => item.isChecked);
+
+    const requestOptions = {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: this.props.token,
+        task: 'delete',
+        items: items,
+      })
+    };
+
+    fetch('http://localhost:3001/main/administrare/central', requestOptions)
+    .then(response => response.json())
+    .then(res => {
+
+      if ('error' === res.status) {
+
+        console.log('Eroare - centralizator spatii - adaugare sau actualizare (!)')
+        
+      }
+
+      else
+
+      if ('statusError' === res.status) {
+
+        this.setState( (state, props) => ({
+
+          cannotDelete: true,
+
+        }));
+
+      }
+      
+      else
+      
+      if ('valid' === res.status) {
+        
+        this.getItems();
+
+      }
+      
+      else
+
+      if ('denied' === res.status) {
+        this.props.onChange('Login');
+      }
+    });
   }
 
   itemKey(index, data) {
@@ -346,11 +552,12 @@ class CentralizatorSpatii extends React.Component {
         checkLevel = 0;
       }
 
-      this.setState({
+      this.setState((state, props) => ({
         checkLevel: checkLevel,
         current: current,
         checkedRows: checkedRows,
-      })
+        cannotDelete: false,
+      }));
     }
   }
 
@@ -392,11 +599,12 @@ class CentralizatorSpatii extends React.Component {
         }
       }
 
-      this.setState({
+      this.setState((state, props) => ({
         current: current,
         checkLevel: checkLevel,
         checkedRows: checkedRows,
-      });
+        cannotDelete: false,
+      }));
 
     }
   }
@@ -406,59 +614,9 @@ class CentralizatorSpatii extends React.Component {
   }
 
   componentDidMount() {
-    /** 'descarc' info -> spatiile de cazare */
-    const requestOptions = {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: this.props.token,
-        task: 'read',
-      })
-    };
 
-    fetch('http://localhost:3001/main/administrare/central', requestOptions)
-    .then(response => response.json())
-    .then(res => {
+    this.getItems();
 
-      if ('error' === res.status) {
-        console.log('Eroare - categorii spatii')
-      } 
-      
-      else 
-      
-      if ('valid' === res.status) {
-
-        let rooms = res.categorii;
-        let confs = res.confort;
-        let beds = res.paturi;
-        let items = res.spatii;
-
-        let length = 0;
-
-        items.forEach( item => {
-
-          item.index = length++;
-    
-          item.isChecked = false;
-          item.isSearchResult = false;
-
-        });
-
-        this.setState({
-          roomTypes: rooms,
-          confortTypes: confs,
-          bedTypes: beds,
-          items: items,
-        });
-      } 
-      
-      else
-
-      if ('denied' === res.status) {
-        this.props.onChange('Login');
-      }
-    });
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -544,27 +702,48 @@ class CentralizatorSpatii extends React.Component {
                                                                                                 : 'fas fa-edit -tbutton-edit'}
                 onClick={this.edit}></i>
             </Tippy>
-            <Tippy
-              disabled={this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows < 1}
-              content={
-                <div>Șterge</div>
-              }
-              allowHTML={true}
-              placement='top'
-              arrow={true}
-              theme='material-confort-disabled'
-              hideOnClick={false}
-              offset={[0, 10]}>
-              <i className={(this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows < 1) 
-                                                                                                ? 'fas fa-trash-alt -tbutton-delete--disabled' 
-                                                                                                : 'fas fa-trash-alt -tbutton-delete'}
-                onClick={this.delete}></i>
-            </Tippy>
+            {
+              this.state.cannotDelete
+                ?
+              <Tippy
+                content={
+                  <div>Anumite spații sunt ocupate!</div>
+                }
+                allowHTML={true}
+                placement='top'
+                arrow={true}
+                theme='material-confort-disabled'
+                hideOnClick={false}
+                offset={[0, 10]}>
+                  <div className='-tbutton-cannot-delete'>
+                    <i className='fas fa-trash-alt ---delete'></i>
+                    <i className='fas fa-ban ---cannot'></i>
+                  </div>
+              </Tippy>
+                :
+              <Tippy
+                disabled={this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows < 1}
+                content={
+                  <div>Șterge</div>
+                }
+                allowHTML={true}
+                placement='top'
+                arrow={true}
+                theme='material-confort-disabled'
+                hideOnClick={false}
+                offset={[0, 10]}>
+                  <i className={(this.state.adding || this.state.addingRange || this.state.editing || this.state.checkedRows < 1) 
+                                                                                                    ? 'fas fa-trash-alt -tbutton-delete--disabled' 
+                                                                                                    : 'fas fa-trash-alt -tbutton-delete'}
+                    onClick={this.delete}></i>
+              </Tippy>
+            }
+
           </div>
             <Tippy
               disabled={this.state.adding || this.state.addingRange || this.state.editing}
               content={
-                <div>Caută spațiu de cazare</div>
+                <div>Introdu numărul spațiului de cazare</div>
               }
               allowHTML={true}
               placement='top'
@@ -642,7 +821,7 @@ class CentralizatorSpatii extends React.Component {
         {
           this.state.adding && !this.state.addingRange && !this.state.editing &&
 
-          <SpatiuAdd
+          <SpatiuAdd ref={this.addRef}
             save={this.save}
             cancel={this.cancel}
             roomTypes={this.state.roomTypes}
@@ -653,9 +832,12 @@ class CentralizatorSpatii extends React.Component {
         {
           !this.state.adding && this.state.addingRange && !this.state.editing &&
 
-          <div className='-rows-adding'>
-            ADDING RANGE
-          </div>
+          <SpatiuAddRange ref={this.addRangeRef} 
+            save={this.saveRange}
+            cancel={this.cancelRange}
+            roomTypes={this.state.roomTypes}
+            confortTypes={this.state.confortTypes}
+            bedTypes={this.state.bedTypes}/>
 
         }
         {

@@ -768,7 +768,12 @@ function deletePat(value) {
 
 function createSCSingle (item) {
 
-  let error;
+  let error = undefined;
+  let duplicate = false;
+
+  const checkNumarSpatiu = 
+    db.prepare(`SELECT ID FROM Spatii
+                WHERE Numar = ?`);
 
   const selectCategorieSpatiuID = 
     db.prepare(`SELECT ID FROM CategoriiSpatii
@@ -781,30 +786,83 @@ function createSCSingle (item) {
   const selectCategoriiPaturi = 
     db.prepare(`SELECT ID, Denumire FROM CategoriiPaturi`);
 
+  const selectSpatiuID = 
+    db.prepare(`SELECT ID From Spatii
+                Where Numar = ?`);
+
   const insertSpatiu = 
     db.prepare(`INSERT INTO Spatii(Numar, CategorieSpatiuID, Etaj, CategorieConfortID)
                 VALUES(?, ?, ?, ?)`);
 
-  const insertPaturi = 
+  const insertPat = 
     db.prepare(`INSERT INTO PaturiSpatii(SpatiuID, CategoriePatID, NumarPaturi)
-                VALUES(?, ?, ?)`);
+                VALUES(@spatiuId, @categoriePatId, @numarPaturi)`);
+
+  const insertPaturi = db.transaction( (paturi) => {
+
+    for (const pat of paturi) {
+      insertPat.run(pat);
+    }
+
+  });
 
   try {
 
-    const categorieSpatiuID = 
-      selectCategorieSpatiuID.get(item.tip);
-    
-    const categorieConfortID = 
-      selectCategorieConfortID.get(item.confort);
+    const check = checkNumarSpatiu.get(item.numar);
 
-    const categoriiPaturi = 
-      selectCategoriiPaturi.all();
-    
-    insertSpatiu.run(
-      item.numar, 
-      categorieSpatiuID.ID, 
-      item.etaj,
-      categorieConfortID.ID);
+    if (undefined === check) {
+
+      const categorieSpatiuID = 
+        selectCategorieSpatiuID.get(item.tip);
+      
+      const categorieConfortID = 
+        selectCategorieConfortID.get(item.confort);
+
+      const categoriiPaturi = 
+        selectCategoriiPaturi.all();
+      
+      insertSpatiu.run(
+        item.numar, 
+        categorieSpatiuID.ID, 
+        item.etaj,
+        categorieConfortID.ID);
+
+      const spatiu = selectSpatiuID.get(item.numar);
+
+      let paturi = [];
+
+
+      for (let c = 0; c < categoriiPaturi.length; c++) {
+
+        paturi.push({
+          spatiuId: spatiu.ID,
+          categoriePatId: categoriiPaturi[c].ID,
+          numarPaturi: 0,
+        });
+
+        let current = paturi.length - 1;
+
+        for (let i = 0; i < item.paturi.length; i++) {
+
+          if (item.paturi[i].type === categoriiPaturi[c].Denumire) {
+
+            paturi[current].numarPaturi += Number(item.paturi[i].count);
+
+          }
+
+        }
+
+      }
+
+      let paturiNonZero = paturi.filter((pat) => pat.numarPaturi !== 0);
+
+      insertPaturi(paturiNonZero);
+
+    } else {
+
+      duplicate = true;
+
+    }
 
   } catch(err) {
 
@@ -820,15 +878,184 @@ function createSCSingle (item) {
 
     if (!error) {
 
-      return 'valid';
+      if (!duplicate) {
+
+        return 'valid';
+
+      } else {
+
+        return 'duplicate';
+
+      }
+      
 
     } 
 
   }
 }
 
-function createSCRange() {
+function createSCRange (itemRange) {
 
+  let error = undefined;
+  let rangeError = false;
+  let duplicate = false;
+
+  const checkRangeSpatiu = 
+    db.prepare(`SELECT ID FROM Spatii
+                WHERE Numar BETWEEN ? AND ?`);
+
+  const selectCategorieSpatiuID = 
+    db.prepare(`SELECT ID FROM CategoriiSpatii
+                WHERE Denumire = ?`);
+
+  const selectCategorieConfortID = 
+    db.prepare(`SELECT ID FROM CategoriiConfort
+                WHERE Denumire = ?`);
+
+  const selectCategoriiPaturi = 
+    db.prepare(`SELECT ID, Denumire FROM CategoriiPaturi`);
+
+  const selectSpatiuID = 
+    db.prepare(`SELECT ID From Spatii
+                Where Numar = ?`);
+
+  const insertSpatiu = 
+    db.prepare(`INSERT INTO Spatii(Numar, CategorieSpatiuID, Etaj, CategorieConfortID)
+                VALUES(@numar, @categorieSpatiuId, @etaj, @categorieConfortId)`);
+
+  const insertPat = 
+    db.prepare(`INSERT INTO PaturiSpatii(SpatiuID, CategoriePatID, NumarPaturi)
+                VALUES(@spatiuId, @categoriePatId, @numarPaturi)`);
+
+  const insertPaturi = db.transaction( (paturi) => {
+
+    for (const pat of paturi) {
+      insertPat.run(pat);
+    }
+
+  });
+
+  try {
+
+    if (itemRange.numarFrom >= 0 && itemRange.numarTo >= 0 && 
+        itemRange.numarFrom <= 10000 && itemRange.numarTo <= 10000 &&
+        itemRange.numarFrom < itemRange.numarTo) {
+
+      const check = checkRangeSpatiu.all(itemRange.numarFrom, itemRange.numarTo);
+
+      if (check.length === 0) {
+
+        const categorieSpatiuID = 
+          selectCategorieSpatiuID.get(itemRange.tip);
+        
+        const categorieConfortID = 
+          selectCategorieConfortID.get(itemRange.confort);
+
+        const categoriiPaturi = 
+          selectCategoriiPaturi.all();
+        
+        let spatii = [];
+
+        for (let i = itemRange.numarFrom; i <= itemRange.numarTo; i++) {
+
+          spatii.push({
+            numar: i,
+            categorieSpatiuId: categorieSpatiuID.ID,
+            etaj: itemRange.etaj,
+            categorieConfortId: categorieConfortID.ID
+          });
+
+        }
+
+        const insertSpatii = db.transaction( (spatii) => {
+
+          for (let s = 0; s < spatii.length; s++) {
+            
+            insertSpatiu.run(spatii[s]);
+          
+            const spatiu = selectSpatiuID.get(spatii[s].numar);
+
+            let paturi = [];
+
+            for (let c = 0; c < categoriiPaturi.length; c++) {
+
+              paturi.push({
+                spatiuId: spatiu.ID,
+                categoriePatId: categoriiPaturi[c].ID,
+                numarPaturi: 0,
+              });
+
+              let current = paturi.length - 1;
+
+              for (let i = 0; i < itemRange.paturi.length; i++) {
+
+                if (itemRange.paturi[i].type === categoriiPaturi[c].Denumire) {
+
+                  paturi[current].numarPaturi += Number(itemRange.paturi[i].count);
+
+                }
+
+              }
+
+            }
+
+            let paturiNonZero = paturi.filter((pat) => pat.numarPaturi !== 0);
+
+            insertPaturi(paturiNonZero);
+
+          }
+
+        });
+
+        insertSpatii(spatii);
+        
+      } else {
+
+        duplicate = true;
+
+      }
+
+    } else {
+
+      rangeError = true;
+
+    }
+
+  } catch(err) {
+
+    if (err) {
+
+      console.log(err);
+      error = err;
+
+      return 'error';
+    }
+
+  } finally {
+
+    if (!error && !rangeError) {
+
+      if (!duplicate) {
+
+        return 'valid';
+
+      } else {
+
+        return 'duplicate';
+
+      }
+      
+    } 
+
+    else
+
+    if (rangeError) {
+
+      return 'rangeError';
+
+    }
+
+  }
 }
 
 function readSC() {
@@ -932,6 +1159,7 @@ function readSC() {
         }
       }
       
+      
       return {
         status: 'valid',
         spatii: newSpaces,
@@ -943,21 +1171,14 @@ function readSC() {
   }
 }
 
-function updateSCSingle() {
+function updateSC(oldItem, newItem) {
 
 }
 
-function updateSCRange() {
-
+function deleteSC(items) {
+  console.log(items)
 }
 
-function deleteSCSingle() {
-
-}
-
-function deleteSCRange() {
-
-}
 
 
 /** Routes */
@@ -1559,13 +1780,25 @@ router.post('/:attribute', authorization, function(req, res) {
 
                 }
 
-
                 break;
+
               }
 
               case 'createRange': {
 
+                if (req.body.itemRange) {
+
+                  const status = createSCRange(req.body.itemRange);
+
+                  return res.json ({
+                    status: status,
+                  });
+
+                }
+
+
                 break;
+
               }
 
               case 'read': {
@@ -1585,15 +1818,31 @@ router.post('/:attribute', authorization, function(req, res) {
 
               case 'update': {
 
+                if (req.body.oldItem && req.body.newItem) {
+
+                  const status = updateSC(req.body.oldItem, req.body.newItem);
+
+                  return res.json ({
+                    status: status,
+                  });
+
+                }
+
                 break;
+
               }
 
               case 'delete': {
 
-                break;
-              }
+                if (req.body.items) {
 
-              case 'deleteRange': {
+                  const status = deleteSC(req.body.items);
+
+                  return res.json ({
+                    status: status,
+                  });
+
+                }
 
                 break;
               }
