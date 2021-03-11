@@ -459,7 +459,25 @@ class CentralizatorSpatii extends React.Component {
 
   delete() {
 
-    let items = this.state.items.filter((item) => item.isChecked);
+    let items = this.state.items.filter((item) => item.isChecked).map((item) => {
+      
+      let res = {
+        etaj: item.etaj,
+        numar: item.numar,
+        tipSpatiu: item.tipSpatiu,
+        tipConfort: item.tipConfort,
+        paturi: undefined,
+      };
+
+      let paturi = []; paturi.push(...item.paturi);
+
+      res.paturi = paturi;
+
+      return res;
+
+    });
+
+    console.log(items)
 
     const requestOptions = {
       method: 'POST',
